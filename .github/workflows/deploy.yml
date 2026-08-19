@@ -12,15 +12,20 @@ jobs:
       - name: Set up deploy SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p 22 "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+          echo "--- key file (first line only) ---"
+          head -n1 ~/.ssh/deploy_key
+          echo "--- keyscan ---"
+          ssh-keyscan -v -p 22 "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>&1 || echo "KEYSCAN_EXIT_CODE=$?"
+          echo "--- known_hosts ---"
+          cat ~/.ssh/known_hosts || true
 
       - name: Run remote deploy script
         run: |
-          ssh -i ~/.ssh/deploy_key -p 22 -o StrictHostKeyChecking=yes \
+          ssh -vvv -i ~/.ssh/deploy_key -p 22 -o StrictHostKeyChecking=yes -o ConnectTimeout=15 \
             "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "bash ~/nobilita.adaptsmedia.info/deploy.sh"
+            "bash ~/nobilita.adaptsmedia.info/deploy.sh" || echo "SSH_EXIT_CODE=$?"
 
       - name: Clean up key
         if: always()
