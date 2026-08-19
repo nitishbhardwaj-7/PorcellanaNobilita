@@ -10,7 +10,7 @@ const applications = [
   { name: "INTERIOR WALLS", image: "/images/Calacatta Oyster Application 1.jpg", row: 1 },
   { name: "INTERIOR FLOORS", image: "/images/ccc.jpg", row: 1 },
   { name: "COUNTERTOPS", image: "/images/mmm.jpg", row: 1 },
-  { name: "EXTERIOR WALLS", image: "/images/exterior walls.png", row: 2 },
+  { name: "EXTERIOR WALLS", image: "/images/22.png", row: 2 },
   { name: "EXTERIOR FLOORS", image: "/images/4.jpg", row: 2 },
   { name: "FURNITURE", image: "/images/Arabescato Fjord (2).jpg", row: 2 },
 ];
@@ -168,28 +168,28 @@ export default function ApplicationsSection({ onTileClick }: ApplicationsSection
         }}
         className="app-tile group relative overflow-hidden cursor-pointer h-[250px] md:h-[300px] lg:h-[360px]"
       >
-      <img
-        src={app.image}
-        alt={app.name}
-        className="tile-img absolute inset-0 w-full h-full object-cover"
-        style={{
-          willChange: "transform",
-          transform: "scale(1.18)",
-        }}
-      />
-      {/* ── Label */}
-      <div className="absolute inset-0 flex items-center justify-center p-4 text-center pointer-events-none">
-        <span
-          className={`tile-label font-didot font-medium text-[clamp(16px,4vw,28px)] uppercase relative z-10 ${DARK_LABEL.includes(app.name) ? "text-brand-dark" : "text-white"
-            }`}
-          style={{ fontFamily: "var(--font-didot), Georgia, serif", letterSpacing: "0.1em", opacity: 0 }}
-        >
-          {app.name}
-        </span>
+        <img
+          src={app.image}
+          alt={app.name}
+          className="tile-img absolute inset-0 w-full h-full object-cover"
+          style={{
+            willChange: "transform",
+            transform: "scale(1.18)",
+          }}
+        />
+        {/* ── Label */}
+        <div className="absolute inset-0 flex items-center justify-center p-4 text-center pointer-events-none">
+          <span
+            className={`tile-label font-didot font-medium text-[clamp(16px,4vw,28px)] uppercase relative z-10 ${DARK_LABEL.includes(app.name) ? "text-brand-dark" : "text-white"
+              }`}
+            style={{ fontFamily: "var(--font-didot), Georgia, serif", letterSpacing: "0.1em", opacity: 0 }}
+          >
+            {app.name}
+          </span>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   return (
     <section
