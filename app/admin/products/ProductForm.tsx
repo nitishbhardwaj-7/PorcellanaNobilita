@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, X, ChevronDown } from "lucide-react";
+import { MediaPickerField, MediaPickerButton } from "../_components/MediaPicker";
 
 function CustomSelect({
   value,
@@ -399,13 +400,16 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                     Left Panel Image (Slab Application)
                   </label>
-                  <input
-                    type="text"
-                    value={form.leftBg}
-                    onChange={(e) => setForm((p) => ({ ...p, leftBg: e.target.value }))}
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                    placeholder="e.g. /images/Our story/Verde profondo application.jpg"
-                  />
+                  <div className="flex gap-1.5">
+                    <input
+                      type="text"
+                      value={form.leftBg}
+                      onChange={(e) => setForm((p) => ({ ...p, leftBg: e.target.value }))}
+                      className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                      placeholder="e.g. /images/Our story/Verde profondo application.jpg"
+                    />
+                    <MediaPickerButton folder="products" onSelect={(url) => setForm((p) => ({ ...p, leftBg: url }))} />
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">
@@ -414,13 +418,16 @@ export default function ProductForm({ productId }: ProductFormProps) {
                     <br />
                     (Optional)
                   </label>
-                  <input
-                    type="text"
-                    value={form.bookmatchImg}
-                    onChange={(e) => setForm((p) => ({ ...p, bookmatchImg: e.target.value }))}
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                    placeholder="e.g. /images/Calacatta Oyster/Bookmatch.jpg"
-                  />
+                  <div className="flex gap-1.5">
+                    <input
+                      type="text"
+                      value={form.bookmatchImg}
+                      onChange={(e) => setForm((p) => ({ ...p, bookmatchImg: e.target.value }))}
+                      className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                      placeholder="e.g. /images/Calacatta Oyster/Bookmatch.jpg"
+                    />
+                    <MediaPickerButton folder="products" onSelect={(url) => setForm((p) => ({ ...p, bookmatchImg: url }))} />
+                  </div>
                 </div>
               </div>
 
@@ -497,16 +504,28 @@ export default function ProductForm({ productId }: ProductFormProps) {
                       </div>
                       <div className={slide.type === "video" ? "sm:col-span-2" : "sm:col-span-3"}>
                         <label className="block text-[8px] text-[#8b8b8b] uppercase">Source URL</label>
-                        <input
-                          type="text"
-                          value={slide.src}
-                          onChange={(e) => {
-                            const newSlides = [...form.slides];
-                            newSlides[idx].src = e.target.value;
-                            setForm((p) => ({ ...p, slides: newSlides }));
-                          }}
-                          className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none animate-none"
-                        />
+                        <div className="flex gap-1">
+                          <input
+                            type="text"
+                            value={slide.src}
+                            onChange={(e) => {
+                              const newSlides = [...form.slides];
+                              newSlides[idx].src = e.target.value;
+                              setForm((p) => ({ ...p, slides: newSlides }));
+                            }}
+                            className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none animate-none"
+                          />
+                          {slide.type === "image" && (
+                            <MediaPickerButton
+                              folder="products"
+                              onSelect={(url) => {
+                                const newSlides = [...form.slides];
+                                newSlides[idx].src = url;
+                                setForm((p) => ({ ...p, slides: newSlides }));
+                              }}
+                            />
+                          )}
+                        </div>
                       </div>
                       {slide.type === "video" && (
                         <div>
@@ -550,45 +569,14 @@ export default function ProductForm({ productId }: ProductFormProps) {
           {/* Right column — images & order */}
           <div className="space-y-5">
             {/* Cover image */}
-            <div className="bg-white border border-[#1a1a1a]/8 p-5 space-y-4">
-              <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3" style={fontMichroma}>
-                Cover Image
-              </p>
-              {form.coverImage && (
-                <div className="relative aspect-square w-full overflow-hidden border border-[#1a1a1a]/8">
-                  <img
-                    src={form.coverImage}
-                    alt="Cover"
-                    className="w-full h-full object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setForm((p) => ({ ...p, coverImage: "" }))}
-                    className="absolute top-2 right-2 bg-white/90 border border-[#1a1a1a]/10 w-6 h-6 flex items-center justify-center text-[#1a1a1a]/50 hover:text-red-500 transition-colors"
-                  >
-                    <X size={11} />
-                  </button>
-                </div>
-              )}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-                  Image URL
-                </label>
-                <input
-                  type="text"
-                  value={form.coverImage}
-                  onChange={(e) => setForm((p) => ({ ...p, coverImage: e.target.value }))}
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-[11px] font-mono text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                  placeholder="/uploads/products/…"
-                />
-                <p className="text-[10px] text-[#8b8b8b]">
-                  Upload via{" "}
-                  <Link href="/admin/media" className="underline text-[#1a7a96]" target="_blank">
-                    Media Library
-                  </Link>{" "}
-                  then paste URL
-                </p>
-              </div>
+            <div className="bg-white border border-[#1a1a1a]/8 p-5">
+              <MediaPickerField
+                label="Cover Image"
+                value={form.coverImage}
+                onChange={(url) => setForm((p) => ({ ...p, coverImage: url }))}
+                folder="products"
+                placeholder="/uploads/products/…"
+              />
             </div>
 
             {/* Order */}

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, X, ChevronDown, ChevronUp, GripVertical, Plus } from "lucide-react";
+import { MediaPickerField, MediaPickerButton } from "../_components/MediaPicker";
 
 function CustomSelect({
   value,
@@ -286,13 +287,16 @@ function ContentBlockEditor({
                   <img src={block.src} alt={block.alt || ""} className="w-full h-full object-cover" />
                 </div>
               )}
-              <input
-                type="text"
-                value={block.src || ""}
-                onChange={(e) => updateBlock(idx, { src: e.target.value })}
-                placeholder="Image URL, e.g. /uploads/blogs/…"
-                className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-xs font-mono text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-              />
+              <div className="flex gap-1.5">
+                <input
+                  type="text"
+                  value={block.src || ""}
+                  onChange={(e) => updateBlock(idx, { src: e.target.value })}
+                  placeholder="Image URL, e.g. /uploads/blogs/…"
+                  className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-xs font-mono text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                />
+                <MediaPickerButton folder="blogs" onSelect={(url) => updateBlock(idx, { src: url })} />
+              </div>
               <input
                 type="text"
                 value={block.alt || ""}
@@ -569,13 +573,16 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                   Author Image URL
                 </label>
-                <input
-                  type="text"
-                  value={form.authorImage}
-                  onChange={(e) => setForm((p) => ({ ...p, authorImage: e.target.value }))}
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-xs font-mono text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                  placeholder="/uploads/…"
-                />
+                <div className="flex gap-1.5">
+                  <input
+                    type="text"
+                    value={form.authorImage}
+                    onChange={(e) => setForm((p) => ({ ...p, authorImage: e.target.value }))}
+                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-xs font-mono text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                    placeholder="/uploads/…"
+                  />
+                  <MediaPickerButton folder="blogs" onSelect={(url) => setForm((p) => ({ ...p, authorImage: url }))} />
+                </div>
               </div>
             </div>
 
@@ -658,40 +665,14 @@ export default function BlogForm({ blogId }: BlogFormProps) {
           <div className="space-y-5">
             {/* Hero image */}
             <div className="bg-white border border-[#1a1a1a]/8 p-5 space-y-4">
-              <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3" style={fontMichroma}>
-                Hero Image
-              </p>
-              {form.heroImage && (
-                <div className="relative aspect-[16/10] w-full overflow-hidden border border-[#1a1a1a]/8">
-                  <img src={form.heroImage} alt="Hero" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => setForm((p) => ({ ...p, heroImage: "" }))}
-                    className="absolute top-2 right-2 bg-white/90 border border-[#1a1a1a]/10 w-6 h-6 flex items-center justify-center text-[#1a1a1a]/50 hover:text-red-500 transition-colors"
-                  >
-                    <X size={11} />
-                  </button>
-                </div>
-              )}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-                  Image URL
-                </label>
-                <input
-                  type="text"
-                  value={form.heroImage}
-                  onChange={(e) => setForm((p) => ({ ...p, heroImage: e.target.value }))}
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-[11px] font-mono text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                  placeholder="/uploads/blogs/…"
-                />
-                <p className="text-[10px] text-[#8b8b8b]">
-                  Upload via{" "}
-                  <Link href="/admin/media" className="underline text-[#1a7a96]" target="_blank">
-                    Media Library
-                  </Link>{" "}
-                  then paste URL
-                </p>
-              </div>
+              <MediaPickerField
+                label="Hero Image"
+                value={form.heroImage}
+                onChange={(url) => setForm((p) => ({ ...p, heroImage: url }))}
+                folder="blogs"
+                placeholder="/uploads/blogs/…"
+                aspect="aspect-[16/10]"
+              />
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
                   Hero Image Alt Text
