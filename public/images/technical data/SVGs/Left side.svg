@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="265.01 130.01 135.35 247.53">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&amp;family=Michroma&amp;display=swap');
+
+      .svg-header-text {
+        fill: #fff;
+        font-family: var(--font-ivymode), IvyMode, 'Cormorant Garamond', Georgia, serif;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+      }
+
+      .svg-dim-text {
+        fill: #fff;
+        font-family: var(--font-michroma), Michroma, sans-serif;
+        font-size: 9px;
+        letter-spacing: 0.05em;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: none;
+      }
+
+      .cls-1 {
+        stroke: #fff;
+        stroke-width: 0.75px;
+      }
+
+      .cls-2 {
+        stroke-width: .78px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #fcfafa;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-5 {
+        letter-spacing: .2em;
+      }
+
+      .cls-6 {
+        clip-path: url(#clippath-2);
+      }
+
+      .cls-3 {
+        stroke-width: .26px;
+      }
+
+      .cls-4 {
+        stroke: #fff;
+        stroke-width: .25px;
+      }
+
+      .cls-7 {
+        fill: #fff;
+        font-family: Michroma, Michroma;
+        font-size: 9px;
+      }
+    </style>
+    <clipPath id="clippath-2">
+      <rect class="cls-1" x="642.81" y="226.54" width="70.72" height="150.13"/>
+    </clipPath>
+  </defs>
+
+  <!-- Rectified Slab Text -->
+  <text x="331" y="180" class="svg-header-text" text-anchor="middle">RECTIFIED</text>
+  <text x="331" y="284" class="svg-dim-text" text-anchor="middle">1600</text>
+  <text x="331" y="300" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="316" class="svg-dim-text" text-anchor="middle">3200</text>
+  <text x="331" y="332" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="348" class="svg-dim-text" text-anchor="middle">6.5 MM</text>
+
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&amp;family=Michroma&amp;display=swap');
+      .svg-header-text {
+        fill: #fff;
+        font-family: var(--font-ivymode), IvyMode, 'Cormorant Garamond', Georgia, serif;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+      }
+      .svg-dim-text {
+        fill: #fff;
+        font-family: var(--font-michroma), Michroma, sans-serif;
+        font-size: 9px;
+        letter-spacing: 0.05em;
+      }
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: none;
+      }
+      .cls-1 {
+        stroke: #fff;
+        stroke-width: 0.75px;
+      }
+      .cls-2 {
+        stroke-width: .78px;
+      }
+      .cls-2, .cls-3 {
+        stroke: #fcfafa;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .cls-5 {
+        letter-spacing: .2em;
+      }
+      .cls-6 {
+        clip-path: url(#clippath-2);
+      }
+      .cls-3 {
+        stroke-width: .26px;
+      }
+      .cls-4 {
+        stroke: #fff;
+        stroke-width: .25px;
+      }
+      .cls-7 {
+        fill: #fff;
+        font-family: Michroma, Michroma;
+        font-size: 9px;
+      }
+  <text x="331" y="180" class="svg-header-text" text-anchor="middle">RECTIFIED</text>
+  <text x="331" y="284" class="svg-dim-text" text-anchor="middle">1600</text>
+  <text x="331" y="300" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="316" class="svg-dim-text" text-anchor="middle">3200</text>
+  <text x="331" y="332" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="348" class="svg-dim-text" text-anchor="middle">6.5 MM</text>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&amp;family=Michroma&amp;display=swap');
+      .svg-header-text {
+        fill: #fff;
+        font-family: var(--font-ivymode), IvyMode, 'Cormorant Garamond', Georgia, serif;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+      }
+      .svg-dim-text {
+        fill: #fff;
+        font-family: var(--font-michroma), Michroma, sans-serif;
+        font-size: 9px;
+        letter-spacing: 0.05em;
+      }
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: none;
+      }
+      .cls-1 {
+        stroke: #fff;
+        stroke-width: 0.75px;
+      }
+      .cls-2 {
+        stroke-width: .78px;
+      }
+      .cls-2, .cls-3 {
+        stroke: #fcfafa;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .cls-5 {
+        letter-spacing: .2em;
+      }
+      .cls-6 {
+        clip-path: url(#clippath-2);
+      }
+      .cls-3 {
+        stroke-width: .26px;
+      }
+      .cls-4 {
+        stroke: #fff;
+        stroke-width: .25px;
+      }
+      .cls-7 {
+        fill: #fff;
+        font-family: Michroma, Michroma;
+        font-size: 9px;
+      }
+  <text x="331" y="180" class="svg-header-text" text-anchor="middle">RECTIFIED</text>
+  <text x="331" y="284" class="svg-dim-text" text-anchor="middle">1600</text>
+  <text x="331" y="300" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="316" class="svg-dim-text" text-anchor="middle">3200</text>
+  <text x="331" y="332" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="348" class="svg-dim-text" text-anchor="middle">6.5 MM</text>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&amp;family=Michroma&amp;display=swap');
+      .svg-header-text {
+        fill: #fff;
+        font-family: var(--font-ivymode), IvyMode, 'Cormorant Garamond', Georgia, serif;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+      }
+      .svg-dim-text {
+        fill: #fff;
+        font-family: var(--font-michroma), Michroma, sans-serif;
+        font-size: 9px;
+        letter-spacing: 0.05em;
+      }
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: none;
+      }
+      .cls-1 {
+        stroke: #fff;
+        stroke-width: 0.75px;
+      }
+      .cls-2 {
+        stroke-width: .78px;
+      }
+      .cls-2, .cls-3 {
+        stroke: #fcfafa;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .cls-5 {
+        letter-spacing: .2em;
+      }
+      .cls-6 {
+        clip-path: url(#clippath-2);
+      }
+      .cls-3 {
+        stroke-width: .26px;
+      }
+      .cls-4 {
+        stroke: #fff;
+        stroke-width: .25px;
+      }
+      .cls-7 {
+        fill: #fff;
+        font-family: Michroma, Michroma;
+        font-size: 9px;
+      }
+  <text x="331" y="180" class="svg-header-text" text-anchor="middle">RECTIFIED</text>
+  <text x="331" y="284" class="svg-dim-text" text-anchor="middle">1600</text>
+  <text x="331" y="300" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="316" class="svg-dim-text" text-anchor="middle">3200</text>
+  <text x="331" y="332" class="svg-dim-text" text-anchor="middle">x</text>
+  <text x="331" y="348" class="svg-dim-text" text-anchor="middle">6.5 MM</text>
+  <rect class="cls-1" x="275.51" y="140.01" width="111.39" height="224.77"/>
+  <polyline class="cls-1" points="275.01 364.65 277.98 367.54 390.36 367.54 390.36 142.63 387.4 140.15"/>
+  <line class="cls-1" x1="386.86" y1="364.33" x2="389.98" y2="367.45"/>
+</svg>

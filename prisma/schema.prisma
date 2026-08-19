@@ -1,0 +1,133 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+}
+
+enum SubmissionType {
+  QUERY
+  CATALOG
+  NEWSLETTER
+  DATASHEET
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Product {
+  id               String   @id @default(cuid())
+  name             String
+  slug             String   @unique
+  description      String?  @db.Text
+  color            String   @default("White")
+  finish           String?
+  thicknessMm      String[]
+  dimensions       String[]
+  format           String?
+  applications     String[]
+  coverImage       String?
+  gallery          String[] @default([])
+  
+  // Custom configuration for Exhibition/Featured product detail modal
+  leftBg           String?
+  faces            String[] @default([])
+  finishes         String[] @default([])
+  slides           Json     @default("[]")
+  availableFaces   String[] @default([])
+  bookmatchImg     String?
+  isHorizontalFace Boolean  @default(false)
+  isDark           Boolean  @default(false)
+
+  order            Int      @default(0)
+  status           Status   @default(DRAFT)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Blog {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  excerpt        String?  @db.Text
+  author         String   @default("NOBILITA Editorial Team")
+  authorImage    String?
+  heroImage      String?
+  heroImageAlt   String?
+  tag            String?
+  tags           String[] @default([])
+  content        Json     @default("[]")
+  readTime       String?
+  seoTitle       String?
+  seoDescription String?
+  order          Int      @default(0)
+  status         Status   @default(DRAFT)
+  publishedAt    DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Submission {
+  id        String         @id @default(cuid())
+  type      SubmissionType
+  name      String
+  email     String
+  phone     String?
+  message   String?        @db.Text
+  product   String?
+  language  String?
+  source    String?
+  isRead    Boolean        @default(false)
+  createdAt DateTime       @default(now())
+
+  @@index([type])
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  fileName  String
+  fileUrl   String
+  fileType  String
+  fileSize  Int
+  alt       String?
+  tags      String[] @default([])
+  width     Int?
+  height    Int?
+  folder    String   @default("/")
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id             String   @id @default("global")
+  siteName       String   @default("Porcellana Nobilita")
+  logoLight      String?
+  logoDark       String?
+  contactEmail   String?
+  contactPhone   String?
+  footerText     String?
+  socialLinks    Json     @default("{}")
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

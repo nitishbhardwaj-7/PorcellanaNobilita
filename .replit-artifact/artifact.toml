@@ -1,0 +1,30 @@
+kind = "web"
+previewPath = "/"
+title = "Porcellana Nobilita"
+version = "1.0.0"
+id = "artifacts/porcellana-nobilita"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24429
+
+[services.development]
+run = "pnpm --filter @workspace/porcellana-nobilita run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/porcellana-nobilita", "run", "build" ]
+publicDir = "artifacts/porcellana-nobilita/out"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24429"

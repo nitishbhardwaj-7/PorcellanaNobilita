@@ -1,0 +1,228 @@
+%!Adobe-FontList 1.25
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/AdobeFnt25.lst
+FileLength:5003
+FileModTime:802792670
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Michroma
+FamilyName:Michroma
+StyleName:Regular
+MenuName:Michroma
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Michroma
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/Michroma.ttf
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:64940
+FileModTime:800418660
+NameArray:0,Mac,18,Michroma
+NameArray:0,Mac,4,Michroma
+NameArray:0,Win,1,Michroma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+MenuName:Minion Pro
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Minion Pro
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/MinionPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:218640
+FileModTime:800418660
+DesignSize:110
+NameArray:0,Mac,4,Minion Pro
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:IvyMode-Regular
+FamilyName:Ivy Mode
+StyleName:Regular
+MenuName:Ivy Mode
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:IvyMode-Regular
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/ivy-mode-regular.ttf
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:116052
+FileModTime:739887752
+NameArray:0,Mac,18,Ivy Mode Regular
+NameArray:0,Mac,4,IvyMode-Regular
+NameArray:0,Win,1,Ivy Mode
+NameArray:0,Win,16,Ivy Mode
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Didot
+FamilyName:Didot
+StyleName:Regular
+MenuName:Didot
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Didot
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/Didot.ttc
+TTCOffset:36
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:724008
+FileModTime:800418660
+NameArray:0,Mac,4,Didot
+NameArray:0,Win,1,Didot
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Didot-Bold
+FamilyName:Didot
+StyleName:Bold
+MenuName:Didot
+StyleBits:2
+WeightClass:700
+WidthClass:5
+AngleClass:0
+FullName:Didot Bold
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/Didot.ttc
+TTCOffset:652
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:724008
+FileModTime:800418660
+NameArray:0,Mac,4,Didot Bold
+NameArray:0,Win,1,Didot
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Didot-Italic
+FamilyName:Didot
+StyleName:Italic
+MenuName:Didot
+StyleBits:1
+WeightClass:400
+WidthClass:5
+AngleClass:1
+FullName:Didot Italic
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/Didot.ttc
+TTCOffset:352
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:724008
+FileModTime:800418660
+NameArray:0,Mac,4,Didot Italic
+NameArray:0,Win,1,Didot
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:GurmukhiMN
+FamilyName:Gurmukhi MN
+StyleName:Regular
+MenuName:Gurmukhi MN
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Gurmukhi MN
+WritingScript:Gurmukhi
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/Gurmukhi MN.ttc
+TTCOffset:32
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:230292
+FileModTime:800418660
+NameArray:0,Mac,18,Gurmukhi MN
+NameArray:0,Mac,4,Gurmukhi MN
+NameArray:0,Win,1,Gurmukhi MN
+NameArray:9,Win,1,गुरुमुखी एमएन
+NameArray:10,Win,1,ਗੁਰਮੁਖੀ ਐਮਐੱਨ
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:GurmukhiMN-Bold
+FamilyName:Gurmukhi MN
+StyleName:Bold
+MenuName:Gurmukhi MN
+StyleBits:2
+WeightClass:700
+WidthClass:5
+AngleClass:0
+FullName:Gurmukhi MN Bold
+WritingScript:Gurmukhi
+OutlineFileName:/Volumes/DATA/3. Website/NOBILITA Website/Nobilita_Website_10June26/Document fonts/Gurmukhi MN.ttc
+TTCOffset:380
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:230292
+FileModTime:800418660
+NameArray:0,Mac,18,Gurmukhi MN Bold
+NameArray:0,Mac,4,Gurmukhi MN Bold
+NameArray:0,Win,1,Gurmukhi MN
+NameArray:9,Win,1,गुरुमुखी एमएन
+NameArray:10,Win,1,ਗੁਰਮੁਖੀ ਐਮਐੱਨ
+%EndFont
+

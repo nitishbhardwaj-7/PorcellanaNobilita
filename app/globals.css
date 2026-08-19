@@ -1,0 +1,365 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'GurmukhiMN';
+  src: url('../public/fonts/GurmukhiMN-01.ttf') format('truetype');
+  font-weight: 100 400;
+  /* Covers Thin, Extra Light, Light, and Normal */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GurmukhiMN';
+  src: url('../public/fonts/GurmukhiMN-Bold-02.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --teal: #1a7a96;
+  --teal-dark: #156680;
+  --teal-light: #2490b0;
+  --white: #ffffff;
+  --off-white: #f8f5f0;
+  --warm-cream: #f5f0e8;
+  --dark: #1a1a1a;
+  --charcoal: #3d3d3d;
+  --grey-mid: #8b8b8b;
+  --italian-green: #009246;
+  --italian-red: #ce2b37;
+  --italian-white: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Applied site-wide (excluding /admin) by DisableInspect.tsx — text can't be
+   click-dragged to select. Form fields are explicitly exempted so visitors can
+   still select/copy what they've typed into name/email/phone/message inputs. */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.no-select input,
+.no-select textarea,
+.no-select [contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Loader stroke-dashoffset animation */
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Loading bar fill animation */
+@keyframes fillBar {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.palazzo-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.5s ease-out forwards;
+  animation-play-state: paused;
+}
+
+.palazzo-path.animate {
+  animation-play-state: running;
+}
+
+.loading-bar-fill {
+  animation: fillBar 4.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation-delay: 0.5s;
+}
+
+/* Rich Text Page Blocks styling (Luxury Editorial rules) */
+.rich-text-container h1,
+.rich-text-container h2,
+.rich-text-container h3,
+.rich-text-container h4 {
+  font-family: var(--font-ivymode), Georgia, serif;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: normal;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.rich-text-container h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.2;
+}
+
+.rich-text-container h2 {
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.3;
+}
+
+.rich-text-container h3 {
+  font-size: clamp(18px, 2.5vw, 26px);
+  line-height: 1.4;
+}
+
+.rich-text-container p {
+  font-family: var(--font-montserrat), sans-serif;
+  color: var(--charcoal);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+  font-size: clamp(14px, 1.5vw, 16px);
+}
+
+.rich-text-container ul {
+  list-style-type: square;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.rich-text-container ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.rich-text-container li {
+  font-family: var(--font-montserrat), sans-serif;
+  color: var(--charcoal);
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+  font-size: clamp(14px, 1.5vw, 16px);
+}
+
+.rich-text-container a {
+  color: var(--teal);
+  text-decoration: underline;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.rich-text-container a:hover {
+  color: var(--teal-dark);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Wipe-in transitions for sliders */
+@keyframes wipe-in-right {
+  from {
+    clip-path: inset(0 0 0 100%);
+    -webkit-clip-path: inset(0 0 0 100%);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    -webkit-clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes wipe-in-left {
+  from {
+    clip-path: inset(0 100% 0 0);
+    -webkit-clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    -webkit-clip-path: inset(0 0 0 0);
+  }
+}
+
+.animate-wipe-right {
+  animation: wipe-in-right 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-wipe-left {
+  animation: wipe-in-left 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Hide scrollbar globally across all elements */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* Custom Leaflet Map Marker Styling */
+.custom-marker-wrapper {
+  position: relative;
+  width: 0;
+  height: 0;
+  cursor: pointer !important;
+}
+
+/* Semi-transparent soft blue circular glow */
+.custom-marker-glow {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(0, 113, 144, 0.18);
+  border-radius: 50%;
+  left: -25px;
+  top: -25px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Bright blue center dot */
+.custom-marker-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #007190;
+  border-radius: 50%;
+  left: -5px;
+  top: -5px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+/* Pulsing blip animation (the blip) */
+.custom-marker-dot::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(0, 113, 144, 0.6);
+  border-radius: 50%;
+  left: 0;
+  top: 0;
+  animation: blip-animation 2s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes blip-animation {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+
+/* Info badge containing the icon and text next to the dot */
+.custom-marker-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  left: 10px; /* Offset to the right of the center dot */
+  top: -15px; /* Offset upwards slightly */
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Muted grayish-brown circular shop icon background */
+.custom-marker-icon-circle {
+  width: 16px;
+  height: 16px;
+  background-color: #8c7b6d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Text label container */
+.custom-marker-label {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  font-family: var(--font-montserrat), sans-serif;
+  color: #4a4a4a;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8), 0 0 4px rgba(255, 255, 255, 0.8);
+}
+
+.custom-marker-label .line-1 {
+  font-size: 10px;
+  font-weight: 700;
+  color: #3a3a3a;
+}
+
+.custom-marker-label .line-2 {
+  font-size: 8px;
+  font-weight: 500;
+  color: #6a6a6a;
+}
+
+/* Custom Minimalist Styling for Leaflet controls & attribution */
+.leaflet-container {
+  font-family: inherit !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.75) !important;
+  font-size: 8px !important;
+  color: #8b8b8b !important;
+  border-top-left-radius: 2px;
+}
+
+.leaflet-control-attribution a {
+  color: #1a7a96 !important;
+  text-decoration: none;
+}
+
+.leaflet-control-attribution a:hover {
+  text-decoration: underline;
+}
+
+/* Grayscale Map Graphics (Black and White map) */
+.grayscale-map {
+  filter: grayscale(100%) contrast(1.1) brightness(0.95);
+}
+
+
