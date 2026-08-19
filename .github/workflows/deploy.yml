@@ -1,0 +1,27 @@
+name: Deploy to nobilita.adaptsmedia.info
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up deploy SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p 22 "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Run remote deploy script
+        run: |
+          ssh -i ~/.ssh/deploy_key -p 22 -o StrictHostKeyChecking=yes \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "bash ~/nobilita.adaptsmedia.info/deploy.sh"
+
+      - name: Clean up key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
