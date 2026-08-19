@@ -12,10 +12,12 @@ jobs:
       - name: Set up deploy SSH key
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           echo "--- key file (first line only) ---"
           head -n1 ~/.ssh/deploy_key
+          echo "--- validate key ---"
+          ssh-keygen -y -f ~/.ssh/deploy_key -P "" > /dev/null && echo "KEY_VALID" || echo "KEY_INVALID"
           echo "--- keyscan ---"
           ssh-keyscan -v -p 22 "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>&1 || echo "KEYSCAN_EXIT_CODE=$?"
           echo "--- known_hosts ---"
