@@ -1,0 +1,28 @@
+# Reference copy of the .htaccess living at the cPanel document root
+# (/home/d10917/nobilita.adaptsmedia.info/.htaccess) for nobilita.adaptsmedia.info.
+#
+# This is NOT auto-synced by deploy.sh — it's kept here purely as a record so the
+# reverse-proxy setup can be restored if ever lost. If you change it on the server,
+# copy the change back into this file too.
+#
+# Why this exists: Phusion Passenger is not actually installed on this shared
+# hosting server (despite cPanel's "Setup Node.js App" UI existing), so the
+# Next.js app runs as a plain background `node server.js` process on
+# 127.0.0.1:3001, and Apache reverse-proxies to it via mod_rewrite below.
+
+DirectoryIndex disabled
+RewriteEngine On
+
+# Serve uploaded media directly from disk, bypassing Node. Next.js's public/
+# file lookup is cached at process startup and won't see files uploaded via
+# the CMS after that, so proxying these to Node would 404 until a restart.
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
+
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteCond %{REQUEST_URI} !^/public/uploads/
+RewriteRule ^$ http://127.0.0.1:3001/ [P,L]
+
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteCond %{REQUEST_URI} !^/public/uploads/
+RewriteRule ^(.*)$ http://127.0.0.1:3001/$1 [P,L]
