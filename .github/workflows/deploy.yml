@@ -12,7 +12,7 @@ jobs:
       - name: Set up deploy SSH key
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
+          printf '%s' "${{ secrets.DEPLOY_SSH_KEY }}" | tr -d ' \n\r' | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           echo "--- key file (first line only) ---"
           head -n1 ~/.ssh/deploy_key
