@@ -11,7 +11,7 @@ echo "[$(date)] === deploy start ==="
 git fetch origin main
 git reset --hard origin/main
 
-npm install --include=dev
+npm install --include=dev --ignore-scripts
 npm run build
 
 OLDPID=$(ps aux | grep '[n]ode server.js' | awk '{print $2}')
