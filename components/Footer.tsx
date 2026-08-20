@@ -32,13 +32,19 @@ export default function Footer() {
   const [selectedLanguage, setSelectedLanguage] = useState<"english" | "italian">("english");
   const [enquiryProduct, setEnquiryProduct] = useState<string | null>(null);
 
-  const triggerPdfDownload = (lang: "english" | "italian") => {
-    const pdfUrl = lang === "italian"
-      ? "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ITALIAN.pdf"
-      : "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ENGLISH.pdf";
-    const fileName = lang === "italian"
-      ? "TECHNICAL DATA SHEET - ITALIAN.pdf"
-      : "TECHNICAL DATA SHEET - ENGLISH.pdf";
+  const triggerPdfDownload = (resource: "catalog" | "datasheet", lang: "english" | "italian") => {
+    // The catalogue is a single PDF (no language variants), unlike the
+    // technical data sheet which has separate English/Italian files.
+    const pdfUrl = resource === "catalog"
+      ? "/Pdfs/CATALOGUE.pdf"
+      : lang === "italian"
+        ? "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ITALIAN.pdf"
+        : "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ENGLISH.pdf";
+    const fileName = resource === "catalog"
+      ? "CATALOGUE.pdf"
+      : lang === "italian"
+        ? "TECHNICAL DATA SHEET - ITALIAN.pdf"
+        : "TECHNICAL DATA SHEET - ENGLISH.pdf";
 
     const link = document.createElement("a");
     link.href = pdfUrl;
@@ -146,7 +152,7 @@ export default function Footer() {
     // Downloads fire immediately — a hiccup saving the lead shouldn't block the visitor
     // from getting the resource they asked for.
     if (activeForm === "catalog" || activeForm === "datasheet") {
-      triggerPdfDownload(selectedLanguage);
+      triggerPdfDownload(activeForm, selectedLanguage);
     }
 
     try {
