@@ -21,7 +21,7 @@ const appProductMapping: Record<string, string> = {
   "INTERIOR WALLS": "Calacatta Oyster",
   "INTERIOR FLOORS": "Verde Profondo",
   "COUNTERTOPS": "Macchia Vecchia Max",
-  "EXTERIOR WALLS": "Arabescato Fjord",
+  "EXTERIOR WALLS": "Caliza Marbella",
   "EXTERIOR FLOORS": "Travertino Romano Classico Vein Cut",
   "FURNITURE": "Arabescato Fjord",
 };
