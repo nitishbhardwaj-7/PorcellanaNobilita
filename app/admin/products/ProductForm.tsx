@@ -496,7 +496,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   className="w-4 h-4 border-[#1a1a1a]/15 text-[#1a1a1a] focus:ring-0 focus:outline-none"
                 />
                 <label htmlFor="isHorizontalFace" className="text-xs text-[#1a1a1a]/70 select-none">
-                  Wide/Horizontal Face Preview (isHorizontalFace)
+                  Wide/Horizontal Face Preview
                 </label>
               </div>
 
