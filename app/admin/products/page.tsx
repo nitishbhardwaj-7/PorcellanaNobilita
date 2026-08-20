@@ -94,7 +94,7 @@ export default function ProductsPage() {
         </div>
         <Link
           href="/admin/products/new"
-          className="flex items-center gap-2 bg-[#1a1a1a] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#3d3d3d] transition-colors"
+          className="flex items-center gap-2 bg-[#007190] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] transition-colors"
           style={fontMichroma}
         >
           <Plus size={13} />
@@ -113,7 +113,7 @@ export default function ProductsPage() {
           <p className="text-sm text-[#8b8b8b] mb-4">No products yet. Add your first slab to the catalogue.</p>
           <Link
             href="/admin/products/new"
-            className="inline-flex items-center gap-2 bg-[#1a1a1a] px-6 py-3 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#3d3d3d] transition-colors"
+            className="inline-flex items-center gap-2 bg-[#007190] px-6 py-3 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] transition-colors"
             style={fontMichroma}
           >
             <Plus size={13} />

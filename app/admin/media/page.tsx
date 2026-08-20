@@ -160,7 +160,7 @@ export default function MediaLibrary() {
           </div>
 
           <label
-            className={`flex items-center gap-2 bg-[#1a1a1a] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#3d3d3d] transition-colors cursor-pointer ${
+            className={`flex items-center gap-2 bg-[#007190] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] transition-colors cursor-pointer ${
               uploading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             style={fontMichroma}
@@ -225,7 +225,7 @@ export default function MediaLibrary() {
             </div>
             <button
               type="submit"
-              className="border border-l-0 border-[#1a1a1a]/15 bg-[#1a1a1a] px-3 text-white hover:bg-[#3d3d3d] transition-colors"
+              className="border border-l-0 border-[#007190] bg-[#007190] px-3 text-white hover:bg-[#005d76] transition-colors"
             >
               <Search size={13} />
             </button>
@@ -352,7 +352,7 @@ export default function MediaLibrary() {
           {/* Copy URL */}
           <button
             onClick={() => handleCopy(selectedFile)}
-            className="flex w-full items-center justify-center gap-2 border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#1a1a1a]/60 hover:bg-[#1a1a1a] hover:text-white hover:border-[#1a1a1a] transition-all"
+            className="flex w-full items-center justify-center gap-2 border border-[#007190]/25 bg-white px-3 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] transition-all"
             style={fontMichroma}
           >
             {copiedId === selectedFile.id ? (
@@ -394,7 +394,7 @@ export default function MediaLibrary() {
           <button
             onClick={saveDetail}
             disabled={saving}
-            className="w-full bg-[#1a1a1a] py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#3d3d3d] disabled:opacity-40 transition-colors"
+            className="w-full bg-[#007190] py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] disabled:opacity-40 transition-colors"
             style={fontMichroma}
           >
             {saving ? "Saving…" : "Save Details"}

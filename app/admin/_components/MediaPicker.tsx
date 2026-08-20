@@ -113,8 +113,8 @@ function MediaPickerModal({
                 onClick={() => setFolder(f)}
                 className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase border transition-colors ${
                   folder === f
-                    ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
-                    : "bg-white text-[#1a1a1a]/40 border-[#1a1a1a]/15 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/30"
+                    ? "bg-[#007190] text-white border-[#007190]"
+                    : "bg-white text-[#007190]/60 border-[#007190]/15 hover:text-[#007190] hover:border-[#007190]/30"
                 }`}
                 style={fontMichroma}
               >
@@ -141,7 +141,7 @@ function MediaPickerModal({
             </form>
 
             <label
-              className={`flex items-center gap-1.5 whitespace-nowrap bg-[#1a1a1a] px-4 py-2 text-[9px] tracking-[0.15em] uppercase text-white hover:bg-[#3d3d3d] transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 whitespace-nowrap bg-[#007190] px-4 py-2 text-[9px] tracking-[0.15em] uppercase text-white hover:bg-[#005d76] transition-colors cursor-pointer ${
                 uploading ? "opacity-50 cursor-not-allowed" : ""
               }`}
               style={fontMichroma}
@@ -257,7 +257,7 @@ export function MediaPickerField({
       <button
         type="button"
         onClick={() => setModalOpen(true)}
-        className="flex w-full items-center justify-center gap-2 border border-[#1a1a1a] px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-white transition-all"
+        className="flex w-full items-center justify-center gap-2 border border-[#007190] px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#007190] hover:bg-[#007190] hover:text-white transition-all"
         style={fontMichroma}
       >
         <Upload size={13} />
@@ -299,18 +299,20 @@ export function MediaPickerField({
 export function MediaPickerButton({
   onSelect,
   folder = "products",
+  className = "w-12",
 }: {
   onSelect: (url: string) => void;
   folder?: string;
+  className?: string;
 }) {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <>
+    <div className={`${className} flex-shrink-0 flex items-stretch`}>
       <button
         type="button"
         onClick={() => setModalOpen(true)}
-        className="flex items-center justify-center w-full h-full min-h-[26px] border border-[#1a1a1a]/15 bg-white px-2 text-[#1a1a1a]/50 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/40 transition-colors"
+        className="flex items-center justify-center w-full border border-[#1a1a1a]/15 bg-white text-[#1a1a1a]/50 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/40 transition-colors"
         title="Choose from Media Library"
       >
         <Upload size={12} />
@@ -325,6 +327,6 @@ export function MediaPickerButton({
           }}
         />
       )}
-    </>
+    </div>
   );
 }

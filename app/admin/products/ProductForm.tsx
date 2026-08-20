@@ -90,11 +90,15 @@ function TagInput({
   values,
   onChange,
   placeholder,
+  showMediaPicker = false,
+  mediaFolder = "products",
 }: {
   label: string;
   values: string[];
   onChange: (values: string[]) => void;
   placeholder: string;
+  showMediaPicker?: boolean;
+  mediaFolder?: string;
 }) {
   const [input, setInput] = useState("");
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
@@ -117,32 +121,44 @@ function TagInput({
       <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
         {label}
       </label>
-      <div className="min-h-[44px] flex flex-wrap gap-1.5 items-center border border-[#1a1a1a]/15 bg-white px-3 py-2 focus-within:border-[#1a1a1a]/40 transition-colors">
-        {values.map((v) => (
-          <span
-            key={v}
-            className="flex items-center gap-1 bg-[#f8f5f0] border border-[#1a1a1a]/10 px-2 py-0.5 text-[10px] text-[#1a1a1a]/70"
-          >
-            {v}
-            <button
-              type="button"
-              onClick={() => onChange(values.filter((x) => x !== v))}
-              className="text-[#1a1a1a]/30 hover:text-[#1a1a1a] transition-colors"
+      <div className="flex gap-1.5 items-stretch">
+        <div className="flex-1 min-h-[44px] flex flex-wrap gap-1.5 items-center border border-[#1a1a1a]/15 bg-white px-3 py-2 focus-within:border-[#1a1a1a]/40 transition-colors">
+          {values.map((v) => (
+            <span
+              key={v}
+              className="flex items-center gap-1 bg-[#f8f5f0] border border-[#1a1a1a]/10 px-2 py-0.5 text-[10px] text-[#1a1a1a]/70"
             >
-              <X size={10} />
-            </button>
-          </span>
-        ))}
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={values.length === 0 ? placeholder : ""}
-          className="flex-1 min-w-[120px] bg-transparent text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 outline-none"
-        />
+              {v}
+              <button
+                type="button"
+                onClick={() => onChange(values.filter((x) => x !== v))}
+                className="text-[#1a1a1a]/30 hover:text-[#1a1a1a] transition-colors"
+              >
+                <X size={10} />
+              </button>
+            </span>
+          ))}
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={values.length === 0 ? placeholder : ""}
+            className="flex-1 min-w-[120px] bg-transparent text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 outline-none"
+          />
+        </div>
+        {showMediaPicker && (
+          <MediaPickerButton
+            folder={mediaFolder}
+            onSelect={(url) => {
+              if (!values.includes(url)) {
+                onChange([...values, url]);
+              }
+            }}
+          />
+        )}
       </div>
-      <p className="text-[10px] text-[#8b8b8b]">Press Enter or comma to add</p>
+      <p className="text-[10px] text-[#8b8b8b]">Press Enter or comma to add{showMediaPicker && ", or pick from media library"}</p>
     </div>
   );
 }
@@ -301,7 +317,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
             type="submit"
             form="product-form"
             disabled={saving}
-            className="flex items-center gap-2 bg-[#1a1a1a] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#3d3d3d] disabled:opacity-40 transition-colors"
+            className="flex items-center gap-2 bg-[#007190] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] disabled:opacity-40 transition-colors"
             style={fontMichroma}
           >
             <Save size={13} />
@@ -400,6 +416,26 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                     Left Panel Image (Slab Application)
                   </label>
+                  {form.leftBg && (
+                    <div className="relative aspect-video w-full overflow-hidden border border-[#1a1a1a]/8 bg-[#f8f5f0] mb-2 flex items-center justify-center">
+                      <img
+                        src={form.leftBg}
+                        alt="Left Panel Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setForm((p) => ({ ...p, leftBg: "" }))}
+                        className="absolute top-2 right-2 bg-white/90 border border-[#1a1a1a]/10 w-6 h-6 flex items-center justify-center text-[#1a1a1a]/50 hover:text-red-500 transition-colors"
+                        title="Remove image"
+                      >
+                        <X size={11} />
+                      </button>
+                    </div>
+                  )}
                   <div className="flex gap-1.5">
                     <input
                       type="text"
@@ -418,6 +454,26 @@ export default function ProductForm({ productId }: ProductFormProps) {
                     <br />
                     (Optional)
                   </label>
+                  {form.bookmatchImg && (
+                    <div className="relative aspect-video w-full overflow-hidden border border-[#1a1a1a]/8 bg-[#f8f5f0] mb-2 flex items-center justify-center">
+                      <img
+                        src={form.bookmatchImg}
+                        alt="Bookmatch Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setForm((p) => ({ ...p, bookmatchImg: "" }))}
+                        className="absolute top-2 right-2 bg-white/90 border border-[#1a1a1a]/10 w-6 h-6 flex items-center justify-center text-[#1a1a1a]/50 hover:text-red-500 transition-colors"
+                        title="Remove image"
+                      >
+                        <X size={11} />
+                      </button>
+                    </div>
+                  )}
                   <div className="flex gap-1.5">
                     <input
                       type="text"
@@ -476,6 +532,8 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 values={form.availableFaces}
                 onChange={(v) => setForm((p) => ({ ...p, availableFaces: v }))}
                 placeholder="Paste face image path and press Enter"
+                showMediaPicker={true}
+                mediaFolder="products"
               />
               
               {/* Slides Editor */}
@@ -557,7 +615,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 <button
                   type="button"
                   onClick={() => setForm((p) => ({ ...p, slides: [...p.slides, { type: "image", src: "" }] }))}
-                  className="px-3 py-1.5 border border-[#1a1a1a] text-[9px] tracking-[0.15em] uppercase hover:bg-[#1a1a1a] hover:text-white transition-all"
+                  className="px-3 py-1.5 border border-[#007190] text-[9px] tracking-[0.15em] uppercase hover:bg-[#007190] hover:text-white transition-all"
                   style={fontMichroma}
                 >
                   + Add Slide

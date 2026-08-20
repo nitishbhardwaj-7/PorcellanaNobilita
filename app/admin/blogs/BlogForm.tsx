@@ -315,7 +315,7 @@ function ContentBlockEditor({
             key={t.value}
             type="button"
             onClick={() => addBlock(t.value)}
-            className="flex items-center gap-1.5 px-3 py-2 border border-[#1a1a1a] text-[9px] tracking-[0.15em] uppercase hover:bg-[#1a1a1a] hover:text-white transition-all"
+            className="flex items-center gap-1.5 px-3 py-2 border border-[#007190] text-[9px] tracking-[0.15em] uppercase hover:bg-[#007190] hover:text-white transition-all"
             style={fontMichroma}
           >
             <Plus size={11} />
@@ -472,7 +472,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
             type="submit"
             form="blog-form"
             disabled={saving}
-            className="flex items-center gap-2 bg-[#1a1a1a] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#3d3d3d] disabled:opacity-40 transition-colors"
+            className="flex items-center gap-2 bg-[#007190] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] disabled:opacity-40 transition-colors"
             style={fontMichroma}
           >
             <Save size={13} />

@@ -187,15 +187,15 @@ export default function AdminDashboard() {
             <Link
               key={action.href}
               href={action.href}
-              className="flex items-center justify-between border border-[#1a1a1a]/10 bg-white hover:bg-[#1a1a1a] hover:border-[#1a1a1a] px-4 py-3.5 group transition-all duration-200"
+              className="flex items-center justify-between border border-[#007190]/15 bg-white hover:bg-[#007190] hover:border-[#007190] px-4 py-3.5 group transition-all duration-200"
             >
               <span
-                className="text-[10px] tracking-[0.15em] uppercase text-[#1a1a1a]/60 group-hover:text-white transition-colors"
+                className="text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 group-hover:text-white transition-colors"
                 style={fontMichroma}
               >
                 {action.label}
               </span>
-              <Plus size={13} className="text-[#1a1a1a]/30 group-hover:text-white transition-colors" />
+              <Plus size={13} className="text-[#007190]/40 group-hover:text-white transition-colors" />
             </Link>
           ))}
         </div>

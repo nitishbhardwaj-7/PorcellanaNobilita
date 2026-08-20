@@ -129,7 +129,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#1a1a1a] px-4 py-3.5 text-[10px] tracking-[0.3em] uppercase text-white hover:bg-[#3d3d3d] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-[#007190] px-4 py-3.5 text-[10px] tracking-[0.3em] uppercase text-white hover:bg-[#005d76] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               style={{ fontFamily: "var(--font-michroma), sans-serif" }}
             >
               {isLoading ? "Authenticating..." : "Enter Studio"}
