@@ -509,7 +509,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   className="w-4 h-4 border-[#1a1a1a]/15 text-[#1a1a1a] focus:ring-0 focus:outline-none"
                 />
                 <label htmlFor="isDark" className="text-xs text-[#1a1a1a]/70 select-none">
-                  Dark Background (use white text/labels on catalogue tile &amp; modal)
+                  White text for darker background materials
                 </label>
               </div>
 
