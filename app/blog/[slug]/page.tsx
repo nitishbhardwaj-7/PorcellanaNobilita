@@ -25,15 +25,17 @@ function toBlogPost(b: any): BlogPost {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const hcBlog = HARDCODED_BLOGS.find((b) => b.slug === params.slug);
-
-  let blog: any = hcBlog;
+  // CMS-managed content always wins over the hardcoded seed data — a hardcoded
+  // entry only fills in if the database has nothing for this slug (e.g. DB
+  // briefly unreachable), never as a permanent shadow over an edited post.
+  let blog: any = null;
+  try {
+    blog = await prisma.blog.findUnique({ where: { slug: params.slug } });
+  } catch (e) {
+    blog = null;
+  }
   if (!blog) {
-    try {
-      blog = await prisma.blog.findUnique({ where: { slug: params.slug } });
-    } catch (e) {
-      blog = null;
-    }
+    blog = HARDCODED_BLOGS.find((b) => b.slug === params.slug);
   }
 
   if (!blog || blog.status !== "PUBLISHED") {
@@ -56,15 +58,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function BlogDetailPage({ params }: { params: { slug: string } }) {
-  const hcBlog = HARDCODED_BLOGS.find((b) => b.slug === params.slug);
-
-  let blog: any = hcBlog;
+  // CMS-managed content always wins over the hardcoded seed data — see note
+  // in generateMetadata above.
+  let blog: any = null;
+  try {
+    blog = await prisma.blog.findUnique({ where: { slug: params.slug } });
+  } catch (e) {
+    blog = null;
+  }
   if (!blog) {
-    try {
-      blog = await prisma.blog.findUnique({ where: { slug: params.slug } });
-    } catch (e) {
-      blog = null;
-    }
+    blog = HARDCODED_BLOGS.find((b) => b.slug === params.slug);
   }
 
   if (!blog || blog.status !== "PUBLISHED") {
