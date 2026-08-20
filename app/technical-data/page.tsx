@@ -747,10 +747,10 @@ export default function TechnicalDataPage() {
             </div>
             <div className="thick-desc space-y-6 mt-6">
               <p className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest leading-relaxed">
-                6.5 mm – Lightweight and versatile, 6.5 mm porcelain is ideal for wall cladding, furniture applications and other interior surfaces where reduced weight is preferred.
+                6.5 MM – Lightweight and versatile, 6.5 MM porcelain is ideal for wall cladding, furniture applications and other interior surfaces where reduced weight is preferred.
               </p>
               <p className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest leading-relaxed">
-                12 mm – A robust and durable option, 12 mm porcelain is well suited for flooring, countertops, kitchen worktops and other high-use applications.
+                12 MM – A robust and durable option, 12 MM porcelain is well suited for flooring, countertops, kitchen worktops and other high-use applications.
               </p>
             </div>
           </div>
