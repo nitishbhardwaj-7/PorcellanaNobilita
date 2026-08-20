@@ -900,7 +900,7 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
                   DIMENSIONS
                 </h3>
                 <div className="mt-1 md:mt-2">
-                  <p className="font-michroma text-black uppercase tracking-[0.1em] leading-[1.8] text-[10px] sm:text-[12px] md:text-[14px]">
+                  <p className="font-michroma text-black tracking-[0.1em] leading-[1.8] text-[10px] sm:text-[12px] md:text-[14px]">
                     {config.dimensions.map((dim, i) => (
                       <span key={i} className="block whitespace-nowrap">
                         {dim}
@@ -926,7 +926,7 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
                   FACES
                 </h3>
                 <div className="mt-1 md:mt-2">
-                  <p className="font-michroma text-black uppercase tracking-[0.1em] leading-[1.8] text-[10px] sm:text-[12px] md:text-[14px]">
+                  <p className="font-michroma text-black tracking-[0.1em] leading-[1.8] text-[10px] sm:text-[12px] md:text-[14px]">
                     {config.faces.map((face, i) => (
                       <span key={i} className="block whitespace-nowrap">
                         {face}
@@ -957,7 +957,7 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
                   FINISHES
                 </h3>
                 <div className="mt-1 md:mt-2">
-                  <p className="font-michroma text-black uppercase tracking-[0.1em] leading-[1.8] text-[10px] sm:text-[12px] md:text-[14px]">
+                  <p className="font-michroma text-black tracking-[0.1em] leading-[1.8] text-[10px] sm:text-[12px] md:text-[14px]">
                     {config.finishes.map((finish, i) => (
                       <span key={i} className="block whitespace-nowrap">
                         {finish}
