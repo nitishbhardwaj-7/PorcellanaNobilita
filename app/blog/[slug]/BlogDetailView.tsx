@@ -15,7 +15,12 @@ const TITLE_SIZE_CLASSES: Record<string, string> = {
   xlarge: "text-[44px] sm:text-[56px] md:text-[66px]",
 };
 
+// "default" applies no color class at all, so the block inherits the
+// article's base grey (#545759) rather than being forced to pure black —
+// this is what plain, never-customized paragraphs/point-text looked like
+// before this feature existed, and must stay the true default.
 const BLOCK_COLOR_CLASSES: Record<string, string> = {
+  default: "",
   black: "text-black",
   teal: "text-[#007190]",
 };
@@ -47,11 +52,18 @@ interface ContentBlock {
   alt?: string;
   // paragraph: applies to the whole block. heading: font/size apply to the
   // whole heading, but color is chosen per-line via firstLineColor/secondLineColor.
-  color?: "black" | "teal";
+  color?: "default" | "black" | "teal";
   font?: "ivymode" | "michroma";
   size?: "small" | "standard" | "large" | "xlarge";
   firstLineColor?: "black" | "teal";
   secondLineColor?: "black" | "teal";
+  // point: the bold label and its body text are styled independently.
+  labelColor?: "default" | "black" | "teal";
+  labelFont?: "ivymode" | "michroma";
+  labelSize?: "small" | "standard" | "large" | "xlarge";
+  textColor?: "default" | "black" | "teal";
+  textFont?: "ivymode" | "michroma";
+  textSize?: "small" | "standard" | "large" | "xlarge";
 }
 
 export interface BlogPost {
@@ -161,7 +173,7 @@ export default function BlogDetailView({
                 return (
                   <p
                     key={idx}
-                    className={`font-light text-left ${BLOCK_COLOR_CLASSES[block.color || "black"]} ${
+                    className={`font-light text-left ${BLOCK_COLOR_CLASSES[block.color || "default"]} ${
                       block.font ? BLOCK_FONT_CLASSES[block.font] : ""
                     } ${PARAGRAPH_SIZE_CLASSES[block.size || "standard"]}`}
                   >
@@ -193,10 +205,20 @@ export default function BlogDetailView({
               case "point":
                 return (
                   <p key={idx} className="font-light text-left">
-                    <strong className="font-ivymode font-medium text-[#007190] text-[clamp(14px,1.35vw,20px)] mr-2 tracking-widest">
+                    <strong
+                      className={`font-medium mr-2 tracking-widest ${BLOCK_COLOR_CLASSES[block.labelColor || "teal"]} ${
+                        BLOCK_FONT_CLASSES[block.labelFont || "ivymode"]
+                      } ${PARAGRAPH_SIZE_CLASSES[block.labelSize || "standard"]}`}
+                    >
                       {block.title}:
                     </strong>
-                    {block.text}
+                    <span
+                      className={`${BLOCK_COLOR_CLASSES[block.textColor || "default"]} ${
+                        block.textFont ? BLOCK_FONT_CLASSES[block.textFont] : ""
+                      } ${PARAGRAPH_SIZE_CLASSES[block.textSize || "standard"]}`}
+                    >
+                      {block.text}
+                    </span>
                   </p>
                 );
               case "image":

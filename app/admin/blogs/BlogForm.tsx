@@ -147,14 +147,29 @@ type ContentBlock = {
   title?: string;
   src?: string;
   alt?: string;
-  color?: "black" | "teal";
+  color?: "default" | "black" | "teal";
   font?: "ivymode" | "michroma";
   size?: "small" | "standard" | "large" | "xlarge";
   firstLineColor?: "black" | "teal";
   secondLineColor?: "black" | "teal";
+  labelColor?: "default" | "black" | "teal";
+  labelFont?: "ivymode" | "michroma";
+  labelSize?: "small" | "standard" | "large" | "xlarge";
+  textColor?: "default" | "black" | "teal";
+  textFont?: "ivymode" | "michroma";
+  textSize?: "small" | "standard" | "large" | "xlarge";
 };
 
+// For heading lines only — there's no natural "inherited" color for a
+// standalone uppercase heading line, so just the two real choices.
 const COLOR_OPTIONS = [
+  { value: "black", label: "Black" },
+  { value: "teal", label: "Teal (#007190)" },
+];
+// For paragraph text and point labels/text — "Default" means no explicit
+// color override, i.e. inherit the article's normal grey body color.
+const COLOR_OPTIONS_WITH_DEFAULT = [
+  { value: "default", label: "Default" },
   { value: "black", label: "Black" },
   { value: "teal", label: "Teal (#007190)" },
 ];
@@ -292,7 +307,7 @@ function ContentBlockEditor({
               <div className="grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-                  <MiniSelect value={block.color || "black"} onChange={(v) => updateBlock(idx, { color: v as ContentBlock["color"] })} options={COLOR_OPTIONS} />
+                  <MiniSelect value={block.color || "default"} onChange={(v) => updateBlock(idx, { color: v as ContentBlock["color"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
                 </div>
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
@@ -338,21 +353,56 @@ function ContentBlockEditor({
           )}
 
           {block.type === "point" && (
-            <div className="space-y-2">
-              <input
-                type="text"
-                value={block.title || ""}
-                onChange={(e) => updateBlock(idx, { title: e.target.value })}
-                placeholder="Point label, e.g. Zero Porosity"
-                className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-              />
-              <textarea
-                value={block.text || ""}
-                onChange={(e) => updateBlock(idx, { text: e.target.value })}
-                rows={2}
-                placeholder="Point description…"
-                className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
-              />
+            <div className="space-y-3">
+              <div className="space-y-1.5">
+                <input
+                  type="text"
+                  value={block.title || ""}
+                  onChange={(e) => updateBlock(idx, { title: e.target.value })}
+                  placeholder="Point label, e.g. Zero Porosity"
+                  className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                />
+                <p className="text-[8px] text-[#8b8b8b] uppercase tracking-wider">Label style</p>
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+                    <MiniSelect value={block.labelColor || "teal"} onChange={(v) => updateBlock(idx, { labelColor: v as ContentBlock["labelColor"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                    <MiniSelect value={block.labelFont || "ivymode"} onChange={(v) => updateBlock(idx, { labelFont: v as ContentBlock["labelFont"] })} options={FONT_OPTIONS} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                    <MiniSelect value={block.labelSize || "standard"} onChange={(v) => updateBlock(idx, { labelSize: v as ContentBlock["labelSize"] })} options={SIZE_OPTIONS} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-1.5 pt-1 border-t border-[#1a1a1a]/8">
+                <textarea
+                  value={block.text || ""}
+                  onChange={(e) => updateBlock(idx, { text: e.target.value })}
+                  rows={2}
+                  placeholder="Point description…"
+                  className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed mt-2"
+                />
+                <p className="text-[8px] text-[#8b8b8b] uppercase tracking-wider">Description style</p>
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+                    <MiniSelect value={block.textColor || "default"} onChange={(v) => updateBlock(idx, { textColor: v as ContentBlock["textColor"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                    <MiniSelect value={block.textFont || "ivymode"} onChange={(v) => updateBlock(idx, { textFont: v as ContentBlock["textFont"] })} options={FONT_OPTIONS} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                    <MiniSelect value={block.textSize || "standard"} onChange={(v) => updateBlock(idx, { textSize: v as ContentBlock["textSize"] })} options={SIZE_OPTIONS} />
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
