@@ -8,9 +8,26 @@ import Footer from "@/components/Footer";
 
 // Full literal class strings (required for Tailwind's scanner to pick them up —
 // it can't see dynamically-concatenated partial class names).
+//
+// Each size scale is keyed by its own desktop (md:) pixel value as a string,
+// except "standard" — kept as a named key (rather than e.g. "46") so it
+// stays meaningful as "the original default" and so existing saved content
+// keeps rendering at exactly the same size it always has. "small"/"large"/
+// "xlarge" are kept too, mapped onto the new scale, purely so any older
+// saved content using those legacy values still renders sensibly.
 const TITLE_SIZE_CLASSES: Record<string, string> = {
-  small: "text-[24px] sm:text-[30px] md:text-[34px]",
+  "20": "text-[16px] sm:text-[18px] md:text-[20px]",
+  "24": "text-[18px] sm:text-[21px] md:text-[24px]",
+  "28": "text-[20px] sm:text-[24px] md:text-[28px]",
+  "32": "text-[23px] sm:text-[27px] md:text-[32px]",
+  "36": "text-[26px] sm:text-[31px] md:text-[36px]",
+  "40": "text-[29px] sm:text-[35px] md:text-[40px]",
   standard: "text-[32px] sm:text-[40px] md:text-[46px]",
+  "52": "text-[36px] sm:text-[45px] md:text-[52px]",
+  "58": "text-[40px] sm:text-[50px] md:text-[58px]",
+  "66": "text-[45px] sm:text-[57px] md:text-[66px]",
+  "74": "text-[50px] sm:text-[64px] md:text-[74px]",
+  small: "text-[24px] sm:text-[30px] md:text-[34px]",
   large: "text-[38px] sm:text-[48px] md:text-[56px]",
   xlarge: "text-[44px] sm:text-[56px] md:text-[66px]",
 };
@@ -31,15 +48,35 @@ const BLOCK_FONT_CLASSES: Record<string, string> = {
 };
 
 const PARAGRAPH_SIZE_CLASSES: Record<string, string> = {
-  small: "text-[clamp(12px,1.1vw,16px)]",
+  "12": "text-[clamp(10px,0.8vw,12px)]",
+  "14": "text-[clamp(11px,0.95vw,14px)]",
+  "16": "text-[clamp(12px,1.1vw,16px)]",
+  "18": "text-[clamp(13px,1.2vw,18px)]",
   standard: "text-[clamp(14px,1.35vw,20px)]",
+  "22": "text-[clamp(15px,1.5vw,22px)]",
+  "24": "text-[clamp(16px,1.6vw,24px)]",
+  "26": "text-[clamp(17px,1.8vw,26px)]",
+  "28": "text-[clamp(18px,1.9vw,28px)]",
+  "32": "text-[clamp(20px,2.2vw,32px)]",
+  "36": "text-[clamp(22px,2.5vw,36px)]",
+  small: "text-[clamp(12px,1.1vw,16px)]",
   large: "text-[clamp(16px,1.6vw,24px)]",
   xlarge: "text-[clamp(18px,1.9vw,28px)]",
 };
 
 const HEADING_SIZE_CLASSES: Record<string, string> = {
-  small: "text-[18px] sm:text-[20px] md:text-[22px]",
+  "18": "text-[15px] sm:text-[16px] md:text-[18px]",
+  "20": "text-[16px] sm:text-[18px] md:text-[20px]",
+  "22": "text-[18px] sm:text-[20px] md:text-[22px]",
+  "24": "text-[19px] sm:text-[22px] md:text-[24px]",
+  "26": "text-[21px] sm:text-[24px] md:text-[26px]",
   standard: "text-[22px] sm:text-[26px] md:text-[28px]",
+  "30": "text-[23px] sm:text-[27px] md:text-[30px]",
+  "32": "text-[25px] sm:text-[29px] md:text-[32px]",
+  "36": "text-[27px] sm:text-[32px] md:text-[36px]",
+  "40": "text-[29px] sm:text-[35px] md:text-[40px]",
+  "44": "text-[30px] sm:text-[38px] md:text-[44px]",
+  small: "text-[18px] sm:text-[20px] md:text-[22px]",
   large: "text-[26px] sm:text-[32px] md:text-[36px]",
   xlarge: "text-[30px] sm:text-[38px] md:text-[44px]",
 };
@@ -54,16 +91,16 @@ interface ContentBlock {
   // whole heading, but color is chosen per-line via firstLineColor/secondLineColor.
   color?: "default" | "black" | "teal";
   font?: "ivymode" | "michroma";
-  size?: "small" | "standard" | "large" | "xlarge";
+  size?: string; // key into PARAGRAPH_SIZE_CLASSES or HEADING_SIZE_CLASSES — "standard" or a px value
   firstLineColor?: "black" | "teal";
   secondLineColor?: "black" | "teal";
   // point: the bold label and its body text are styled independently.
   labelColor?: "default" | "black" | "teal";
   labelFont?: "ivymode" | "michroma";
-  labelSize?: "small" | "standard" | "large" | "xlarge";
+  labelSize?: string;
   textColor?: "default" | "black" | "teal";
   textFont?: "ivymode" | "michroma";
-  textSize?: "small" | "standard" | "large" | "xlarge";
+  textSize?: string;
 }
 
 export interface BlogPost {
@@ -71,7 +108,7 @@ export interface BlogPost {
   title: string;
   titleColor?: "black" | "teal";
   titleFont?: "ivymode" | "michroma";
-  titleFontSize?: "small" | "standard" | "large" | "xlarge";
+  titleFontSize?: string;
   author: string;
   authorImage: string;
   date: string;
@@ -141,7 +178,7 @@ export default function BlogDetailView({
           <h1
             className={`${post.titleFont === "michroma" ? "font-michroma" : "font-ivymode"} ${
               post.titleColor === "teal" ? "text-[#007190]" : "text-neutral-900"
-            } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"]} font-normal leading-[1.12] tracking-[0.05em] uppercase text-center`}
+            } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"] || TITLE_SIZE_CLASSES.standard} font-normal leading-[1.12] tracking-[0.05em] uppercase text-center`}
           >
             {post.title}
           </h1>
@@ -175,7 +212,7 @@ export default function BlogDetailView({
                     key={idx}
                     className={`font-light text-left ${BLOCK_COLOR_CLASSES[block.color || "default"]} ${
                       block.font ? BLOCK_FONT_CLASSES[block.font] : ""
-                    } ${PARAGRAPH_SIZE_CLASSES[block.size || "standard"]}`}
+                    } ${PARAGRAPH_SIZE_CLASSES[block.size || "standard"] || PARAGRAPH_SIZE_CLASSES.standard}`}
                   >
                     {block.text}
                   </p>
@@ -188,7 +225,7 @@ export default function BlogDetailView({
                   <h2
                     key={idx}
                     className={`${block.font ? BLOCK_FONT_CLASSES[block.font] : "font-ivymode"} font-medium ${
-                      HEADING_SIZE_CLASSES[block.size || "standard"]
+                      HEADING_SIZE_CLASSES[block.size || "standard"] || HEADING_SIZE_CLASSES.standard
                     } tracking-[0.05em] uppercase leading-tight pt-6 pb-2`}
                   >
                     {headingLines.map((lineText, lineIdx) => (
@@ -208,14 +245,14 @@ export default function BlogDetailView({
                     <strong
                       className={`font-medium mr-2 tracking-widest ${BLOCK_COLOR_CLASSES[block.labelColor || "teal"]} ${
                         BLOCK_FONT_CLASSES[block.labelFont || "ivymode"]
-                      } ${PARAGRAPH_SIZE_CLASSES[block.labelSize || "standard"]}`}
+                      } ${PARAGRAPH_SIZE_CLASSES[block.labelSize || "standard"] || PARAGRAPH_SIZE_CLASSES.standard}`}
                     >
                       {block.title}:
                     </strong>
                     <span
                       className={`${BLOCK_COLOR_CLASSES[block.textColor || "default"]} ${
                         block.textFont ? BLOCK_FONT_CLASSES[block.textFont] : ""
-                      } ${PARAGRAPH_SIZE_CLASSES[block.textSize || "standard"]}`}
+                      } ${PARAGRAPH_SIZE_CLASSES[block.textSize || "standard"] || PARAGRAPH_SIZE_CLASSES.standard}`}
                     >
                       {block.text}
                     </span>

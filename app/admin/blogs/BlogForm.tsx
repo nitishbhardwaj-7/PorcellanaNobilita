@@ -149,15 +149,15 @@ type ContentBlock = {
   alt?: string;
   color?: "default" | "black" | "teal";
   font?: "ivymode" | "michroma";
-  size?: "small" | "standard" | "large" | "xlarge";
+  size?: string;
   firstLineColor?: "black" | "teal";
   secondLineColor?: "black" | "teal";
   labelColor?: "default" | "black" | "teal";
   labelFont?: "ivymode" | "michroma";
-  labelSize?: "small" | "standard" | "large" | "xlarge";
+  labelSize?: string;
   textColor?: "default" | "black" | "teal";
   textFont?: "ivymode" | "michroma";
-  textSize?: "small" | "standard" | "large" | "xlarge";
+  textSize?: string;
 };
 
 // For heading lines only — there's no natural "inherited" color for a
@@ -177,11 +177,52 @@ const FONT_OPTIONS = [
   { value: "ivymode", label: "Ivymode" },
   { value: "michroma", label: "Michroma" },
 ];
-const SIZE_OPTIONS = [
-  { value: "small", label: "Small" },
-  { value: "standard", label: "Standard" },
-  { value: "large", label: "Large" },
-  { value: "xlarge", label: "Extra Large" },
+// Each size dropdown shows its actual pixel value so the size difference
+// between options is concrete rather than a vague "Small/Large" guess.
+// "Standard" is kept as a named option (rather than just its own px value)
+// since it's specifically "the original default" — every other option is
+// labeled with its value alone. Values are the desktop (md:) pixel size for
+// the title/heading scales, and the desktop clamp() ceiling for paragraph/
+// point text. Must stay in sync with the *_SIZE_CLASSES maps in
+// app/blog/[slug]/BlogDetailView.tsx.
+const TITLE_SIZE_OPTIONS = [
+  { value: "20", label: "20px" },
+  { value: "24", label: "24px" },
+  { value: "28", label: "28px" },
+  { value: "32", label: "32px" },
+  { value: "36", label: "36px" },
+  { value: "40", label: "40px" },
+  { value: "standard", label: "Standard (46px)" },
+  { value: "52", label: "52px" },
+  { value: "58", label: "58px" },
+  { value: "66", label: "66px" },
+  { value: "74", label: "74px" },
+];
+const HEADING_SIZE_OPTIONS = [
+  { value: "18", label: "18px" },
+  { value: "20", label: "20px" },
+  { value: "22", label: "22px" },
+  { value: "24", label: "24px" },
+  { value: "26", label: "26px" },
+  { value: "standard", label: "Standard (28px)" },
+  { value: "30", label: "30px" },
+  { value: "32", label: "32px" },
+  { value: "36", label: "36px" },
+  { value: "40", label: "40px" },
+  { value: "44", label: "44px" },
+];
+const PARAGRAPH_SIZE_OPTIONS = [
+  { value: "12", label: "12px" },
+  { value: "14", label: "14px" },
+  { value: "16", label: "16px" },
+  { value: "18", label: "18px" },
+  { value: "standard", label: "Standard (20px)" },
+  { value: "22", label: "22px" },
+  { value: "24", label: "24px" },
+  { value: "26", label: "26px" },
+  { value: "28", label: "28px" },
+  { value: "32", label: "32px" },
+  { value: "36", label: "36px" },
 ];
 
 function MiniSelect({
@@ -315,7 +356,7 @@ function ContentBlockEditor({
                 </div>
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
-                  <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={SIZE_OPTIONS} />
+                  <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={PARAGRAPH_SIZE_OPTIONS} />
                 </div>
               </div>
             </div>
@@ -345,7 +386,7 @@ function ContentBlockEditor({
                 </div>
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
-                  <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={SIZE_OPTIONS} />
+                  <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={HEADING_SIZE_OPTIONS} />
                 </div>
               </div>
               <p className="text-[10px] text-[#8b8b8b]">A new line in the text above becomes the "2nd line" — each line's color is independent, so you can put teal first, black second, or the other way around.</p>
@@ -374,7 +415,7 @@ function ContentBlockEditor({
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
-                    <MiniSelect value={block.labelSize || "standard"} onChange={(v) => updateBlock(idx, { labelSize: v as ContentBlock["labelSize"] })} options={SIZE_OPTIONS} />
+                    <MiniSelect value={block.labelSize || "standard"} onChange={(v) => updateBlock(idx, { labelSize: v as ContentBlock["labelSize"] })} options={PARAGRAPH_SIZE_OPTIONS} />
                   </div>
                 </div>
               </div>
@@ -399,7 +440,7 @@ function ContentBlockEditor({
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
-                    <MiniSelect value={block.textSize || "standard"} onChange={(v) => updateBlock(idx, { textSize: v as ContentBlock["textSize"] })} options={SIZE_OPTIONS} />
+                    <MiniSelect value={block.textSize || "standard"} onChange={(v) => updateBlock(idx, { textSize: v as ContentBlock["textSize"] })} options={PARAGRAPH_SIZE_OPTIONS} />
                   </div>
                 </div>
               </div>
@@ -465,7 +506,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
     title: "",
     titleColor: "black" as "black" | "teal",
     titleFont: "ivymode" as "ivymode" | "michroma",
-    titleFontSize: "standard" as "small" | "standard" | "large" | "xlarge",
+    titleFontSize: "standard" as string,
     slug: "",
     excerpt: "",
     author: "NOBILITA Editorial Team",
@@ -504,7 +545,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
               title: b.title,
               titleColor: b.titleColor === "teal" ? "teal" : "black",
               titleFont: b.titleFont === "michroma" ? "michroma" : "ivymode",
-              titleFontSize: ["small", "large", "xlarge"].includes(b.titleFontSize) ? b.titleFontSize : "standard",
+              titleFontSize: TITLE_SIZE_OPTIONS.some((o) => o.value === b.titleFontSize) ? b.titleFontSize : "standard",
               slug: b.slug,
               excerpt: b.excerpt || "",
               author: b.author || "NOBILITA Editorial Team",
@@ -675,8 +716,8 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   </label>
                   <MiniSelect
                     value={form.titleFontSize}
-                    onChange={(val) => setForm((p) => ({ ...p, titleFontSize: val as "small" | "standard" | "large" | "xlarge" }))}
-                    options={SIZE_OPTIONS}
+                    onChange={(val) => setForm((p) => ({ ...p, titleFontSize: val }))}
+                    options={TITLE_SIZE_OPTIONS}
                   />
                 </div>
               </div>
