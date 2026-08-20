@@ -161,8 +161,7 @@ export default function AdminDashboard() {
                   <Icon size={15} />
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <p className="text-[11px] text-[#8b8b8b]">{card.detail}</p>
+              <div className="flex items-center justify-center">
                 <Link
                   href={card.href}
                   className="flex items-center gap-1 text-[9px] tracking-[0.2em] uppercase text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-colors"
