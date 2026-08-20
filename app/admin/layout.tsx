@@ -124,37 +124,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Logo area */}
-        <div className="flex h-16 items-center justify-between px-6 border-b border-white/[0.06]">
+        {/* Logo area — enlarged and centered */}
+        <div className="relative flex h-24 items-center justify-center px-6 border-b border-white/[0.06]">
           <Link href="/admin">
             <Image
               src="/images/NOBILITA_white.png"
               alt="Nobilita"
-              width={120}
-              height={32}
-              className="object-contain opacity-90 hover:opacity-100 transition-opacity"
+              width={170}
+              height={46}
+              className="object-contain"
             />
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="text-white/30 hover:text-white transition-colors lg:hidden"
+            className="absolute right-4 text-white hover:text-white/70 transition-colors lg:hidden"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* CMS label */}
-        <div className="px-6 pt-6 pb-3">
-          <span
-            className="text-[9px] tracking-[0.35em] uppercase text-white/25"
-            style={{ fontFamily: "var(--font-michroma), sans-serif" }}
-          >
-            Content Studio
-          </span>
-        </div>
-
         {/* Navigation */}
-        <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 px-3 pt-6 space-y-0.5 overflow-y-auto">
           {menuItems.map((item) => {
             const isActive = item.exact
               ? pathname === item.path
@@ -166,26 +156,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={item.path}
                 href={item.path}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 transition-all duration-150 group ${
-                  isActive
-                    ? "bg-white/[0.07] text-white"
-                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]"
+                className={`flex items-center gap-3 px-3 py-2.5 text-white transition-all duration-150 group ${
+                  isActive ? "bg-white/[0.07]" : "hover:bg-white/[0.04]"
                 }`}
               >
-                <Icon
-                  size={15}
-                  className={isActive ? "text-white/70" : "text-white/30 group-hover:text-white/50"}
-                />
+                <Icon size={15} className="text-white" />
                 <span
-                  className={`text-[11px] tracking-[0.15em] uppercase ${
-                    isActive ? "text-white" : ""
-                  }`}
+                  className="text-[11px] tracking-[0.15em] uppercase text-white"
                   style={{ fontFamily: "var(--font-michroma), sans-serif" }}
                 >
                   {item.name}
                 </span>
                 {isActive && (
-                  <ChevronRight size={12} className="ml-auto text-white/30" />
+                  <ChevronRight size={12} className="ml-auto text-white" />
                 )}
               </Link>
             );
@@ -195,9 +178,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Bottom user area */}
         <div className="border-t border-white/[0.06] p-4 space-y-3">
           <div className="px-2">
-            <p className="text-[10px] text-white/50 truncate">{user?.email || "—"}</p>
+            <p className="text-[10px] text-white truncate">{user?.email || "—"}</p>
             <p
-              className="text-[9px] tracking-[0.2em] uppercase text-white/25 mt-0.5"
+              className="text-[9px] tracking-[0.2em] uppercase text-white mt-0.5"
               style={{ fontFamily: "var(--font-michroma), sans-serif" }}
             >
               {user?.role || "ADMIN"}
@@ -205,7 +188,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-2.5 px-2 py-2 text-white/30 hover:text-red-400 transition-colors text-[11px]"
+            className="flex w-full items-center gap-2.5 px-2 py-2 text-white hover:text-red-400 transition-colors text-[11px]"
           >
             <LogOut size={14} />
             <span
