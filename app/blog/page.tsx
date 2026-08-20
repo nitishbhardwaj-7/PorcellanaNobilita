@@ -17,6 +17,9 @@ interface BlogListItem {
   title: string;
   image: string;
   date: string;
+  author: string;
+  showDate: boolean;
+  showAuthor: boolean;
   href: string;
 }
 
@@ -32,6 +35,9 @@ export default function BlogPage() {
       title: b.title,
       image: b.heroImage || "/images/blogs page images/ferro-industriale-blog-hero.webp",
       date: b.publishedAt.slice(0, 10),
+      author: b.author || "",
+      showDate: true,
+      showAuthor: true,
       href: `/blog/${b.slug}`,
     }));
 
@@ -46,6 +52,9 @@ export default function BlogPage() {
             title: b.title,
             image: b.heroImage || "/images/blogs page images/ferro-industriale-blog-hero.webp",
             date: (b.publishedAt || b.createdAt || "").slice(0, 10),
+            author: b.author || "",
+            showDate: b.showDateOnCard ?? true,
+            showAuthor: b.showAuthorOnCard ?? true,
             href: `/blog/${b.slug}`,
           }));
 
@@ -245,12 +254,23 @@ export default function BlogPage() {
                       </h2>
                     </div>
 
+                    {/* Bottom Left Author */}
+                    {post.showAuthor && post.author && (
+                      <div className="absolute bottom-2 left-3 md:bottom-3 md:left-4 z-10 pointer-events-none select-none text-left">
+                        <span className="blog-card-author font-ivymode font-light text-[#007190] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] tracking-[0.20em] drop-shadow-md block">
+                          {post.author}
+                        </span>
+                      </div>
+                    )}
+
                     {/* Bottom Right Date */}
-                    <div className="absolute bottom-2 right-3 md:bottom-3 md:right-4 z-10 pointer-events-none select-none text-right">
-                      <span className="blog-card-date font-ivymode font-light text-[#007190] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] tracking-[0.20em] drop-shadow-md block">
-                        {post.date}
-                      </span>
-                    </div>
+                    {post.showDate && (
+                      <div className="absolute bottom-2 right-3 md:bottom-3 md:right-4 z-10 pointer-events-none select-none text-right">
+                        <span className="blog-card-date font-ivymode font-light text-[#007190] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] tracking-[0.20em] drop-shadow-md block">
+                          {post.date}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </Link>
               ))}

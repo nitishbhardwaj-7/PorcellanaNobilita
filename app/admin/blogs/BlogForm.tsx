@@ -481,6 +481,8 @@ export default function BlogForm({ blogId }: BlogFormProps) {
     order: 0,
     status: "DRAFT" as "DRAFT" | "PUBLISHED",
     publishedAt: new Date().toISOString().slice(0, 10),
+    showDateOnCard: true,
+    showAuthorOnCard: true,
   });
 
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
@@ -518,6 +520,8 @@ export default function BlogForm({ blogId }: BlogFormProps) {
               order: b.order ?? 0,
               status: b.status,
               publishedAt: b.publishedAt ? new Date(b.publishedAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+              showDateOnCard: b.showDateOnCard ?? true,
+              showAuthorOnCard: b.showAuthorOnCard ?? true,
             });
             setSlugManuallyEdited(true);
           }
@@ -900,6 +904,37 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                 />
                 <p className="text-[10px] text-[#8b8b8b]">Lower = shown first on the blogs listing</p>
+              </div>
+
+              <div className="space-y-2 pt-1">
+                <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                  Blogs Listing Tile
+                </label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="showDateOnCard"
+                    checked={form.showDateOnCard}
+                    onChange={(e) => setForm((p) => ({ ...p, showDateOnCard: e.target.checked }))}
+                    className="w-4 h-4 border-[#1a1a1a]/15 text-[#1a1a1a] focus:ring-0 focus:outline-none"
+                  />
+                  <label htmlFor="showDateOnCard" className="text-xs text-[#1a1a1a]/70 select-none">
+                    Show published date on card
+                  </label>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="showAuthorOnCard"
+                    checked={form.showAuthorOnCard}
+                    onChange={(e) => setForm((p) => ({ ...p, showAuthorOnCard: e.target.checked }))}
+                    className="w-4 h-4 border-[#1a1a1a]/15 text-[#1a1a1a] focus:ring-0 focus:outline-none"
+                  />
+                  <label htmlFor="showAuthorOnCard" className="text-xs text-[#1a1a1a]/70 select-none">
+                    Show author name on card
+                  </label>
+                </div>
+                <p className="text-[10px] text-[#8b8b8b]">Turn either or both off to hide them from the blogs listing tile.</p>
               </div>
             </div>
           </div>
