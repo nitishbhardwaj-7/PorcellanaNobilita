@@ -15,12 +15,43 @@ const TITLE_SIZE_CLASSES: Record<string, string> = {
   xlarge: "text-[44px] sm:text-[56px] md:text-[66px]",
 };
 
+const BLOCK_COLOR_CLASSES: Record<string, string> = {
+  black: "text-black",
+  teal: "text-[#007190]",
+};
+
+const BLOCK_FONT_CLASSES: Record<string, string> = {
+  ivymode: "font-ivymode",
+  michroma: "font-michroma",
+};
+
+const PARAGRAPH_SIZE_CLASSES: Record<string, string> = {
+  small: "text-[clamp(12px,1.1vw,16px)]",
+  standard: "text-[clamp(14px,1.35vw,20px)]",
+  large: "text-[clamp(16px,1.6vw,24px)]",
+  xlarge: "text-[clamp(18px,1.9vw,28px)]",
+};
+
+const HEADING_SIZE_CLASSES: Record<string, string> = {
+  small: "text-[18px] sm:text-[20px] md:text-[22px]",
+  standard: "text-[22px] sm:text-[26px] md:text-[28px]",
+  large: "text-[26px] sm:text-[32px] md:text-[36px]",
+  xlarge: "text-[30px] sm:text-[38px] md:text-[44px]",
+};
+
 interface ContentBlock {
   type: "paragraph" | "heading" | "point" | "image";
   text?: string;
   title?: string;
   src?: string;
   alt?: string;
+  // paragraph: applies to the whole block. heading: font/size apply to the
+  // whole heading, but color is chosen per-line via firstLineColor/secondLineColor.
+  color?: "black" | "teal";
+  font?: "ivymode" | "michroma";
+  size?: "small" | "standard" | "large" | "xlarge";
+  firstLineColor?: "black" | "teal";
+  secondLineColor?: "black" | "teal";
 }
 
 export interface BlogPost {
@@ -128,25 +159,30 @@ export default function BlogDetailView({
             switch (block.type) {
               case "paragraph":
                 return (
-                  <p key={idx} className="font-light text-left">
+                  <p
+                    key={idx}
+                    className={`font-light text-left ${BLOCK_COLOR_CLASSES[block.color || "black"]} ${
+                      block.font ? BLOCK_FONT_CLASSES[block.font] : ""
+                    } ${PARAGRAPH_SIZE_CLASSES[block.size || "standard"]}`}
+                  >
                     {block.text}
                   </p>
                 );
               case "heading": {
                 const headingLines = block.text ? block.text.split("\n") : [];
+                const firstLineClass = BLOCK_COLOR_CLASSES[block.firstLineColor || "teal"];
+                const secondLineClass = BLOCK_COLOR_CLASSES[block.secondLineColor || "black"];
                 return (
                   <h2
                     key={idx}
-                    className="font-ivymode font-medium text-[22px] sm:text-[26px] md:text-[28px] tracking-[0.05em] uppercase leading-tight pt-6 pb-2"
+                    className={`${block.font ? BLOCK_FONT_CLASSES[block.font] : "font-ivymode"} font-medium ${
+                      HEADING_SIZE_CLASSES[block.size || "standard"]
+                    } tracking-[0.05em] uppercase leading-tight pt-6 pb-2`}
                   >
                     {headingLines.map((lineText, lineIdx) => (
                       <span
                         key={lineIdx}
-                        className={
-                          lineIdx === 0
-                            ? "text-[#007190] block"
-                            : "text-black block mt-1"
-                        }
+                        className={`${lineIdx === 0 ? firstLineClass : secondLineClass} block ${lineIdx > 0 ? "mt-1" : ""}`}
                       >
                         {lineText}
                       </span>

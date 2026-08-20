@@ -147,7 +147,49 @@ type ContentBlock = {
   title?: string;
   src?: string;
   alt?: string;
+  color?: "black" | "teal";
+  font?: "ivymode" | "michroma";
+  size?: "small" | "standard" | "large" | "xlarge";
+  firstLineColor?: "black" | "teal";
+  secondLineColor?: "black" | "teal";
 };
+
+const COLOR_OPTIONS = [
+  { value: "black", label: "Black" },
+  { value: "teal", label: "Teal (#007190)" },
+];
+const FONT_OPTIONS = [
+  { value: "ivymode", label: "Ivymode" },
+  { value: "michroma", label: "Michroma" },
+];
+const SIZE_OPTIONS = [
+  { value: "small", label: "Small" },
+  { value: "standard", label: "Standard" },
+  { value: "large", label: "Large" },
+  { value: "xlarge", label: "Extra Large" },
+];
+
+function MiniSelect({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1.5 text-[11px] text-[#1a1a1a] outline-none focus:border-[#1a1a1a]/40"
+    >
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>{o.label}</option>
+      ))}
+    </select>
+  );
+}
 
 const BLOCK_TYPES: { value: ContentBlock["type"]; label: string }[] = [
   { value: "paragraph", label: "Paragraph" },
@@ -239,25 +281,59 @@ function ContentBlockEditor({
           </select>
 
           {block.type === "paragraph" && (
-            <textarea
-              value={block.text || ""}
-              onChange={(e) => updateBlock(idx, { text: e.target.value })}
-              rows={3}
-              placeholder="Paragraph text…"
-              className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
-            />
+            <div className="space-y-2">
+              <textarea
+                value={block.text || ""}
+                onChange={(e) => updateBlock(idx, { text: e.target.value })}
+                rows={3}
+                placeholder="Paragraph text…"
+                className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
+              />
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+                  <MiniSelect value={block.color || "black"} onChange={(v) => updateBlock(idx, { color: v as ContentBlock["color"] })} options={COLOR_OPTIONS} />
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                  <MiniSelect value={block.font || "ivymode"} onChange={(v) => updateBlock(idx, { font: v as ContentBlock["font"] })} options={FONT_OPTIONS} />
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                  <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={SIZE_OPTIONS} />
+                </div>
+              </div>
+            </div>
           )}
 
           {block.type === "heading" && (
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <textarea
                 value={block.text || ""}
                 onChange={(e) => updateBlock(idx, { text: e.target.value })}
                 rows={2}
-                placeholder="Heading text… (use a new line to split into two colored lines)"
+                placeholder="Heading text… (use a new line to split into two independently-colored lines)"
                 className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
               />
-              <p className="text-[10px] text-[#8b8b8b]">First line renders in teal, following lines in black.</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">1st Line Color</label>
+                  <MiniSelect value={block.firstLineColor || "teal"} onChange={(v) => updateBlock(idx, { firstLineColor: v as ContentBlock["firstLineColor"] })} options={COLOR_OPTIONS} />
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">2nd Line Color</label>
+                  <MiniSelect value={block.secondLineColor || "black"} onChange={(v) => updateBlock(idx, { secondLineColor: v as ContentBlock["secondLineColor"] })} options={COLOR_OPTIONS} />
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                  <MiniSelect value={block.font || "ivymode"} onChange={(v) => updateBlock(idx, { font: v as ContentBlock["font"] })} options={FONT_OPTIONS} />
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                  <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={SIZE_OPTIONS} />
+                </div>
+              </div>
+              <p className="text-[10px] text-[#8b8b8b]">A new line in the text above becomes the "2nd line" — each line's color is independent, so you can put teal first, black second, or the other way around.</p>
             </div>
           )}
 
