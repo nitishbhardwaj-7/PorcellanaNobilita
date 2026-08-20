@@ -759,46 +759,16 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                    Author
-                  </label>
-                  <input
-                    type="text"
-                    value={form.author}
-                    onChange={(e) => setForm((p) => ({ ...p, author: e.target.value }))}
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                    Read Time
-                  </label>
-                  <input
-                    type="text"
-                    value={form.readTime}
-                    onChange={(e) => setForm((p) => ({ ...p, readTime: e.target.value }))}
-                    placeholder="e.g. 4 min read"
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                  />
-                </div>
-              </div>
-
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                  Author Image URL
+                  Author
                 </label>
-                <div className="flex gap-1.5">
-                  <input
-                    type="text"
-                    value={form.authorImage}
-                    onChange={(e) => setForm((p) => ({ ...p, authorImage: e.target.value }))}
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-xs font-mono text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                    placeholder="/uploads/…"
-                  />
-                  <MediaPickerButton folder="blogs" onSelect={(url) => setForm((p) => ({ ...p, authorImage: url }))} />
-                </div>
+                <input
+                  type="text"
+                  value={form.author}
+                  onChange={(e) => setForm((p) => ({ ...p, author: e.target.value }))}
+                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+                />
               </div>
             </div>
 
