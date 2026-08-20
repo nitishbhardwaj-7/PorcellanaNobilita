@@ -653,44 +653,30 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                     Title Color
                   </label>
-                  <CustomSelect
+                  <MiniSelect
                     value={form.titleColor}
                     onChange={(val) => setForm((p) => ({ ...p, titleColor: val as "black" | "teal" }))}
-                    options={[
-                      { value: "black", label: "Black" },
-                      { value: "teal", label: "Teal (#007190)" },
-                    ]}
-                    style={fontMichroma}
+                    options={COLOR_OPTIONS}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                     Title Font
                   </label>
-                  <CustomSelect
+                  <MiniSelect
                     value={form.titleFont}
                     onChange={(val) => setForm((p) => ({ ...p, titleFont: val as "ivymode" | "michroma" }))}
-                    options={[
-                      { value: "ivymode", label: "Ivymode" },
-                      { value: "michroma", label: "Michroma" },
-                    ]}
-                    style={fontMichroma}
+                    options={FONT_OPTIONS}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                     Title Size
                   </label>
-                  <CustomSelect
+                  <MiniSelect
                     value={form.titleFontSize}
                     onChange={(val) => setForm((p) => ({ ...p, titleFontSize: val as "small" | "standard" | "large" | "xlarge" }))}
-                    options={[
-                      { value: "small", label: "Small" },
-                      { value: "standard", label: "Standard" },
-                      { value: "large", label: "Large" },
-                      { value: "xlarge", label: "Extra Large" },
-                    ]}
-                    style={fontMichroma}
+                    options={SIZE_OPTIONS}
                   />
                 </div>
               </div>
