@@ -903,7 +903,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, order: parseInt(e.target.value) || 0 }))}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                 />
-                <p className="text-[10px] text-[#8b8b8b]">Lower = shown first on the blogs listing</p>
+                <p className="text-[10px] text-[#8b8b8b]">Lower number = shown first on the page</p>
               </div>
 
               <div className="space-y-2 pt-1">
