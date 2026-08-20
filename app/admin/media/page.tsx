@@ -201,7 +201,7 @@ export default function MediaLibrary() {
                 onClick={() => setCurrentFolder(folder)}
                 className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase border transition-colors ${
                   currentFolder === folder
-                    ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
+                    ? "bg-[#007190] text-white border-[#007190]"
                     : "bg-white text-[#1a1a1a]/40 border-[#1a1a1a]/15 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/30"
                 }`}
                 style={fontMichroma}
