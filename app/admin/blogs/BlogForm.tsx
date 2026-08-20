@@ -539,8 +539,11 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, excerpt: e.target.value }))}
                   rows={3}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
-                  placeholder="A short summary shown on the blogs listing and 'Recent Blogs' carousel…"
+                  placeholder="A short summary…"
                 />
+                <p className="text-[10px] text-[#8b8b8b]">
+                  Shown as the preview text in the "Recent Blogs" carousel on other posts, and used as the SEO meta description if that field below is left blank.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-5">
