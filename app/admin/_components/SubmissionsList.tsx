@@ -21,9 +21,10 @@ interface SubmissionsListProps {
   label: string; // e.g. "Query" — used in empty/count copy
   eyebrow: string; // e.g. "Enquiries"
   showMessage?: boolean; // whether to render the message column (newsletter usually has none)
+  noun?: string; // e.g. "Downloads" instead of "Submissions", for catalog/datasheet
 }
 
-export default function SubmissionsList({ type, label, eyebrow, showMessage = true }: SubmissionsListProps) {
+export default function SubmissionsList({ type, label, eyebrow, showMessage = true, noun = "Submissions" }: SubmissionsListProps) {
   const [items, setItems] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -108,7 +109,7 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
             {eyebrow}
           </p>
           <h2 className="text-3xl font-light text-[#1a1a1a]" style={fontIvymode}>
-            {label} Submissions
+            {label} {noun}
           </h2>
         </div>
         {unreadCount > 0 && (
@@ -130,7 +131,7 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
       {items.length === 0 ? (
         <div className="bg-white border border-[#1a1a1a]/8 p-16 text-center">
           <p className="text-sm text-[#8b8b8b]">
-            No {label.toLowerCase()} submissions yet. They'll appear here as visitors submit the form on the site.
+            No {label.toLowerCase()} {noun.toLowerCase()} yet. They'll appear here as visitors submit the form on the site.
           </p>
         </div>
       ) : (
