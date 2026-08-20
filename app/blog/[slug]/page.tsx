@@ -13,6 +13,7 @@ function toBlogPost(b: any): BlogPost {
     title: b.title,
     titleColor: b.titleColor || "black",
     titleFont: b.titleFont || "ivymode",
+    titleFontSize: b.titleFontSize || "standard",
     author: b.author,
     authorImage: b.authorImage || "",
     date: (b.publishedAt || b.createdAt || "").toString(),

@@ -71,6 +71,7 @@ model Blog {
   title          String
   titleColor     String   @default("black") // "black" | "teal" (#007190) — rendered color of the blog title
   titleFont      String   @default("ivymode") // "ivymode" | "michroma" — rendered font of the blog title
+  titleFontSize  String   @default("standard") // "small" | "standard" | "large" | "xlarge" — rendered size of the blog title
   excerpt        String?  @db.Text
   author         String   @default("NOBILITA Editorial Team")
   authorImage    String?

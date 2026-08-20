@@ -6,6 +6,15 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+// Full literal class strings (required for Tailwind's scanner to pick them up —
+// it can't see dynamically-concatenated partial class names).
+const TITLE_SIZE_CLASSES: Record<string, string> = {
+  small: "text-[24px] sm:text-[30px] md:text-[34px]",
+  standard: "text-[32px] sm:text-[40px] md:text-[46px]",
+  large: "text-[38px] sm:text-[48px] md:text-[56px]",
+  xlarge: "text-[44px] sm:text-[56px] md:text-[66px]",
+};
+
 interface ContentBlock {
   type: "paragraph" | "heading" | "point" | "image";
   text?: string;
@@ -19,6 +28,7 @@ export interface BlogPost {
   title: string;
   titleColor?: "black" | "teal";
   titleFont?: "ivymode" | "michroma";
+  titleFontSize?: "small" | "standard" | "large" | "xlarge";
   author: string;
   authorImage: string;
   date: string;
@@ -88,7 +98,7 @@ export default function BlogDetailView({
           <h1
             className={`${post.titleFont === "michroma" ? "font-michroma" : "font-ivymode"} ${
               post.titleColor === "teal" ? "text-[#007190]" : "text-neutral-900"
-            } font-normal text-[32px] sm:text-[40px] md:text-[46px] leading-[1.12] tracking-[0.05em] uppercase text-center`}
+            } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"]} font-normal leading-[1.12] tracking-[0.05em] uppercase text-center`}
           >
             {post.title}
           </h1>

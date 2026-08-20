@@ -339,6 +339,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
     title: "",
     titleColor: "black" as "black" | "teal",
     titleFont: "ivymode" as "ivymode" | "michroma",
+    titleFontSize: "standard" as "small" | "standard" | "large" | "xlarge",
     slug: "",
     excerpt: "",
     author: "NOBILITA Editorial Team",
@@ -375,6 +376,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
               title: b.title,
               titleColor: b.titleColor === "teal" ? "teal" : "black",
               titleFont: b.titleFont === "michroma" ? "michroma" : "ivymode",
+              titleFontSize: ["small", "large", "xlarge"].includes(b.titleFontSize) ? b.titleFontSize : "standard",
               slug: b.slug,
               excerpt: b.excerpt || "",
               author: b.author || "NOBILITA Editorial Team",
@@ -516,7 +518,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                 <p className="text-[10px] text-[#8b8b8b]">Press Enter for a manual line break on the blogs listing tile.</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-3 gap-5">
                 <div className="space-y-1.5">
                   <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                     Title Color
@@ -545,8 +547,26 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                     style={fontMichroma}
                   />
                 </div>
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
+                    Title Size
+                  </label>
+                  <CustomSelect
+                    value={form.titleFontSize}
+                    onChange={(val) => setForm((p) => ({ ...p, titleFontSize: val as "small" | "standard" | "large" | "xlarge" }))}
+                    options={[
+                      { value: "small", label: "Small" },
+                      { value: "standard", label: "Standard" },
+                      { value: "large", label: "Large" },
+                      { value: "xlarge", label: "Extra Large" },
+                    ]}
+                    style={fontMichroma}
+                  />
+                </div>
               </div>
-              <p className="text-[10px] text-[#8b8b8b] -mt-3">Applies to the title as shown on the blog post's own page.</p>
+              <p className="text-[10px] text-[#8b8b8b] -mt-3">
+                Applies to the title as shown on the blog post's own page. Pick "Standard" anytime to reset the size back to default.
+              </p>
 
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
