@@ -86,7 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#1a1a1a]">
+      <div className="flex h-screen items-center justify-center bg-[#007190]">
         <div className="flex flex-col items-center gap-6">
           <div className="w-8 h-8 border border-white/20 border-t-white/80 rounded-full animate-spin" />
           <p className="font-michroma text-[10px] tracking-[0.3em] uppercase text-white/40">
