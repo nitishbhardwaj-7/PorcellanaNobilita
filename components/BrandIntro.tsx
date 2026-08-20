@@ -115,8 +115,10 @@ export default function BrandIntro({ title, subtitle, buttonText, image, isLoade
       {/* Menu Icon on Top Left */}
       <div className="brand-menu-btn-wrapper absolute top-6 left-6 md:top-8 md:left-12 lg:top-10 lg:left-14 z-[10000] opacity-0">
         <button
-          onClick={() => setIsNavOpen(!isNavOpen)}
-          className="relative w-10 h-10 lg:w-11 lg:h-11 focus:outline-none transition-opacity hover:opacity-80 flex items-center justify-center"
+          onClick={() => setIsNavOpen(true)}
+          className={`relative w-10 h-10 lg:w-11 lg:h-11 focus:outline-none transition-opacity hover:opacity-80 flex items-center justify-center ${
+            isNavOpen ? "invisible" : ""
+          }`}
           aria-label="Toggle navigation menu"
         >
           <span
