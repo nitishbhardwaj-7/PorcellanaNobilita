@@ -174,26 +174,34 @@ export default function Navbar({ forceVisible = false }: { forceVisible?: boolea
           forceVisible || ((isVisible || isNavOpen) && !isInsideBrandIntro) ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        {/* Animated Hamburger / Close Icon */}
+        {/* Hamburger Icon — hidden instantly (no fade) once the menu opens,
+            since the overlay has its own back-arrow close button. Previously
+            this stayed rendered underneath the overlay's 0.4s fade-in, which
+            made it look like the hamburger itself was fading out slowly.
+            Uses `invisible` (not a conditional unmount) so it keeps its
+            layout space in this flex row — removing it entirely would
+            shift the logo since this row only has these two children. */}
         <button
-          onClick={() => setIsNavOpen(!isNavOpen)}
-          className="relative w-10 h-10 focus:outline-none z-[10000] transition-opacity hover:opacity-80 flex items-center justify-center"
+          onClick={() => setIsNavOpen(true)}
+          className={`relative w-10 h-10 focus:outline-none z-[10000] transition-opacity hover:opacity-80 flex items-center justify-center ${
+            isNavOpen ? "invisible" : ""
+          }`}
           aria-label="Toggle navigation menu"
         >
-          <span 
+          <span
             className="absolute block h-[2px] w-12 bg-white transition-all duration-300 ease-in-out"
             style={{
               transform: "translateY(-6px) rotate(0deg)"
             }}
           />
-          <span 
+          <span
             className="absolute block h-[2px] w-12 bg-white transition-all duration-300 ease-in-out"
             style={{
               transform: "scaleX(1)",
               opacity: 1
             }}
           />
-          <span 
+          <span
             className="absolute block h-[2px] w-12 bg-white transition-all duration-300 ease-in-out"
             style={{
               transform: "translateY(6px) rotate(0deg)"
