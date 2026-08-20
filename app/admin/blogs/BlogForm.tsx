@@ -337,6 +337,8 @@ export default function BlogForm({ blogId }: BlogFormProps) {
 
   const [form, setForm] = useState({
     title: "",
+    titleColor: "black" as "black" | "teal",
+    titleFont: "ivymode" as "ivymode" | "michroma",
     slug: "",
     excerpt: "",
     author: "NOBILITA Editorial Team",
@@ -371,6 +373,8 @@ export default function BlogForm({ blogId }: BlogFormProps) {
             const b = data.data;
             setForm({
               title: b.title,
+              titleColor: b.titleColor === "teal" ? "teal" : "black",
+              titleFont: b.titleFont === "michroma" ? "michroma" : "ivymode",
               slug: b.slug,
               excerpt: b.excerpt || "",
               author: b.author || "NOBILITA Editorial Team",
@@ -511,6 +515,38 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                 />
                 <p className="text-[10px] text-[#8b8b8b]">Press Enter for a manual line break on the blogs listing tile.</p>
               </div>
+
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
+                    Title Color
+                  </label>
+                  <CustomSelect
+                    value={form.titleColor}
+                    onChange={(val) => setForm((p) => ({ ...p, titleColor: val as "black" | "teal" }))}
+                    options={[
+                      { value: "black", label: "Black" },
+                      { value: "teal", label: "Teal (#007190)" },
+                    ]}
+                    style={fontMichroma}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
+                    Title Font
+                  </label>
+                  <CustomSelect
+                    value={form.titleFont}
+                    onChange={(val) => setForm((p) => ({ ...p, titleFont: val as "ivymode" | "michroma" }))}
+                    options={[
+                      { value: "ivymode", label: "Ivymode" },
+                      { value: "michroma", label: "Michroma" },
+                    ]}
+                    style={fontMichroma}
+                  />
+                </div>
+              </div>
+              <p className="text-[10px] text-[#8b8b8b] -mt-3">Applies to the title as shown on the blog post's own page.</p>
 
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>

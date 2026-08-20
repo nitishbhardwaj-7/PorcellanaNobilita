@@ -17,6 +17,8 @@ interface ContentBlock {
 export interface BlogPost {
   slug: string;
   title: string;
+  titleColor?: "black" | "teal";
+  titleFont?: "ivymode" | "michroma";
   author: string;
   authorImage: string;
   date: string;
@@ -83,7 +85,11 @@ export default function BlogDetailView({
       <main className="w-full max-w-[720px] mx-auto px-6 pt-20 sm:pt-12 pb-12 mt-[64px] md:mt-[80px]">
         {/* Title */}
         <div className="relative mb-8">
-          <h1 className="font-ivymode font-normal text-neutral-900 text-[32px] sm:text-[40px] md:text-[46px] leading-[1.12] tracking-[0.05em] uppercase text-center">
+          <h1
+            className={`${post.titleFont === "michroma" ? "font-michroma" : "font-ivymode"} ${
+              post.titleColor === "teal" ? "text-[#007190]" : "text-neutral-900"
+            } font-normal text-[32px] sm:text-[40px] md:text-[46px] leading-[1.12] tracking-[0.05em] uppercase text-center`}
+          >
             {post.title}
           </h1>
         </div>

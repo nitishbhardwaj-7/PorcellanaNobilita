@@ -11,6 +11,8 @@ function toBlogPost(b: any): BlogPost {
   return {
     slug: b.slug,
     title: b.title,
+    titleColor: b.titleColor || "black",
+    titleFont: b.titleFont || "ivymode",
     author: b.author,
     authorImage: b.authorImage || "",
     date: (b.publishedAt || b.createdAt || "").toString(),

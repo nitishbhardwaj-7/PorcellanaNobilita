@@ -34,6 +34,8 @@ export async function PUT(
     const body = await request.json();
     const {
       title,
+      titleColor,
+      titleFont,
       slug,
       excerpt,
       author,
@@ -66,6 +68,8 @@ export async function PUT(
       where: { id: params.id },
       data: {
         ...(title !== undefined && { title }),
+        ...(titleColor !== undefined && { titleColor }),
+        ...(titleFont !== undefined && { titleFont }),
         ...(slug !== undefined && { slug }),
         ...(excerpt !== undefined && { excerpt }),
         ...(author !== undefined && { author }),

@@ -69,6 +69,8 @@ model Blog {
   id             String   @id @default(cuid())
   slug           String   @unique
   title          String
+  titleColor     String   @default("black") // "black" | "teal" (#007190) — rendered color of the blog title
+  titleFont      String   @default("ivymode") // "ivymode" | "michroma" — rendered font of the blog title
   excerpt        String?  @db.Text
   author         String   @default("NOBILITA Editorial Team")
   authorImage    String?

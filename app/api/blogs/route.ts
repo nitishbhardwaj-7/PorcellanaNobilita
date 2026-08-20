@@ -32,6 +32,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       title,
+      titleColor,
+      titleFont,
       slug,
       excerpt,
       author,
@@ -70,6 +72,8 @@ export async function POST(request: Request) {
     const blog = await prisma.blog.create({
       data: {
         title,
+        titleColor: titleColor || "black",
+        titleFont: titleFont || "ivymode",
         slug: finalSlug,
         excerpt: excerpt || null,
         author: author || "NOBILITA Editorial Team",
