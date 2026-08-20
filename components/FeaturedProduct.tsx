@@ -1129,46 +1129,54 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
           ) : (
             /* Side-by-side Faces View */
             <div className="w-full flex flex-col items-center">
-              <div className={`grid grid-cols-1 ${config.availableFaces?.length === 2 ? "md:grid-cols-2 max-w-[900px]" : "md:grid-cols-3 max-w-[1250px]"} gap-8 w-full justify-center`}>
-                {(config.availableFaces || []).map((faceImg, idx) => {
-                  const faceNum = idx + 1;
-                  return (
-                    <div key={faceNum} className="flex flex-col items-center w-full">
-                      {/* Face Image Container */}
-                      <div className="relative w-full aspect-[1/2] max-w-[360px] overflow-hidden bg-brand-cream/5 shadow-sm border border-brand-dark/5 flex items-center justify-center">
-                        {/* Label inside top-center */}
-                        <div className={`absolute top-6 left-1/2 -translate-x-1/2 font-michroma font-medium text-[10px] md:text-[16px] tracking-[0.025em] ${config.isDark ? "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" : "text-[#1a1a1a]"} uppercase z-20 text-center whitespace-nowrap`}>
-                          FACE {faceNum}
-                        </div>
-
-                        <img
-                          src={faceImg}
-                          alt={`${activeProduct} Face ${faceNum}`}
-                          className={
-                            config.isHorizontalFace
-                              ? "absolute inset-0 w-full h-full object-cover block transition-all duration-700 ease-in-out z-10"
-                              : "absolute w-[200%] h-[50%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-90 object-cover origin-center block transition-all duration-700 ease-in-out z-10 max-w-none max-h-none"
-                          }
-                        />
-
-                        {/* View Bookmatch button overlaid on face 2 */}
-                        {faceNum === 2 && config.bookmatchImg && (
-                          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-full px-4 flex justify-center">
-                            <button
-                              onClick={() => setShowBookmatch(true)}
-                              className={`border relative overflow-hidden group px-6 py-2 md:py-2.5 font-michroma font-medium text-[10px] md:text-[16px] tracking-[0.025em] uppercase focus:outline-none whitespace-nowrap ${config.isDark ? "border-white/40" : "border-brand-dark/40"}`}
-                            >
-                              <span className={`absolute -inset-[1px] scale-x-0 origin-left transition-transform duration-500 ease-[0.22,1,0.36,1] group-hover:scale-x-100 ${config.isDark ? "bg-white" : "bg-brand-dark"}`} />
-                              <span className={`relative z-10 transition-colors duration-500 ${config.isDark ? "text-white group-hover:text-neutral-900" : "text-brand-dark group-hover:text-white"}`}>
-                                VIEW BOOKMATCH
-                              </span>
-                            </button>
+              {/* Relative wrapper spans the whole face-group width, so the
+                  bookmatch button below centers across ALL faces together
+                  (straddling the boundary between them when there are 2,
+                  and landing on the middle column when there are 3) rather
+                  than being confined inside a single face's box. */}
+              <div className="relative w-full flex justify-center">
+                <div className={`grid grid-cols-1 ${config.availableFaces?.length === 2 ? "md:grid-cols-2 max-w-[900px]" : "md:grid-cols-3 max-w-[1250px]"} gap-8 w-full justify-center`}>
+                  {(config.availableFaces || []).map((faceImg, idx) => {
+                    const faceNum = idx + 1;
+                    return (
+                      <div key={faceNum} className="flex flex-col items-center w-full">
+                        {/* Face Image Container */}
+                        <div className="relative w-full aspect-[1/2] max-w-[360px] overflow-hidden bg-brand-cream/5 shadow-sm border border-brand-dark/5 flex items-center justify-center">
+                          {/* Label inside top-center */}
+                          <div className={`absolute top-6 left-1/2 -translate-x-1/2 font-michroma font-medium text-[10px] md:text-[16px] tracking-[0.025em] ${config.isDark ? "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" : "text-[#1a1a1a]"} uppercase z-20 text-center whitespace-nowrap`}>
+                            FACE {faceNum}
                           </div>
-                        )}
+
+                          <img
+                            src={faceImg}
+                            alt={`${activeProduct} Face ${faceNum}`}
+                            className={
+                              config.isHorizontalFace
+                                ? "absolute inset-0 w-full h-full object-cover block transition-all duration-700 ease-in-out z-10"
+                                : "absolute w-[200%] h-[50%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-90 object-cover origin-center block transition-all duration-700 ease-in-out z-10 max-w-none max-h-none"
+                            }
+                          />
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+
+                {/* View Bookmatch button — centered across the entire face
+                    group, whether it holds 1, 2, or 3 faces. */}
+                {config.bookmatchImg && (
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
+                    <button
+                      onClick={() => setShowBookmatch(true)}
+                      className={`border relative overflow-hidden group px-6 py-2 md:py-2.5 font-michroma font-medium text-[10px] md:text-[16px] tracking-[0.025em] uppercase focus:outline-none whitespace-nowrap ${config.isDark ? "border-white/40" : "border-brand-dark/40"}`}
+                    >
+                      <span className={`absolute -inset-[1px] scale-x-0 origin-left transition-transform duration-500 ease-[0.22,1,0.36,1] group-hover:scale-x-100 ${config.isDark ? "bg-white" : "bg-brand-dark"}`} />
+                      <span className={`relative z-10 transition-colors duration-500 ${config.isDark ? "text-white group-hover:text-neutral-900" : "text-brand-dark group-hover:text-white"}`}>
+                        VIEW BOOKMATCH
+                      </span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )
