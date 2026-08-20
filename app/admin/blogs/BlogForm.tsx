@@ -39,7 +39,7 @@ function CustomSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between border border-[#1a1a1a]/15 bg-white px-4 py-3 text-xs text-[#1a1a1a] hover:border-[#1a1a1a]/40 transition-colors focus:outline-none"
+        className="flex w-full items-center justify-between border border-[#1a1a1a]/15 bg-white px-4 py-2.5 text-[10px] text-[#1a1a1a] hover:border-[#1a1a1a]/40 transition-colors focus:outline-none"
       >
         <span className="tracking-[0.1em] uppercase font-semibold text-left">{selectedOption?.label}</span>
         <ChevronDown size={14} className={`text-[#1a1a1a]/40 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
