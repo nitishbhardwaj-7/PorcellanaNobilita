@@ -874,7 +874,11 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
             className="relative z-10 w-full text-center lg:text-left mb-4 md:mb-12 mt-16 md:mt-20 lg:mt-8 lg:max-w-none"
             style={{ opacity: 0, transform: "translateY(30px)" }}
           >
-            <h2 className="font-ivymode text-[clamp(28px,4.5vw,66px)] text-black tracking-[0.05em] uppercase font-light">
+            <h2
+              className={`font-ivymode text-[clamp(28px,4.5vw,66px)] tracking-[0.05em] uppercase font-light ${
+                config.isDark ? "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]" : "text-black"
+              }`}
+            >
               {activeProduct}
             </h2>
           </div>
