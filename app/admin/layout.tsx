@@ -13,7 +13,6 @@ import {
   LogOut,
   Menu,
   X,
-  ExternalLink,
   ChevronRight,
   MessageSquare,
   Download,
@@ -100,13 +99,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (isLoginPage) {
     return <>{children}</>;
   }
-
-  const pageTitle = (() => {
-    if (pathname === "/admin") return "Overview";
-    const segment = pathname.split("/")[2];
-    if (!segment) return "Dashboard";
-    return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
-  })();
 
   return (
     <div className="flex min-h-screen bg-[#f8f5f0]" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
@@ -203,38 +195,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* ── Main Content ── */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Topbar */}
-        <header className="flex h-16 items-center justify-between border-b border-[#1a1a1a]/10 bg-[#f8f5f0] px-6 lg:px-10">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-colors lg:hidden"
-            >
-              <Menu size={20} />
-            </button>
-            <div>
-              <h1
-                className="text-[11px] tracking-[0.25em] uppercase text-[#1a1a1a]/80"
-                style={{ fontFamily: "var(--font-michroma), sans-serif" }}
-              >
-                {pageTitle}
-              </h1>
-            </div>
-          </div>
-
-          <Link
-            href="/"
-            target="_blank"
-            className="flex items-center gap-1.5 text-[10px] tracking-[0.2em] uppercase text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-colors border-b border-transparent hover:border-[#1a1a1a]/30 pb-0.5"
-            style={{ fontFamily: "var(--font-michroma), sans-serif" }}
-          >
-            View Site
-            <ExternalLink size={11} />
-          </Link>
-        </header>
+        {/* Mobile sidebar toggle (no topbar on desktop) */}
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="flex items-center px-6 pt-6 text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-colors lg:hidden"
+        >
+          <Menu size={20} />
+        </button>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-10">
+        <main className="flex-1 overflow-y-auto p-6 pt-4 lg:p-10 lg:pt-6">
           <div className="mx-auto max-w-6xl">
             {children}
           </div>
