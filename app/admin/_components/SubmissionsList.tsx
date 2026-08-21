@@ -22,9 +22,10 @@ interface SubmissionsListProps {
   eyebrow: string; // e.g. "Enquiries"
   showMessage?: boolean; // whether to render the message column (newsletter usually has none)
   noun?: string; // e.g. "Downloads" instead of "Submissions", for catalog/datasheet
+  showLanguage?: boolean; // whether to show the requested language under the contact name — off for catalog, which only has one file
 }
 
-export default function SubmissionsList({ type, label, eyebrow, showMessage = true, noun = "Submissions" }: SubmissionsListProps) {
+export default function SubmissionsList({ type, label, eyebrow, showMessage = true, noun = "Submissions", showLanguage = true }: SubmissionsListProps) {
   const [items, setItems] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -170,7 +171,7 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
                     {item.product}
                   </span>
                 )}
-                {item.language && (
+                {showLanguage && item.language && (
                   <p className="text-[10px] text-[#8b8b8b] mt-0.5 uppercase">{item.language}</p>
                 )}
               </div>
