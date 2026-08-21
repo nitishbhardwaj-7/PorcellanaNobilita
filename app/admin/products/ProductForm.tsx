@@ -560,7 +560,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                           <option value="video">Video</option>
                         </select>
                       </div>
-                      <div className={slide.type === "video" ? "sm:col-span-2" : "sm:col-span-3"}>
+                      <div className="sm:col-span-3">
                         <label className="block text-[8px] text-[#8b8b8b] uppercase">Source URL</label>
                         <div className="flex gap-1">
                           <input
@@ -573,34 +573,17 @@ export default function ProductForm({ productId }: ProductFormProps) {
                             }}
                             className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none animate-none"
                           />
-                          {slide.type === "image" && (
-                            <MediaPickerButton
-                              folder="products"
-                              onSelect={(url) => {
-                                const newSlides = [...form.slides];
-                                newSlides[idx].src = url;
-                                setForm((p) => ({ ...p, slides: newSlides }));
-                              }}
-                            />
-                          )}
-                        </div>
-                      </div>
-                      {slide.type === "video" && (
-                        <div>
-                          <label className="block text-[8px] text-[#8b8b8b] uppercase">Poster (Thumbnail Image)</label>
-                          <input
-                            type="text"
-                            value={slide.poster || ""}
-                            onChange={(e) => {
+                          <MediaPickerButton
+                            folder="products"
+                            accept={slide.type === "video" ? "video/*" : "image/*"}
+                            onSelect={(url) => {
                               const newSlides = [...form.slides];
-                              newSlides[idx].poster = e.target.value;
+                              newSlides[idx].src = url;
                               setForm((p) => ({ ...p, slides: newSlides }));
                             }}
-                            className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
-                            placeholder="Image URL"
                           />
                         </div>
-                      )}
+                      </div>
                     </div>
                     <button
                       type="button"

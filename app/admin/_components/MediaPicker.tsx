@@ -25,10 +25,12 @@ function MediaPickerModal({
   initialFolder,
   onSelect,
   onClose,
+  accept = "image/*",
 }: {
   initialFolder: string;
   onSelect: (url: string) => void;
   onClose: () => void;
+  accept?: string;
 }) {
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -152,7 +154,7 @@ function MediaPickerModal({
                 ref={fileInputRef}
                 type="file"
                 className="hidden"
-                accept="image/*"
+                accept={accept}
                 disabled={uploading}
                 onChange={handleUpload}
               />
@@ -190,6 +192,14 @@ function MediaPickerModal({
                     <img
                       src={file.fileUrl}
                       alt={file.fileName}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : file.fileType.startsWith("video/") ? (
+                    <video
+                      src={file.fileUrl}
+                      muted
+                      playsInline
+                      preload="metadata"
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
@@ -300,10 +310,12 @@ export function MediaPickerButton({
   onSelect,
   folder = "products",
   className = "w-12",
+  accept = "image/*",
 }: {
   onSelect: (url: string) => void;
   folder?: string;
   className?: string;
+  accept?: string;
 }) {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -321,6 +333,7 @@ export function MediaPickerButton({
         <MediaPickerModal
           initialFolder={folder}
           onClose={() => setModalOpen(false)}
+          accept={accept}
           onSelect={(url) => {
             onSelect(url);
             setModalOpen(false);
