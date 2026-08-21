@@ -139,7 +139,6 @@ export default function DownloadsPage() {
           {SLOTS.map((s) => {
             const currentUrl = (settings[s.urlKey] as string | null) || s.defaultUrl;
             const currentName = (settings[s.nameKey] as string | null) || s.defaultName;
-            const isCustom = Boolean(settings[s.urlKey]);
             const isUploading = uploadingSlot === s.slot;
             const justUpdated = justUpdatedSlot === s.slot;
 
@@ -168,12 +167,6 @@ export default function DownloadsPage() {
                       {currentName}
                       <ExternalLink size={11} className="flex-shrink-0" />
                     </a>
-                    <span
-                      className="text-[9px] tracking-[0.15em] uppercase px-1.5 py-0.5 border border-[#1a1a1a]/10 text-[#1a1a1a]/35"
-                      style={fontMichroma}
-                    >
-                      {isCustom ? "Custom" : "Default"}
-                    </span>
                     {justUpdated && (
                       <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
                         <Check size={11} /> Updated
