@@ -23,9 +23,10 @@ interface SubmissionsListProps {
   showMessage?: boolean; // whether to render the message column (newsletter usually has none)
   noun?: string; // e.g. "Downloads" instead of "Submissions", for catalog/datasheet
   showLanguage?: boolean; // whether to show the requested language under the contact name — off for catalog, which only has one file
+  splitByProduct?: boolean; // show separate "Contact Us" vs "Product Enquiry" counters — for Queries, which mixes both under one type
 }
 
-export default function SubmissionsList({ type, label, eyebrow, showMessage = true, noun = "Submissions", showLanguage = true }: SubmissionsListProps) {
+export default function SubmissionsList({ type, label, eyebrow, showMessage = true, noun = "Submissions", showLanguage = true, splitByProduct = false }: SubmissionsListProps) {
   const [items, setItems] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -90,6 +91,8 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
   }
 
   const unreadCount = items.filter((i) => !i.isRead).length;
+  const contactUsCount = items.filter((i) => !i.product).length;
+  const productEnquiryCount = items.filter((i) => i.product).length;
 
   if (loading) {
     return (
@@ -113,14 +116,32 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
             {label} {noun}
           </h2>
         </div>
-        {unreadCount > 0 && (
-          <span
-            className="px-3 py-1 text-[10px] tracking-[0.2em] uppercase border border-[#1a7a96]/30 text-[#1a7a96] bg-[#1a7a96]/5"
-            style={fontMichroma}
-          >
-            {unreadCount} New
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {splitByProduct && (
+            <>
+              <span
+                className="px-3 py-1 text-[10px] tracking-[0.2em] uppercase border border-[#1a1a1a]/15 text-[#1a1a1a]/50"
+                style={fontMichroma}
+              >
+                {contactUsCount} Contact Us
+              </span>
+              <span
+                className="px-3 py-1 text-[10px] tracking-[0.2em] uppercase border border-[#1a1a1a]/15 text-[#1a1a1a]/50"
+                style={fontMichroma}
+              >
+                {productEnquiryCount} Product Enquiry
+              </span>
+            </>
+          )}
+          {unreadCount > 0 && (
+            <span
+              className="px-3 py-1 text-[10px] tracking-[0.2em] uppercase border border-[#1a7a96]/30 text-[#1a7a96] bg-[#1a7a96]/5"
+              style={fontMichroma}
+            >
+              {unreadCount} New
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="h-px bg-[#1a1a1a]/8" />
