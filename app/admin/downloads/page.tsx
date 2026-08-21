@@ -115,10 +115,10 @@ export default function DownloadsPage() {
           Site Files
         </p>
         <h2 className="text-3xl font-light text-[#1a1a1a]" style={fontIvymode}>
-          PDF Downloads
+          PDF
         </h2>
         <p className="mt-2 text-sm text-[#8b8b8b]">
-          Replace the catalogue and technical data sheet files visitors download from the site. Uploading a new file here takes effect immediately — no code changes needed.
+          Replace the catalogue and technical data sheet files visitors download from the site.
         </p>
       </div>
 
