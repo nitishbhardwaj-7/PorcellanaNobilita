@@ -26,25 +26,45 @@ const navItemVariants = {
   }
 };
 
+interface DownloadSettings {
+  catalogPdfUrl: string | null;
+  catalogPdfName: string | null;
+  datasheetPdfUrlEnglish: string | null;
+  datasheetPdfNameEnglish: string | null;
+  datasheetPdfUrlItalian: string | null;
+  datasheetPdfNameItalian: string | null;
+}
+
 export default function Footer() {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [activeForm, setActiveForm] = useState<"none" | "query" | "catalog" | "newsletter" | "datasheet">("none");
   const [selectedLanguage, setSelectedLanguage] = useState<"english" | "italian">("english");
   const [enquiryProduct, setEnquiryProduct] = useState<string | null>(null);
+  const [downloadSettings, setDownloadSettings] = useState<DownloadSettings | null>(null);
+
+  React.useEffect(() => {
+    // CMS-editable PDFs — falls back to the bundled defaults below if this
+    // fetch fails or nothing has been uploaded yet.
+    fetch("/api/settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => data?.data && setDownloadSettings(data.data))
+      .catch(() => {});
+  }, []);
 
   const triggerPdfDownload = (resource: "catalog" | "datasheet", lang: "english" | "italian") => {
     // The catalogue is a single PDF (no language variants), unlike the
     // technical data sheet which has separate English/Italian files.
+    // Each falls back to the bundled default file if no CMS override was uploaded.
     const pdfUrl = resource === "catalog"
-      ? "/Pdfs/CATALOGUE.pdf"
+      ? downloadSettings?.catalogPdfUrl || "/Pdfs/CATALOGUE.pdf"
       : lang === "italian"
-        ? "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ITALIAN.pdf"
-        : "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ENGLISH.pdf";
+        ? downloadSettings?.datasheetPdfUrlItalian || "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ITALIAN.pdf"
+        : downloadSettings?.datasheetPdfUrlEnglish || "/Pdfs/TECHNICAL%20DATA%20SHEET%20-%20ENGLISH.pdf";
     const fileName = resource === "catalog"
-      ? "CATALOGUE.pdf"
+      ? downloadSettings?.catalogPdfName || "CATALOGUE.pdf"
       : lang === "italian"
-        ? "TECHNICAL DATA SHEET - ITALIAN.pdf"
-        : "TECHNICAL DATA SHEET - ENGLISH.pdf";
+        ? downloadSettings?.datasheetPdfNameItalian || "TECHNICAL DATA SHEET - ITALIAN.pdf"
+        : downloadSettings?.datasheetPdfNameEnglish || "TECHNICAL DATA SHEET - ENGLISH.pdf";
 
     const link = document.createElement("a");
     link.href = pdfUrl;

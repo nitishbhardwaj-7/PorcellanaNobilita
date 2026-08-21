@@ -133,6 +133,16 @@ model Settings {
   socialLinks    Json     @default("{}")
   seoTitle       String?
   seoDescription String?
+
+  // Downloadable PDFs — editable from the CMS. When null, the site falls back
+  // to the bundled default file in /public/Pdfs/.
+  catalogPdfUrl            String?
+  catalogPdfName           String?
+  datasheetPdfUrlEnglish   String?
+  datasheetPdfNameEnglish  String?
+  datasheetPdfUrlItalian   String?
+  datasheetPdfNameItalian  String?
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
