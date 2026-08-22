@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, X, ChevronDown } from "lucide-react";
+import { ArrowLeft, Save, X, ChevronDown, GripVertical } from "lucide-react";
 import { MediaPickerField, MediaPickerButton } from "../_components/MediaPicker";
 
 function CustomSelect({
@@ -199,6 +199,18 @@ export default function ProductForm({ productId }: ProductFormProps) {
   // its original slug stable when the name is edited, rather than silently changing it.
   const [keepExistingSlug, setKeepExistingSlug] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [draggedSlideIdx, setDraggedSlideIdx] = useState<number | null>(null);
+  const [dragOverSlideIdx, setDragOverSlideIdx] = useState<number | null>(null);
+
+  function moveSlide(from: number, to: number) {
+    if (from === to) return;
+    setForm((p) => {
+      const next = [...p.slides];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
+      return { ...p, slides: next };
+    });
+  }
   const [loadingProduct, setLoadingProduct] = useState(!isNew);
   const [error, setError] = useState<string | null>(null);
 
@@ -546,7 +558,39 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 </label>
                 
                 {form.slides.map((slide, idx) => (
-                  <div key={idx} className="flex gap-2.5 items-center bg-[#f8f5f0] border border-[#1a1a1a]/10 p-3 relative">
+                  <div
+                    key={idx}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      if (draggedSlideIdx !== null) setDragOverSlideIdx(idx);
+                    }}
+                    onDragLeave={() => setDragOverSlideIdx((cur) => (cur === idx ? null : cur))}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (draggedSlideIdx !== null) moveSlide(draggedSlideIdx, idx);
+                      setDraggedSlideIdx(null);
+                      setDragOverSlideIdx(null);
+                    }}
+                    className={`flex gap-2.5 items-center bg-[#f8f5f0] border p-3 relative transition-colors ${
+                      draggedSlideIdx === idx
+                        ? "opacity-40 border-[#1a1a1a]/10"
+                        : dragOverSlideIdx === idx
+                          ? "border-[#007190]"
+                          : "border-[#1a1a1a]/10"
+                    }`}
+                  >
+                    <div
+                      draggable
+                      onDragStart={() => setDraggedSlideIdx(idx)}
+                      onDragEnd={() => {
+                        setDraggedSlideIdx(null);
+                        setDragOverSlideIdx(null);
+                      }}
+                      className="flex-shrink-0 self-stretch flex items-center text-[#1a1a1a]/25 hover:text-[#1a1a1a]/60 cursor-grab active:cursor-grabbing transition-colors"
+                      title="Drag to reorder"
+                    >
+                      <GripVertical size={15} />
+                    </div>
                     <div className="w-14 h-14 flex-shrink-0 border border-[#1a1a1a]/10 bg-white overflow-hidden">
                       {slide.src ? (
                         slide.type === "video" ? (
