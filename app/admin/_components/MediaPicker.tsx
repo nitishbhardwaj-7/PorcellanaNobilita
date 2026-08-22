@@ -12,7 +12,7 @@ interface MediaFile {
   folder: string;
 }
 
-const FOLDERS = ["products", "blogs", "general"];
+const FOLDERS = ["products", "blogs"];
 
 /**
  * In-context media browser + uploader, rendered as a modal overlay.

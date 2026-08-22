@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
-    const folder = (formData.get("folder") as string) || "general";
+    const folder = (formData.get("folder") as string) || "products";
     const alt = (formData.get("alt") as string) || "";
     const tagsRaw = (formData.get("tags") as string) || "";
     const tags = tagsRaw
