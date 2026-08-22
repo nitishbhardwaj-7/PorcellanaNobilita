@@ -126,8 +126,11 @@ function TagInput({
           {values.map((v) => (
             <span
               key={v}
-              className="flex items-center gap-1 bg-[#f8f5f0] border border-[#1a1a1a]/10 px-2 py-0.5 text-[10px] text-[#1a1a1a]/70"
+              className="flex items-center gap-1.5 bg-[#f8f5f0] border border-[#1a1a1a]/10 pl-1 pr-2 py-0.5 text-[10px] text-[#1a1a1a]/70"
             >
+              {showMediaPicker && (
+                <img src={v} alt="" className="w-5 h-5 object-cover border border-[#1a1a1a]/10 flex-shrink-0" />
+              )}
               {v}
               <button
                 type="button"
@@ -544,6 +547,15 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 
                 {form.slides.map((slide, idx) => (
                   <div key={idx} className="flex gap-2.5 items-center bg-[#f8f5f0] border border-[#1a1a1a]/10 p-3 relative">
+                    <div className="w-14 h-14 flex-shrink-0 border border-[#1a1a1a]/10 bg-white overflow-hidden">
+                      {slide.src ? (
+                        slide.type === "video" ? (
+                          <video src={slide.src} muted playsInline preload="metadata" className="w-full h-full object-cover" />
+                        ) : (
+                          <img src={slide.src} alt="" className="w-full h-full object-cover" />
+                        )
+                      ) : null}
+                    </div>
                     <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-2">
                       <div>
                         <label className="block text-[8px] text-[#8b8b8b] uppercase">Type</label>
