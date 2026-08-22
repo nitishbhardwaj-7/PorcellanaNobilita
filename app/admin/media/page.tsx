@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Upload, Trash2, Copy, Check, Search, X, Tag } from "lucide-react";
+import PdfDownloadsPanel from "../_components/PdfDownloadsPanel";
 
 interface MediaFile {
   id: string;
@@ -16,6 +17,7 @@ interface MediaFile {
 }
 
 const FOLDERS = ["products", "blogs"];
+const TABS = [...FOLDERS, "pdf"];
 
 export default function MediaLibrary() {
   const [media, setMedia] = useState<MediaFile[]>([]);
@@ -23,6 +25,7 @@ export default function MediaLibrary() {
   const [error, setError] = useState<string | null>(null);
 
   const [currentFolder, setCurrentFolder] = useState("products");
+  const isPdfTab = currentFolder === "pdf";
   const [searchQuery, setSearchQuery] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<string | null>(null);
@@ -37,7 +40,7 @@ export default function MediaLibrary() {
   const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
   useEffect(() => {
-    fetchMedia();
+    if (!isPdfTab) fetchMedia();
   }, [currentFolder]);
 
   async function fetchMedia() {
@@ -159,24 +162,26 @@ export default function MediaLibrary() {
             </h2>
           </div>
 
-          <label
-            className={`flex items-center gap-2 bg-[#007190] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] transition-colors cursor-pointer ${
-              uploading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            style={fontMichroma}
-          >
-            <Upload size={13} />
-            {uploading ? "Uploading..." : "Upload"}
-            <input
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              accept="image/*,application/pdf"
-              multiple
-              disabled={uploading}
-              onChange={handleFileUpload}
-            />
-          </label>
+          {!isPdfTab && (
+            <label
+              className={`flex items-center gap-2 bg-[#007190] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-white hover:bg-[#005d76] transition-colors cursor-pointer ${
+                uploading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              style={fontMichroma}
+            >
+              <Upload size={13} />
+              {uploading ? "Uploading..." : "Upload"}
+              <input
+                ref={fileInputRef}
+                type="file"
+                className="hidden"
+                accept="image/*,application/pdf"
+                multiple
+                disabled={uploading}
+                onChange={handleFileUpload}
+              />
+            </label>
+          )}
         </div>
 
         <div className="h-px bg-[#1a1a1a]/8" />
@@ -193,45 +198,52 @@ export default function MediaLibrary() {
 
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3">
-          {/* Folder selector */}
+          {/* Tab selector */}
           <div className="flex gap-1">
-            {FOLDERS.map((folder) => (
+            {TABS.map((tab) => (
               <button
-                key={folder}
-                onClick={() => setCurrentFolder(folder)}
+                key={tab}
+                onClick={() => setCurrentFolder(tab)}
                 className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase border transition-colors ${
-                  currentFolder === folder
+                  currentFolder === tab
                     ? "bg-[#007190] text-white border-[#007190]"
                     : "bg-white text-[#1a1a1a]/40 border-[#1a1a1a]/15 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/30"
                 }`}
                 style={fontMichroma}
               >
-                {folder}
+                {tab}
               </button>
             ))}
           </div>
 
           {/* Search */}
-          <form onSubmit={handleSearch} className="flex flex-1 max-w-sm">
-            <div className="relative flex-1">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1a1a1a]/30" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by filename…"
-                className="w-full border border-[#1a1a1a]/15 bg-white pl-9 pr-3 py-1.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/30 focus:outline-none focus:border-[#1a1a1a]/40"
-              />
-            </div>
-            <button
-              type="submit"
-              className="border border-l-0 border-[#007190] bg-[#007190] px-3 text-white hover:bg-[#005d76] transition-colors"
-            >
-              <Search size={13} />
-            </button>
-          </form>
+          {!isPdfTab && (
+            <form onSubmit={handleSearch} className="flex flex-1 max-w-sm">
+              <div className="relative flex-1">
+                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1a1a1a]/30" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by filename…"
+                  className="w-full border border-[#1a1a1a]/15 bg-white pl-9 pr-3 py-1.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/30 focus:outline-none focus:border-[#1a1a1a]/40"
+                />
+              </div>
+              <button
+                type="submit"
+                className="border border-l-0 border-[#007190] bg-[#007190] px-3 text-white hover:bg-[#005d76] transition-colors"
+              >
+                <Search size={13} />
+              </button>
+            </form>
+          )}
         </div>
 
+        {/* PDF tab */}
+        {isPdfTab ? (
+          <PdfDownloadsPanel />
+        ) : (
+          <>
         {/* Grid */}
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -316,6 +328,8 @@ export default function MediaLibrary() {
         )}
 
         <p className="text-[10px] text-[#8b8b8b]">{media.length} asset{media.length !== 1 ? "s" : ""}</p>
+          </>
+        )}
       </div>
 
       {/* Detail panel */}
