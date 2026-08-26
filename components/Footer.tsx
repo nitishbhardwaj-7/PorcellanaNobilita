@@ -75,17 +75,32 @@ export default function Footer() {
   };
 
   React.useEffect(() => {
+    // Scrolls to the contact/download form, then re-applies a few more times
+    // over the next few seconds. A single scroll shortly after mount isn't
+    // enough on a fresh page load: the intro loader is still covering the
+    // screen and the sections above the footer are still rendering, so the
+    // page keeps growing taller for a couple seconds and the initial scroll
+    // ends up short. Re-applying self-corrects once layout settles, and is a
+    // harmless no-op once we're already in place (e.g. when triggered by a
+    // click on an already-loaded page).
+    const scrollToContactForm = () => {
+      const delays = [100, 600, 1200, 2200, 3500];
+      delays.forEach((delay) => {
+        setTimeout(() => {
+          const contactSection = document.getElementById("contact-form-section");
+          if (contactSection) {
+            contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, delay);
+      });
+    };
+
     const handleOpenQuery = (e?: Event) => {
       const customEvent = e as CustomEvent<{ product?: string }>;
       setEnquiryProduct(customEvent?.detail?.product || null);
       setActiveForm("query");
       setSubmitStatus("idle");
-      setTimeout(() => {
-        const contactSection = document.getElementById("contact-form-section");
-        if (contactSection) {
-          contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 100);
+      scrollToContactForm();
     };
 
     const handleOpenCatalog = (e?: Event) => {
@@ -96,24 +111,14 @@ export default function Footer() {
       setEnquiryProduct(null);
       setActiveForm("catalog");
       setSubmitStatus("idle");
-      setTimeout(() => {
-        const contactSection = document.getElementById("contact-form-section");
-        if (contactSection) {
-          contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 100);
+      scrollToContactForm();
     };
 
     const handleOpenNewsletter = () => {
       setEnquiryProduct(null);
       setActiveForm("newsletter");
       setSubmitStatus("idle");
-      setTimeout(() => {
-        const contactSection = document.getElementById("contact-form-section");
-        if (contactSection) {
-          contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 100);
+      scrollToContactForm();
     };
 
     const handleOpenDatasheet = (e?: Event) => {
@@ -124,12 +129,7 @@ export default function Footer() {
       setEnquiryProduct(null);
       setActiveForm("datasheet");
       setSubmitStatus("idle");
-      setTimeout(() => {
-        const contactSection = document.getElementById("contact-form-section");
-        if (contactSection) {
-          contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 100);
+      scrollToContactForm();
     };
 
     window.addEventListener("open-query-form", handleOpenQuery);
