@@ -41,7 +41,8 @@ model Product {
   slug             String   @unique
   description      String?  @db.Text
   color            String   @default("White")
-  finish           String?
+  finish           String?  // legacy single-value field, superseded by finishCategories below
+  finishCategories String[] @default([]) // one or more of Polished/Matte/Honed/etc. — a product can be filtered under multiple finishes on the public site
   thicknessMm      String[]
   dimensions       String[]
   format           String?

@@ -176,6 +176,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
     description: "",
     color: "White",
     finish: "",
+    finishCategories: [] as string[],
     thicknessMm: [] as string[],
     dimensions: [] as string[],
     format: "",
@@ -230,6 +231,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
               description: p.description || "",
               color: p.color || "White",
               finish: p.finish || "",
+              // Fall back to the legacy single `finish` value for products saved
+              // before multi-finish support existed, so it shows up pre-selected.
+              finishCategories: (p.finishCategories && p.finishCategories.length > 0)
+                ? p.finishCategories
+                : (p.finish ? [p.finish] : []),
               thicknessMm: p.thicknessMm || [],
               dimensions: p.dimensions || [],
               format: p.format || "",
@@ -379,37 +385,54 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 Specifications
               </p>
 
-              <div className="grid grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                    Color Category
-                  </label>
-                  <select
-                    value={form.color}
-                    onChange={(e) => setForm((p) => ({ ...p, color: e.target.value }))}
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                  >
-                    {["White", "Beige", "Grey", "Green", "Brown"].map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
+              <div className="space-y-1.5">
+                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
+                  Color Category
+                </label>
+                <select
+                  value={form.color}
+                  onChange={(e) => setForm((p) => ({ ...p, color: e.target.value }))}
+                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+                >
+                  {["White", "Beige", "Grey", "Green", "Brown"].map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                    Finish
-                  </label>
-                  <select
-                    value={form.finish}
-                    onChange={(e) => setForm((p) => ({ ...p, finish: e.target.value }))}
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                  >
-                    <option value="">Select finish…</option>
-                    {FINISHES.map((f) => (
-                      <option key={f} value={f}>{f}</option>
-                    ))}
-                  </select>
+              <div className="space-y-1.5">
+                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
+                  Finish
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {FINISHES.map((f) => {
+                    const isSelected = form.finishCategories.includes(f);
+                    return (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() =>
+                          setForm((p) => ({
+                            ...p,
+                            finishCategories: isSelected
+                              ? p.finishCategories.filter((x) => x !== f)
+                              : [...p.finishCategories, f],
+                          }))
+                        }
+                        className={`px-3.5 py-2 text-xs border transition-colors ${
+                          isSelected
+                            ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
+                            : "bg-[#f8f5f0] text-[#1a1a1a]/60 border-[#1a1a1a]/15 hover:border-[#1a1a1a]/35"
+                        }`}
+                      >
+                        {f}
+                      </button>
+                    );
+                  })}
                 </div>
+                <p className="text-[10px] text-[#8b8b8b]">
+                  Select every finish this slab is available in — it'll show up under each one as a filter on the website.
+                </p>
               </div>
 
               <TagInput

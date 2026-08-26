@@ -268,7 +268,12 @@ function ExploreCollectionContent() {
                 name: p.name,
                 img,
                 color: p.color,
-                finish: p.finish || "",
+                // A product can now be tagged with multiple finishes so it shows
+                // up under each one as a filter. Falls back to the legacy
+                // single `finish` value for products saved before this existed.
+                finishes: (Array.isArray(p.finishCategories) && p.finishCategories.length > 0)
+                  ? p.finishCategories
+                  : (p.finish ? [p.finish] : []),
                 isDark: !!p.isDark
               };
             });
@@ -344,7 +349,12 @@ function ExploreCollectionContent() {
   const filteredSlabs = useMemo(() => {
     return slabsToRender.filter((slab) => {
       const matchColor = !selectedColor || slab.color === selectedColor;
-      const matchFinish = !selectedFinish || slab.finish === selectedFinish;
+      // Supports both the new multi-finish shape (finishes: string[]) and the
+      // static offline-fallback catalog's legacy single `finish` value.
+      const slabFinishes: string[] = Array.isArray((slab as any).finishes)
+        ? (slab as any).finishes
+        : ((slab as any).finish ? [(slab as any).finish] : []);
+      const matchFinish = !selectedFinish || slabFinishes.includes(selectedFinish);
       const matchSearch = !searchTerm || slab.name.toLowerCase().includes(searchTerm.toLowerCase());
       return matchColor && matchFinish && matchSearch;
     });

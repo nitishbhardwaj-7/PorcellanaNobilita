@@ -9,6 +9,7 @@ interface Product {
   name: string;
   slug: string;
   finish: string | null;
+  finishCategories: string[];
   status: "DRAFT" | "PUBLISHED";
   coverImage: string | null;
   order: number;
@@ -164,7 +165,11 @@ export default function ProductsPage() {
               </div>
 
               {/* Finish */}
-              <p className="text-[11px] text-[#8b8b8b]">{product.finish || "—"}</p>
+              <p className="text-[11px] text-[#8b8b8b]">
+                {product.finishCategories && product.finishCategories.length > 0
+                  ? product.finishCategories.join(", ")
+                  : product.finish || "—"}
+              </p>
 
               {/* Status badge */}
               <div>
