@@ -107,7 +107,15 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         image={d.brandImg}
         isLoaderActive={isLoading}
       />
-      <CraftsmanshipSection />
+      <CraftsmanshipSection
+        heading={d.craftHeading}
+        paragraph={d.craftParagraph}
+        bgImage={d.craftBgImage}
+        bgImageMobile={d.craftBgImageMobile}
+        badgeText={d.craftBadgeText}
+        badgeLink={d.craftBadgeLink}
+        casaLabel={d.craftCasaLabel}
+      />
       <LegacySection />
       <ApplicationsSection onTileClick={(prodName) => handleProductSelect(prodName)} />
       <DimensionsSection />

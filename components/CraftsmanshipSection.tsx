@@ -8,7 +8,25 @@ import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function CraftsmanshipSection() {
+interface Props {
+  heading?: string;
+  paragraph?: string;
+  bgImage?: string;
+  bgImageMobile?: string;
+  badgeText?: string;
+  badgeLink?: string;
+  casaLabel?: string;
+}
+
+export default function CraftsmanshipSection({
+  heading,
+  paragraph,
+  bgImage,
+  bgImageMobile,
+  badgeText,
+  badgeLink,
+  casaLabel,
+}: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
@@ -144,10 +162,10 @@ export default function CraftsmanshipSection() {
         <picture className="w-full h-full block">
           <source
             media="(max-width: 767px)"
-            srcSet="/images/Links/medici-villa-mobile.png"
+            srcSet={bgImageMobile || "/images/Links/medici-villa-mobile.png"}
           />
           <img
-            src="/images/Links/MEDICI VILLA copy (7).png"
+            src={bgImage || "/images/Links/MEDICI VILLA copy (7).png"}
             alt="Italian craftsmanship"
             loading="lazy"
             className="w-full h-full object-cover object-center block"
@@ -165,13 +183,13 @@ export default function CraftsmanshipSection() {
             className="craftsmanship-heading font-ivymode text-white font-light text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] uppercase text-center whitespace-normal md:whitespace-nowrap leading-tight py-1"
             style={{ opacity: 0, letterSpacing: "0.28em", marginRight: "-0.28em" }}
           >
-            ITALIAN CRAFTSMANSHIP
+            {heading || "ITALIAN CRAFTSMANSHIP"}
           </h2>
           <p
             ref={paraRef}
             className="craftsmanship-para font-ivymode font-extralight text-white text-center md:text-justify md:[text-align-last:center] text-[14px] sm:text-[15px] md:text-[18px] tracking-widest leading-[28px] md:leading-[32px] w-full mt-3"
           >
-            In the heart of Modena, where centuries of Italian expertise meet innovation, NOBILITA creates porcelain surfaces that embody the art of timeless craftsmanship.
+            {paragraph || "In the heart of Modena, where centuries of Italian expertise meet innovation, NOBILITA creates porcelain surfaces that embody the art of timeless craftsmanship."}
           </p>
         </div>
       </div>
@@ -179,7 +197,7 @@ export default function CraftsmanshipSection() {
       {/* ── LOWER-CENTER BADGE ── */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center mt-auto mb-6 md:mb-14 px-6 w-full">
         {/* ── MADE IN ITALY BADGE */}
-        <Link href="/made-in-italy">
+        <Link href={badgeLink || "/made-in-italy"}>
           <button
             ref={badgeWrapRef}
             className="badge-wrap group relative overflow-hidden inline-block bg-transparent cursor-pointer focus:outline-none px-8 py-2.5"
@@ -214,7 +232,7 @@ export default function CraftsmanshipSection() {
               className="badge-text relative z-10 font-michroma text-white group-hover:text-black transition-colors duration-500 text-[clamp(12px,1.5vw,20px)] tracking-[0.25em] uppercase"
               style={{ opacity: 0 }}
             >
-              MADE IN ITALY
+              {badgeText || "MADE IN ITALY"}
             </span>
           </button>
         </Link>
@@ -227,7 +245,7 @@ export default function CraftsmanshipSection() {
           className="casa-nobile-label font-ivymode text-white/90 text-[16px] tracking-[0.2em] uppercase"
           style={{ opacity: 0, letterSpacing: "0.1em" }}
         >
-          CASA NOBILE
+          {casaLabel || "CASA NOBILE"}
         </span>
       </div>
     </section>

@@ -7,9 +7,9 @@ import { MediaPickerButton } from "../_components/MediaPicker";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship"] as const;
 type Tab = (typeof TABS)[number];
-const TAB_LABELS: Record<Tab, string> = { hero: "Hero", "brand-intro": "Brand Intro" };
+const TAB_LABELS: Record<Tab, string> = { hero: "Hero", "brand-intro": "Brand Intro", craftsmanship: "Craftsmanship" };
 
 export default function HomepagePage() {
   const [activeTab, setActiveTab] = useState<Tab>("hero");
@@ -49,7 +49,7 @@ export default function HomepagePage() {
         ))}
       </div>
 
-      {activeTab === "hero" ? <HeroTab /> : <BrandIntroTab />}
+      {activeTab === "hero" ? <HeroTab /> : activeTab === "brand-intro" ? <BrandIntroTab /> : <CraftsmanshipTab />}
     </div>
   );
 }
@@ -612,6 +612,220 @@ function BrandIntroTab() {
           style={fontMichroma}
         >
           {saving ? "Saving…" : "Save Brand Intro"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Craftsmanship tab
+// ============================================================================
+
+interface CraftSettings {
+  craftHeading: string | null;
+  craftParagraph: string | null;
+  craftBgImage: string | null;
+  craftBgImageMobile: string | null;
+  craftBadgeText: string | null;
+  craftBadgeLink: string | null;
+  craftCasaLabel: string | null;
+}
+
+function CraftsmanshipTab() {
+  const [settings, setSettings] = useState<CraftSettings>({
+    craftHeading: "",
+    craftParagraph: "",
+    craftBgImage: "",
+    craftBgImageMobile: "",
+    craftBadgeText: "",
+    craftBadgeLink: "",
+    craftCasaLabel: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.data) {
+          setSettings({
+            craftHeading: data.data.craftHeading || "",
+            craftParagraph: data.data.craftParagraph || "",
+            craftBgImage: data.data.craftBgImage || "",
+            craftBgImageMobile: data.data.craftBgImageMobile || "",
+            craftBadgeText: data.data.craftBadgeText || "",
+            craftBadgeLink: data.data.craftBadgeLink || "",
+            craftCasaLabel: data.data.craftCasaLabel || "",
+          });
+        }
+      })
+      .catch((err) => setError(err.message || "Failed to load."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2].map((n) => (
+          <div key={n} className="h-24 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
+            Craftsmanship
+          </p>
+          {saved && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Heading
+          </label>
+          <input
+            type="text"
+            value={settings.craftHeading || ""}
+            onChange={(e) => setSettings((p) => ({ ...p, craftHeading: e.target.value }))}
+            placeholder="ITALIAN CRAFTSMANSHIP"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Paragraph
+          </label>
+          <textarea
+            value={settings.craftParagraph || ""}
+            onChange={(e) => setSettings((p) => ({ ...p, craftParagraph: e.target.value }))}
+            rows={3}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Background Image (Desktop)
+            </label>
+            {settings.craftBgImage && (
+              <img src={settings.craftBgImage} alt="" className="h-16 w-full object-cover border border-[#1a1a1a]/10" />
+            )}
+            <div className="flex gap-1">
+              <input
+                type="text"
+                value={settings.craftBgImage || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, craftBgImage: e.target.value }))}
+                className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, craftBgImage: url }))} />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Background Image (Mobile)
+            </label>
+            {settings.craftBgImageMobile && (
+              <img src={settings.craftBgImageMobile} alt="" className="h-16 w-full object-cover border border-[#1a1a1a]/10" />
+            )}
+            <div className="flex gap-1">
+              <input
+                type="text"
+                value={settings.craftBgImageMobile || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, craftBgImageMobile: e.target.value }))}
+                className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, craftBgImageMobile: url }))} />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Badge Text
+            </label>
+            <input
+              type="text"
+              value={settings.craftBadgeText || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, craftBadgeText: e.target.value }))}
+              placeholder="MADE IN ITALY"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Badge Link
+            </label>
+            <input
+              type="text"
+              value={settings.craftBadgeLink || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, craftBadgeLink: e.target.value }))}
+              placeholder="/made-in-italy"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none font-mono"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            "Casa Nobile" Label
+          </label>
+          <p className="text-[10px] text-[#8b8b8b]">Small label in the bottom corner of the section.</p>
+          <input
+            type="text"
+            value={settings.craftCasaLabel || ""}
+            onChange={(e) => setSettings((p) => ({ ...p, craftCasaLabel: e.target.value }))}
+            placeholder="CASA NOBILE"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+        </div>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {saving ? "Saving…" : "Save Craftsmanship"}
         </button>
       </div>
     </div>

@@ -35,6 +35,13 @@ export default async function Home() {
       brandBtn: settings?.brandBtn,
       brandBtnLink: settings?.brandBtnLink,
       brandImg: settings?.brandImg,
+      craftHeading: settings?.craftHeading,
+      craftParagraph: settings?.craftParagraph,
+      craftBgImage: settings?.craftBgImage,
+      craftBgImageMobile: settings?.craftBgImageMobile,
+      craftBadgeText: settings?.craftBadgeText,
+      craftBadgeLink: settings?.craftBadgeLink,
+      craftCasaLabel: settings?.craftCasaLabel,
     };
   } catch (e) {
     cmsData = null;

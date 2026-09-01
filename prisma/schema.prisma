@@ -159,6 +159,15 @@ model Settings {
   brandBtn        String? // button text
   brandBtnLink    String? // button link
 
+  // Homepage Craftsmanship section — editable from Admin > Homepage.
+  craftHeading        String?
+  craftParagraph      String? @db.Text
+  craftBgImage        String? // desktop background
+  craftBgImageMobile  String? // mobile background
+  craftBadgeText      String?
+  craftBadgeLink      String?
+  craftCasaLabel      String? // small "CASA NOBILE" label, bottom corner
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
