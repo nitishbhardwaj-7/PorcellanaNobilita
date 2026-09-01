@@ -170,7 +170,7 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         buttonLink={d.heroButtonLink}
         slides={d.heroSlides}
       />
-      <TechnicalDataSection />
+      <TechnicalDataSection slides={d.techDataSlides} />
       <LocationsSection />
       <Footer />
       <FeaturedProduct

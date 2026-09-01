@@ -234,6 +234,19 @@ model HeroSlide {
   updatedAt DateTime @updatedAt
 }
 
+// One slide in the homepage Technical Data section's background slideshow.
+// Editable order, image, label text, and label color from Admin > Homepage —
+// same shape and admin UI pattern as HeroSlide above.
+model TechDataSlide {
+  id        String   @id @default(cuid())
+  image     String
+  label     String
+  textColor String   @default("black") // "white" | "black" — label contrast against the image
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // One tile in the homepage Applications grid. Always exactly six rows (two
 // rows of three) — the admin can edit each tile's content but not add,
 // remove, or move a tile between rows, keeping the fixed layout intact.

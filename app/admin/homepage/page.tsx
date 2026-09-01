@@ -7,7 +7,7 @@ import { MediaPickerButton } from "../_components/MediaPicker";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
   hero: "Hero",
@@ -17,6 +17,7 @@ const TAB_LABELS: Record<Tab, string> = {
   applications: "Applications",
   dimensions: "Dimensions",
   finishes: "Finishes",
+  "technical-data": "Technical Data",
 };
 
 export default function HomepagePage() {
@@ -64,6 +65,7 @@ export default function HomepagePage() {
       {activeTab === "applications" && <ApplicationsTab />}
       {activeTab === "dimensions" && <DimensionsTab />}
       {activeTab === "finishes" && <FinishesTab />}
+      {activeTab === "technical-data" && <TechnicalDataTab />}
     </div>
   );
 }
@@ -1730,6 +1732,249 @@ function FinishesTab() {
           style={fontMichroma}
         >
           {saving ? "Saving…" : "Save Finishes"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Technical Data tab
+// ============================================================================
+
+interface TechDataSlide {
+  id: string;
+  image: string;
+  label: string;
+  textColor: string;
+  order: number;
+}
+
+function TechnicalDataTab() {
+  const [slides, setSlides] = useState<TechDataSlide[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchSlides();
+  }, []);
+
+  async function fetchSlides() {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/tech-data-slides").then((r) => r.json());
+      if (res?.data) setSlides(res.data);
+    } catch (err: any) {
+      setError(err.message || "Failed to load.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleAddSlide() {
+    setError(null);
+    try {
+      const res = await fetch("/api/tech-data-slides", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: "", label: "NEW SLIDE", textColor: "black" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to add slide.");
+      setSlides((prev) => [...prev, data.data]);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function updateSlide(id: string, patch: Partial<TechDataSlide>) {
+    setSlides((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
+    try {
+      await fetch(`/api/tech-data-slides/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+    } catch {
+      setError("Failed to save slide changes.");
+    }
+  }
+
+  async function handleDeleteSlide(id: string) {
+    if (!confirm("Delete this slide? This cannot be undone.")) return;
+    setError(null);
+    try {
+      const res = await fetch(`/api/tech-data-slides/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete.");
+      setSlides((prev) => prev.filter((s) => s.id !== id));
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function moveSlide(from: number, to: number) {
+    if (from === to) return;
+    const reordered = [...slides];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+    setSlides(reordered);
+
+    setError(null);
+    try {
+      await Promise.all(
+        reordered.map((slide, i) =>
+          slide.order === i
+            ? Promise.resolve()
+            : fetch(`/api/tech-data-slides/${slide.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order: i }),
+              })
+        )
+      );
+      setSlides((prev) => prev.map((s, i) => ({ ...s, order: i })));
+    } catch {
+      setError("Failed to save the new slide order.");
+      fetchSlides();
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3].map((n) => (
+          <div key={n} className="h-24 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-4">
+        <div>
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3 mb-1" style={fontMichroma}>
+            Technical Data Slideshow
+          </p>
+          <p className="text-[10px] text-[#8b8b8b] pt-2">
+            Drag the grip handle to reorder. Each slide's label is shown in the bottom-right corner over its image. The Catalogue and Newsletter buttons open the site's standard forms and are not editable here.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {slides.map((slide, idx) => (
+            <div
+              key={slide.id}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) setDragOverIdx(idx);
+              }}
+              onDragLeave={() => setDragOverIdx((cur) => (cur === idx ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) moveSlide(draggedIdx, idx);
+                setDraggedIdx(null);
+                setDragOverIdx(null);
+              }}
+              className={`flex gap-3 items-center bg-[#f8f5f0] border p-3 transition-colors ${
+                draggedIdx === idx
+                  ? "opacity-40 border-[#1a1a1a]/10"
+                  : dragOverIdx === idx
+                    ? "border-[#007190]"
+                    : "border-[#1a1a1a]/10"
+              }`}
+            >
+              <div
+                draggable
+                onDragStart={() => setDraggedIdx(idx)}
+                onDragEnd={() => {
+                  setDraggedIdx(null);
+                  setDragOverIdx(null);
+                }}
+                className="flex-shrink-0 self-stretch flex items-center text-[#1a1a1a]/25 hover:text-[#1a1a1a]/60 cursor-grab active:cursor-grabbing transition-colors"
+                title="Drag to reorder"
+              >
+                <GripVertical size={15} />
+              </div>
+
+              <div className="w-16 h-16 flex-shrink-0 border border-[#1a1a1a]/10 bg-white overflow-hidden">
+                {slide.image ? (
+                  <img src={slide.image} alt="" className="w-full h-full object-cover" />
+                ) : null}
+              </div>
+
+              <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div className="sm:col-span-2">
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Image</label>
+                  <div className="flex gap-1">
+                    <input
+                      type="text"
+                      value={slide.image}
+                      onChange={(e) => updateSlide(slide.id, { image: e.target.value })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                    <MediaPickerButton
+                      folder="products"
+                      onSelect={(url) => updateSlide(slide.id, { image: url })}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Color</label>
+                  <div className="flex gap-1">
+                    {(["white", "black"] as const).map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => updateSlide(slide.id, { textColor: c })}
+                        className={`flex-1 px-2 py-1 text-[10px] uppercase border transition-colors ${
+                          slide.textColor === c
+                            ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
+                            : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15"
+                        }`}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="sm:col-span-3">
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Text</label>
+                  <input
+                    type="text"
+                    value={slide.label}
+                    onChange={(e) => updateSlide(slide.id, { label: e.target.value })}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleDeleteSlide(slide.id)}
+                className="text-red-500 hover:text-red-700 transition-colors p-1 self-start"
+              >
+                <X size={15} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAddSlide}
+          className="flex items-center gap-2 border border-[#007190] px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#007190] hover:bg-[#007190] hover:text-white transition-all"
+          style={fontMichroma}
+        >
+          <Plus size={13} />
+          Add Slide
         </button>
       </div>
     </div>

@@ -2,7 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 
-const technicalImages = [
+interface TechDataSlide {
+  image: string;
+  label: string;
+  textColor: string;
+}
+
+interface Props {
+  slides?: TechDataSlide[];
+}
+
+// Fallback slideshow — used until Admin > Homepage has slides in the database.
+const defaultImages = [
   { src: "/images/Links/Statuario Ultimo 1.jpg", name: "STATUARIO ULTIMO", textColor: "black" },
   { src: "/images/Links/Arbescato Fjord Face 1.jpg", name: "ARABESCATO FJORD", textColor: "black" },
   { src: "/images/Links/Arabescato Vagli Face 1_1.jpg", name: "ARABESCATO VAGLI", textColor: "black" },
@@ -13,7 +24,15 @@ const technicalImages = [
   { src: "/images/Links/Fior Di Melo Face 1.jpg", name: "FIOR DI MELO", textColor: "black" },
   { src: "/images/Links/Onice Bianco 1.jpg", name: "ONICE BIANCO", textColor: "black" },
   { src: "/images/Links/Travertino CC 1.jpg", name: "TRAVERTINO ROMANO CLASSICO CROSS CUT", textColor: "black" }
-]; export default function TechnicalDataSection() {
+];
+
+export default function TechnicalDataSection({ slides }: Props) {
+  // CMS-managed slides (Admin > Homepage) win when present; otherwise fall
+  // back to the bundled default slideshow so the section never renders empty.
+  const technicalImages = slides && slides.length > 0
+    ? slides.map((s) => ({ src: s.image, name: s.label, textColor: s.textColor }))
+    : defaultImages;
+
   const [{ current, prev }, setImageIndices] = useState({ current: 0, prev: null as number | null });
 
   useEffect(() => {
@@ -23,7 +42,7 @@ const technicalImages = [
     });
   }, []);
 
-  // Change image every 10 seconds (matches hero timing)
+  // Change image every 10 seconds (matches hero timing)
   useEffect(() => {
     const timer = setInterval(() => {
       setImageIndices((state) => ({
