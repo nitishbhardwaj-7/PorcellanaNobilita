@@ -5,14 +5,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Navbar from "./Navbar";
 
+interface HeroSlide {
+  image: string;
+  label: string;
+  textColor: string;
+}
+
 interface Props {
   title?: string;
   subtitle?: string;
   buttonText?: string;
-  bgImage?: string;
+  buttonLink?: string;
+  slides?: HeroSlide[];
 }
 
-const slideshowImages = [
+// Fallback slideshow — used until Admin > Homepage has slides in the database.
+const defaultSlideshowImages = [
   {
     src: "/images/NewImages/Arabescato%20Fjord.jpg",
     name: "ARABESCATO FJORD",
@@ -136,7 +144,13 @@ const buttonTextVariants = {
   }
 };
 
-export default function HeroSection({ title, subtitle, buttonText, bgImage }: Props) {
+export default function HeroSection({ title, subtitle, buttonText, buttonLink, slides }: Props) {
+  // CMS-managed slides (Admin > Homepage) win when present; otherwise fall
+  // back to the bundled default slideshow so the section never renders empty.
+  const slideshowImages = slides && slides.length > 0
+    ? slides.map((s) => ({ src: s.image, name: s.label, textColor: s.textColor }))
+    : defaultSlideshowImages;
+
   const [{ current, prev }, setImageIndices] = useState({ current: 0, prev: null as number | null });
 
   useEffect(() => {
@@ -283,7 +297,7 @@ export default function HeroSection({ title, subtitle, buttonText, bgImage }: Pr
             variants={buttonVariants}
             className="w-full mt-auto mb-5 flex justify-center"
           >
-            <Link href="/explore-collection">
+            <Link href={buttonLink || "/explore-collection"}>
               <motion.button
                 whileTap={{ scale: 0.96 }}
                 className="relative overflow-hidden border border-white text-white bg-transparent px-8 py-2.5 2xl:px-12 2xl:py-3.5 font-michroma text-[clamp(12px,1.5vw,20px)] 2xl:text-[22px] tracking-[0.25em] transition-colors duration-500 uppercase group"

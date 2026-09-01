@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import HomeClient from "@/components/HomeClient";
 import { getStaticPageMetadata } from "@/lib/staticPageMeta";
+import prisma from "@/lib/prisma";
 
 export const revalidate = 0; // Ensure fresh data on every request
 
@@ -13,9 +14,29 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
+  // Homepage Hero content (Admin > Homepage) — fetched server-side so it's
+  // ready on first paint, no client-side loading flash. Falls back to
+  // HeroSection's own hardcoded defaults if the DB is briefly unreachable.
+  let cmsData: any = null;
+  try {
+    const [settings, heroSlides] = await Promise.all([
+      prisma.settings.findUnique({ where: { id: "global" } }),
+      prisma.heroSlide.findMany({ orderBy: { order: "asc" } }),
+    ]);
+    cmsData = {
+      heroTitle: settings?.heroTitle,
+      heroSubtitle: settings?.heroSubtitle,
+      heroBtn: settings?.heroButtonText,
+      heroButtonLink: settings?.heroButtonLink,
+      heroSlides: heroSlides.length > 0 ? heroSlides : undefined,
+    };
+  } catch (e) {
+    cmsData = null;
+  }
+
   return (
     <Suspense fallback={null}>
-      <HomeClient cmsData={null} />
+      <HomeClient cmsData={cmsData} />
     </Suspense>
   );
 }

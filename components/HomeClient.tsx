@@ -110,11 +110,12 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
       <ApplicationsSection onTileClick={(prodName) => handleProductSelect(prodName)} />
       <DimensionsSection />
       <FinishesSection />
-      <HeroSection 
+      <HeroSection
         title={d.heroTitle}
         subtitle={d.heroSubtitle}
         buttonText={d.heroBtn}
-        bgImage={d.heroImg}
+        buttonLink={d.heroButtonLink}
+        slides={d.heroSlides}
       />
       <TechnicalDataSection />
       <LocationsSection />

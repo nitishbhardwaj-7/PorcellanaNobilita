@@ -144,8 +144,27 @@ model Settings {
   datasheetPdfUrlItalian   String?
   datasheetPdfNameItalian  String?
 
+  // Homepage Hero section — editable from Admin > Homepage. The slideshow
+  // images themselves live in the HeroSlide model below.
+  heroTitle      String?
+  heroSubtitle   String?  @db.Text
+  heroButtonText String?
+  heroButtonLink String?
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+// One slide in the homepage Hero's background slideshow. Editable order,
+// image, label text, and label color from Admin > Homepage.
+model HeroSlide {
+  id        String   @id @default(cuid())
+  image     String
+  label     String
+  textColor String   @default("white") // "white" | "black" — label contrast against the image
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Master data — the set of Color/Finish options offered in the product form

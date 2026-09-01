@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   LayoutDashboard,
+  Home,
   FileText,
   Package,
   Newspaper,
@@ -30,6 +31,7 @@ interface User {
 
 const menuItems = [
   { name: "Overview", path: "/admin", icon: LayoutDashboard, exact: true },
+  { name: "Homepage", path: "/admin/homepage", icon: Home, exact: false },
   { name: "Products", path: "/admin/products", icon: Package, exact: false },
   { name: "Blogs", path: "/admin/blogs", icon: Newspaper, exact: false },
   { name: "Queries", path: "/admin/queries", icon: MessageSquare, exact: false },
