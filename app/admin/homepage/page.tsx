@@ -7,7 +7,7 @@ import { MediaPickerButton } from "../_components/MediaPicker";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
   hero: "Hero",
@@ -15,6 +15,7 @@ const TAB_LABELS: Record<Tab, string> = {
   craftsmanship: "Craftsmanship",
   legacy: "Legacy",
   applications: "Applications",
+  dimensions: "Dimensions",
 };
 
 export default function HomepagePage() {
@@ -60,6 +61,7 @@ export default function HomepagePage() {
       {activeTab === "craftsmanship" && <CraftsmanshipTab />}
       {activeTab === "legacy" && <LegacyTab />}
       {activeTab === "applications" && <ApplicationsTab />}
+      {activeTab === "dimensions" && <DimensionsTab />}
     </div>
   );
 }
@@ -1259,6 +1261,267 @@ function ApplicationsTab() {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Dimensions tab
+// ============================================================================
+
+interface DimensionsSettings {
+  dimHeading: string | null;
+  dimCol1Header: string | null;
+  dimCol1Item1: string | null;
+  dimCol1Item2: string | null;
+  dimCol2Header: string | null;
+  dimCol2Item1: string | null;
+  dimCol2Item2: string | null;
+  dimCol3Header: string | null;
+  dimCol3Item1: string | null;
+  dimCol3Item2: string | null;
+  dimImage: string | null;
+  dimBtnText: string | null;
+  dimBtnLink: string | null;
+}
+
+function DimensionsTab() {
+  const [settings, setSettings] = useState<DimensionsSettings>({
+    dimHeading: "",
+    dimCol1Header: "",
+    dimCol1Item1: "",
+    dimCol1Item2: "",
+    dimCol2Header: "",
+    dimCol2Item1: "",
+    dimCol2Item2: "",
+    dimCol3Header: "",
+    dimCol3Item1: "",
+    dimCol3Item2: "",
+    dimImage: "",
+    dimBtnText: "",
+    dimBtnLink: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.data) {
+          setSettings({
+            dimHeading: data.data.dimHeading || "",
+            dimCol1Header: data.data.dimCol1Header || "",
+            dimCol1Item1: data.data.dimCol1Item1 || "",
+            dimCol1Item2: data.data.dimCol1Item2 || "",
+            dimCol2Header: data.data.dimCol2Header || "",
+            dimCol2Item1: data.data.dimCol2Item1 || "",
+            dimCol2Item2: data.data.dimCol2Item2 || "",
+            dimCol3Header: data.data.dimCol3Header || "",
+            dimCol3Item1: data.data.dimCol3Item1 || "",
+            dimCol3Item2: data.data.dimCol3Item2 || "",
+            dimImage: data.data.dimImage || "",
+            dimBtnText: data.data.dimBtnText || "",
+            dimBtnLink: data.data.dimBtnLink || "",
+          });
+        }
+      })
+      .catch((err) => setError(err.message || "Failed to load."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2].map((n) => (
+          <div key={n} className="h-24 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
+            Dimensions
+          </p>
+          {saved && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+        <p className="text-[10px] text-[#8b8b8b] -mt-2">
+          The "Format &amp; Dimensions" spec grid — a fixed 3-column layout (Thickness / Dimensions / Format), each with two lines, plus a feature image and button.
+        </p>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Heading
+          </label>
+          <input
+            type="text"
+            value={settings.dimHeading || ""}
+            onChange={(e) => setSettings((p) => ({ ...p, dimHeading: e.target.value }))}
+            placeholder="FORMAT & DIMENSIONS"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Column 1 Header
+            </label>
+            <input
+              type="text"
+              value={settings.dimCol1Header || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol1Header: e.target.value }))}
+              placeholder="THICKNESS"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <input
+              type="text"
+              value={settings.dimCol1Item1 || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol1Item1: e.target.value }))}
+              placeholder="6.5 MM"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <input
+              type="text"
+              value={settings.dimCol1Item2 || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol1Item2: e.target.value }))}
+              placeholder="12 MM"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Column 2 Header
+            </label>
+            <input
+              type="text"
+              value={settings.dimCol2Header || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol2Header: e.target.value }))}
+              placeholder="DIMENSIONS"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <input
+              type="text"
+              value={settings.dimCol2Item1 || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol2Item1: e.target.value }))}
+              placeholder="1600 X 3200 MM"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <input
+              type="text"
+              value={settings.dimCol2Item2 || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol2Item2: e.target.value }))}
+              placeholder="1620 X 3240 MM"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Column 3 Header
+            </label>
+            <input
+              type="text"
+              value={settings.dimCol3Header || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol3Header: e.target.value }))}
+              placeholder="FORMAT"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <input
+              type="text"
+              value={settings.dimCol3Item1 || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol3Item1: e.target.value }))}
+              placeholder="RECTIFIED"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <input
+              type="text"
+              value={settings.dimCol3Item2 || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, dimCol3Item2: e.target.value }))}
+              placeholder="GROSS"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <ImageField
+            label="Feature Image"
+            value={settings.dimImage || ""}
+            onChange={(url) => setSettings((p) => ({ ...p, dimImage: url }))}
+          />
+          <div className="space-y-5">
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Button Text
+              </label>
+              <input
+                type="text"
+                value={settings.dimBtnText || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimBtnText: e.target.value }))}
+                placeholder="TECHNICAL DATA"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Button Link
+              </label>
+              <input
+                type="text"
+                value={settings.dimBtnLink || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimBtnLink: e.target.value }))}
+                placeholder="/technical-data"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none font-mono"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {saving ? "Saving…" : "Save Dimensions"}
+        </button>
       </div>
     </div>
   );

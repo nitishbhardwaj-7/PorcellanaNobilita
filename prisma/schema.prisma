@@ -181,6 +181,22 @@ model Settings {
   // tiles themselves live in the ApplicationTile model below.
   applicationsHeading String?
 
+  // Homepage Dimensions section — editable from Admin > Homepage. Fixed
+  // 3-column x 2-item spec grid (Thickness / Dimensions / Format).
+  dimHeading   String?
+  dimCol1Header String? // THICKNESS
+  dimCol1Item1  String?
+  dimCol1Item2  String?
+  dimCol2Header String? // DIMENSIONS
+  dimCol2Item1  String?
+  dimCol2Item2  String?
+  dimCol3Header String? // FORMAT
+  dimCol3Item1  String?
+  dimCol3Item2  String?
+  dimImage      String?
+  dimBtnText    String?
+  dimBtnLink    String?
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

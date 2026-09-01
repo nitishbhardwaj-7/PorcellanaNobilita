@@ -52,6 +52,19 @@ export default async function Home() {
       legacyRightLabel: settings?.legacyRightLabel,
       applicationsHeading: settings?.applicationsHeading,
       applicationTiles: applicationTiles.length > 0 ? applicationTiles : undefined,
+      dimHeading: settings?.dimHeading,
+      dimCol1Header: settings?.dimCol1Header,
+      dimCol1Item1: settings?.dimCol1Item1,
+      dimCol1Item2: settings?.dimCol1Item2,
+      dimCol2Header: settings?.dimCol2Header,
+      dimCol2Item1: settings?.dimCol2Item1,
+      dimCol2Item2: settings?.dimCol2Item2,
+      dimCol3Header: settings?.dimCol3Header,
+      dimCol3Item1: settings?.dimCol3Item1,
+      dimCol3Item2: settings?.dimCol3Item2,
+      dimImage: settings?.dimImage,
+      dimBtnText: settings?.dimBtnText,
+      dimBtnLink: settings?.dimBtnLink,
     };
   } catch (e) {
     cmsData = null;

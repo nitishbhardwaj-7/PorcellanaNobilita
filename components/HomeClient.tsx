@@ -130,7 +130,21 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         heading={d.applicationsHeading}
         tiles={d.applicationTiles}
       />
-      <DimensionsSection />
+      <DimensionsSection
+        heading={d.dimHeading}
+        col1Header={d.dimCol1Header}
+        col1Item1={d.dimCol1Item1}
+        col1Item2={d.dimCol1Item2}
+        col2Header={d.dimCol2Header}
+        col2Item1={d.dimCol2Item1}
+        col2Item2={d.dimCol2Item2}
+        col3Header={d.dimCol3Header}
+        col3Item1={d.dimCol3Item1}
+        col3Item2={d.dimCol3Item2}
+        image={d.dimImage}
+        btnText={d.dimBtnText}
+        btnLink={d.dimBtnLink}
+      />
       <FinishesSection />
       <HeroSection
         title={d.heroTitle}
