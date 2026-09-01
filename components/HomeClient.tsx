@@ -98,10 +98,12 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
     <main className="w-full min-h-screen bg-white">
       <Loader isLoading={isLoading} onComplete={handleComplete} />
       {/* <LanguageSwitcher isVisible={!isLoading} /> */}
-      <BrandIntro 
-        title={d.brandTitle}
+      <BrandIntro
+        tagImage={d.brandTagImage}
+        tagSubtext={d.brandTagSubtext}
         subtitle={d.brandSubtitle}
         buttonText={d.brandBtn}
+        buttonLink={d.brandBtnLink}
         image={d.brandImg}
         isLoaderActive={isLoading}
       />

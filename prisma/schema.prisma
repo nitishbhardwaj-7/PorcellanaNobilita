@@ -151,6 +151,14 @@ model Settings {
   heroButtonText String?
   heroButtonLink String?
 
+  // Homepage Brand Intro section — editable from Admin > Homepage.
+  brandTagImage   String? // top "Il Gres Imperiale d'Italia" tag graphic
+  brandTagSubtext String? // small caption under the tag graphic
+  brandImg        String? // middle NOBILITA logo image
+  brandSubtitle   String? @db.Text // description paragraph
+  brandBtn        String? // button text
+  brandBtnLink    String? // button link
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

@@ -29,6 +29,12 @@ export default async function Home() {
       heroBtn: settings?.heroButtonText,
       heroButtonLink: settings?.heroButtonLink,
       heroSlides: heroSlides.length > 0 ? heroSlides : undefined,
+      brandTagImage: settings?.brandTagImage,
+      brandTagSubtext: settings?.brandTagSubtext,
+      brandSubtitle: settings?.brandSubtitle,
+      brandBtn: settings?.brandBtn,
+      brandBtnLink: settings?.brandBtnLink,
+      brandImg: settings?.brandImg,
     };
   } catch (e) {
     cmsData = null;

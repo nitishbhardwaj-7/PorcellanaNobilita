@@ -9,14 +9,16 @@ import NavigationOverlay from "./NavigationOverlay";
 gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
-  title?: string;
+  tagImage?: string;
+  tagSubtext?: string;
   subtitle?: string;
   buttonText?: string;
+  buttonLink?: string;
   image?: string;
   isLoaderActive?: boolean;
 }
 
-export default function BrandIntro({ title, subtitle, buttonText, image, isLoaderActive = false }: Props) {
+export default function BrandIntro({ tagImage, tagSubtext, subtitle, buttonText, buttonLink, image, isLoaderActive = false }: Props) {
   const defaultSubtitle = "Inspired by Italy's noble heritage and Baroque architecture, NOBILITA porcelain is crafted in Modena, Italy, home to Ferrari, Acetaia Giusti, and Brioni. A collection where timeless Italian elegance meets advanced porcelain technology.";
   const sectionRef = useRef<HTMLElement>(null);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -211,13 +213,13 @@ export default function BrandIntro({ title, subtitle, buttonText, image, isLoade
         {/* Top Header Image (tag.png) */}
         <div className="brand-tag-wrapper w-full max-w-[450px] md:max-w-[750px] lg:max-w-[920px] xl:max-w-[1050px] flex flex-col items-center opacity-0 translate-y-8">
           <img
-            src="/images/Links/tag.png"
+            src={tagImage || "/images/Links/tag.png"}
             alt="Il Gres Imperiale d'Italia"
             loading="lazy"
             className="w-full h-auto object-contain"
           />
           <span className="brand-tag-subtext font-michroma text-white/50 text-[clamp(12px,1.5vw,20px)] lg:text-[clamp(15px,1.5vw,24px)] tracking-[0.2em] block opacity-0 mt-1 md:mt-2">
-            The Imperial Stone of Italy
+            {tagSubtext || "The Imperial Stone of Italy"}
           </span>
         </div>
 
@@ -249,7 +251,7 @@ export default function BrandIntro({ title, subtitle, buttonText, image, isLoade
 
         {/* Button: OUR STORY */}
         <div className="brand-btn-wrapper opacity-0 translate-y-6">
-          <Link href="/our-story">
+          <Link href={buttonLink || "/our-story"}>
             <button
               className="brand-story-btn relative overflow-hidden border border-white text-white bg-transparent px-8 py-2.5 lg:px-10 lg:py-3.5 font-michroma text-[clamp(12px,1.3vw,18px)] lg:text-[clamp(14px,1.4vw,20px)] tracking-[0.25em] transition-colors duration-500 uppercase group"
             >
