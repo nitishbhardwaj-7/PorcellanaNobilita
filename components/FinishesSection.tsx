@@ -1,65 +1,100 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
-const finishes = [
+// Fixed identity per tile — filter routing and per-tile styling stay pinned
+// to these, independent of the editable name/image/desc content below, so
+// renaming a tile in the CMS can never break the "explore collection" link.
+const finishMeta = [
+  { filterName: "Polished", darkText: true, idleOverlay: "bg-transparent", hoverOverlay: "bg-black/[0.03]" },
+  { filterName: "Matte", darkText: false, idleOverlay: "bg-black/25", hoverOverlay: "bg-black/10" },
+  { filterName: "Honed", darkText: true, idleOverlay: "bg-transparent", hoverOverlay: "bg-black/[0.03]" },
+  { filterName: "Structured Matte", darkText: true, idleOverlay: "bg-white/25", hoverOverlay: "bg-white/35" },
+  { filterName: "3D-5D Matte", darkText: true, idleOverlay: "bg-transparent", hoverOverlay: "bg-black/[0.03]" },
+];
+
+const defaults = [
   {
     name: "POLISHED",
     img: "/images/Links/Onice Bianco 1.jpg",
-    darkText: true,
     desc: "A glossy, reflective finish that brings out the full richness of the design for a luxurious look.",
-    idleOverlay: "bg-transparent",
-    hoverOverlay: "bg-black/[0.03]"
   },
   {
     name: "MATTE",
     img: "/images/Links/Basaltina matte.jpg",
-    darkText: false,
     desc: "A non-reflective and refined finish, with added slip resistance.",
-    idleOverlay: "bg-black/25",
-    hoverOverlay: "bg-black/10"
   },
   {
     name: "HONED",
     img: "/images/Links/Statuario Ultimo 1.jpg",
-    darkText: true,
     desc: "A smooth, satin-like finish that balances subtle sheen with modern elegance.",
-    idleOverlay: "bg-transparent",
-    hoverOverlay: "bg-black/[0.03]"
   },
   {
     name: "STRUCTURED MATTE",
     img: "/images/Links/White Camouflage Face 1 - Copy.jpg",
-    darkText: true,
     desc: "Leather-inspired texture with subtle richness and enhanced grip.",
-    idleOverlay: "bg-white/25",
-    hoverOverlay: "bg-white/35"
   },
   {
     name: "3D / 5D MATTE",
     img: "/images/Travertino Romano Classico Face 1 - Copy.jpg",
-    darkText: true,
     desc: "A multi-dimensional finish that brings depth, texture, and realism to stone surfaces.",
-    idleOverlay: "bg-transparent",
-    hoverOverlay: "bg-black/[0.03]"
   },
 ];
 
-export default function FinishesSection() {
+interface Props {
+  heading?: string;
+  finish1Name?: string;
+  finish1Image?: string;
+  finish1Desc?: string;
+  finish2Name?: string;
+  finish2Image?: string;
+  finish2Desc?: string;
+  finish3Name?: string;
+  finish3Image?: string;
+  finish3Desc?: string;
+  finish4Name?: string;
+  finish4Image?: string;
+  finish4Desc?: string;
+  finish5Name?: string;
+  finish5Image?: string;
+  finish5Desc?: string;
+}
+
+export default function FinishesSection({
+  heading,
+  finish1Name,
+  finish1Image,
+  finish1Desc,
+  finish2Name,
+  finish2Image,
+  finish2Desc,
+  finish3Name,
+  finish3Image,
+  finish3Desc,
+  finish4Name,
+  finish4Image,
+  finish4Desc,
+  finish5Name,
+  finish5Image,
+  finish5Desc,
+}: Props) {
   const router = useRouter();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const handleFinishClick = (finish: typeof finishes[0]) => {
-    let filterName = "";
-    if (finish.name === "POLISHED") filterName = "Polished";
-    else if (finish.name === "MATTE") filterName = "Matte";
-    else if (finish.name === "HONED") filterName = "Honed";
-    else if (finish.name === "STRUCTURED MATTE") filterName = "Structured Matte";
-    else if (finish.name === "3D / 5D MATTE") filterName = "3D-5D Matte";
+  const content = [
+    { name: finish1Name || defaults[0].name, img: finish1Image || defaults[0].img, desc: finish1Desc || defaults[0].desc },
+    { name: finish2Name || defaults[1].name, img: finish2Image || defaults[1].img, desc: finish2Desc || defaults[1].desc },
+    { name: finish3Name || defaults[2].name, img: finish3Image || defaults[2].img, desc: finish3Desc || defaults[2].desc },
+    { name: finish4Name || defaults[3].name, img: finish4Image || defaults[3].img, desc: finish4Desc || defaults[3].desc },
+    { name: finish5Name || defaults[4].name, img: finish5Image || defaults[4].img, desc: finish5Desc || defaults[4].desc },
+  ];
 
-    router.push(`/explore-collection?finish=${encodeURIComponent(filterName)}`);
+  const finishes = content.map((c, i) => ({ ...c, ...finishMeta[i] }));
+
+  const handleFinishClick = (finish: typeof finishes[0]) => {
+    router.push(`/explore-collection?finish=${encodeURIComponent(finish.filterName)}`);
   };
 
   return (
@@ -72,7 +107,7 @@ export default function FinishesSection() {
         transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="font-ivymode text-[clamp(28px,4.5vw,66px)] text-[#545759] tracking-[0.2em] text-center mb-[40px] uppercase"
       >
-        FINISHES
+        {heading || "FINISHES"}
       </motion.h2>
 
       {/* High-Performance Accordion */}
@@ -81,7 +116,7 @@ export default function FinishesSection() {
           const isHovered = hoveredIndex === i;
           return (
             <div
-              key={finish.name}
+              key={i}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => handleFinishClick(finish)}

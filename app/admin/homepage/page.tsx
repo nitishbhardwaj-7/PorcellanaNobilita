@@ -7,7 +7,7 @@ import { MediaPickerButton } from "../_components/MediaPicker";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
   hero: "Hero",
@@ -16,6 +16,7 @@ const TAB_LABELS: Record<Tab, string> = {
   legacy: "Legacy",
   applications: "Applications",
   dimensions: "Dimensions",
+  finishes: "Finishes",
 };
 
 export default function HomepagePage() {
@@ -62,6 +63,7 @@ export default function HomepagePage() {
       {activeTab === "legacy" && <LegacyTab />}
       {activeTab === "applications" && <ApplicationsTab />}
       {activeTab === "dimensions" && <DimensionsTab />}
+      {activeTab === "finishes" && <FinishesTab />}
     </div>
   );
 }
@@ -1521,6 +1523,213 @@ function DimensionsTab() {
           style={fontMichroma}
         >
           {saving ? "Saving…" : "Save Dimensions"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Finishes tab
+// ============================================================================
+
+interface FinishesSettings {
+  finishesHeading: string | null;
+  finish1Name: string | null;
+  finish1Image: string | null;
+  finish1Desc: string | null;
+  finish2Name: string | null;
+  finish2Image: string | null;
+  finish2Desc: string | null;
+  finish3Name: string | null;
+  finish3Image: string | null;
+  finish3Desc: string | null;
+  finish4Name: string | null;
+  finish4Image: string | null;
+  finish4Desc: string | null;
+  finish5Name: string | null;
+  finish5Image: string | null;
+  finish5Desc: string | null;
+}
+
+const FINISH_ROW_KEYS = [1, 2, 3, 4, 5] as const;
+
+function FinishesTab() {
+  const [settings, setSettings] = useState<FinishesSettings>({
+    finishesHeading: "",
+    finish1Name: "",
+    finish1Image: "",
+    finish1Desc: "",
+    finish2Name: "",
+    finish2Image: "",
+    finish2Desc: "",
+    finish3Name: "",
+    finish3Image: "",
+    finish3Desc: "",
+    finish4Name: "",
+    finish4Image: "",
+    finish4Desc: "",
+    finish5Name: "",
+    finish5Image: "",
+    finish5Desc: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.data) {
+          setSettings({
+            finishesHeading: data.data.finishesHeading || "",
+            finish1Name: data.data.finish1Name || "",
+            finish1Image: data.data.finish1Image || "",
+            finish1Desc: data.data.finish1Desc || "",
+            finish2Name: data.data.finish2Name || "",
+            finish2Image: data.data.finish2Image || "",
+            finish2Desc: data.data.finish2Desc || "",
+            finish3Name: data.data.finish3Name || "",
+            finish3Image: data.data.finish3Image || "",
+            finish3Desc: data.data.finish3Desc || "",
+            finish4Name: data.data.finish4Name || "",
+            finish4Image: data.data.finish4Image || "",
+            finish4Desc: data.data.finish4Desc || "",
+            finish5Name: data.data.finish5Name || "",
+            finish5Image: data.data.finish5Image || "",
+            finish5Desc: data.data.finish5Desc || "",
+          });
+        }
+      })
+      .catch((err) => setError(err.message || "Failed to load."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2].map((n) => (
+          <div key={n} className="h-24 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  const rowDefaults: Record<(typeof FINISH_ROW_KEYS)[number], { name: string; desc: string }> = {
+    1: { name: "POLISHED", desc: "A glossy, reflective finish that brings out the full richness of the design for a luxurious look." },
+    2: { name: "MATTE", desc: "A non-reflective and refined finish, with added slip resistance." },
+    3: { name: "HONED", desc: "A smooth, satin-like finish that balances subtle sheen with modern elegance." },
+    4: { name: "STRUCTURED MATTE", desc: "Leather-inspired texture with subtle richness and enhanced grip." },
+    5: { name: "3D / 5D MATTE", desc: "A multi-dimensional finish that brings depth, texture, and realism to stone surfaces." },
+  };
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
+            Finishes
+          </p>
+          {saved && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+        <p className="text-[10px] text-[#8b8b8b] -mt-2">
+          The five-tile finishes accordion. Fixed order and click-to-filter behavior — only each tile's name, image, and description are editable.
+        </p>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Heading
+          </label>
+          <input
+            type="text"
+            value={settings.finishesHeading || ""}
+            onChange={(e) => setSettings((p) => ({ ...p, finishesHeading: e.target.value }))}
+            placeholder="FINISHES"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+        </div>
+
+        {FINISH_ROW_KEYS.map((n) => {
+          const nameKey = `finish${n}Name` as keyof FinishesSettings;
+          const imageKey = `finish${n}Image` as keyof FinishesSettings;
+          const descKey = `finish${n}Desc` as keyof FinishesSettings;
+          return (
+            <div key={n} className="border-t border-[#1a1a1a]/8 pt-5 space-y-4">
+              <p className="text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/30" style={fontMichroma}>
+                Tile {n}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={settings[nameKey] || ""}
+                    onChange={(e) => setSettings((p) => ({ ...p, [nameKey]: e.target.value }))}
+                    placeholder={rowDefaults[n].name}
+                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+                  />
+                </div>
+                <ImageField
+                  label="Image"
+                  value={settings[imageKey] || ""}
+                  onChange={(url) => setSettings((p) => ({ ...p, [imageKey]: url }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                  Description
+                </label>
+                <textarea
+                  value={settings[descKey] || ""}
+                  onChange={(e) => setSettings((p) => ({ ...p, [descKey]: e.target.value }))}
+                  placeholder={rowDefaults[n].desc}
+                  rows={2}
+                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+                />
+              </div>
+            </div>
+          );
+        })}
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {saving ? "Saving…" : "Save Finishes"}
         </button>
       </div>
     </div>

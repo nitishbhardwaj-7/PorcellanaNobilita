@@ -145,7 +145,24 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         btnText={d.dimBtnText}
         btnLink={d.dimBtnLink}
       />
-      <FinishesSection />
+      <FinishesSection
+        heading={d.finishesHeading}
+        finish1Name={d.finish1Name}
+        finish1Image={d.finish1Image}
+        finish1Desc={d.finish1Desc}
+        finish2Name={d.finish2Name}
+        finish2Image={d.finish2Image}
+        finish2Desc={d.finish2Desc}
+        finish3Name={d.finish3Name}
+        finish3Image={d.finish3Image}
+        finish3Desc={d.finish3Desc}
+        finish4Name={d.finish4Name}
+        finish4Image={d.finish4Image}
+        finish4Desc={d.finish4Desc}
+        finish5Name={d.finish5Name}
+        finish5Image={d.finish5Image}
+        finish5Desc={d.finish5Desc}
+      />
       <HeroSection
         title={d.heroTitle}
         subtitle={d.heroSubtitle}

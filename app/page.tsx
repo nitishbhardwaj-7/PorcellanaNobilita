@@ -65,6 +65,22 @@ export default async function Home() {
       dimImage: settings?.dimImage,
       dimBtnText: settings?.dimBtnText,
       dimBtnLink: settings?.dimBtnLink,
+      finishesHeading: settings?.finishesHeading,
+      finish1Name: settings?.finish1Name,
+      finish1Image: settings?.finish1Image,
+      finish1Desc: settings?.finish1Desc,
+      finish2Name: settings?.finish2Name,
+      finish2Image: settings?.finish2Image,
+      finish2Desc: settings?.finish2Desc,
+      finish3Name: settings?.finish3Name,
+      finish3Image: settings?.finish3Image,
+      finish3Desc: settings?.finish3Desc,
+      finish4Name: settings?.finish4Name,
+      finish4Image: settings?.finish4Image,
+      finish4Desc: settings?.finish4Desc,
+      finish5Name: settings?.finish5Name,
+      finish5Image: settings?.finish5Image,
+      finish5Desc: settings?.finish5Desc,
     };
   } catch (e) {
     cmsData = null;

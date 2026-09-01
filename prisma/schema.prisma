@@ -197,6 +197,27 @@ model Settings {
   dimBtnText    String?
   dimBtnLink    String?
 
+  // Homepage Finishes section — editable from Admin > Homepage. Fixed set of
+  // five finish tiles (Polished / Matte / Honed / Structured Matte / 3D-5D
+  // Matte); each tile's filter-routing identity stays fixed in code, only
+  // its label, image, and description text are editable here.
+  finishesHeading String?
+  finish1Name  String?
+  finish1Image String?
+  finish1Desc  String? @db.Text
+  finish2Name  String?
+  finish2Image String?
+  finish2Desc  String? @db.Text
+  finish3Name  String?
+  finish3Image String?
+  finish3Desc  String? @db.Text
+  finish4Name  String?
+  finish4Image String?
+  finish4Desc  String? @db.Text
+  finish5Name  String?
+  finish5Image String?
+  finish5Desc  String? @db.Text
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
