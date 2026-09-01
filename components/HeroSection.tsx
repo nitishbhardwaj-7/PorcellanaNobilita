@@ -172,7 +172,7 @@ export default function HeroSection({ title, subtitle, buttonText, bgImage }: Pr
 
   const defaultTitle = "EXPLORE THE COLLECTION";
   const defaultSubtitle = "At NOBILITA, we believe that true luxury is not about trends, it is timeless design, enduring quality, and a deep respect\nfor architectural legacy. Our porcelain tiles are not just surfaces, they are foundations for homes, businesses, and\nlandmarks that will stand for generations.";
-  const defaultButtonText = "VIEW ALL SLABS";
+  const defaultButtonText = "VIEW ALL PRODUCTS";
 
   const headline = title || defaultTitle;
   const words = headline.split(" ");
