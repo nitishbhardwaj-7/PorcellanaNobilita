@@ -116,7 +116,15 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         badgeLink={d.craftBadgeLink}
         casaLabel={d.craftCasaLabel}
       />
-      <LegacySection />
+      <LegacySection
+        leftImage={d.legacyLeftImage}
+        leftLabel={d.legacyLeftLabel}
+        sketchImage={d.legacySketchImage}
+        logoImage={d.legacyLogoImage}
+        taglineImage={d.legacyTaglineImage}
+        rightImage={d.legacyRightImage}
+        rightLabel={d.legacyRightLabel}
+      />
       <ApplicationsSection onTileClick={(prodName) => handleProductSelect(prodName)} />
       <DimensionsSection />
       <FinishesSection />

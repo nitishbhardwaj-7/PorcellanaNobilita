@@ -7,9 +7,14 @@ import { MediaPickerButton } from "../_components/MediaPicker";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship", "legacy"] as const;
 type Tab = (typeof TABS)[number];
-const TAB_LABELS: Record<Tab, string> = { hero: "Hero", "brand-intro": "Brand Intro", craftsmanship: "Craftsmanship" };
+const TAB_LABELS: Record<Tab, string> = {
+  hero: "Hero",
+  "brand-intro": "Brand Intro",
+  craftsmanship: "Craftsmanship",
+  legacy: "Legacy",
+};
 
 export default function HomepagePage() {
   const [activeTab, setActiveTab] = useState<Tab>("hero");
@@ -49,7 +54,10 @@ export default function HomepagePage() {
         ))}
       </div>
 
-      {activeTab === "hero" ? <HeroTab /> : activeTab === "brand-intro" ? <BrandIntroTab /> : <CraftsmanshipTab />}
+      {activeTab === "hero" && <HeroTab />}
+      {activeTab === "brand-intro" && <BrandIntroTab />}
+      {activeTab === "craftsmanship" && <CraftsmanshipTab />}
+      {activeTab === "legacy" && <LegacyTab />}
     </div>
   );
 }
@@ -826,6 +834,205 @@ function CraftsmanshipTab() {
           style={fontMichroma}
         >
           {saving ? "Saving…" : "Save Craftsmanship"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Legacy tab
+// ============================================================================
+
+interface LegacySettings {
+  legacyLeftImage: string | null;
+  legacyLeftLabel: string | null;
+  legacySketchImage: string | null;
+  legacyLogoImage: string | null;
+  legacyTaglineImage: string | null;
+  legacyRightImage: string | null;
+  legacyRightLabel: string | null;
+}
+
+function ImageField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+        {label}
+      </label>
+      {value && <img src={value} alt="" className="h-16 w-full object-cover border border-[#1a1a1a]/10" />}
+      <div className="flex gap-1">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+        />
+        <MediaPickerButton folder="products" onSelect={onChange} />
+      </div>
+    </div>
+  );
+}
+
+function LegacyTab() {
+  const [settings, setSettings] = useState<LegacySettings>({
+    legacyLeftImage: "",
+    legacyLeftLabel: "",
+    legacySketchImage: "",
+    legacyLogoImage: "",
+    legacyTaglineImage: "",
+    legacyRightImage: "",
+    legacyRightLabel: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.data) {
+          setSettings({
+            legacyLeftImage: data.data.legacyLeftImage || "",
+            legacyLeftLabel: data.data.legacyLeftLabel || "",
+            legacySketchImage: data.data.legacySketchImage || "",
+            legacyLogoImage: data.data.legacyLogoImage || "",
+            legacyTaglineImage: data.data.legacyTaglineImage || "",
+            legacyRightImage: data.data.legacyRightImage || "",
+            legacyRightLabel: data.data.legacyRightLabel || "",
+          });
+        }
+      })
+      .catch((err) => setError(err.message || "Failed to load."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2].map((n) => (
+          <div key={n} className="h-24 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
+            Legacy (Triptych)
+          </p>
+          {saved && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+        <p className="text-[10px] text-[#8b8b8b] -mt-2">
+          The three-panel section below Craftsmanship — a photo on each side of a center logo stack.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <ImageField
+            label="Left Panel Photo"
+            value={settings.legacyLeftImage || ""}
+            onChange={(url) => setSettings((p) => ({ ...p, legacyLeftImage: url }))}
+          />
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Left Panel Caption
+            </label>
+            <input
+              type="text"
+              value={settings.legacyLeftLabel || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, legacyLeftLabel: e.target.value }))}
+              placeholder="TREVI FOUNTAIN"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <ImageField
+            label="Right Panel Photo"
+            value={settings.legacyRightImage || ""}
+            onChange={(url) => setSettings((p) => ({ ...p, legacyRightImage: url }))}
+          />
+          <div className="space-y-1.5">
+            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+              Right Panel Caption
+            </label>
+            <input
+              type="text"
+              value={settings.legacyRightLabel || ""}
+              onChange={(e) => setSettings((p) => ({ ...p, legacyRightLabel: e.target.value }))}
+              placeholder="PALAZZO DELLA CIVILTÀ ITALIANA"
+              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <ImageField
+            label="Center Sketch"
+            value={settings.legacySketchImage || ""}
+            onChange={(url) => setSettings((p) => ({ ...p, legacySketchImage: url }))}
+          />
+          <ImageField
+            label="Center Logo"
+            value={settings.legacyLogoImage || ""}
+            onChange={(url) => setSettings((p) => ({ ...p, legacyLogoImage: url }))}
+          />
+          <ImageField
+            label="Center Tagline Graphic"
+            value={settings.legacyTaglineImage || ""}
+            onChange={(url) => setSettings((p) => ({ ...p, legacyTaglineImage: url }))}
+          />
+        </div>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {saving ? "Saving…" : "Save Legacy"}
         </button>
       </div>
     </div>

@@ -168,6 +168,15 @@ model Settings {
   craftBadgeLink      String?
   craftCasaLabel      String? // small "CASA NOBILE" label, bottom corner
 
+  // Homepage Legacy section (triptych) — editable from Admin > Homepage.
+  legacyLeftImage    String? // left panel photo
+  legacyLeftLabel    String? // left panel caption
+  legacySketchImage  String? // center architectural sketch
+  legacyLogoImage    String? // center NOBILITA logo
+  legacyTaglineImage String? // center tagline graphic
+  legacyRightImage   String? // right panel photo
+  legacyRightLabel   String? // right panel caption
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

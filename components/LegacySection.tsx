@@ -6,7 +6,25 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function LegacySection() {
+interface Props {
+  leftImage?: string;
+  leftLabel?: string;
+  sketchImage?: string;
+  logoImage?: string;
+  taglineImage?: string;
+  rightImage?: string;
+  rightLabel?: string;
+}
+
+export default function LegacySection({
+  leftImage,
+  leftLabel,
+  sketchImage,
+  logoImage,
+  taglineImage,
+  rightImage,
+  rightLabel,
+}: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const panelLeftRef = useRef<HTMLDivElement>(null);
   const panelRightRef = useRef<HTMLDivElement>(null);
@@ -149,7 +167,7 @@ export default function LegacySection() {
       >
         <img
           ref={imgLeftRef}
-          src="/images/Links/Trevi-Fountain-Large.jpeg"
+          src={leftImage || "/images/Links/Trevi-Fountain-Large.jpeg"}
           alt="Trevi Fountain"
           loading="lazy"
           className="panel-img absolute inset-0 w-full h-[112%] object-cover"
@@ -161,7 +179,7 @@ export default function LegacySection() {
             ref={labelTreviRef}
             className="label-trevi font-ivymode tracking-[0.20em] text-[clamp(11px,1.2vw,16px)] text-white uppercase inline-block"
           >
-            TREVI FOUNTAIN
+            {leftLabel || "TREVI FOUNTAIN"}
           </p>
         </div>
       </div>
@@ -171,7 +189,7 @@ export default function LegacySection() {
         <div className="w-full md:flex-1 flex flex-col items-center justify-center md:justify-end max-w-none px-4 space-y-6 md:space-y-0">
           <img
             ref={sketchRef}
-            src="/images/Links/DP8017299.png"
+            src={sketchImage || "/images/Links/DP8017299.png"}
             alt="Palazzo architectural sketch"
             loading="lazy"
             className="sketch-img w-[80%] mt-10 md:mt-0 lg:mt-0 sm:w-[70%] md:w-[85%] lg:w-[95%] max-w-[340px] md:max-w-[360px] h-auto object-contain"
@@ -181,7 +199,7 @@ export default function LegacySection() {
 
           <img
             ref={logoRef}
-            src="/images/Links/NOBILITA Logo BLACK.png"
+            src={logoImage || "/images/Links/NOBILITA Logo BLACK.png"}
             alt="Nobilita Logo"
             loading="lazy"
             className="nobilita-logo h-12 md:h-22 lg:h-24 w-[280px] object-contain"
@@ -191,7 +209,7 @@ export default function LegacySection() {
 
           <img
             ref={taglineRef}
-            src="/images/Links/tag grey.png"
+            src={taglineImage || "/images/Links/tag grey.png"}
             alt="Il Gres Imperiale d'Italia"
             loading="lazy"
             className="tagline-text w-[80%] sm:w-[70%] md:w-[85%] lg:w-[95%] max-w-[340px] md:max-w-[360px] h-auto object-contain"
@@ -208,7 +226,7 @@ export default function LegacySection() {
       >
         <img
           ref={imgRightRef}
-          src="/images/rightlegacy.jpg"
+          src={rightImage || "/images/rightlegacy.jpg"}
           alt="Palazzo della Civiltà Italiana"
           loading="lazy"
           className="panel-img absolute inset-0 w-full h-[112%] object-cover"
@@ -220,7 +238,7 @@ export default function LegacySection() {
             ref={labelPalazzoRef}
             className="label-palazzo font-ivymode tracking-[0.15em] text-[clamp(11px,1.2vw,16px)] text-white uppercase inline-block"
           >
-            PALAZZO DELLA CIVILTÀ ITALIANA
+            {rightLabel || "PALAZZO DELLA CIVILTÀ ITALIANA"}
           </p>
         </div>
       </div>

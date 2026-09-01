@@ -42,6 +42,13 @@ export default async function Home() {
       craftBadgeText: settings?.craftBadgeText,
       craftBadgeLink: settings?.craftBadgeLink,
       craftCasaLabel: settings?.craftCasaLabel,
+      legacyLeftImage: settings?.legacyLeftImage,
+      legacyLeftLabel: settings?.legacyLeftLabel,
+      legacySketchImage: settings?.legacySketchImage,
+      legacyLogoImage: settings?.legacyLogoImage,
+      legacyTaglineImage: settings?.legacyTaglineImage,
+      legacyRightImage: settings?.legacyRightImage,
+      legacyRightLabel: settings?.legacyRightLabel,
     };
   } catch (e) {
     cmsData = null;
