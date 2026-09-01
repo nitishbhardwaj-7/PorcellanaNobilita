@@ -7,13 +7,14 @@ import { MediaPickerButton } from "../_components/MediaPicker";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship", "legacy"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
   hero: "Hero",
   "brand-intro": "Brand Intro",
   craftsmanship: "Craftsmanship",
   legacy: "Legacy",
+  applications: "Applications",
 };
 
 export default function HomepagePage() {
@@ -58,6 +59,7 @@ export default function HomepagePage() {
       {activeTab === "brand-intro" && <BrandIntroTab />}
       {activeTab === "craftsmanship" && <CraftsmanshipTab />}
       {activeTab === "legacy" && <LegacyTab />}
+      {activeTab === "applications" && <ApplicationsTab />}
     </div>
   );
 }
@@ -1034,6 +1036,229 @@ function LegacyTab() {
         >
           {saving ? "Saving…" : "Save Legacy"}
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Applications tab
+// ============================================================================
+
+interface AppTileData {
+  id: string;
+  name: string;
+  image: string;
+  productName: string;
+  row: number;
+  darkLabel: boolean;
+}
+
+function ApplicationsTab() {
+  const [heading, setHeading] = useState("");
+  const [tiles, setTiles] = useState<AppTileData[]>([]);
+  const [productNames, setProductNames] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [savingHeading, setSavingHeading] = useState(false);
+  const [savedHeading, setSavedHeading] = useState(false);
+  const [savingTileId, setSavingTileId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchAll();
+  }, []);
+
+  async function fetchAll() {
+    try {
+      setLoading(true);
+      const [settingsRes, tilesRes, productsRes] = await Promise.all([
+        fetch("/api/settings").then((r) => r.json()),
+        fetch("/api/application-tiles").then((r) => r.json()),
+        fetch("/api/products").then((r) => r.json()),
+      ]);
+      if (settingsRes?.data) setHeading(settingsRes.data.applicationsHeading || "");
+      if (tilesRes?.data) setTiles(tilesRes.data);
+      if (productsRes?.data) {
+        setProductNames(productsRes.data.map((p: { name: string }) => p.name).sort());
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to load.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSaveHeading() {
+    setSavingHeading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationsHeading: heading }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setSavedHeading(true);
+      setTimeout(() => setSavedHeading(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSavingHeading(false);
+    }
+  }
+
+  async function updateTile(id: string, patch: Partial<AppTileData>) {
+    setTiles((prev) => prev.map((t) => (t.id === id ? { ...t, ...patch } : t)));
+    setSavingTileId(id);
+    try {
+      const res = await fetch(`/api/application-tiles/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) throw new Error("Failed to save tile.");
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSavingTileId(null);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3].map((n) => (
+          <div key={n} className="h-24 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      {/* Heading */}
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
+            Applications
+          </p>
+          {savedHeading && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Heading
+          </label>
+          <input
+            type="text"
+            value={heading}
+            onChange={(e) => setHeading(e.target.value)}
+            placeholder="APPLICATIONS"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+        </div>
+        <button
+          onClick={handleSaveHeading}
+          disabled={savingHeading}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {savingHeading ? "Saving…" : "Save Heading"}
+        </button>
+      </div>
+
+      {/* Tiles */}
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-4">
+        <div>
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3 mb-1" style={fontMichroma}>
+            The Six Tiles
+          </p>
+          <p className="text-[10px] text-[#8b8b8b] pt-2">
+            Each tile's name, image, and target product can be changed — the grid stays fixed at two rows of three.
+            Changes save automatically as you edit.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {tiles.map((tile) => (
+            <div key={tile.id} className="flex gap-3 items-center bg-[#f8f5f0] border border-[#1a1a1a]/10 p-3">
+              <div className="w-16 h-16 flex-shrink-0 border border-[#1a1a1a]/10 bg-white overflow-hidden">
+                {tile.image && <img src={tile.image} alt="" className="w-full h-full object-cover" />}
+              </div>
+
+              <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-2">
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Label</label>
+                  <input
+                    type="text"
+                    value={tile.name}
+                    onChange={(e) => updateTile(tile.id, { name: e.target.value })}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Image</label>
+                  <div className="flex gap-1">
+                    <input
+                      type="text"
+                      value={tile.image}
+                      onChange={(e) => updateTile(tile.id, { image: e.target.value })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                    <MediaPickerButton folder="products" onSelect={(url) => updateTile(tile.id, { image: url })} />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Opens Product</label>
+                  <select
+                    value={tile.productName}
+                    onChange={(e) => updateTile(tile.id, { productName: e.target.value })}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                  >
+                    {/* Keep the current value selectable even if it's since been renamed/removed */}
+                    {!productNames.includes(tile.productName) && (
+                      <option value={tile.productName}>{tile.productName}</option>
+                    )}
+                    {productNames.map((p) => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="sm:col-span-4">
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Color</label>
+                  <div className="flex gap-1 w-32">
+                    {([false, true] as const).map((dark) => (
+                      <button
+                        key={String(dark)}
+                        type="button"
+                        onClick={() => updateTile(tile.id, { darkLabel: dark })}
+                        className={`flex-1 px-2 py-1 text-[10px] uppercase border transition-colors ${
+                          tile.darkLabel === dark
+                            ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
+                            : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15"
+                        }`}
+                      >
+                        {dark ? "Dark" : "White"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {savingTileId === tile.id && (
+                <span className="text-[9px] text-[#8b8b8b] flex-shrink-0" style={fontMichroma}>Saving…</span>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

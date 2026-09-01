@@ -125,7 +125,11 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         rightImage={d.legacyRightImage}
         rightLabel={d.legacyRightLabel}
       />
-      <ApplicationsSection onTileClick={(prodName) => handleProductSelect(prodName)} />
+      <ApplicationsSection
+        onTileClick={(prodName) => handleProductSelect(prodName)}
+        heading={d.applicationsHeading}
+        tiles={d.applicationTiles}
+      />
       <DimensionsSection />
       <FinishesSection />
       <HeroSection

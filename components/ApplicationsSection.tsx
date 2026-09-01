@@ -26,11 +26,33 @@ const appProductMapping: Record<string, string> = {
   "FURNITURE": "Arabescato Fjord",
 };
 
-interface ApplicationsSectionProps {
-  onTileClick?: (productName: string) => void;
+interface AppTile {
+  name: string;
+  image: string;
+  productName: string;
+  row: number;
+  darkLabel: boolean;
 }
 
-export default function ApplicationsSection({ onTileClick }: ApplicationsSectionProps) {
+interface ApplicationsSectionProps {
+  onTileClick?: (productName: string) => void;
+  heading?: string;
+  tiles?: AppTile[];
+}
+
+export default function ApplicationsSection({ onTileClick, heading, tiles: cmsTiles }: ApplicationsSectionProps) {
+  // CMS-managed tiles (Admin > Homepage) win when present; otherwise fall
+  // back to the bundled defaults so the grid never renders empty.
+  const activeTiles: (AppTile & { image: string })[] =
+    cmsTiles && cmsTiles.length > 0
+      ? cmsTiles
+      : applications.map((a) => ({
+          name: a.name,
+          image: a.image,
+          productName: appProductMapping[a.name],
+          row: a.row,
+          darkLabel: DARK_LABEL.includes(a.name),
+        }));
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const row1Ref = useRef<HTMLDivElement>(null);
@@ -152,11 +174,11 @@ export default function ApplicationsSection({ onTileClick }: ApplicationsSection
     };
   }, []);
 
-  const row1Apps = applications.filter(a => a.row === 1);
-  const row2Apps = applications.filter(a => a.row === 2);
+  const row1Apps = activeTiles.filter(a => a.row === 1);
+  const row2Apps = activeTiles.filter(a => a.row === 2);
 
-  const renderTile = (app: typeof applications[0], globalIdx: number) => {
-    const productName = appProductMapping[app.name];
+  const renderTile = (app: AppTile, globalIdx: number) => {
+    const productName = app.productName;
     return (
       <div
         key={app.name}
@@ -180,7 +202,7 @@ export default function ApplicationsSection({ onTileClick }: ApplicationsSection
         {/* ── Label */}
         <div className="absolute inset-0 flex items-center justify-center p-4 text-center pointer-events-none">
           <span
-            className={`tile-label font-didot font-medium text-[clamp(16px,4vw,28px)] uppercase relative z-10 ${DARK_LABEL.includes(app.name) ? "text-brand-dark" : "text-white"
+            className={`tile-label font-didot font-medium text-[clamp(16px,4vw,28px)] uppercase relative z-10 ${app.darkLabel ? "text-brand-dark" : "text-white"
               }`}
             style={{ fontFamily: "var(--font-didot), Georgia, serif", letterSpacing: "0.1em", opacity: 0 }}
           >
@@ -203,7 +225,7 @@ export default function ApplicationsSection({ onTileClick }: ApplicationsSection
           className="applications-heading font-ivymode text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] text-[#545759] tracking-[0.06em] md:tracking-[0.1em] uppercase inline-block"
         >
           <span className="applications-title-span inline-block">
-            APPLICATIONS
+            {heading || "APPLICATIONS"}
           </span>
         </h2>
       </div>

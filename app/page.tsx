@@ -19,9 +19,10 @@ export default async function Home() {
   // HeroSection's own hardcoded defaults if the DB is briefly unreachable.
   let cmsData: any = null;
   try {
-    const [settings, heroSlides] = await Promise.all([
+    const [settings, heroSlides, applicationTiles] = await Promise.all([
       prisma.settings.findUnique({ where: { id: "global" } }),
       prisma.heroSlide.findMany({ orderBy: { order: "asc" } }),
+      prisma.applicationTile.findMany({ orderBy: [{ row: "asc" }, { order: "asc" }] }),
     ]);
     cmsData = {
       heroTitle: settings?.heroTitle,
@@ -49,6 +50,8 @@ export default async function Home() {
       legacyTaglineImage: settings?.legacyTaglineImage,
       legacyRightImage: settings?.legacyRightImage,
       legacyRightLabel: settings?.legacyRightLabel,
+      applicationsHeading: settings?.applicationsHeading,
+      applicationTiles: applicationTiles.length > 0 ? applicationTiles : undefined,
     };
   } catch (e) {
     cmsData = null;

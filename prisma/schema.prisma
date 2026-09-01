@@ -177,6 +177,10 @@ model Settings {
   legacyRightImage   String? // right panel photo
   legacyRightLabel   String? // right panel caption
 
+  // Homepage Applications section — editable from Admin > Homepage. The six
+  // tiles themselves live in the ApplicationTile model below.
+  applicationsHeading String?
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -191,6 +195,21 @@ model HeroSlide {
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// One tile in the homepage Applications grid. Always exactly six rows (two
+// rows of three) — the admin can edit each tile's content but not add,
+// remove, or move a tile between rows, keeping the fixed layout intact.
+model ApplicationTile {
+  id          String   @id @default(cuid())
+  name        String // label shown on the tile, e.g. "INTERIOR WALLS"
+  image       String
+  productName String // which product opens when the tile is clicked
+  row         Int // 1 or 2
+  order       Int      @default(0) // position within its row
+  darkLabel   Boolean  @default(false) // true = dark label text, false = white
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // Master data — the set of Color/Finish options offered in the product form
