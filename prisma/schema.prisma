@@ -147,3 +147,33 @@ model Settings {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+
+// Master data — the set of Color/Finish options offered in the product form
+// and the public explore-collection filters. Editable from the CMS instead
+// of being a hardcoded list in the code.
+model Color {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Finish {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// One row per static page — lets the CMS control each page's browser-tab
+// title and SEO meta description independently. A page with no row (or
+// blank fields) falls back to that page's hardcoded default.
+model PageMeta {
+  id          String   @id @default(cuid())
+  pageKey     String   @unique
+  title       String?
+  description String?
+  updatedAt   DateTime @updatedAt
+}

@@ -17,6 +17,8 @@ import {
   MessageSquare,
   Download,
   Mail,
+  Palette,
+  Type,
 } from "lucide-react";
 
 interface User {
@@ -35,6 +37,8 @@ const menuItems = [
   { name: "Datasheet Requests", path: "/admin/datasheet-requests", icon: FileText, exact: false },
   { name: "Newsletter", path: "/admin/newsletter", icon: Mail, exact: false },
   { name: "Media Library", path: "/admin/media", icon: ImageIcon, exact: false },
+  { name: "Master Data", path: "/admin/master-data", icon: Palette, exact: false },
+  { name: "Page Titles", path: "/admin/page-titles", icon: Type, exact: false },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

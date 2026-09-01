@@ -70,8 +70,6 @@ function CustomSelect({
   );
 }
 
-const FINISHES = ["Polished", "Matte", "Honed", "Structured Matte", "3D-5D Matte"];
-
 interface ProductFormProps {
   productId?: string; // undefined = new product
 }
@@ -214,6 +212,21 @@ export default function ProductForm({ productId }: ProductFormProps) {
   }
   const [loadingProduct, setLoadingProduct] = useState(!isNew);
   const [error, setError] = useState<string | null>(null);
+
+  // Color/Finish master data — editable from Admin > Master Data instead of hardcoded.
+  const [colorOptions, setColorOptions] = useState<string[]>([]);
+  const [finishOptions, setFinishOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("/api/colors")
+      .then((res) => res.json())
+      .then((data) => data?.data && setColorOptions(data.data.map((c: { name: string }) => c.name)))
+      .catch(() => {});
+    fetch("/api/finishes")
+      .then((res) => res.json())
+      .then((data) => data?.data && setFinishOptions(data.data.map((f: { name: string }) => f.name)))
+      .catch(() => {});
+  }, []);
 
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
   const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
@@ -394,7 +407,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, color: e.target.value }))}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                 >
-                  {["White", "Beige", "Grey", "Green", "Brown"].map((c) => (
+                  {/* Include the product's current value even if it's since been removed
+                      from Master Data, so editing an old product never silently changes it. */}
+                  {(form.color && !colorOptions.includes(form.color) ? [form.color, ...colorOptions] : colorOptions).map((c) => (
                     <option key={c} value={c}>{c}</option>
                   ))}
                 </select>
@@ -405,7 +420,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   Finish
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {FINISHES.map((f) => {
+                  {[...finishOptions, ...form.finishCategories.filter((f) => !finishOptions.includes(f))].map((f) => {
                     const isSelected = form.finishCategories.includes(f);
                     return (
                       <button
