@@ -25,7 +25,24 @@ const wordVariants = {
   }
 };
 
-export default function MadeInItalyPage() {
+interface MadeInItalyCmsData {
+  miHeading?: string | null;
+  miSec1Label?: string | null;
+  miSec2Para1?: string | null;
+  miSec2Image?: string | null;
+  miSec2ImageLabel?: string | null;
+  miSec3Line1?: string | null;
+  miSec3LeftImage?: string | null;
+  miSec3RightImage?: string | null;
+  miSec3RightImageLabel?: string | null;
+  miSec3BottomPara?: string | null;
+  miSec4BgImage?: string | null;
+  miSec4BgImageMobile?: string | null;
+  miSec4Label?: string | null;
+}
+
+export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsData | null }) {
+  const d = cmsData || {};
   const handleImageEnter = (selector: string) => {
     gsap.to(selector, { scale: 1.08, duration: 0.8, ease: "power2.out", overwrite: "auto" });
   };
@@ -169,7 +186,7 @@ export default function MadeInItalyPage() {
                 variants={containerVariants}
                 className="font-ivymode font-light text-[#545759] uppercase tracking-[0.06em] md:tracking-[0.18em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(26px,5.5vw,66px)] leading-tight drop-shadow-md flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em]"
               >
-                {["MADE", "IN", "ITALY"].map((word, i) => (
+                {(d.miHeading || "MADE IN ITALY").split(" ").map((word, i) => (
                   <span key={i} className="inline-block overflow-hidden py-2 md:py-0 px-[1px]">
                     <motion.span variants={wordVariants} className="inline-block">
                       {word}
@@ -182,7 +199,7 @@ export default function MadeInItalyPage() {
             {/* Overlay Text */}
             <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-30 flex flex-col items-end">
               <span className="sec1-label-text font-ivymode font-light text-white uppercase tracking-[0.15em] text-[clamp(11px,1.2vw,16px)] inline-block drop-shadow-md">
-                DUOMO DI MILANO
+                {d.miSec1Label || "DUOMO DI MILANO"}
               </span>
             </div>
           </div>
@@ -200,7 +217,7 @@ export default function MadeInItalyPage() {
             <div className="sec2-text flex flex-col justify-center space-y-6 md:space-y-8 font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left order-2 md:order-1 h-full py-0 md:py-2">
               <div className="overflow-hidden py-0.5">
                 <p className="sec2-line">
-                  In the heart of Italy, where rolling hills meet centuries of craftsmanship, lies Modena, a region shaped by the relentless pursuit of excellence. Home to Ferrari, Acetaia Giusti, and Brioni, Modena has long been a place where mastery is refined through patience, precision, and dedication to craft.
+                  {d.miSec2Para1 || "In the heart of Italy, where rolling hills meet centuries of craftsmanship, lies Modena, a region shaped by the relentless pursuit of excellence. Home to Ferrari, Acetaia Giusti, and Brioni, Modena has long been a place where mastery is refined through patience, precision, and dedication to craft."}
                 </p>
               </div>
 
@@ -222,7 +239,7 @@ export default function MadeInItalyPage() {
                 onMouseLeave={() => handleImageLeave(".sec2-img-inner")}
               >
                 <img
-                  src="/images/made-in-italy/Palazzo_della_civilt%C3%A0_del_lavoro_(EUR,_Rome)_(5904657870).jpg"
+                  src={d.miSec2Image || "/images/made-in-italy/Palazzo_della_civilt%C3%A0_del_lavoro_(EUR,_Rome)_(5904657870).jpg"}
                   alt="Palazzo della civiltà del lavoro application"
                   className="sec2-img-inner w-full h-full object-cover block transform-gpu scale-[1.18]"
                   loading="lazy"
@@ -230,7 +247,7 @@ export default function MadeInItalyPage() {
                 {/* Overlay Text */}
                 <div className="absolute bottom-2 right-2 md:bottom-2 md:right-3 z-10">
                   <span className="font-ivymode font-light text-white uppercase tracking-[0.15em] text-[clamp(11px,1.4vw,16px)] 2xl:text-[20px] drop-shadow-md">
-                    PALAZZO DELLA CIVILTÀ ITALIANA
+                    {d.miSec2ImageLabel || "PALAZZO DELLA CIVILTÀ ITALIANA"}
                   </span>
                 </div>
               </div>
@@ -247,7 +264,7 @@ export default function MadeInItalyPage() {
           <div className="sec3-text-container w-full font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left space-y-6 md:space-y-8">
             <div className="overflow-hidden py-0.5">
               <p className="sec3-line">
-                Every NOBILITA slab is born from this tradition, crafted with Italian expertise, engineered for performance, and designed to stand the test of time.
+                {d.miSec3Line1 || "Every NOBILITA slab is born from this tradition, crafted with Italian expertise, engineered for performance, and designed to stand the test of time."}
               </p>
             </div>
             <div className="overflow-hidden py-0.5">
@@ -269,7 +286,7 @@ export default function MadeInItalyPage() {
               onMouseLeave={() => handleImageLeave(".sec3-img-inner-left")}
             >
               <img
-                src="/images/made-in-italy/factory-image.jpeg"
+                src={d.miSec3LeftImage || "/images/made-in-italy/factory-image.jpeg"}
                 alt="Factory"
                 className="sec3-img-inner-left w-full h-full object-cover block transform-gpu scale-[1.18]"
                 loading="lazy"
@@ -283,7 +300,7 @@ export default function MadeInItalyPage() {
               onMouseLeave={() => handleImageLeave(".sec3-img-inner-right")}
             >
               <img
-                src="/images/made-in-italy/continua-impianto-hd-2.jpg"
+                src={d.miSec3RightImage || "/images/made-in-italy/continua-impianto-hd-2.jpg"}
                 alt="Large Format Slabs Processing Unit"
                 className="sec3-img-inner-right w-full h-full object-cover block transform-gpu scale-[1.18]"
                 loading="lazy"
@@ -291,7 +308,7 @@ export default function MadeInItalyPage() {
               {/* Overlay Text */}
               <div className="absolute bottom-2 right-2 md:bottom-2 md:right-3 z-10">
                 <span className="font-ivymode font-light text-white uppercase tracking-[0.15em] text-[clamp(10px,1.2vw,16px)] 2xl:text-[20px] drop-shadow-md">
-                  LARGE FORMAT SLABS PROCESSING UNIT
+                  {d.miSec3RightImageLabel || "LARGE FORMAT SLABS PROCESSING UNIT"}
                 </span>
               </div>
             </div>
@@ -301,7 +318,7 @@ export default function MadeInItalyPage() {
           <div className="sec3-bottom-text w-full font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
             <div className="overflow-hidden py-0.5">
               <p className="sec3-bottom-line mb-12">
-                NOBILITA works at the forefront of large-format surface innovation, with state-of-the-art production systems capable of creating ultra-large slabs in exceptional formats and multiple thicknesses. These advancements have redefined what is possible in contemporary architecture, enabling seamless surfaces, reduced visual fragmentation, and a more monolithic architectural language.
+                {d.miSec3BottomPara || "NOBILITA works at the forefront of large-format surface innovation, with state-of-the-art production systems capable of creating ultra-large slabs in exceptional formats and multiple thicknesses. These advancements have redefined what is possible in contemporary architecture, enabling seamless surfaces, reduced visual fragmentation, and a more monolithic architectural language."}
               </p>
             </div>
           </div>
@@ -315,10 +332,10 @@ export default function MadeInItalyPage() {
           <picture className="w-full h-full block">
             <source
               media="(max-width: 767px)"
-              srcSet="/images/made-in-italy/colosseo-mobile.jpg"
+              srcSet={d.miSec4BgImageMobile || "/images/made-in-italy/colosseo-mobile.jpg"}
             />
             <img
-              src="/images/made-in-italy/colosseo-2020-compressed.jpg"
+              src={d.miSec4BgImage || "/images/made-in-italy/colosseo-2020-compressed.jpg"}
               alt="Colosseum"
               className="sec4-img-inner w-full h-full object-cover block origin-center will-change-transform"
               loading="lazy"
@@ -342,7 +359,7 @@ export default function MadeInItalyPage() {
           {/* Overlay Text */}
           <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 lg:right-3 z-30">
             <span className="sec4-label-text font-ivymode font-light text-white uppercase text-[clamp(11px,1.4vw,16px)] drop-shadow-md inline-block">
-              COLOSSEUM
+              {d.miSec4Label || "COLOSSEUM"}
             </span>
           </div>
         </div>

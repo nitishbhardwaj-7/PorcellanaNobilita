@@ -247,6 +247,26 @@ model Settings {
   storySec4BtnText     String? // default "FERRO INDUSTRIALE"
   storySec4ProductName String? // which product the button opens
 
+  // Made in Italy page — editable from Admin > Made in Italy. Layout,
+  // GSAP/Framer animations, and section order stay fixed; only text and
+  // images are editable. The Duomo video, the Colosseum tag graphic, and a
+  // paragraph carrying an inline colored highlight phrase stay hardcoded.
+  miHeading             String? // default "MADE IN ITALY"
+  miSec1Label           String? // default "DUOMO DI MILANO"
+  miSec2Para1           String? @db.Text
+  // (sec2 paragraph 2 has an inline highlighted phrase — stays hardcoded)
+  miSec2Image           String? // Palazzo della Civiltà Italiana photo
+  miSec2ImageLabel      String? // default "PALAZZO DELLA CIVILTÀ ITALIANA"
+  miSec3Line1           String? @db.Text
+  // (sec3 line 2 has an inline highlighted phrase — stays hardcoded)
+  miSec3LeftImage       String? // factory photo
+  miSec3RightImage      String? // large-format slab processing unit photo
+  miSec3RightImageLabel String? // default "LARGE FORMAT SLABS PROCESSING UNIT"
+  miSec3BottomPara      String? @db.Text
+  miSec4BgImage         String? // Colosseum photo (desktop)
+  miSec4BgImageMobile   String? // Colosseum photo (mobile)
+  miSec4Label           String? // default "COLOSSEUM"
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
