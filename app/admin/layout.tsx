@@ -22,6 +22,7 @@ import {
   Type,
   BookOpen,
   Landmark,
+  Ruler,
 } from "lucide-react";
 
 interface User {
@@ -36,6 +37,7 @@ const menuItems = [
   { name: "Homepage", path: "/admin/homepage", icon: Home, exact: false },
   { name: "Our Story", path: "/admin/our-story", icon: BookOpen, exact: false },
   { name: "Made in Italy", path: "/admin/made-in-italy", icon: Landmark, exact: false },
+  { name: "Technical Data", path: "/admin/technical-data", icon: Ruler, exact: false },
   { name: "Products", path: "/admin/products", icon: Package, exact: false },
   { name: "Blogs", path: "/admin/blogs", icon: Newspaper, exact: false },
   { name: "Queries", path: "/admin/queries", icon: MessageSquare, exact: false },

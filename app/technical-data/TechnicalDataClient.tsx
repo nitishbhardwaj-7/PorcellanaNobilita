@@ -13,7 +13,34 @@ import WineSpillSVG from "@/components/WineSpillSVG";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function TechnicalDataPage() {
+interface TdCmsData {
+  tdHeading?: string | null;
+  tdHeroDesc?: string | null;
+  tdCharHeading?: string | null;
+  tdChar1Title?: string | null; tdChar1Desc?: string | null; tdChar1Icon?: string | null;
+  tdChar2Title?: string | null; tdChar2Desc?: string | null; tdChar2Icon?: string | null;
+  tdChar3Title?: string | null; tdChar3Desc?: string | null; tdChar3Icon?: string | null;
+  tdChar4Title?: string | null; tdChar4Desc?: string | null; tdChar4Icon?: string | null;
+  tdChar5Title?: string | null; tdChar5Desc?: string | null; tdChar5Icon?: string | null;
+  tdChar6Title?: string | null; tdChar6Desc?: string | null; tdChar6Icon?: string | null;
+  tdChar7Title?: string | null; tdChar7Desc?: string | null; tdChar7Icon?: string | null;
+  tdChar8Title?: string | null; tdChar8Desc?: string | null; tdChar8Icon?: string | null;
+  tdChar9Title?: string | null; tdChar9Desc?: string | null; tdChar9Icon?: string | null;
+  tdUgHeading?: string | null;
+  tdUgDesc1?: string | null;
+  tdUgDesc2?: string | null;
+  tdDimHeading?: string | null;
+  tdDimDesc1?: string | null;
+  tdDimDesc2?: string | null;
+  tdDimDesc3?: string | null;
+  tdThickHeading?: string | null;
+  tdThickDesc1?: string | null;
+  tdThickDesc2?: string | null;
+  tdSpecsHeading?: string | null;
+}
+
+export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | null }) {
+  const d = cmsData || {};
   useSpillAnimations();
   const [dimSvg, setDimSvg] = useState<string>("");
 
@@ -296,7 +323,7 @@ export default function TechnicalDataPage() {
 
           <div className="w-full flex flex-col md:flex-row items-center justify-center relative px-4 md:px-20 gap-4 md:gap-0">
             <h1 className="font-ivymode font-light text-black uppercase tracking-[0.04em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em] px-2 md:px-0">
-              {"ENGINEERED FOR PERFORMANCE".split(" ").map((word, wIdx) => (
+              {(d.tdHeading || "ENGINEERED FOR PERFORMANCE").split(" ").map((word, wIdx) => (
                 <span key={wIdx} className="inline-block whitespace-nowrap">
                   {word.split("").map((char, cIdx) => (
                     <span key={cIdx} className="inline-block overflow-hidden align-bottom py-2 md:py-0 px-[1px]">
@@ -311,7 +338,7 @@ export default function TechnicalDataPage() {
             className="hero-desc font-ivymode font-light text-black text-[15px] sm:text-[16px] md:text-[20px] tracking-wide max-w-[1150px] w-[92%] mx-auto mt-6 md:mt-10 text-justify"
             style={{ textAlignLast: "center" }}
           >
-            Every NOBILITA surface is engineered for exceptional performance from specification to installation. Designed by architects and engineers, it combines technical precision with refined aesthetics, ensuring premium quality, consistency and reliability. NOBILITA offers outstanding durability, dimensional stability, stain resistance, and long-term performance.
+            {d.tdHeroDesc || "Every NOBILITA surface is engineered for exceptional performance from specification to installation. Designed by architects and engineers, it combines technical precision with refined aesthetics, ensuring premium quality, consistency and reliability. NOBILITA offers outstanding durability, dimensional stability, stain resistance, and long-term performance."}
           </p>
         </div>
       </section>
@@ -325,7 +352,7 @@ export default function TechnicalDataPage() {
           <div className="space-y-16">
             <div className="char-title char-title-trigger">
               <h2 className="font-ivymode font-light text-white uppercase tracking-[0.04em] md:tracking-[0.15em] text-[clamp(28px,6.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
-                {"CHARACTERISTICS".split(" ").map((word, wIdx) => (
+                {(d.tdCharHeading || "CHARACTERISTICS").split(" ").map((word, wIdx) => (
                   <span key={wIdx} className="inline-block whitespace-nowrap">
                     {word.split("").map((char, cIdx) => (
                       <span key={cIdx} className="inline-block overflow-hidden align-bottom py-2 md:py-0 px-[1px]">
@@ -342,17 +369,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-01.svg"
+                    src={d.tdChar1Icon || "/images/technical data/SVGs/SVGs/icons-01.svg"}
                     alt="Water Proof"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    WATER PROOF
+                    {d.tdChar1Title || "WATER PROOF"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Highly resistant to water damage, due to an ultra-low absorption rate.
+                    {d.tdChar1Desc || "Highly resistant to water damage, due to an ultra-low absorption rate."}
                   </p>
                 </div>
               </div>
@@ -361,17 +388,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-06.svg"
+                    src={d.tdChar2Icon || "/images/technical data/SVGs/SVGs/icons-06.svg"}
                     alt="UV Resistant"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    UV RESISTANT
+                    {d.tdChar2Title || "UV RESISTANT"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Composed of 100% natural materials, ensuring colors remain vibrant even with prolonged exposure to sunlight and extreme weather.
+                    {d.tdChar2Desc || "Composed of 100% natural materials, ensuring colors remain vibrant even with prolonged exposure to sunlight and extreme weather."}
                   </p>
                 </div>
               </div>
@@ -380,17 +407,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-03.svg"
+                    src={d.tdChar3Icon || "/images/technical data/SVGs/SVGs/icons-03.svg"}
                     alt="Scratch Resistant"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    SCRATCH RESISTANT
+                    {d.tdChar3Title || "SCRATCH RESISTANT"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Engineered with a tough surface strength to withstand scratches and abrasions.
+                    {d.tdChar3Desc || "Engineered with a tough surface strength to withstand scratches and abrasions."}
                   </p>
                 </div>
               </div>
@@ -399,17 +426,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-04.svg"
+                    src={d.tdChar4Icon || "/images/technical data/SVGs/SVGs/icons-04.svg"}
                     alt="Eco Friendly"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    ECO FRIENDLY
+                    {d.tdChar4Title || "ECO FRIENDLY"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Contains no substances harmful to the environment.
+                    {d.tdChar4Desc || "Contains no substances harmful to the environment."}
                   </p>
                 </div>
               </div>
@@ -418,17 +445,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-05.svg"
+                    src={d.tdChar5Icon || "/images/technical data/SVGs/SVGs/icons-05.svg"}
                     alt="Heat & Frost Resistant"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    HEAT & FROST RESISTANT
+                    {d.tdChar5Title || "HEAT & FROST RESISTANT"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    NOBILITA does not burn, emit smoke, or release toxic substances when exposed to fire.
+                    {d.tdChar5Desc || "NOBILITA does not burn, emit smoke, or release toxic substances when exposed to fire."}
                   </p>
                 </div>
               </div>
@@ -437,17 +464,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-07.svg"
+                    src={d.tdChar6Icon || "/images/technical data/SVGs/SVGs/icons-07.svg"}
                     alt="Recyclable"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    RECYCLABLE
+                    {d.tdChar6Title || "RECYCLABLE"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Each slab incorporates between 52% - 98% recycled content and is fully reusable and recyclable.
+                    {d.tdChar6Desc || "Each slab incorporates between 52% - 98% recycled content and is fully reusable and recyclable."}
                   </p>
                 </div>
               </div>
@@ -456,17 +483,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-08.svg"
+                    src={d.tdChar7Icon || "/images/technical data/SVGs/SVGs/icons-08.svg"}
                     alt="Easy to Maintain"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    EASY TO MAINTAIN
+                    {d.tdChar7Title || "EASY TO MAINTAIN"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Compatible with all types of cleaning agents, including bleach and ammonia.
+                    {d.tdChar7Desc || "Compatible with all types of cleaning agents, including bleach and ammonia."}
                   </p>
                 </div>
               </div>
@@ -475,17 +502,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-09.svg"
+                    src={d.tdChar8Icon || "/images/technical data/SVGs/SVGs/icons-09.svg"}
                     alt="High Flexural Strength"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    HIGH FLEXURAL STRENGTH
+                    {d.tdChar8Title || "HIGH FLEXURAL STRENGTH"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Designed to withstand heavy loads and pressure without bending or cracking.
+                    {d.tdChar8Desc || "Designed to withstand heavy loads and pressure without bending or cracking."}
                   </p>
                 </div>
               </div>
@@ -494,17 +521,17 @@ export default function TechnicalDataPage() {
               <div className="char-item flex items-start gap-6 md:gap-8 group">
                 <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
                   <img
-                    src="/images/technical data/SVGs/SVGs/icons-10.svg"
+                    src={d.tdChar9Icon || "/images/technical data/SVGs/SVGs/icons-10.svg"}
                     alt="Hygienic & Food Safe"
                     className="w-full h-full object-contain scale-[2.2] transition-all duration-500 opacity-100 group-hover:opacity-100 group-hover:scale-[2.35]"
                   />
                 </div>
                 <div className="flex-1 space-y-2 md:space-y-4">
                   <h3 className="font-michroma text-base md:text-[18px] tracking-[0.15em] uppercase font-light text-white">
-                    HYGIENIC & FOOD SAFE
+                    {d.tdChar9Title || "HYGIENIC & FOOD SAFE"}
                   </h3>
                   <p className="font-ivymode font-light text-white/90 text-[14px] md:text-[18px] tracking-[0.08em] leading-normal">
-                    Non-toxic and free from harmful emissions, 100% food safe, NSF Certified.
+                    {d.tdChar9Desc || "Non-toxic and free from harmful emissions, 100% food safe, NSF Certified."}
                   </p>
                 </div>
               </div>
@@ -516,7 +543,7 @@ export default function TechnicalDataPage() {
             <div className="space-y-16">
               <div className="ug-title ug-title-trigger">
                 <h2 className="font-ivymode font-light text-white uppercase tracking-[0.06em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
-                  {"USER GUIDE".split(" ").map((word, wIdx) => (
+                  {(d.tdUgHeading || "USER GUIDE").split(" ").map((word, wIdx) => (
                     <span key={wIdx} className="inline-block whitespace-nowrap">
                       {word.split("").map((char, cIdx) => (
                         <span key={cIdx} className="inline-block overflow-hidden align-bottom py-2 md:py-0 px-[1px]">
@@ -529,10 +556,10 @@ export default function TechnicalDataPage() {
               </div>
               <div className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[20px] tracking-widest w-full space-y-8 md:space-y-12">
                 <p className="ug-desc">
-                  The lasting beauty and performance of a surface depend on proper care and maintenance. To help you preserve the exceptional qualities of NOBILITA porcelain surfaces, we have created a collection of maintenance guidelines.
+                  {d.tdUgDesc1 || "The lasting beauty and performance of a surface depend on proper care and maintenance. To help you preserve the exceptional qualities of NOBILITA porcelain surfaces, we have created a collection of maintenance guidelines."}
                 </p>
                 <p className="ug-desc">
-                  Explore our easy-to-follow care instructions and cleaning recommendations. Whether for residential or commercial applications, these guidelines ensure your NOBILITA surfaces continue to perform and look their best for generations to come.
+                  {d.tdUgDesc2 || "Explore our easy-to-follow care instructions and cleaning recommendations. Whether for residential or commercial applications, these guidelines ensure your NOBILITA surfaces continue to perform and look their best for generations to come."}
                 </p>
               </div>
             </div>
@@ -685,7 +712,7 @@ export default function TechnicalDataPage() {
           {/* Subsection 1: Dimensions */}
           <div className="dim-title dim-title-trigger mb-12 md:mb-16 w-full text-left">
             <h2 className="font-ivymode font-light text-white uppercase tracking-[0.06em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
-              {"FORMAT & DIMENSIONS".split(" ").map((word, wIdx) => (
+              {(d.tdDimHeading || "FORMAT & DIMENSIONS").split(" ").map((word, wIdx) => (
                 <span key={wIdx} className="inline-block whitespace-nowrap">
                   {word.split("").map((char, cIdx) => (
                     <span key={cIdx} className="inline-block overflow-hidden align-bottom py-2 md:py-0 px-[1px]">
@@ -714,13 +741,13 @@ export default function TechnicalDataPage() {
             {/* Slab Dimensions Description Text (Right Column) */}
             <div className="dim-desc-trigger w-full lg:w-[48%] xl:w-[50%] flex flex-col justify-between text-left font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest gap-8 lg:gap-0 py-2">
               <p className="dim-desc">
-                NOBILITA offers large-format porcelain slabs in rectified and non-rectified formats to suit different applications.
+                {d.tdDimDesc1 || "NOBILITA offers large-format porcelain slabs in rectified and non-rectified formats to suit different applications."}
               </p>
               <p className="dim-desc">
-                RECTIFIED SLABS are precisely trimmed for seamless installation, making them the preferred choice for tiling applications such as flooring, walls, and facades.
+                {d.tdDimDesc2 || "RECTIFIED SLABS are precisely trimmed for seamless installation, making them the preferred choice for tiling applications such as flooring, walls, and facades."}
               </p>
               <p className="dim-desc">
-                NON-RECTIFIED SLABS (Gross) are ideal when custom cutting is required, making them perfect for counter tops, mill work, and furniture.
+                {d.tdDimDesc3 || "NON-RECTIFIED SLABS (Gross) are ideal when custom cutting is required, making them perfect for counter tops, mill work, and furniture."}
               </p>
             </div>
           </div>
@@ -734,7 +761,7 @@ export default function TechnicalDataPage() {
           <div className="thick-text-trigger w-full lg:w-[60%] xl:w-[62%] flex flex-col items-start justify-center text-left py-4">
             <div className="thick-title-trigger mb-6 md:mb-10 w-full text-left">
               <h2 className="font-ivymode font-light text-white uppercase tracking-[0.06em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
-                {"THICKNESSES".split(" ").map((word, wIdx) => (
+                {(d.tdThickHeading || "THICKNESSES").split(" ").map((word, wIdx) => (
                   <span key={wIdx} className="inline-block whitespace-nowrap">
                     {word.split("").map((char, cIdx) => (
                       <span key={cIdx} className="inline-block overflow-hidden align-bottom py-2 md:py-0 px-[1px]">
@@ -747,10 +774,10 @@ export default function TechnicalDataPage() {
             </div>
             <div className="thick-desc space-y-6 mt-6">
               <p className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest leading-relaxed">
-                6.5 MM – Lightweight and versatile, 6.5 MM porcelain is ideal for wall cladding, furniture applications and other interior surfaces where reduced weight is preferred.
+                {d.tdThickDesc1 || "6.5 MM – Lightweight and versatile, 6.5 MM porcelain is ideal for wall cladding, furniture applications and other interior surfaces where reduced weight is preferred."}
               </p>
               <p className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest leading-relaxed">
-                12 MM – A robust and durable option, 12 MM porcelain is well suited for flooring, countertops, kitchen worktops and other high-use applications.
+                {d.tdThickDesc2 || "12 MM – A robust and durable option, 12 MM porcelain is well suited for flooring, countertops, kitchen worktops and other high-use applications."}
               </p>
             </div>
           </div>
@@ -791,7 +818,7 @@ export default function TechnicalDataPage() {
         <div className="max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col items-start w-full space-y-16">
           <div className="text-center w-full">
             <h2 className="specs-title font-ivymode font-light text-[#007190] uppercase tracking-[0.15em] text-[clamp(28px,4.5vw,42px)] leading-tight">
-              TECHNICAL SPECIFICATIONS FOR PROFESSIONALS
+              {d.tdSpecsHeading || "TECHNICAL SPECIFICATIONS FOR PROFESSIONALS"}
             </h2>
           </div>
 

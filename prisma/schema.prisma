@@ -267,6 +267,61 @@ model Settings {
   miSec4BgImageMobile   String? // Colosseum photo (mobile)
   miSec4Label           String? // default "COLOSSEUM"
 
+  // Technical Data page (/technical-data) — editable from Admin > Technical
+  // Data. Layout, GSAP animations, and section order stay fixed. The Duomo
+  // video-style hero background, the spill-care how-to subsections (Oil /
+  // Coffee / Wine), the inlined format & dimensions SVG diagram, and the
+  // labeled thickness diagram image stay hardcoded — out of plain-text/safe
+  // -image scope (the thickness image has percentage-positioned text
+  // overlays tied to its exact geometry, and the dimensions SVG is inlined
+  // via dangerouslySetInnerHTML so isn't safe to point at arbitrary input).
+  tdHeading    String? // default "ENGINEERED FOR PERFORMANCE"
+  tdHeroDesc   String? @db.Text
+
+  tdCharHeading String? // default "CHARACTERISTICS" — fixed set of 9 items
+  tdChar1Title String?
+  tdChar1Desc  String? @db.Text
+  tdChar1Icon  String?
+  tdChar2Title String?
+  tdChar2Desc  String? @db.Text
+  tdChar2Icon  String?
+  tdChar3Title String?
+  tdChar3Desc  String? @db.Text
+  tdChar3Icon  String?
+  tdChar4Title String?
+  tdChar4Desc  String? @db.Text
+  tdChar4Icon  String?
+  tdChar5Title String?
+  tdChar5Desc  String? @db.Text
+  tdChar5Icon  String?
+  tdChar6Title String?
+  tdChar6Desc  String? @db.Text
+  tdChar6Icon  String?
+  tdChar7Title String?
+  tdChar7Desc  String? @db.Text
+  tdChar7Icon  String?
+  tdChar8Title String?
+  tdChar8Desc  String? @db.Text
+  tdChar8Icon  String?
+  tdChar9Title String?
+  tdChar9Desc  String? @db.Text
+  tdChar9Icon  String?
+
+  tdUgHeading String? // default "USER GUIDE"
+  tdUgDesc1   String? @db.Text
+  tdUgDesc2   String? @db.Text
+
+  tdDimHeading String? // default "FORMAT & DIMENSIONS"
+  tdDimDesc1   String? @db.Text
+  tdDimDesc2   String? @db.Text
+  tdDimDesc3   String? @db.Text
+
+  tdThickHeading String? // default "THICKNESSES"
+  tdThickDesc1   String? @db.Text
+  tdThickDesc2   String? @db.Text
+
+  tdSpecsHeading String? // default "TECHNICAL SPECIFICATIONS FOR PROFESSIONALS"
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
