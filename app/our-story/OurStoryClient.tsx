@@ -43,7 +43,31 @@ const paragraphWordVariants = {
   })
 };
 
-function OurStoryContent() {
+interface StoryCmsData {
+  storyHeroTitle?: string | null;
+  storyHeroPara1?: string | null;
+  storyHeroPara2?: string | null;
+  storySec2Heading?: string | null;
+  storySec2Line1?: string | null;
+  storySec2Line3?: string | null;
+  storySec2BgImage?: string | null;
+  storySec2Image?: string | null;
+  storySec2BtnText?: string | null;
+  storySec2ProductName?: string | null;
+  storySec3Para?: string | null;
+  storySec3BtnText?: string | null;
+  storySec3ProductName?: string | null;
+  storySec4Heading?: string | null;
+  storySec4Line1?: string | null;
+  storySec4Line2?: string | null;
+  storySec4BgImage?: string | null;
+  storySec4Image?: string | null;
+  storySec4BtnText?: string | null;
+  storySec4ProductName?: string | null;
+}
+
+function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
+  const d = cmsData || {};
   const [activeProduct, setActiveProduct] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -239,7 +263,7 @@ function OurStoryContent() {
               variants={containerVariants}
               className="hero-title font-ivymode font-light text-[#545759] uppercase tracking-[clamp(0.06em,0.7vw,0.15em)] text-[clamp(26px,4.5vw,62px)] leading-tight flex flex-wrap justify-center md:justify-start gap-x-[0.35em]"
             >
-              {["OUR", "STORY"].map((word, i) => (
+              {(d.storyHeroTitle || "OUR STORY").split(" ").map((word, i) => (
                 <span key={i} className="inline-block overflow-hidden py-1 md:py-0 px-[1px]">
                   <motion.span variants={wordVariants} className="inline-block">
                     {word}
@@ -259,10 +283,10 @@ function OurStoryContent() {
               className="hero-text font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.75] space-y-[clamp(1rem,1.75vw,1.6rem)] mt-[clamp(1.25rem,2.5vw,2.5rem)] text-center md:text-left"
             >
               <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}>
-                In the grand halls of Renaissance palaces and Baroque villas, architecture was never just about building. It was an expression of culture, craftsmanship, and an enduring pursuit of beauty.
+                {d.storyHeroPara1 || "In the grand halls of Renaissance palaces and Baroque villas, architecture was never just about building. It was an expression of culture, craftsmanship, and an enduring pursuit of beauty."}
               </motion.p>
               <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}>
-                The world's greatest cities were shaped by spaces that celebrated proportion, artistry, and material excellence.
+                {d.storyHeroPara2 || "The world's greatest cities were shaped by spaces that celebrated proportion, artistry, and material excellence."}
               </motion.p>
               <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}>
                 Among their defining features was the <span className="text-[#007190] font-normal">Piano Nobile – the noble floor. <br /> </span> Elevated above the bustle of the streets, it was the heart of the home, where marble, light, and masterful detailing came together to create spaces of remarkable elegance.
@@ -277,7 +301,7 @@ function OurStoryContent() {
         {/* Background Marble Slab */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
-            src="/images/Links/Arbescato Fjord Face 1.jpg"
+            src={d.storySec2BgImage || "/images/Links/Arbescato Fjord Face 1.jpg"}
             alt="Arabescato Fjord background"
             className="sec2-bg w-full h-full object-cover opacity-100 origin-center scale-[1.05]"
           />
@@ -286,7 +310,7 @@ function OurStoryContent() {
         {/* Centered Heading */}
         <div className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-12 lg:px-20 xl:px-24 z-10 shrink-0">
           <h2 className="sec2-title font-ivymode font-light text-[#545759] uppercase tracking-[0.06em] md:tracking-[0.18em] text-[clamp(24px,5.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] leading-tight flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em]">
-            {"PIANO NOBILE, REIMAGINED".split(" ").map((word, wIdx) => (
+            {(d.storySec2Heading || "PIANO NOBILE, REIMAGINED").split(" ").map((word, wIdx) => (
               <span key={wIdx} className="inline-block whitespace-nowrap">
                 {word.split("").map((char, cIdx) => (
                   <span key={cIdx} className="inline-block overflow-hidden align-bottom py-2 md:py-0 px-[1px]">
@@ -305,7 +329,7 @@ function OurStoryContent() {
             <div className="sec2-text md:col-span-7 flex flex-col space-y-4 md:space-y-5 font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
               <div className="overflow-hidden py-0.5">
                 <p className="sec2-line">
-                  NOBILITA takes its name from this tradition.
+                  {d.storySec2Line1 || "NOBILITA takes its name from this tradition."}
                 </p>
               </div>
 
@@ -323,7 +347,7 @@ function OurStoryContent() {
 
               <div className="overflow-hidden py-0.5">
                 <p className="sec2-line">
-                  Today, that philosophy guides everything we do.
+                  {d.storySec2Line3 || "Today, that philosophy guides everything we do."}
                 </p>
               </div>
             </div>
@@ -336,7 +360,7 @@ function OurStoryContent() {
                 onMouseLeave={() => handleImageLeave(".sec2-img-inner")}
               >
                 <img
-                  src="/images/Our story/Verde profondo application.jpg"
+                  src={d.storySec2Image || "/images/Our story/Verde profondo application.jpg"}
                   alt="Verde Profondo application"
                   className="sec2-img-inner w-full h-auto object-contain block transform-gpu scale-[1.18]"
                   loading="lazy"
@@ -345,12 +369,12 @@ function OurStoryContent() {
                 {/* Bottom Right Text Button */}
                 <div className="absolute bottom-2 right-2 md:bottom-2 md:right-2 z-20">
                   <button
-                    onClick={() => handleProductSelect("Verde Profondo")}
+                    onClick={() => handleProductSelect(d.storySec2ProductName || "Verde Profondo")}
                     className="relative overflow-hidden border border-white/0 text-white bg-transparent px-3.5 py-1.5 font-ivymode font-light text-[clamp(10px,1vw,13px)] uppercase tracking-[0.20em] transition-all duration-500 ease-out group-hover:border-white block"
                   >
                     <span className="absolute -inset-[1px] bg-white scale-x-0 origin-left transition-transform duration-500 ease-[0.22,1,0.36,1] group-hover:scale-x-100" />
                     <span className="relative z-10 block transition-colors duration-500 group-hover:text-black drop-shadow-md group-hover:drop-shadow-none">
-                      VERDE PROFONDO
+                      {d.storySec2BtnText || "VERDE PROFONDO"}
                     </span>
                   </button>
                 </div>
@@ -390,12 +414,12 @@ function OurStoryContent() {
           {/* Bottom Right Text Button */}
           <div className="absolute bottom-2 right-2 md:bottom-2 md:right-3 z-30">
             <button
-              onClick={() => handleProductSelect("Basaltina")}
+              onClick={() => handleProductSelect(d.storySec3ProductName || "Basaltina")}
               className="sec3-label-text relative overflow-hidden border border-white/0 text-white bg-transparent px-3.5 py-1.5 font-ivymode font-light text-[clamp(10px,1vw,13px)] uppercase tracking-[0.20em] transition-all duration-500 ease-out group-hover:border-white block cursor-pointer"
             >
               <span className="absolute -inset-[1px] bg-white scale-x-0 origin-left transition-transform duration-500 ease-[0.22,1,0.36,1] group-hover:scale-x-100" />
               <span className="relative z-10 block transition-colors duration-500 group-hover:text-black drop-shadow-md group-hover:drop-shadow-none">
-                BASALTINA
+                {d.storySec3BtnText || "BASALTINA"}
               </span>
             </button>
           </div>
@@ -405,7 +429,7 @@ function OurStoryContent() {
         <div className="sec3-text w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-white px-6 md:px-12 lg:px-20 xl:px-24 pt-[40px] pb-[40px] md:pt-[60px] md:pb-[60px] text-center md:text-left">
           <div className="w-full">
             <p className="font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95]">
-              At NOBILITA, we work closely with architects, designers, and discerning clients to create architectural experiences. Through careful selection, expert craftsmanship, and a deep understanding of design, we help create spaces that feel timeless rather than trend-driven.
+              {d.storySec3Para || "At NOBILITA, we work closely with architects, designers, and discerning clients to create architectural experiences. Through careful selection, expert craftsmanship, and a deep understanding of design, we help create spaces that feel timeless rather than trend-driven."}
             </p>
           </div>
         </div>
@@ -416,7 +440,7 @@ function OurStoryContent() {
         {/* Background Marble Slab */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
-            src="/images/Links/Fior Di Melo Face 1.jpg"
+            src={d.storySec4BgImage || "/images/Links/Fior Di Melo Face 1.jpg"}
             alt="Fior Di Melo background"
             className="sec4-bg w-full h-full object-cover opacity-100 origin-center scale-[1.08]"
           />
@@ -425,7 +449,7 @@ function OurStoryContent() {
         {/* Centered Heading */}
         <div className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-8 lg:px-12 xl:px-16 z-10 shrink-0">
           <h2 className="sec4-title font-ivymode font-light text-[#545759] uppercase tracking-[0.06em] md:tracking-[0.08em] lg:tracking-[0.12em] xl:tracking-[0.16em] text-[clamp(24px,5.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] leading-tight flex flex-wrap md:flex-nowrap justify-center gap-x-[0.25em] md:gap-x-[0.35em]">
-            {"NEXT GENERATION PORCELAIN".split(" ").map((word, wIdx) => (
+            {(d.storySec4Heading || "NEXT GENERATION PORCELAIN").split(" ").map((word, wIdx) => (
               <span key={wIdx} className="inline-block whitespace-nowrap">
                 {word.split("").map((char, cIdx) => (
                   <span key={cIdx} className="inline-block overflow-hidden align-bottom py-2 md:py-0 px-[1px]">
@@ -448,7 +472,7 @@ function OurStoryContent() {
                 onMouseLeave={() => handleImageLeave(".sec4-img-inner")}
               >
                 <img
-                  src="/images/Our story/Ferro Industriale (2).jpg"
+                  src={d.storySec4Image || "/images/Our story/Ferro Industriale (2).jpg"}
                   alt="Ferro Industriale application"
                   className="sec4-img-inner w-full h-auto object-contain block transform-gpu scale-[1.18]"
                   loading="lazy"
@@ -457,12 +481,12 @@ function OurStoryContent() {
                 {/* Bottom Left Text Button */}
                 <div className="absolute bottom-2 left-2 md:bottom-2 md:left-2 z-20">
                   <button
-                    onClick={() => handleProductSelect("Ferro Industriale")}
+                    onClick={() => handleProductSelect(d.storySec4ProductName || "Ferro Industriale")}
                     className="relative overflow-hidden border border-white/0 text-white bg-transparent px-3.5 py-1.5 font-ivymode font-light text-[clamp(10px,1vw,13px)] uppercase tracking-[0.20em] transition-all duration-500 ease-out group-hover:border-white block"
                   >
                     <span className="absolute -inset-[1px] bg-white scale-x-0 origin-left transition-transform duration-500 ease-[0.22,1,0.36,1] group-hover:scale-x-100" />
                     <span className="relative z-10 block transition-colors duration-500 group-hover:text-black drop-shadow-md group-hover:drop-shadow-none">
-                      FERRO INDUSTRIALE
+                      {d.storySec4BtnText || "FERRO INDUSTRIALE"}
                     </span>
                   </button>
                 </div>
@@ -473,16 +497,13 @@ function OurStoryContent() {
             <div className="sec4-text md:col-span-7 flex flex-col space-y-4 md:space-y-5 font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
               <div className="overflow-hidden py-0.5">
                 <p className="sec4-line">
-                  Our inspiration comes from the great interiors of the past, but
-                  our vision is firmly contemporary: bringing the beauty, depth,
-                  and sophistication of natural stone into modern spaces through
-                  advanced porcelain surfaces.
+                  {d.storySec4Line1 || "Our inspiration comes from the great interiors of the past, but our vision is firmly contemporary: bringing the beauty, depth, and sophistication of natural stone into modern spaces through advanced porcelain surfaces."}
                 </p>
               </div>
 
               <div className="overflow-hidden py-0.5">
                 <p className="sec4-line">
-                  Because true luxury is not defined by excess.
+                  {d.storySec4Line2 || "Because true luxury is not defined by excess."}
                 </p>
               </div>
 
@@ -509,10 +530,10 @@ function OurStoryContent() {
   );
 }
 
-export default function OurStoryPage() {
+export default function OurStoryPage({ cmsData }: { cmsData?: StoryCmsData | null }) {
   return (
     <Suspense fallback={null}>
-      <OurStoryContent />
+      <OurStoryContent cmsData={cmsData} />
     </Suspense>
   );
 }
