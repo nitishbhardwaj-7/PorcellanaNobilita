@@ -536,7 +536,7 @@ function BrandIntroTab() {
             </label>
             <p className="text-[10px] text-[#8b8b8b]">The "Il Gres Imperiale d'Italia" graphic at the top.</p>
             {settings.brandTagImage && (
-              <img src={settings.brandTagImage} alt="" className="h-10 object-contain bg-[#007190] px-2 py-1" />
+              <img src={settings.brandTagImage} alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
             )}
             <div className="flex gap-1">
               <input
@@ -555,7 +555,7 @@ function BrandIntroTab() {
             </label>
             <p className="text-[10px] text-[#8b8b8b]">The NOBILITA logo in the middle.</p>
             {settings.brandImg && (
-              <img src={settings.brandImg} alt="" className="h-10 object-contain bg-[#007190] px-2 py-1" />
+              <img src={settings.brandImg} alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
             )}
             <div className="flex gap-1">
               <input
@@ -762,7 +762,7 @@ function CraftsmanshipTab() {
               Background Image (Desktop)
             </label>
             {settings.craftBgImage && (
-              <img src={settings.craftBgImage} alt="" className="h-16 w-full object-cover border border-[#1a1a1a]/10" />
+              <img src={settings.craftBgImage} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
             )}
             <div className="flex gap-1">
               <input
@@ -780,7 +780,7 @@ function CraftsmanshipTab() {
               Background Image (Mobile)
             </label>
             {settings.craftBgImageMobile && (
-              <img src={settings.craftBgImageMobile} alt="" className="h-16 w-full object-cover border border-[#1a1a1a]/10" />
+              <img src={settings.craftBgImageMobile} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
             )}
             <div className="flex gap-1">
               <input
@@ -876,7 +876,7 @@ function ImageField({
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && <img src={value} alt="" className="h-16 w-full object-cover border border-[#1a1a1a]/10" />}
+      {value && <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />}
       <div className="flex gap-1">
         <input
           type="text"

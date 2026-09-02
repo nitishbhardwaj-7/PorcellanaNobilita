@@ -63,7 +63,7 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && <img src={value} alt="" className="h-12 w-12 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-1" />}
+      {value && <img src={value} alt="" className="h-28 w-28 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-3" />}
       <div className="flex gap-1">
         <input
           type="text"
