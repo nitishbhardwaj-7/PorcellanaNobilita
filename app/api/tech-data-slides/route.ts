@@ -19,9 +19,9 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const { image, label, textColor } = await request.json();
-    if (!image || !label) {
+    if (!label) {
       return NextResponse.json(
-        { success: false, error: "Image and label are required." },
+        { success: false, error: "Label is required." },
         { status: 400 }
       );
     }
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const maxOrder = await prisma.techDataSlide.aggregate({ _max: { order: true } });
     const slide = await prisma.techDataSlide.create({
       data: {
-        image,
+        image: image || "",
         label,
         textColor: textColor === "white" ? "white" : "black",
         order: (maxOrder._max.order ?? -1) + 1,
