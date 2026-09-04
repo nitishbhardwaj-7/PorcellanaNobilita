@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import NobilitaHouseSVG from "@/components/NobilitaHouseSVG";
 import dynamic from "next/dynamic";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 const FeaturedProduct = dynamic(() => import("@/components/FeaturedProduct"), { ssr: false });
 
@@ -45,21 +46,51 @@ const paragraphWordVariants = {
 
 interface StoryCmsData {
   storyHeroTitle?: string | null;
+  storyHeroTitleColor?: string | null;
+  storyHeroTitleFont?: string | null;
+  storyHeroTitleSize?: string | null;
   storyHeroPara1?: string | null;
+  storyHeroPara1Color?: string | null;
+  storyHeroPara1Font?: string | null;
+  storyHeroPara1Size?: string | null;
   storyHeroPara2?: string | null;
+  storyHeroPara2Color?: string | null;
+  storyHeroPara2Font?: string | null;
+  storyHeroPara2Size?: string | null;
   storySec2Heading?: string | null;
+  storySec2HeadingColor?: string | null;
+  storySec2HeadingFont?: string | null;
+  storySec2HeadingSize?: string | null;
   storySec2Line1?: string | null;
+  storySec2Line1Color?: string | null;
+  storySec2Line1Font?: string | null;
+  storySec2Line1Size?: string | null;
   storySec2Line3?: string | null;
+  storySec2Line3Color?: string | null;
+  storySec2Line3Font?: string | null;
+  storySec2Line3Size?: string | null;
   storySec2BgImage?: string | null;
   storySec2Image?: string | null;
   storySec2BtnText?: string | null;
   storySec2ProductName?: string | null;
   storySec3Para?: string | null;
+  storySec3ParaColor?: string | null;
+  storySec3ParaFont?: string | null;
+  storySec3ParaSize?: string | null;
   storySec3BtnText?: string | null;
   storySec3ProductName?: string | null;
   storySec4Heading?: string | null;
+  storySec4HeadingColor?: string | null;
+  storySec4HeadingFont?: string | null;
+  storySec4HeadingSize?: string | null;
   storySec4Line1?: string | null;
+  storySec4Line1Color?: string | null;
+  storySec4Line1Font?: string | null;
+  storySec4Line1Size?: string | null;
   storySec4Line2?: string | null;
+  storySec4Line2Color?: string | null;
+  storySec4Line2Font?: string | null;
+  storySec4Line2Size?: string | null;
   storySec4BgImage?: string | null;
   storySec4Image?: string | null;
   storySec4BtnText?: string | null;
@@ -261,7 +292,7 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
               whileInView="visible"
               viewport={{ once: true }}
               variants={containerVariants}
-              className="hero-title font-ivymode font-light text-[#545759] uppercase tracking-[clamp(0.06em,0.7vw,0.15em)] text-[clamp(26px,4.5vw,62px)] leading-tight flex flex-wrap justify-center md:justify-start gap-x-[0.35em]"
+              className={`hero-title ${fontClass(d.storyHeroTitleFont, "font-ivymode")} font-light ${colorClass(d.storyHeroTitleColor, "text-[#545759]")} uppercase tracking-[clamp(0.06em,0.7vw,0.15em)] ${headingSizeClass(d.storyHeroTitleSize, "text-[clamp(26px,4.5vw,62px)]")} leading-tight flex flex-wrap justify-center md:justify-start gap-x-[0.35em]`}
             >
               {(d.storyHeroTitle || "OUR STORY").split(" ").map((word, i) => (
                 <span key={i} className="inline-block overflow-hidden py-1 md:py-0 px-[1px]">
@@ -280,15 +311,24 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.3, delayChildren: 0.6 } }
               }}
-              className="hero-text font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.75] space-y-[clamp(1rem,1.75vw,1.6rem)] mt-[clamp(1.25rem,2.5vw,2.5rem)] text-center md:text-left"
+              className="hero-text tracking-widest leading-[1.75] space-y-[clamp(1rem,1.75vw,1.6rem)] mt-[clamp(1.25rem,2.5vw,2.5rem)] text-center md:text-left"
             >
-              <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}>
+              <motion.p
+                className={`${fontClass(d.storyHeroPara1Font, "font-ivymode")} font-light ${colorClass(d.storyHeroPara1Color, "text-[#545759]")} ${paragraphSizeClass(d.storyHeroPara1Size, "text-[clamp(14px,1.35vw,20px)]")}`}
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}
+              >
                 {d.storyHeroPara1 || "In the grand halls of Renaissance palaces and Baroque villas, architecture was never just about building. It was an expression of culture, craftsmanship, and an enduring pursuit of beauty."}
               </motion.p>
-              <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}>
+              <motion.p
+                className={`${fontClass(d.storyHeroPara2Font, "font-ivymode")} font-light ${colorClass(d.storyHeroPara2Color, "text-[#545759]")} ${paragraphSizeClass(d.storyHeroPara2Size, "text-[clamp(14px,1.35vw,20px)]")}`}
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}
+              >
                 {d.storyHeroPara2 || "The world's greatest cities were shaped by spaces that celebrated proportion, artistry, and material excellence."}
               </motion.p>
-              <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}>
+              <motion.p
+                className="font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}
+              >
                 Among their defining features was the <span className="text-[#007190] font-normal">Piano Nobile – the noble floor. <br /> </span> Elevated above the bustle of the streets, it was the heart of the home, where marble, light, and masterful detailing came together to create spaces of remarkable elegance.
               </motion.p>
             </motion.div>
@@ -309,7 +349,7 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
 
         {/* Centered Heading */}
         <div className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-12 lg:px-20 xl:px-24 z-10 shrink-0">
-          <h2 className="sec2-title font-ivymode font-light text-[#545759] uppercase tracking-[0.06em] md:tracking-[0.18em] text-[clamp(24px,5.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] leading-tight flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em]">
+          <h2 className={`sec2-title ${fontClass(d.storySec2HeadingFont, "font-ivymode")} font-light ${colorClass(d.storySec2HeadingColor, "text-[#545759]")} uppercase tracking-[0.06em] md:tracking-[0.18em] ${headingSizeClass(d.storySec2HeadingSize, "text-[clamp(24px,5.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)]")} leading-tight flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em]`}>
             {(d.storySec2Heading || "PIANO NOBILE, REIMAGINED").split(" ").map((word, wIdx) => (
               <span key={wIdx} className="inline-block whitespace-nowrap">
                 {word.split("").map((char, cIdx) => (
@@ -326,15 +366,15 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
         <div className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-12 lg:px-20 xl:px-24 z-10 mt-8 md:mt-[60px]">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-center w-full">
             {/* Left Column: Narrative (7 cols) */}
-            <div className="sec2-text md:col-span-7 flex flex-col space-y-4 md:space-y-5 font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
+            <div className="sec2-text md:col-span-7 flex flex-col space-y-4 md:space-y-5 tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
               <div className="overflow-hidden py-0.5">
-                <p className="sec2-line">
+                <p className={`sec2-line ${fontClass(d.storySec2Line1Font, "font-ivymode")} font-light ${colorClass(d.storySec2Line1Color, "text-[#545759]")} ${paragraphSizeClass(d.storySec2Line1Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
                   {d.storySec2Line1 || "NOBILITA takes its name from this tradition."}
                 </p>
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec2-line">
+                <p className="sec2-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
                   NOBILITA represents a philosophy rather than a status. It is a
                   belief that exceptional materials, thoughtful design, and skilled
                   craftsmanship have the power to elevate everyday spaces into
@@ -346,7 +386,7 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec2-line">
+                <p className={`sec2-line ${fontClass(d.storySec2Line3Font, "font-ivymode")} font-light ${colorClass(d.storySec2Line3Color, "text-[#545759]")} ${paragraphSizeClass(d.storySec2Line3Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
                   {d.storySec2Line3 || "Today, that philosophy guides everything we do."}
                 </p>
               </div>
@@ -428,7 +468,7 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
         {/* Bottom Narrative Text */}
         <div className="sec3-text w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-white px-6 md:px-12 lg:px-20 xl:px-24 pt-[40px] pb-[40px] md:pt-[60px] md:pb-[60px] text-center md:text-left">
           <div className="w-full">
-            <p className="font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95]">
+            <p className={`${fontClass(d.storySec3ParaFont, "font-ivymode")} font-light ${colorClass(d.storySec3ParaColor, "text-[#545759]")} ${paragraphSizeClass(d.storySec3ParaSize, "text-[clamp(14px,1.35vw,20px)]")} tracking-widest leading-[1.8] 2xl:leading-[1.95]`}>
               {d.storySec3Para || "At NOBILITA, we work closely with architects, designers, and discerning clients to create architectural experiences. Through careful selection, expert craftsmanship, and a deep understanding of design, we help create spaces that feel timeless rather than trend-driven."}
             </p>
           </div>
@@ -448,7 +488,7 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
 
         {/* Centered Heading */}
         <div className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-8 lg:px-12 xl:px-16 z-10 shrink-0">
-          <h2 className="sec4-title font-ivymode font-light text-[#545759] uppercase tracking-[0.06em] md:tracking-[0.08em] lg:tracking-[0.12em] xl:tracking-[0.16em] text-[clamp(24px,5.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] leading-tight flex flex-wrap md:flex-nowrap justify-center gap-x-[0.25em] md:gap-x-[0.35em]">
+          <h2 className={`sec4-title ${fontClass(d.storySec4HeadingFont, "font-ivymode")} font-light ${colorClass(d.storySec4HeadingColor, "text-[#545759]")} uppercase tracking-[0.06em] md:tracking-[0.08em] lg:tracking-[0.12em] xl:tracking-[0.16em] ${headingSizeClass(d.storySec4HeadingSize, "text-[clamp(24px,5.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)]")} leading-tight flex flex-wrap md:flex-nowrap justify-center gap-x-[0.25em] md:gap-x-[0.35em]`}>
             {(d.storySec4Heading || "NEXT GENERATION PORCELAIN").split(" ").map((word, wIdx) => (
               <span key={wIdx} className="inline-block whitespace-nowrap">
                 {word.split("").map((char, cIdx) => (
@@ -494,21 +534,21 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
             </div>
 
             {/* Right Column: Narrative (7 cols) */}
-            <div className="sec4-text md:col-span-7 flex flex-col space-y-4 md:space-y-5 font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
+            <div className="sec4-text md:col-span-7 flex flex-col space-y-4 md:space-y-5 tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
               <div className="overflow-hidden py-0.5">
-                <p className="sec4-line">
+                <p className={`sec4-line ${fontClass(d.storySec4Line1Font, "font-ivymode")} font-light ${colorClass(d.storySec4Line1Color, "text-[#545759]")} ${paragraphSizeClass(d.storySec4Line1Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
                   {d.storySec4Line1 || "Our inspiration comes from the great interiors of the past, but our vision is firmly contemporary: bringing the beauty, depth, and sophistication of natural stone into modern spaces through advanced porcelain surfaces."}
                 </p>
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec4-line">
+                <p className={`sec4-line ${fontClass(d.storySec4Line2Font, "font-ivymode")} font-light ${colorClass(d.storySec4Line2Color, "text-[#545759]")} ${paragraphSizeClass(d.storySec4Line2Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
                   {d.storySec4Line2 || "Because true luxury is not defined by excess."}
                 </p>
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec4-line">
+                <p className="sec4-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
                   It is defined by{" "}
                   <span className="sec4-highlight inline-block text-[#007190] font-normal">
                     beauty that endures.

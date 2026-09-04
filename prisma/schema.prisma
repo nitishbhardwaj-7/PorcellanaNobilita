@@ -263,23 +263,53 @@ model Settings {
   // paragraphs that carry an inline colored highlight phrase stay hardcoded
   // (out of plain-text scope) — noted per field below.
   storyHeroTitle String? // default "OUR STORY"
+  storyHeroTitleColor String?
+  storyHeroTitleFont  String?
+  storyHeroTitleSize  String?
   storyHeroPara1 String? @db.Text
+  storyHeroPara1Color String?
+  storyHeroPara1Font  String?
+  storyHeroPara1Size  String?
   storyHeroPara2 String? @db.Text
+  storyHeroPara2Color String?
+  storyHeroPara2Font  String?
+  storyHeroPara2Size  String?
   // (hero paragraph 3 has an inline highlighted phrase — stays hardcoded)
   storySec2Heading String? // default "PIANO NOBILE, REIMAGINED"
+  storySec2HeadingColor String?
+  storySec2HeadingFont  String?
+  storySec2HeadingSize  String?
   storySec2Line1   String? @db.Text
+  storySec2Line1Color String?
+  storySec2Line1Font  String?
+  storySec2Line1Size  String?
   // (sec2 line 2 has an inline highlighted word "extraordinary" — stays hardcoded)
   storySec2Line3      String? @db.Text
+  storySec2Line3Color String?
+  storySec2Line3Font  String?
+  storySec2Line3Size  String?
   storySec2BgImage    String? // Arabescato Fjord background
   storySec2Image      String? // Verde Profondo application photo
   storySec2BtnText    String? // default "VERDE PROFONDO"
   storySec2ProductName String? // which product the button opens
   storySec3Para        String? @db.Text
+  storySec3ParaColor   String?
+  storySec3ParaFont    String?
+  storySec3ParaSize    String?
   storySec3BtnText     String? // default "BASALTINA"
   storySec3ProductName String? // which product the button opens
   storySec4Heading String? // default "NEXT GENERATION PORCELAIN"
+  storySec4HeadingColor String?
+  storySec4HeadingFont  String?
+  storySec4HeadingSize  String?
   storySec4Line1   String? @db.Text
+  storySec4Line1Color String?
+  storySec4Line1Font  String?
+  storySec4Line1Size  String?
   storySec4Line2   String? @db.Text
+  storySec4Line2Color String?
+  storySec4Line2Font  String?
+  storySec4Line2Size  String?
   // (sec4 line 3 has an inline highlighted phrase "beauty that endures." — stays hardcoded)
   storySec4BgImage     String? // Fior Di Melo background
   storySec4Image       String? // Ferro Industriale application photo

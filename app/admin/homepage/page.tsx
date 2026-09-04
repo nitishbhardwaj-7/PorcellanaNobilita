@@ -3,69 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { Plus, X, GripVertical, Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
-import { COLOR_OPTIONS, FONT_OPTIONS, HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
+import { StyleRow } from "../_components/StyleControls";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
-
-// A field's Color / Font / Size — three plain <select> dropdowns in a row,
-// mirroring the same control set already used for blog content blocks.
-function MiniSelect({
-  value,
-  onChange,
-  options,
-}: {
-  value: string;
-  onChange: (val: string) => void;
-  options: { value: string; label: string }[];
-}) {
-  return (
-    <select
-      value={value || "default"}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1.5 text-[11px] text-[#1a1a1a] outline-none focus:border-[#1a1a1a]/40"
-    >
-      {options.map((o) => (
-        <option key={o.value} value={o.value}>{o.label}</option>
-      ))}
-    </select>
-  );
-}
-
-function StyleRow({
-  color,
-  onColorChange,
-  font,
-  onFontChange,
-  size,
-  onSizeChange,
-  sizeOptions,
-}: {
-  color: string;
-  onColorChange: (v: string) => void;
-  font: string;
-  onFontChange: (v: string) => void;
-  size: string;
-  onSizeChange: (v: string) => void;
-  sizeOptions: { value: string; label: string }[];
-}) {
-  return (
-    <div className="grid grid-cols-3 gap-2">
-      <div>
-        <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-        <MiniSelect value={color} onChange={onColorChange} options={COLOR_OPTIONS} />
-      </div>
-      <div>
-        <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
-        <MiniSelect value={font} onChange={onFontChange} options={FONT_OPTIONS} />
-      </div>
-      <div>
-        <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
-        <MiniSelect value={size} onChange={onSizeChange} options={sizeOptions} />
-      </div>
-    </div>
-  );
-}
 
 const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data"] as const;
 type Tab = (typeof TABS)[number];
