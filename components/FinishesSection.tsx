@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 // Fixed identity per tile — filter routing and per-tile styling stay pinned
 // to these, independent of the editable name/image/desc content below, so
@@ -45,50 +46,86 @@ const defaults = [
 
 interface Props {
   heading?: string;
+  headingColor?: string;
+  headingFont?: string;
+  headingSize?: string;
   finish1Name?: string;
   finish1Image?: string;
   finish1Desc?: string;
+  finish1DescColor?: string;
+  finish1DescFont?: string;
+  finish1DescSize?: string;
   finish2Name?: string;
   finish2Image?: string;
   finish2Desc?: string;
+  finish2DescColor?: string;
+  finish2DescFont?: string;
+  finish2DescSize?: string;
   finish3Name?: string;
   finish3Image?: string;
   finish3Desc?: string;
+  finish3DescColor?: string;
+  finish3DescFont?: string;
+  finish3DescSize?: string;
   finish4Name?: string;
   finish4Image?: string;
   finish4Desc?: string;
+  finish4DescColor?: string;
+  finish4DescFont?: string;
+  finish4DescSize?: string;
   finish5Name?: string;
   finish5Image?: string;
   finish5Desc?: string;
+  finish5DescColor?: string;
+  finish5DescFont?: string;
+  finish5DescSize?: string;
 }
 
 export default function FinishesSection({
   heading,
+  headingColor,
+  headingFont,
+  headingSize,
   finish1Name,
   finish1Image,
   finish1Desc,
+  finish1DescColor,
+  finish1DescFont,
+  finish1DescSize,
   finish2Name,
   finish2Image,
   finish2Desc,
+  finish2DescColor,
+  finish2DescFont,
+  finish2DescSize,
   finish3Name,
   finish3Image,
   finish3Desc,
+  finish3DescColor,
+  finish3DescFont,
+  finish3DescSize,
   finish4Name,
   finish4Image,
   finish4Desc,
+  finish4DescColor,
+  finish4DescFont,
+  finish4DescSize,
   finish5Name,
   finish5Image,
   finish5Desc,
+  finish5DescColor,
+  finish5DescFont,
+  finish5DescSize,
 }: Props) {
   const router = useRouter();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const content = [
-    { name: finish1Name || defaults[0].name, img: finish1Image || defaults[0].img, desc: finish1Desc || defaults[0].desc },
-    { name: finish2Name || defaults[1].name, img: finish2Image || defaults[1].img, desc: finish2Desc || defaults[1].desc },
-    { name: finish3Name || defaults[2].name, img: finish3Image || defaults[2].img, desc: finish3Desc || defaults[2].desc },
-    { name: finish4Name || defaults[3].name, img: finish4Image || defaults[3].img, desc: finish4Desc || defaults[3].desc },
-    { name: finish5Name || defaults[4].name, img: finish5Image || defaults[4].img, desc: finish5Desc || defaults[4].desc },
+    { name: finish1Name || defaults[0].name, img: finish1Image || defaults[0].img, desc: finish1Desc || defaults[0].desc, descColor: finish1DescColor, descFont: finish1DescFont, descSize: finish1DescSize },
+    { name: finish2Name || defaults[1].name, img: finish2Image || defaults[1].img, desc: finish2Desc || defaults[1].desc, descColor: finish2DescColor, descFont: finish2DescFont, descSize: finish2DescSize },
+    { name: finish3Name || defaults[2].name, img: finish3Image || defaults[2].img, desc: finish3Desc || defaults[2].desc, descColor: finish3DescColor, descFont: finish3DescFont, descSize: finish3DescSize },
+    { name: finish4Name || defaults[3].name, img: finish4Image || defaults[3].img, desc: finish4Desc || defaults[3].desc, descColor: finish4DescColor, descFont: finish4DescFont, descSize: finish4DescSize },
+    { name: finish5Name || defaults[4].name, img: finish5Image || defaults[4].img, desc: finish5Desc || defaults[4].desc, descColor: finish5DescColor, descFont: finish5DescFont, descSize: finish5DescSize },
   ];
 
   const finishes = content.map((c, i) => ({ ...c, ...finishMeta[i] }));
@@ -105,7 +142,7 @@ export default function FinishesSection({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="font-ivymode text-[clamp(28px,4.5vw,66px)] text-[#545759] tracking-[0.2em] text-center mb-[40px] uppercase"
+        className={`${fontClass(headingFont, "font-ivymode")} ${headingSizeClass(headingSize, "text-[clamp(28px,4.5vw,66px)]")} ${colorClass(headingColor, "text-[#545759]")} tracking-[0.2em] text-center mb-[40px] uppercase`}
       >
         {heading || "FINISHES"}
       </motion.h2>
@@ -173,8 +210,7 @@ export default function FinishesSection({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                        className={`absolute top-full left-0 font-michroma max-w-full ml-8 md:ml-[45px] text-[clamp(14px,1.8vw,18px)] mt-4 pointer-events-none ${finish.darkText ? 'text-[#545759]' : 'text-white/80'
-                          }`}
+                        className={`absolute top-full left-0 ${fontClass(finish.descFont, "font-michroma")} max-w-full ml-8 md:ml-[45px] ${paragraphSizeClass(finish.descSize, "text-[clamp(14px,1.8vw,18px)]")} mt-4 pointer-events-none ${colorClass(finish.descColor, finish.darkText ? 'text-[#545759]' : 'text-white/80')}`}
                         style={{ wordSpacing: "0.22em" }}
                       >
                         {finish.desc}

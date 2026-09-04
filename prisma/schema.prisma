@@ -147,7 +147,13 @@ model Settings {
   // Homepage Hero section — editable from Admin > Homepage. The slideshow
   // images themselves live in the HeroSlide model below.
   heroTitle      String?
+  heroTitleColor String? // "default" | "black" | "teal" | "grey" | "white"
+  heroTitleFont  String? // "default" | "ivymode" | "michroma"
+  heroTitleSize  String? // "default" or a px value, e.g. "40"
   heroSubtitle   String?  @db.Text
+  heroSubtitleColor String?
+  heroSubtitleFont  String?
+  heroSubtitleSize  String?
   heroButtonText String?
   heroButtonLink String?
 
@@ -156,12 +162,21 @@ model Settings {
   brandTagSubtext String? // small caption under the tag graphic
   brandImg        String? // middle NOBILITA logo image
   brandSubtitle   String? @db.Text // description paragraph
+  brandSubtitleColor String?
+  brandSubtitleFont  String?
+  brandSubtitleSize  String?
   brandBtn        String? // button text
   brandBtnLink    String? // button link
 
   // Homepage Craftsmanship section — editable from Admin > Homepage.
   craftHeading        String?
+  craftHeadingColor   String?
+  craftHeadingFont    String?
+  craftHeadingSize    String?
   craftParagraph      String? @db.Text
+  craftParagraphColor String?
+  craftParagraphFont  String?
+  craftParagraphSize  String?
   craftBgImage        String? // desktop background
   craftBgImageMobile  String? // mobile background
   craftBadgeText      String?
@@ -180,10 +195,16 @@ model Settings {
   // Homepage Applications section — editable from Admin > Homepage. The six
   // tiles themselves live in the ApplicationTile model below.
   applicationsHeading String?
+  applicationsHeadingColor String?
+  applicationsHeadingFont  String?
+  applicationsHeadingSize  String?
 
   // Homepage Dimensions section — editable from Admin > Homepage. Fixed
   // 3-column x 2-item spec grid (Thickness / Dimensions / Format).
   dimHeading   String?
+  dimHeadingColor String?
+  dimHeadingFont  String?
+  dimHeadingSize  String?
   dimCol1Header String? // THICKNESS
   dimCol1Item1  String?
   dimCol1Item2  String?
@@ -202,21 +223,39 @@ model Settings {
   // Matte); each tile's filter-routing identity stays fixed in code, only
   // its label, image, and description text are editable here.
   finishesHeading String?
+  finishesHeadingColor String?
+  finishesHeadingFont  String?
+  finishesHeadingSize  String?
   finish1Name  String?
   finish1Image String?
   finish1Desc  String? @db.Text
+  finish1DescColor String?
+  finish1DescFont  String?
+  finish1DescSize  String?
   finish2Name  String?
   finish2Image String?
   finish2Desc  String? @db.Text
+  finish2DescColor String?
+  finish2DescFont  String?
+  finish2DescSize  String?
   finish3Name  String?
   finish3Image String?
   finish3Desc  String? @db.Text
+  finish3DescColor String?
+  finish3DescFont  String?
+  finish3DescSize  String?
   finish4Name  String?
   finish4Image String?
   finish4Desc  String? @db.Text
+  finish4DescColor String?
+  finish4DescFont  String?
+  finish4DescSize  String?
   finish5Name  String?
   finish5Image String?
   finish5Desc  String? @db.Text
+  finish5DescColor String?
+  finish5DescFont  String?
+  finish5DescSize  String?
 
   // Our Story page — editable from Admin > Our Story. Layout, GSAP/Framer
   // animations, and section order stay fixed; only text, images, and each

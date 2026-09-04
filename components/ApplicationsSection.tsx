@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -37,10 +38,13 @@ interface AppTile {
 interface ApplicationsSectionProps {
   onTileClick?: (productName: string) => void;
   heading?: string;
+  headingColor?: string;
+  headingFont?: string;
+  headingSize?: string;
   tiles?: AppTile[];
 }
 
-export default function ApplicationsSection({ onTileClick, heading, tiles: cmsTiles }: ApplicationsSectionProps) {
+export default function ApplicationsSection({ onTileClick, heading, headingColor, headingFont, headingSize, tiles: cmsTiles }: ApplicationsSectionProps) {
   // CMS-managed tiles (Admin > Homepage) win when present; otherwise fall
   // back to the bundled defaults so the grid never renders empty.
   const activeTiles: (AppTile & { image: string })[] =
@@ -222,7 +226,7 @@ export default function ApplicationsSection({ onTileClick, heading, tiles: cmsTi
       <div className="w-full px-4 mb-[40px] mt-[40px] text-center overflow-hidden">
         <h2
           ref={headingRef}
-          className="applications-heading font-ivymode text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] text-[#545759] tracking-[0.06em] md:tracking-[0.1em] uppercase inline-block"
+          className={`applications-heading ${fontClass(headingFont, "font-ivymode")} ${headingSizeClass(headingSize, "text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)]")} ${colorClass(headingColor, "text-[#545759]")} tracking-[0.06em] md:tracking-[0.1em] uppercase inline-block`}
         >
           <span className="applications-title-span inline-block">
             {heading || "APPLICATIONS"}

@@ -4,13 +4,20 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   heading?: string;
+  headingColor?: string;
+  headingFont?: string;
+  headingSize?: string;
   paragraph?: string;
+  paragraphColor?: string;
+  paragraphFont?: string;
+  paragraphSize?: string;
   bgImage?: string;
   bgImageMobile?: string;
   badgeText?: string;
@@ -20,7 +27,13 @@ interface Props {
 
 export default function CraftsmanshipSection({
   heading,
+  headingColor,
+  headingFont,
+  headingSize,
   paragraph,
+  paragraphColor,
+  paragraphFont,
+  paragraphSize,
   bgImage,
   bgImageMobile,
   badgeText,
@@ -180,14 +193,14 @@ export default function CraftsmanshipSection({
         <div className="w-auto max-w-full md:w-min flex flex-col items-center">
           <h2
             ref={headingRef}
-            className="craftsmanship-heading font-ivymode text-white font-light text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] uppercase text-center whitespace-normal md:whitespace-nowrap leading-tight py-1"
+            className={`craftsmanship-heading ${fontClass(headingFont, "font-ivymode")} ${colorClass(headingColor, "text-white")} font-light ${headingSizeClass(headingSize, "text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)]")} uppercase text-center whitespace-normal md:whitespace-nowrap leading-tight py-1`}
             style={{ opacity: 0, letterSpacing: "0.28em", marginRight: "-0.28em" }}
           >
             {heading || "ITALIAN CRAFTSMANSHIP"}
           </h2>
           <p
             ref={paraRef}
-            className="craftsmanship-para font-ivymode font-extralight text-white text-center md:text-justify md:[text-align-last:center] text-[14px] sm:text-[15px] md:text-[18px] tracking-widest leading-[28px] md:leading-[32px] w-full mt-3"
+            className={`craftsmanship-para ${fontClass(paragraphFont, "font-ivymode")} font-extralight ${colorClass(paragraphColor, "text-white")} text-center md:text-justify md:[text-align-last:center] ${paragraphSizeClass(paragraphSize, "text-[14px] sm:text-[15px] md:text-[18px]")} tracking-widest leading-[28px] md:leading-[32px] w-full mt-3`}
           >
             {paragraph || "In the heart of Modena, where centuries of Italian expertise meet innovation, NOBILITA creates porcelain surfaces that embody the art of timeless craftsmanship."}
           </p>

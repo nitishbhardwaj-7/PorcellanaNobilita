@@ -3,9 +3,69 @@
 import React, { useState, useEffect } from "react";
 import { Plus, X, GripVertical, Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
+import { COLOR_OPTIONS, FONT_OPTIONS, HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
+
+// A field's Color / Font / Size — three plain <select> dropdowns in a row,
+// mirroring the same control set already used for blog content blocks.
+function MiniSelect({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <select
+      value={value || "default"}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1.5 text-[11px] text-[#1a1a1a] outline-none focus:border-[#1a1a1a]/40"
+    >
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>{o.label}</option>
+      ))}
+    </select>
+  );
+}
+
+function StyleRow({
+  color,
+  onColorChange,
+  font,
+  onFontChange,
+  size,
+  onSizeChange,
+  sizeOptions,
+}: {
+  color: string;
+  onColorChange: (v: string) => void;
+  font: string;
+  onFontChange: (v: string) => void;
+  size: string;
+  onSizeChange: (v: string) => void;
+  sizeOptions: { value: string; label: string }[];
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      <div>
+        <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+        <MiniSelect value={color} onChange={onColorChange} options={COLOR_OPTIONS} />
+      </div>
+      <div>
+        <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+        <MiniSelect value={font} onChange={onFontChange} options={FONT_OPTIONS} />
+      </div>
+      <div>
+        <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+        <MiniSelect value={size} onChange={onSizeChange} options={sizeOptions} />
+      </div>
+    </div>
+  );
+}
 
 const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data"] as const;
 type Tab = (typeof TABS)[number];
@@ -84,7 +144,13 @@ interface HeroSlide {
 
 interface HeroSettings {
   heroTitle: string | null;
+  heroTitleColor: string | null;
+  heroTitleFont: string | null;
+  heroTitleSize: string | null;
   heroSubtitle: string | null;
+  heroSubtitleColor: string | null;
+  heroSubtitleFont: string | null;
+  heroSubtitleSize: string | null;
   heroButtonText: string | null;
   heroButtonLink: string | null;
 }
@@ -92,7 +158,13 @@ interface HeroSettings {
 function HeroTab() {
   const [settings, setSettings] = useState<HeroSettings>({
     heroTitle: "",
+    heroTitleColor: "default",
+    heroTitleFont: "default",
+    heroTitleSize: "default",
     heroSubtitle: "",
+    heroSubtitleColor: "default",
+    heroSubtitleFont: "default",
+    heroSubtitleSize: "default",
     heroButtonText: "",
     heroButtonLink: "",
   });
@@ -118,7 +190,13 @@ function HeroTab() {
       if (settingsRes?.data) {
         setSettings({
           heroTitle: settingsRes.data.heroTitle || "",
+          heroTitleColor: settingsRes.data.heroTitleColor || "default",
+          heroTitleFont: settingsRes.data.heroTitleFont || "default",
+          heroTitleSize: settingsRes.data.heroTitleSize || "default",
           heroSubtitle: settingsRes.data.heroSubtitle || "",
+          heroSubtitleColor: settingsRes.data.heroSubtitleColor || "default",
+          heroSubtitleFont: settingsRes.data.heroSubtitleFont || "default",
+          heroSubtitleSize: settingsRes.data.heroSubtitleSize || "default",
           heroButtonText: settingsRes.data.heroButtonText || "",
           heroButtonLink: settingsRes.data.heroButtonLink || "",
         });
@@ -260,6 +338,15 @@ function HeroTab() {
             placeholder="EXPLORE THE COLLECTION"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <StyleRow
+            color={settings.heroTitleColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, heroTitleColor: v }))}
+            font={settings.heroTitleFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, heroTitleFont: v }))}
+            size={settings.heroTitleSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, heroTitleSize: v }))}
+            sizeOptions={HEADING_SIZE_OPTIONS}
+          />
         </div>
 
         <div className="space-y-1.5">
@@ -271,6 +358,15 @@ function HeroTab() {
             onChange={(e) => setSettings((p) => ({ ...p, heroSubtitle: e.target.value }))}
             rows={3}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+          <StyleRow
+            color={settings.heroSubtitleColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, heroSubtitleColor: v }))}
+            font={settings.heroSubtitleFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, heroSubtitleFont: v }))}
+            size={settings.heroSubtitleSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, heroSubtitleSize: v }))}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
           />
         </div>
 
@@ -444,6 +540,9 @@ interface BrandSettings {
   brandTagSubtext: string | null;
   brandImg: string | null;
   brandSubtitle: string | null;
+  brandSubtitleColor: string | null;
+  brandSubtitleFont: string | null;
+  brandSubtitleSize: string | null;
   brandBtn: string | null;
   brandBtnLink: string | null;
 }
@@ -454,6 +553,9 @@ function BrandIntroTab() {
     brandTagSubtext: "",
     brandImg: "",
     brandSubtitle: "",
+    brandSubtitleColor: "default",
+    brandSubtitleFont: "default",
+    brandSubtitleSize: "default",
     brandBtn: "",
     brandBtnLink: "",
   });
@@ -472,6 +574,9 @@ function BrandIntroTab() {
             brandTagSubtext: data.data.brandTagSubtext || "",
             brandImg: data.data.brandImg || "",
             brandSubtitle: data.data.brandSubtitle || "",
+            brandSubtitleColor: data.data.brandSubtitleColor || "default",
+            brandSubtitleFont: data.data.brandSubtitleFont || "default",
+            brandSubtitleSize: data.data.brandSubtitleSize || "default",
             brandBtn: data.data.brandBtn || "",
             brandBtnLink: data.data.brandBtnLink || "",
           });
@@ -592,6 +697,15 @@ function BrandIntroTab() {
             rows={4}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
+          <StyleRow
+            color={settings.brandSubtitleColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, brandSubtitleColor: v }))}
+            font={settings.brandSubtitleFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, brandSubtitleFont: v }))}
+            size={settings.brandSubtitleSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, brandSubtitleSize: v }))}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+          />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -640,7 +754,13 @@ function BrandIntroTab() {
 
 interface CraftSettings {
   craftHeading: string | null;
+  craftHeadingColor: string | null;
+  craftHeadingFont: string | null;
+  craftHeadingSize: string | null;
   craftParagraph: string | null;
+  craftParagraphColor: string | null;
+  craftParagraphFont: string | null;
+  craftParagraphSize: string | null;
   craftBgImage: string | null;
   craftBgImageMobile: string | null;
   craftBadgeText: string | null;
@@ -651,7 +771,13 @@ interface CraftSettings {
 function CraftsmanshipTab() {
   const [settings, setSettings] = useState<CraftSettings>({
     craftHeading: "",
+    craftHeadingColor: "default",
+    craftHeadingFont: "default",
+    craftHeadingSize: "default",
     craftParagraph: "",
+    craftParagraphColor: "default",
+    craftParagraphFont: "default",
+    craftParagraphSize: "default",
     craftBgImage: "",
     craftBgImageMobile: "",
     craftBadgeText: "",
@@ -670,7 +796,13 @@ function CraftsmanshipTab() {
         if (data?.data) {
           setSettings({
             craftHeading: data.data.craftHeading || "",
+            craftHeadingColor: data.data.craftHeadingColor || "default",
+            craftHeadingFont: data.data.craftHeadingFont || "default",
+            craftHeadingSize: data.data.craftHeadingSize || "default",
             craftParagraph: data.data.craftParagraph || "",
+            craftParagraphColor: data.data.craftParagraphColor || "default",
+            craftParagraphFont: data.data.craftParagraphFont || "default",
+            craftParagraphSize: data.data.craftParagraphSize || "default",
             craftBgImage: data.data.craftBgImage || "",
             craftBgImageMobile: data.data.craftBgImageMobile || "",
             craftBadgeText: data.data.craftBadgeText || "",
@@ -742,6 +874,15 @@ function CraftsmanshipTab() {
             placeholder="ITALIAN CRAFTSMANSHIP"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <StyleRow
+            color={settings.craftHeadingColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, craftHeadingColor: v }))}
+            font={settings.craftHeadingFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, craftHeadingFont: v }))}
+            size={settings.craftHeadingSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, craftHeadingSize: v }))}
+            sizeOptions={HEADING_SIZE_OPTIONS}
+          />
         </div>
 
         <div className="space-y-1.5">
@@ -753,6 +894,15 @@ function CraftsmanshipTab() {
             onChange={(e) => setSettings((p) => ({ ...p, craftParagraph: e.target.value }))}
             rows={3}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+          <StyleRow
+            color={settings.craftParagraphColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, craftParagraphColor: v }))}
+            font={settings.craftParagraphFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, craftParagraphFont: v }))}
+            size={settings.craftParagraphSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, craftParagraphSize: v }))}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
           />
         </div>
 
@@ -1062,6 +1212,9 @@ interface AppTileData {
 
 function ApplicationsTab() {
   const [heading, setHeading] = useState("");
+  const [headingColor, setHeadingColor] = useState("default");
+  const [headingFont, setHeadingFont] = useState("default");
+  const [headingSize, setHeadingSize] = useState("default");
   const [tiles, setTiles] = useState<AppTileData[]>([]);
   const [productNames, setProductNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1082,7 +1235,12 @@ function ApplicationsTab() {
         fetch("/api/application-tiles").then((r) => r.json()),
         fetch("/api/products").then((r) => r.json()),
       ]);
-      if (settingsRes?.data) setHeading(settingsRes.data.applicationsHeading || "");
+      if (settingsRes?.data) {
+        setHeading(settingsRes.data.applicationsHeading || "");
+        setHeadingColor(settingsRes.data.applicationsHeadingColor || "default");
+        setHeadingFont(settingsRes.data.applicationsHeadingFont || "default");
+        setHeadingSize(settingsRes.data.applicationsHeadingSize || "default");
+      }
       if (tilesRes?.data) setTiles(tilesRes.data);
       if (productsRes?.data) {
         setProductNames(productsRes.data.map((p: { name: string }) => p.name).sort());
@@ -1101,7 +1259,12 @@ function ApplicationsTab() {
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ applicationsHeading: heading }),
+        body: JSON.stringify({
+          applicationsHeading: heading,
+          applicationsHeadingColor: headingColor,
+          applicationsHeadingFont: headingFont,
+          applicationsHeadingSize: headingSize,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save.");
@@ -1169,6 +1332,15 @@ function ApplicationsTab() {
             onChange={(e) => setHeading(e.target.value)}
             placeholder="APPLICATIONS"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={headingColor}
+            onColorChange={setHeadingColor}
+            font={headingFont}
+            onFontChange={setHeadingFont}
+            size={headingSize}
+            onSizeChange={setHeadingSize}
+            sizeOptions={HEADING_SIZE_OPTIONS}
           />
         </div>
         <button
@@ -1276,6 +1448,9 @@ function ApplicationsTab() {
 
 interface DimensionsSettings {
   dimHeading: string | null;
+  dimHeadingColor: string | null;
+  dimHeadingFont: string | null;
+  dimHeadingSize: string | null;
   dimCol1Header: string | null;
   dimCol1Item1: string | null;
   dimCol1Item2: string | null;
@@ -1293,6 +1468,9 @@ interface DimensionsSettings {
 function DimensionsTab() {
   const [settings, setSettings] = useState<DimensionsSettings>({
     dimHeading: "",
+    dimHeadingColor: "default",
+    dimHeadingFont: "default",
+    dimHeadingSize: "default",
     dimCol1Header: "",
     dimCol1Item1: "",
     dimCol1Item2: "",
@@ -1318,6 +1496,9 @@ function DimensionsTab() {
         if (data?.data) {
           setSettings({
             dimHeading: data.data.dimHeading || "",
+            dimHeadingColor: data.data.dimHeadingColor || "default",
+            dimHeadingFont: data.data.dimHeadingFont || "default",
+            dimHeadingSize: data.data.dimHeadingSize || "default",
             dimCol1Header: data.data.dimCol1Header || "",
             dimCol1Item1: data.data.dimCol1Item1 || "",
             dimCol1Item2: data.data.dimCol1Item2 || "",
@@ -1398,6 +1579,15 @@ function DimensionsTab() {
             onChange={(e) => setSettings((p) => ({ ...p, dimHeading: e.target.value }))}
             placeholder="FORMAT & DIMENSIONS"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={settings.dimHeadingColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, dimHeadingColor: v }))}
+            font={settings.dimHeadingFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, dimHeadingFont: v }))}
+            size={settings.dimHeadingSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, dimHeadingSize: v }))}
+            sizeOptions={HEADING_SIZE_OPTIONS}
           />
         </div>
 
@@ -1537,21 +1727,39 @@ function DimensionsTab() {
 
 interface FinishesSettings {
   finishesHeading: string | null;
+  finishesHeadingColor: string | null;
+  finishesHeadingFont: string | null;
+  finishesHeadingSize: string | null;
   finish1Name: string | null;
   finish1Image: string | null;
   finish1Desc: string | null;
+  finish1DescColor: string | null;
+  finish1DescFont: string | null;
+  finish1DescSize: string | null;
   finish2Name: string | null;
   finish2Image: string | null;
   finish2Desc: string | null;
+  finish2DescColor: string | null;
+  finish2DescFont: string | null;
+  finish2DescSize: string | null;
   finish3Name: string | null;
   finish3Image: string | null;
   finish3Desc: string | null;
+  finish3DescColor: string | null;
+  finish3DescFont: string | null;
+  finish3DescSize: string | null;
   finish4Name: string | null;
   finish4Image: string | null;
   finish4Desc: string | null;
+  finish4DescColor: string | null;
+  finish4DescFont: string | null;
+  finish4DescSize: string | null;
   finish5Name: string | null;
   finish5Image: string | null;
   finish5Desc: string | null;
+  finish5DescColor: string | null;
+  finish5DescFont: string | null;
+  finish5DescSize: string | null;
 }
 
 const FINISH_ROW_KEYS = [1, 2, 3, 4, 5] as const;
@@ -1559,21 +1767,39 @@ const FINISH_ROW_KEYS = [1, 2, 3, 4, 5] as const;
 function FinishesTab() {
   const [settings, setSettings] = useState<FinishesSettings>({
     finishesHeading: "",
+    finishesHeadingColor: "default",
+    finishesHeadingFont: "default",
+    finishesHeadingSize: "default",
     finish1Name: "",
     finish1Image: "",
     finish1Desc: "",
+    finish1DescColor: "default",
+    finish1DescFont: "default",
+    finish1DescSize: "default",
     finish2Name: "",
     finish2Image: "",
     finish2Desc: "",
+    finish2DescColor: "default",
+    finish2DescFont: "default",
+    finish2DescSize: "default",
     finish3Name: "",
     finish3Image: "",
     finish3Desc: "",
+    finish3DescColor: "default",
+    finish3DescFont: "default",
+    finish3DescSize: "default",
     finish4Name: "",
     finish4Image: "",
     finish4Desc: "",
+    finish4DescColor: "default",
+    finish4DescFont: "default",
+    finish4DescSize: "default",
     finish5Name: "",
     finish5Image: "",
     finish5Desc: "",
+    finish5DescColor: "default",
+    finish5DescFont: "default",
+    finish5DescSize: "default",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -1587,21 +1813,39 @@ function FinishesTab() {
         if (data?.data) {
           setSettings({
             finishesHeading: data.data.finishesHeading || "",
+            finishesHeadingColor: data.data.finishesHeadingColor || "default",
+            finishesHeadingFont: data.data.finishesHeadingFont || "default",
+            finishesHeadingSize: data.data.finishesHeadingSize || "default",
             finish1Name: data.data.finish1Name || "",
             finish1Image: data.data.finish1Image || "",
             finish1Desc: data.data.finish1Desc || "",
+            finish1DescColor: data.data.finish1DescColor || "default",
+            finish1DescFont: data.data.finish1DescFont || "default",
+            finish1DescSize: data.data.finish1DescSize || "default",
             finish2Name: data.data.finish2Name || "",
             finish2Image: data.data.finish2Image || "",
             finish2Desc: data.data.finish2Desc || "",
+            finish2DescColor: data.data.finish2DescColor || "default",
+            finish2DescFont: data.data.finish2DescFont || "default",
+            finish2DescSize: data.data.finish2DescSize || "default",
             finish3Name: data.data.finish3Name || "",
             finish3Image: data.data.finish3Image || "",
             finish3Desc: data.data.finish3Desc || "",
+            finish3DescColor: data.data.finish3DescColor || "default",
+            finish3DescFont: data.data.finish3DescFont || "default",
+            finish3DescSize: data.data.finish3DescSize || "default",
             finish4Name: data.data.finish4Name || "",
             finish4Image: data.data.finish4Image || "",
             finish4Desc: data.data.finish4Desc || "",
+            finish4DescColor: data.data.finish4DescColor || "default",
+            finish4DescFont: data.data.finish4DescFont || "default",
+            finish4DescSize: data.data.finish4DescSize || "default",
             finish5Name: data.data.finish5Name || "",
             finish5Image: data.data.finish5Image || "",
             finish5Desc: data.data.finish5Desc || "",
+            finish5DescColor: data.data.finish5DescColor || "default",
+            finish5DescFont: data.data.finish5DescFont || "default",
+            finish5DescSize: data.data.finish5DescSize || "default",
           });
         }
       })
@@ -1679,12 +1923,24 @@ function FinishesTab() {
             placeholder="FINISHES"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <StyleRow
+            color={settings.finishesHeadingColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, finishesHeadingColor: v }))}
+            font={settings.finishesHeadingFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, finishesHeadingFont: v }))}
+            size={settings.finishesHeadingSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, finishesHeadingSize: v }))}
+            sizeOptions={HEADING_SIZE_OPTIONS}
+          />
         </div>
 
         {FINISH_ROW_KEYS.map((n) => {
           const nameKey = `finish${n}Name` as keyof FinishesSettings;
           const imageKey = `finish${n}Image` as keyof FinishesSettings;
           const descKey = `finish${n}Desc` as keyof FinishesSettings;
+          const descColorKey = `finish${n}DescColor` as keyof FinishesSettings;
+          const descFontKey = `finish${n}DescFont` as keyof FinishesSettings;
+          const descSizeKey = `finish${n}DescSize` as keyof FinishesSettings;
           return (
             <div key={n} className="border-t border-[#1a1a1a]/8 pt-5 space-y-4">
               <p className="text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/30" style={fontMichroma}>
@@ -1719,6 +1975,15 @@ function FinishesTab() {
                   placeholder={rowDefaults[n].desc}
                   rows={2}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+                />
+                <StyleRow
+                  color={(settings[descColorKey] as string) || "default"}
+                  onColorChange={(v) => setSettings((p) => ({ ...p, [descColorKey]: v }))}
+                  font={(settings[descFontKey] as string) || "default"}
+                  onFontChange={(v) => setSettings((p) => ({ ...p, [descFontKey]: v }))}
+                  size={(settings[descSizeKey] as string) || "default"}
+                  onSizeChange={(v) => setSettings((p) => ({ ...p, [descSizeKey]: v }))}
+                  sizeOptions={PARAGRAPH_SIZE_OPTIONS}
                 />
               </div>
             </div>

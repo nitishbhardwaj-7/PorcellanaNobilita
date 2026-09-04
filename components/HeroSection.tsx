@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Navbar from "./Navbar";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 interface HeroSlide {
   image: string;
@@ -13,7 +14,13 @@ interface HeroSlide {
 
 interface Props {
   title?: string;
+  titleColor?: string;
+  titleFont?: string;
+  titleSize?: string;
   subtitle?: string;
+  subtitleColor?: string;
+  subtitleFont?: string;
+  subtitleSize?: string;
   buttonText?: string;
   buttonLink?: string;
   slides?: HeroSlide[];
@@ -144,7 +151,19 @@ const buttonTextVariants = {
   }
 };
 
-export default function HeroSection({ title, subtitle, buttonText, buttonLink, slides }: Props) {
+export default function HeroSection({
+  title,
+  titleColor,
+  titleFont,
+  titleSize,
+  subtitle,
+  subtitleColor,
+  subtitleFont,
+  subtitleSize,
+  buttonText,
+  buttonLink,
+  slides,
+}: Props) {
   // CMS-managed slides (Admin > Homepage) win when present; otherwise fall
   // back to the bundled default slideshow so the section never renders empty.
   const slideshowImages = slides && slides.length > 0
@@ -235,7 +254,7 @@ export default function HeroSection({ title, subtitle, buttonText, buttonLink, s
             whileInView="visible"
             viewport={{ once: true }}
             variants={containerVariants}
-            className="font-ivymode text-white leading-tight tracking-[0.06em] md:tracking-[0.1em] text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] 2xl:text-[84px] uppercase flex flex-wrap md:flex-nowrap justify-center gap-x-[0.25em] md:gap-x-[0.4em]"
+            className={`${fontClass(titleFont, "font-ivymode")} ${colorClass(titleColor, "text-white")} leading-tight tracking-[0.06em] md:tracking-[0.1em] ${headingSizeClass(titleSize, "text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] 2xl:text-[84px]")} uppercase flex flex-wrap md:flex-nowrap justify-center gap-x-[0.25em] md:gap-x-[0.4em]`}
           >
             {words.map((word, i) => (
               <span key={i} className="inline-block overflow-hidden py-2 md:py-1 px-[1px]">
@@ -254,7 +273,7 @@ export default function HeroSection({ title, subtitle, buttonText, buttonLink, s
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="block md:hidden font-ivymode text-white/95 text-[14px] sm:text-[15px] font-extralight leading-[26px] my-auto px-2 pt-6 text-center tracking-wider"
+            className={`block md:hidden ${fontClass(subtitleFont, "font-ivymode")} ${colorClass(subtitleColor, "text-white/95")} ${paragraphSizeClass(subtitleSize, "text-[14px] sm:text-[15px]")} font-extralight leading-[26px] my-auto px-2 pt-6 text-center tracking-wider`}
           >
             {(subtitle || defaultSubtitle).replace(/\n/g, " ").split(" ").map((word, wordIdx) => (
               <span key={wordIdx} className="inline-block overflow-hidden align-bottom mx-[0.15em]">
@@ -274,7 +293,7 @@ export default function HeroSection({ title, subtitle, buttonText, buttonLink, s
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="hidden md:block font-ivymode text-white/95 text-[18px] 2xl:text-[22px] font-extralight leading-[32px] 2xl:leading-[40px] w-full max-w-[1150px] 2xl:max-w-[1550px] tracking-widest my-auto px-4 pt-10 text-center"
+            className={`hidden md:block ${fontClass(subtitleFont, "font-ivymode")} ${colorClass(subtitleColor, "text-white/95")} ${paragraphSizeClass(subtitleSize, "text-[18px] 2xl:text-[22px]")} font-extralight leading-[32px] 2xl:leading-[40px] w-full max-w-[1150px] 2xl:max-w-[1550px] tracking-widest my-auto px-4 pt-10 text-center`}
           >
             {(subtitle || defaultSubtitle).replace(/\n/g, " ").split(" ").map((word, wordIdx) => (
               <span key={wordIdx} className="inline-block overflow-hidden align-bottom mx-[0.15em]">

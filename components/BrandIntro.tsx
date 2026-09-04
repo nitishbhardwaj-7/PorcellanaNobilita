@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import NavigationOverlay from "./NavigationOverlay";
+import { colorClass, fontClass, paragraphSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,13 +13,16 @@ interface Props {
   tagImage?: string;
   tagSubtext?: string;
   subtitle?: string;
+  subtitleColor?: string;
+  subtitleFont?: string;
+  subtitleSize?: string;
   buttonText?: string;
   buttonLink?: string;
   image?: string;
   isLoaderActive?: boolean;
 }
 
-export default function BrandIntro({ tagImage, tagSubtext, subtitle, buttonText, buttonLink, image, isLoaderActive = false }: Props) {
+export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleColor, subtitleFont, subtitleSize, buttonText, buttonLink, image, isLoaderActive = false }: Props) {
   const defaultSubtitle = "Inspired by Italy's noble heritage and Baroque architecture, NOBILITA porcelain is crafted in Modena, Italy, home to Ferrari, Acetaia Giusti, and Brioni. A collection where timeless Italian elegance meets advanced porcelain technology.";
   const sectionRef = useRef<HTMLElement>(null);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -235,7 +239,7 @@ export default function BrandIntro({ tagImage, tagSubtext, subtitle, buttonText,
 
         {/* Bottom Paragraph Description */}
         <div className="w-full max-w-[800px] lg:max-w-[980px] xl:max-w-[1120px]">
-          <p className="font-ivymode font-extralight text-white text-justify [text-align-last:center] text-[clamp(15px,1.4vw,18px)] lg:text-[clamp(17px,1.5vw,21px)] xl:text-[clamp(18px,1.5vw,23px)] tracking-widest leading-[30px] lg:leading-[38px] xl:leading-[42px] w-full mt-2">
+          <p className={`${fontClass(subtitleFont, "font-ivymode")} font-extralight ${colorClass(subtitleColor, "text-white")} text-justify [text-align-last:center] ${paragraphSizeClass(subtitleSize, "text-[clamp(15px,1.4vw,18px)] lg:text-[clamp(17px,1.5vw,21px)] xl:text-[clamp(18px,1.5vw,23px)]")} tracking-widest leading-[30px] lg:leading-[38px] xl:leading-[42px] w-full mt-2`}>
             {words.map((word, idx) => (
               <React.Fragment key={idx}>
                 <span className="inline-block overflow-hidden align-bottom">

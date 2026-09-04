@@ -4,11 +4,15 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   heading?: string;
+  headingColor?: string;
+  headingFont?: string;
+  headingSize?: string;
   col1Header?: string;
   col1Item1?: string;
   col1Item2?: string;
@@ -25,6 +29,9 @@ interface Props {
 
 export default function DimensionsSection({
   heading,
+  headingColor,
+  headingFont,
+  headingSize,
   col1Header,
   col1Item1,
   col1Item2,
@@ -151,7 +158,7 @@ export default function DimensionsSection({
     <section ref={sectionRef} className="w-full bg-white flex flex-col items-center">
       {/* Title - slide up reveal */}
       <div className="w-full px-4 mb-[40px] text-center overflow-hidden">
-        <h2 className="font-ivymode text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)] text-[#545759] tracking-[0.06em] md:tracking-[0.1em] uppercase inline-block">
+        <h2 className={`${fontClass(headingFont, "font-ivymode")} ${headingSizeClass(headingSize, "text-[clamp(28px,6.5vw,66px)] md:text-[clamp(28px,4.5vw,66px)]")} ${colorClass(headingColor, "text-[#545759]")} tracking-[0.06em] md:tracking-[0.1em] uppercase inline-block`}>
           <span className="dimensions-title-span inline-block">
             {heading || "FORMAT & DIMENSIONS"}
           </span>
