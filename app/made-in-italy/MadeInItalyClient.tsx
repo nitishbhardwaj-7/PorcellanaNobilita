@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,15 +28,27 @@ const wordVariants = {
 
 interface MadeInItalyCmsData {
   miHeading?: string | null;
+  miHeadingColor?: string | null;
+  miHeadingFont?: string | null;
+  miHeadingSize?: string | null;
   miSec1Label?: string | null;
   miSec2Para1?: string | null;
+  miSec2Para1Color?: string | null;
+  miSec2Para1Font?: string | null;
+  miSec2Para1Size?: string | null;
   miSec2Image?: string | null;
   miSec2ImageLabel?: string | null;
   miSec3Line1?: string | null;
+  miSec3Line1Color?: string | null;
+  miSec3Line1Font?: string | null;
+  miSec3Line1Size?: string | null;
   miSec3LeftImage?: string | null;
   miSec3RightImage?: string | null;
   miSec3RightImageLabel?: string | null;
   miSec3BottomPara?: string | null;
+  miSec3BottomParaColor?: string | null;
+  miSec3BottomParaFont?: string | null;
+  miSec3BottomParaSize?: string | null;
   miSec4BgImage?: string | null;
   miSec4BgImageMobile?: string | null;
   miSec4Label?: string | null;
@@ -184,7 +197,7 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={containerVariants}
-                className="font-ivymode font-light text-[#545759] uppercase tracking-[0.06em] md:tracking-[0.18em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(26px,5.5vw,66px)] leading-tight drop-shadow-md flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em]"
+                className={`${fontClass(d.miHeadingFont, "font-ivymode")} font-light ${colorClass(d.miHeadingColor, "text-[#545759]")} uppercase tracking-[0.06em] md:tracking-[0.18em] ${headingSizeClass(d.miHeadingSize, "text-[clamp(26px,5.5vw,52px)] md:text-[clamp(26px,5.5vw,66px)]")} leading-tight drop-shadow-md flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em]`}
               >
                 {(d.miHeading || "MADE IN ITALY").split(" ").map((word, i) => (
                   <span key={i} className="inline-block overflow-hidden py-2 md:py-0 px-[1px]">
@@ -214,15 +227,15 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
           {/* Grid Layout: Text vs Image */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-stretch mt-0">
             {/* Left Column: Narrative */}
-            <div className="sec2-text flex flex-col justify-center space-y-6 md:space-y-8 font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left order-2 md:order-1 h-full py-0 md:py-2">
+            <div className="sec2-text flex flex-col justify-center space-y-6 md:space-y-8 tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left order-2 md:order-1 h-full py-0 md:py-2">
               <div className="overflow-hidden py-0.5">
-                <p className="sec2-line">
+                <p className={`sec2-line ${fontClass(d.miSec2Para1Font, "font-ivymode")} font-light ${colorClass(d.miSec2Para1Color, "text-[#545759]")} ${paragraphSizeClass(d.miSec2Para1Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
                   {d.miSec2Para1 || "In the heart of Italy, where rolling hills meet centuries of craftsmanship, lies Modena, a region shaped by the relentless pursuit of excellence. Home to Ferrari, Acetaia Giusti, and Brioni, Modena has long been a place where mastery is refined through patience, precision, and dedication to craft."}
                 </p>
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec2-line">
+                <p className="sec2-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
                   The same spirit defines its porcelain industry. Here, innovation and heritage exist side by side, transforming raw materials into surfaces of{" "}
                   <span className="sec2-highlight inline text-[#007190] font-normal">
                     exceptional quality and enduring beauty.
@@ -261,14 +274,14 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
       <section className="sec3-container relative w-full px-6 md:px-12 lg:px-20 xl:px-24 overflow-hidden">
         <div className="relative z-10 w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col space-y-12">
           {/* Top Text */}
-          <div className="sec3-text-container w-full font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left space-y-6 md:space-y-8">
+          <div className="sec3-text-container w-full tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left space-y-6 md:space-y-8">
             <div className="overflow-hidden py-0.5">
-              <p className="sec3-line">
+              <p className={`sec3-line ${fontClass(d.miSec3Line1Font, "font-ivymode")} font-light ${colorClass(d.miSec3Line1Color, "text-[#545759]")} ${paragraphSizeClass(d.miSec3Line1Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
                 {d.miSec3Line1 || "Every NOBILITA slab is born from this tradition, crafted with Italian expertise, engineered for performance, and designed to stand the test of time."}
               </p>
             </div>
             <div className="overflow-hidden py-0.5">
-              <p className="sec3-line">
+              <p className="sec3-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
                 More than a surface, it is a{" "}
                 <span className="sec3-highlight inline text-[#007190] font-normal">
                   legacy of craftsmanship made for generations to come.
@@ -315,7 +328,7 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
           </div>
 
           {/* Bottom Text */}
-          <div className="sec3-bottom-text w-full font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)] tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left">
+          <div className={`sec3-bottom-text w-full ${fontClass(d.miSec3BottomParaFont, "font-ivymode")} font-light ${colorClass(d.miSec3BottomParaColor, "text-[#545759]")} ${paragraphSizeClass(d.miSec3BottomParaSize, "text-[clamp(14px,1.35vw,20px)]")} tracking-widest leading-[1.8] 2xl:leading-[1.95] text-center md:text-left`}>
             <div className="overflow-hidden py-0.5">
               <p className="sec3-bottom-line mb-12">
                 {d.miSec3BottomPara || "NOBILITA works at the forefront of large-format surface innovation, with state-of-the-art production systems capable of creating ultra-large slabs in exceptional formats and multiple thicknesses. These advancements have redefined what is possible in contemporary architecture, enabling seamless surfaces, reduced visual fragmentation, and a more monolithic architectural language."}

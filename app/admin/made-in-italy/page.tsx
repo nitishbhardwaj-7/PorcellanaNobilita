@@ -3,21 +3,39 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
+import { StyleRow } from "../_components/StyleControls";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
+const STYLE_SUFFIXES = ["Color", "Font", "Size"] as const;
+const STYLED_FIELDS = ["miHeading", "miSec2Para1", "miSec3Line1", "miSec3BottomPara"] as const;
+const HEADING_FIELDS = new Set(["miHeading"]);
+
 interface MiSettings {
   miHeading: string;
+  miHeadingColor: string;
+  miHeadingFont: string;
+  miHeadingSize: string;
   miSec1Label: string;
   miSec2Para1: string;
+  miSec2Para1Color: string;
+  miSec2Para1Font: string;
+  miSec2Para1Size: string;
   miSec2Image: string;
   miSec2ImageLabel: string;
   miSec3Line1: string;
+  miSec3Line1Color: string;
+  miSec3Line1Font: string;
+  miSec3Line1Size: string;
   miSec3LeftImage: string;
   miSec3RightImage: string;
   miSec3RightImageLabel: string;
   miSec3BottomPara: string;
+  miSec3BottomParaColor: string;
+  miSec3BottomParaFont: string;
+  miSec3BottomParaSize: string;
   miSec4BgImage: string;
   miSec4BgImageMobile: string;
   miSec4Label: string;
@@ -25,19 +43,62 @@ interface MiSettings {
 
 const EMPTY: MiSettings = {
   miHeading: "",
+  miHeadingColor: "default",
+  miHeadingFont: "default",
+  miHeadingSize: "default",
   miSec1Label: "",
   miSec2Para1: "",
+  miSec2Para1Color: "default",
+  miSec2Para1Font: "default",
+  miSec2Para1Size: "default",
   miSec2Image: "",
   miSec2ImageLabel: "",
   miSec3Line1: "",
+  miSec3Line1Color: "default",
+  miSec3Line1Font: "default",
+  miSec3Line1Size: "default",
   miSec3LeftImage: "",
   miSec3RightImage: "",
   miSec3RightImageLabel: "",
   miSec3BottomPara: "",
+  miSec3BottomParaColor: "default",
+  miSec3BottomParaFont: "default",
+  miSec3BottomParaSize: "default",
   miSec4BgImage: "",
   miSec4BgImageMobile: "",
   miSec4Label: "",
 };
+
+// A <StyleRow> for one of the STYLED_FIELDS, using its own Color/Font/Size
+// keys and the heading or paragraph size scale depending on the field.
+function FieldStyleRow({
+  field,
+  settings,
+  set,
+}: {
+  field: (typeof STYLED_FIELDS)[number];
+  settings: MiSettings;
+  set: <K extends keyof MiSettings>(key: K, value: string) => void;
+}) {
+  const colorKey = `${field}Color` as keyof MiSettings;
+  const fontKey = `${field}Font` as keyof MiSettings;
+  const sizeKey = `${field}Size` as keyof MiSettings;
+  return (
+    <StyleRow
+      color={settings[colorKey]}
+      onColorChange={(v) => set(colorKey, v)}
+      font={settings[fontKey]}
+      onFontChange={(v) => set(fontKey, v)}
+      size={settings[sizeKey]}
+      onSizeChange={(v) => set(sizeKey, v)}
+      sizeOptions={HEADING_FIELDS.has(field) ? HEADING_SIZE_OPTIONS : PARAGRAPH_SIZE_OPTIONS}
+    />
+  );
+}
+
+function styleFields(field: (typeof STYLED_FIELDS)[number]): (keyof MiSettings)[] {
+  return STYLE_SUFFIXES.map((s) => `${field}${s}` as keyof MiSettings);
+}
 
 function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
   return (
@@ -72,7 +133,8 @@ export default function MadeInItalyAdminPage() {
       .then((data) => {
         if (data?.data) {
           const s = data.data;
-          setSettings({
+          const next: MiSettings = {
+            ...EMPTY,
             miHeading: s.miHeading || "",
             miSec1Label: s.miSec1Label || "",
             miSec2Para1: s.miSec2Para1 || "",
@@ -86,7 +148,14 @@ export default function MadeInItalyAdminPage() {
             miSec4BgImage: s.miSec4BgImage || "",
             miSec4BgImageMobile: s.miSec4BgImageMobile || "",
             miSec4Label: s.miSec4Label || "",
+          };
+          STYLED_FIELDS.forEach((field) => {
+            STYLE_SUFFIXES.forEach((suffix) => {
+              const key = `${field}${suffix}` as keyof MiSettings;
+              (next as any)[key] = s[key] || "default";
+            });
           });
+          setSettings(next);
         }
       })
       .catch((err) => setError(err.message || "Failed to load."))
@@ -187,6 +256,7 @@ export default function MadeInItalyAdminPage() {
             placeholder="MADE IN ITALY"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="miHeading" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Video Caption</label>
@@ -199,7 +269,7 @@ export default function MadeInItalyAdminPage() {
           />
         </div>
 
-        <SaveButton section="sec1" label="Save Section" fields={["miHeading", "miSec1Label"]} />
+        <SaveButton section="sec1" label="Save Section" fields={["miHeading", "miSec1Label", ...styleFields("miHeading")]} />
       </div>
 
       {/* Section 2: Intro */}
@@ -217,6 +287,7 @@ export default function MadeInItalyAdminPage() {
             rows={3}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
+          <FieldStyleRow field="miSec2Para1" settings={settings} set={set} />
         </div>
         <p className="text-[10px] text-[#8b8b8b]">
           A second paragraph ("...transforming raw materials into surfaces of exceptional quality...") has an inline highlighted phrase and isn't editable here.
@@ -236,7 +307,7 @@ export default function MadeInItalyAdminPage() {
           </div>
         </div>
 
-        <SaveButton section="sec2" label="Save Section" fields={["miSec2Para1", "miSec2Image", "miSec2ImageLabel"]} />
+        <SaveButton section="sec2" label="Save Section" fields={["miSec2Para1", "miSec2Image", "miSec2ImageLabel", ...styleFields("miSec2Para1")]} />
       </div>
 
       {/* Section 3: Large Format Slabs */}
@@ -254,6 +325,7 @@ export default function MadeInItalyAdminPage() {
             rows={2}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
+          <FieldStyleRow field="miSec3Line1" settings={settings} set={set} />
         </div>
         <p className="text-[10px] text-[#8b8b8b]">
           "Line 2" ("...a legacy of craftsmanship made for generations to come.") has an inline highlighted phrase and isn't editable here.
@@ -281,12 +353,16 @@ export default function MadeInItalyAdminPage() {
             rows={3}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
+          <FieldStyleRow field="miSec3BottomPara" settings={settings} set={set} />
         </div>
 
         <SaveButton
           section="sec3"
           label="Save Section"
-          fields={["miSec3Line1", "miSec3LeftImage", "miSec3RightImage", "miSec3RightImageLabel", "miSec3BottomPara"]}
+          fields={[
+            "miSec3Line1", "miSec3LeftImage", "miSec3RightImage", "miSec3RightImageLabel", "miSec3BottomPara",
+            ...styleFields("miSec3Line1"), ...styleFields("miSec3BottomPara"),
+          ]}
         />
       </div>
 

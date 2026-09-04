@@ -321,17 +321,29 @@ model Settings {
   // images are editable. The Duomo video, the Colosseum tag graphic, and a
   // paragraph carrying an inline colored highlight phrase stay hardcoded.
   miHeading             String? // default "MADE IN ITALY"
+  miHeadingColor        String?
+  miHeadingFont         String?
+  miHeadingSize         String?
   miSec1Label           String? // default "DUOMO DI MILANO"
   miSec2Para1           String? @db.Text
+  miSec2Para1Color      String?
+  miSec2Para1Font       String?
+  miSec2Para1Size       String?
   // (sec2 paragraph 2 has an inline highlighted phrase — stays hardcoded)
   miSec2Image           String? // Palazzo della Civiltà Italiana photo
   miSec2ImageLabel      String? // default "PALAZZO DELLA CIVILTÀ ITALIANA"
   miSec3Line1           String? @db.Text
+  miSec3Line1Color      String?
+  miSec3Line1Font       String?
+  miSec3Line1Size       String?
   // (sec3 line 2 has an inline highlighted phrase — stays hardcoded)
   miSec3LeftImage       String? // factory photo
   miSec3RightImage      String? // large-format slab processing unit photo
   miSec3RightImageLabel String? // default "LARGE FORMAT SLABS PROCESSING UNIT"
   miSec3BottomPara      String? @db.Text
+  miSec3BottomParaColor String?
+  miSec3BottomParaFont  String?
+  miSec3BottomParaSize  String?
   miSec4BgImage         String? // Colosseum photo (desktop)
   miSec4BgImageMobile   String? // Colosseum photo (mobile)
   miSec4Label           String? // default "COLOSSEUM"
