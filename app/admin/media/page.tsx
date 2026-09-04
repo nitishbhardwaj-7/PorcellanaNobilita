@@ -17,7 +17,13 @@ interface MediaFile {
 }
 
 const FOLDERS = ["products", "blogs"];
-const TABS = [...FOLDERS, "pdf"];
+const TABS = [...FOLDERS, "pages", "pdf"];
+const PAGES = [
+  { key: "homepage", label: "Homepage" },
+  { key: "our-story", label: "Our Story" },
+  { key: "made-in-italy", label: "Made in Italy" },
+  { key: "technical-data", label: "Technical Data" },
+];
 
 export default function MediaLibrary() {
   const [media, setMedia] = useState<MediaFile[]>([]);
@@ -25,7 +31,9 @@ export default function MediaLibrary() {
   const [error, setError] = useState<string | null>(null);
 
   const [currentFolder, setCurrentFolder] = useState("products");
+  const [pageKey, setPageKey] = useState(PAGES[0].key);
   const isPdfTab = currentFolder === "pdf";
+  const isPagesTab = currentFolder === "pages";
   const [searchQuery, setSearchQuery] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<string | null>(null);
@@ -41,12 +49,15 @@ export default function MediaLibrary() {
 
   useEffect(() => {
     if (!isPdfTab) fetchMedia();
-  }, [currentFolder]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentFolder, pageKey]);
 
   async function fetchMedia() {
     try {
       setLoading(true);
-      const params = new URLSearchParams({ folder: "/" + currentFolder });
+      const params = isPagesTab
+        ? new URLSearchParams({ tag: `page:${pageKey}` })
+        : new URLSearchParams({ folder: "/" + currentFolder });
       if (searchQuery) params.set("search", searchQuery);
       const res = await fetch(`/api/media?${params}`);
       if (!res.ok) throw new Error("Failed to load media.");
@@ -77,7 +88,11 @@ export default function MediaLibrary() {
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("folder", currentFolder);
+      // "Pages" is a filtered view, not its own storage bucket — new
+      // uploads still land in the general products bucket, just tagged so
+      // they show up under this page going forward.
+      formData.append("folder", isPagesTab ? "products" : currentFolder);
+      if (isPagesTab) formData.append("tags", `page:${pageKey}`);
 
       try {
         const res = await fetch("/api/media", { method: "POST", body: formData });
@@ -239,6 +254,26 @@ export default function MediaLibrary() {
           )}
         </div>
 
+        {/* Page sub-tabs — only shown while browsing the Pages bucket */}
+        {isPagesTab && (
+          <div className="flex flex-wrap gap-1">
+            {PAGES.map((p) => (
+              <button
+                key={p.key}
+                onClick={() => setPageKey(p.key)}
+                className={`px-3 py-1.5 text-[9px] tracking-[0.15em] uppercase border transition-colors ${
+                  pageKey === p.key
+                    ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
+                    : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/30"
+                }`}
+                style={fontMichroma}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* PDF tab */}
         {isPdfTab ? (
           <PdfDownloadsPanel />
@@ -253,7 +288,9 @@ export default function MediaLibrary() {
           </div>
         ) : media.length === 0 ? (
           <div className="bg-white border border-[#1a1a1a]/8 p-16 text-center">
-            <p className="text-sm text-[#8b8b8b]">No assets in "{currentFolder}". Upload your first image.</p>
+            <p className="text-sm text-[#8b8b8b]">
+              No assets in "{isPagesTab ? PAGES.find((p) => p.key === pageKey)?.label : currentFolder}". Upload your first image.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -273,6 +310,14 @@ export default function MediaLibrary() {
                     <img
                       src={file.fileUrl}
                       alt={file.alt || file.fileName}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : file.fileType.startsWith("video/") ? (
+                    <video
+                      src={file.fileUrl}
+                      muted
+                      playsInline
+                      preload="metadata"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
@@ -349,9 +394,11 @@ export default function MediaLibrary() {
 
           {/* Preview */}
           <div className="aspect-square w-full border border-[#1a1a1a]/8 overflow-hidden bg-[#f8f5f0]">
-            {selectedFile.fileType.startsWith("image/") && (
+            {selectedFile.fileType.startsWith("image/") ? (
               <img src={selectedFile.fileUrl} alt="" className="w-full h-full object-cover" />
-            )}
+            ) : selectedFile.fileType.startsWith("video/") ? (
+              <video src={selectedFile.fileUrl} controls muted playsInline className="w-full h-full object-cover" />
+            ) : null}
           </div>
 
           {/* Meta */}

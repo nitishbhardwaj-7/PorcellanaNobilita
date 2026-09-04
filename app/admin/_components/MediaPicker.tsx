@@ -13,6 +13,12 @@ interface MediaFile {
 }
 
 const FOLDERS = ["products", "blogs"];
+const PAGES = [
+  { key: "homepage", label: "Homepage" },
+  { key: "our-story", label: "Our Story" },
+  { key: "made-in-italy", label: "Made in Italy" },
+  { key: "technical-data", label: "Technical Data" },
+];
 
 /**
  * In-context media browser + uploader, rendered as a modal overlay.
@@ -35,7 +41,10 @@ function MediaPickerModal({
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [folder, setFolder] = useState(FOLDERS.includes(initialFolder) ? initialFolder : "products");
+  const [view, setView] = useState<"products" | "blogs" | "pages">(
+    FOLDERS.includes(initialFolder) ? (initialFolder as "products" | "blogs") : "products"
+  );
+  const [pageKey, setPageKey] = useState(PAGES[0].key);
   const [search, setSearch] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -45,12 +54,15 @@ function MediaPickerModal({
   useEffect(() => {
     fetchMedia();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [folder]);
+  }, [view, pageKey]);
 
   async function fetchMedia() {
     try {
       setLoading(true);
-      const params = new URLSearchParams({ folder: "/" + folder });
+      const params =
+        view === "pages"
+          ? new URLSearchParams({ tag: `page:${pageKey}` })
+          : new URLSearchParams({ folder: "/" + view });
       if (search) params.set("search", search);
       const res = await fetch(`/api/media?${params}`);
       const data = await res.json();
@@ -71,7 +83,11 @@ function MediaPickerModal({
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("folder", folder);
+      // A "Pages" browse view isn't itself a storage bucket — new uploads
+      // still land in the general products bucket, just tagged so they show
+      // up under this page going forward.
+      formData.append("folder", view === "pages" ? "products" : view);
+      if (view === "pages") formData.append("tags", `page:${pageKey}`);
 
       const res = await fetch("/api/media", { method: "POST", body: formData });
       const data = await res.json();
@@ -112,9 +128,9 @@ function MediaPickerModal({
               <button
                 key={f}
                 type="button"
-                onClick={() => setFolder(f)}
+                onClick={() => setView(f as "products" | "blogs")}
                 className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase border transition-colors ${
-                  folder === f
+                  view === f
                     ? "bg-[#007190] text-white border-[#007190]"
                     : "bg-white text-[#007190]/60 border-[#007190]/15 hover:text-[#007190] hover:border-[#007190]/30"
                 }`}
@@ -123,6 +139,18 @@ function MediaPickerModal({
                 {f}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => setView("pages")}
+              className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase border transition-colors ${
+                view === "pages"
+                  ? "bg-[#007190] text-white border-[#007190]"
+                  : "bg-white text-[#007190]/60 border-[#007190]/15 hover:text-[#007190] hover:border-[#007190]/30"
+              }`}
+              style={fontMichroma}
+            >
+              Pages
+            </button>
           </div>
 
           <div className="flex gap-2">
@@ -162,6 +190,27 @@ function MediaPickerModal({
           </div>
         </div>
 
+        {/* Page sub-tabs — only shown while browsing the Pages bucket */}
+        {view === "pages" && (
+          <div className="flex flex-wrap gap-1 border-b border-[#1a1a1a]/8 px-6 py-3">
+            {PAGES.map((p) => (
+              <button
+                key={p.key}
+                type="button"
+                onClick={() => setPageKey(p.key)}
+                className={`px-3 py-1.5 text-[9px] tracking-[0.15em] uppercase border transition-colors ${
+                  pageKey === p.key
+                    ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
+                    : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/30"
+                }`}
+                style={fontMichroma}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {error && (
           <div className="mx-6 mt-4 border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-600">{error}</div>
         )}
@@ -176,7 +225,9 @@ function MediaPickerModal({
             </div>
           ) : media.length === 0 ? (
             <div className="flex h-full items-center justify-center">
-              <p className="text-sm text-[#8b8b8b]">No assets in "{folder}" yet — upload one above.</p>
+              <p className="text-sm text-[#8b8b8b]">
+                No assets in "{view === "pages" ? PAGES.find((p) => p.key === pageKey)?.label : view}" yet — upload one above.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
