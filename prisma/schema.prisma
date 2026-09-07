@@ -218,44 +218,14 @@ model Settings {
   dimBtnText    String?
   dimBtnLink    String?
 
-  // Homepage Finishes section — editable from Admin > Homepage. Fixed set of
-  // five finish tiles (Polished / Matte / Honed / Structured Matte / 3D-5D
-  // Matte); each tile's filter-routing identity stays fixed in code, only
-  // its label, image, and description text are editable here.
+  // Homepage Finishes section heading — editable from Admin > Homepage. The
+  // tiles themselves (add/remove/reorder any count) live in HomeFinishTile
+  // below, not here — this used to be a fixed set of five finish1..finish5
+  // field groups; that content was migrated into HomeFinishTile rows.
   finishesHeading String?
   finishesHeadingColor String?
   finishesHeadingFont  String?
   finishesHeadingSize  String?
-  finish1Name  String?
-  finish1Image String?
-  finish1Desc  String? @db.Text
-  finish1DescColor String?
-  finish1DescFont  String?
-  finish1DescSize  String?
-  finish2Name  String?
-  finish2Image String?
-  finish2Desc  String? @db.Text
-  finish2DescColor String?
-  finish2DescFont  String?
-  finish2DescSize  String?
-  finish3Name  String?
-  finish3Image String?
-  finish3Desc  String? @db.Text
-  finish3DescColor String?
-  finish3DescFont  String?
-  finish3DescSize  String?
-  finish4Name  String?
-  finish4Image String?
-  finish4Desc  String? @db.Text
-  finish4DescColor String?
-  finish4DescFont  String?
-  finish4DescSize  String?
-  finish5Name  String?
-  finish5Image String?
-  finish5Desc  String? @db.Text
-  finish5DescColor String?
-  finish5DescFont  String?
-  finish5DescSize  String?
 
   // Our Story page — editable from Admin > Our Story. Layout, GSAP/Framer
   // animations, and section order stay fixed; only text, images, and each
@@ -485,6 +455,35 @@ model ApplicationTile {
   row         Int // 1 or 2
   order       Int      @default(0) // position within its row
   darkLabel   Boolean  @default(false) // true = dark label text, false = white
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// One tile in the homepage Finishes accordion (Admin > Homepage > Finishes).
+// Add/remove/reorder freely — unlike ApplicationTile above, this section has
+// no fixed count. `filterName` is the value matched against the Explore
+// Collection page's Finish filter (and each product's finishCategories) when
+// a visitor clicks the tile; it can differ from the display `name` (e.g.
+// name "3D / 5D MATTE" vs filterName "3D-5D Matte") for legacy tiles carried
+// over from the original fixed five. `textStyle` picks the tile's idle text
+// color and overlay tone ("dark" = dark text, near-transparent overlay that
+// only tints slightly on hover; "light" = white text, dimmed overlay so it
+// stays readable over a bright image). `lightWash` adds an extra soft white
+// overlay on top of a "dark" tile — only meaningful when textStyle is
+// "dark" — for a busy/light image that needs a touch more contrast wash
+// (mirrors the original "Structured Matte" tile's treatment).
+model HomeFinishTile {
+  id          String   @id @default(cuid())
+  order       Int      @default(0)
+  name        String
+  filterName  String
+  image       String?
+  desc        String?  @db.Text
+  descColor   String?
+  descFont    String?
+  descSize    String?
+  textStyle   String   @default("dark")
+  lightWash   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

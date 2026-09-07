@@ -145,34 +145,6 @@ const slabs = [
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
-const finishMetadata: Record<string, { name: string; img: string; desc: string }> = {
-  "Polished": {
-    name: "POLISHED",
-    img: "/images/Links/Onice Bianco 1.jpg",
-    desc: "A glossy and reflective surface that enhances depth, adding luxurious look."
-  },
-  "Matte": {
-    name: "MATTE",
-    img: "/images/Links/Basaltina matte.jpg",
-    desc: "A non-reflective and refined finish, with added slip resistance."
-  },
-  "Honed": {
-    name: "HONED",
-    img: "/images/Links/Statuario Ultimo 1.jpg",
-    desc: "A smooth, satin-like finish that balances subtle sheen with modern elegance."
-  },
-  "Structured Matte": {
-    name: "STRUCTURED MATTE",
-    img: "/images/Links/White Camouflage Face 1 - Copy.jpg",
-    desc: "Leather-inspired texture with subtle richness and enhanced grip."
-  },
-  "3D-5D Matte": {
-    name: "3D / 5D MATTE",
-    img: "/images/Travertino Romano Classico Face 1 - Copy.jpg",
-    desc: "A multi-dimensional finish that brings depth, texture, and realism to stone surfaces."
-  }
-};
-
 // Fallback lists used until /api/colors and /api/finishes (Admin > Master Data) load.
 const DEFAULT_COLORS = ["White", "Beige", "Grey", "Green", "Brown"];
 const DEFAULT_FINISHES = ["Polished", "Matte", "Honed", "Structured Matte", "3D-5D Matte"];
@@ -183,24 +155,19 @@ function ExploreCollectionContent() {
   const pathname = usePathname();
   const isOpenedFromSessionRef = useRef(false);
 
-  const initialFinish = useMemo(() => {
-    const finish = searchParams.get("finish");
-    if (finish) {
-      const matchedKey = Object.keys(finishMetadata).find(
-        (key) => key.toLowerCase() === finish.toLowerCase()
-      );
-      return matchedKey || null;
-    }
-    return null;
-  }, [searchParams]);
+  // Trust the raw `?finish=` value from the link (e.g. a homepage Finishes
+  // tile, which can now name any finish an admin has added) — not just a
+  // fixed hardcoded set. Case gets normalized against the live finish list
+  // below once it loads, same as before.
+  const rawFinishParam = searchParams.get("finish");
 
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedFinish, setSelectedFinish] = useState<string | null>(initialFinish);
+  const [selectedFinish, setSelectedFinish] = useState<string | null>(rawFinishParam || null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    setSelectedFinish(initialFinish);
-  }, [initialFinish]);
+    setSelectedFinish(rawFinishParam || null);
+  }, [rawFinishParam]);
 
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [finishDropdownOpen, setFinishDropdownOpen] = useState(false);
@@ -215,8 +182,20 @@ function ExploreCollectionContent() {
       .catch(() => {});
     fetch("/api/finishes")
       .then((res) => res.json())
-      .then((data) => data?.data?.length && setFinishes(data.data.map((f: { name: string }) => f.name)))
+      .then((data) => {
+        if (data?.data?.length) {
+          const names = data.data.map((f: { name: string }) => f.name);
+          setFinishes(names);
+          // Normalize the case of a `?finish=` param once the real list is in
+          // (e.g. a link built with different casing than the stored name).
+          if (rawFinishParam) {
+            const matched = names.find((n: string) => n.toLowerCase() === rawFinishParam.toLowerCase());
+            if (matched) setSelectedFinish(matched);
+          }
+        }
+      })
       .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Grid column count state: 1, 2, 3, 4, or 5 columns

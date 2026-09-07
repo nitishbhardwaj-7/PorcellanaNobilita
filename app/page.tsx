@@ -19,11 +19,12 @@ export default async function Home() {
   // HeroSection's own hardcoded defaults if the DB is briefly unreachable.
   let cmsData: any = null;
   try {
-    const [settings, heroSlides, applicationTiles, techDataSlides] = await Promise.all([
+    const [settings, heroSlides, applicationTiles, techDataSlides, finishTiles] = await Promise.all([
       prisma.settings.findUnique({ where: { id: "global" } }),
       prisma.heroSlide.findMany({ orderBy: { order: "asc" } }),
       prisma.applicationTile.findMany({ orderBy: [{ row: "asc" }, { order: "asc" }] }),
       prisma.techDataSlide.findMany({ orderBy: { order: "asc" } }),
+      prisma.homeFinishTile.findMany({ orderBy: { order: "asc" } }),
     ]);
     cmsData = {
       heroTitle: settings?.heroTitle,
@@ -91,36 +92,7 @@ export default async function Home() {
       finishesHeadingColor: settings?.finishesHeadingColor,
       finishesHeadingFont: settings?.finishesHeadingFont,
       finishesHeadingSize: settings?.finishesHeadingSize,
-      finish1Name: settings?.finish1Name,
-      finish1Image: settings?.finish1Image,
-      finish1Desc: settings?.finish1Desc,
-      finish1DescColor: settings?.finish1DescColor,
-      finish1DescFont: settings?.finish1DescFont,
-      finish1DescSize: settings?.finish1DescSize,
-      finish2Name: settings?.finish2Name,
-      finish2Image: settings?.finish2Image,
-      finish2Desc: settings?.finish2Desc,
-      finish2DescColor: settings?.finish2DescColor,
-      finish2DescFont: settings?.finish2DescFont,
-      finish2DescSize: settings?.finish2DescSize,
-      finish3Name: settings?.finish3Name,
-      finish3Image: settings?.finish3Image,
-      finish3Desc: settings?.finish3Desc,
-      finish3DescColor: settings?.finish3DescColor,
-      finish3DescFont: settings?.finish3DescFont,
-      finish3DescSize: settings?.finish3DescSize,
-      finish4Name: settings?.finish4Name,
-      finish4Image: settings?.finish4Image,
-      finish4Desc: settings?.finish4Desc,
-      finish4DescColor: settings?.finish4DescColor,
-      finish4DescFont: settings?.finish4DescFont,
-      finish4DescSize: settings?.finish4DescSize,
-      finish5Name: settings?.finish5Name,
-      finish5Image: settings?.finish5Image,
-      finish5Desc: settings?.finish5Desc,
-      finish5DescColor: settings?.finish5DescColor,
-      finish5DescFont: settings?.finish5DescFont,
-      finish5DescSize: settings?.finish5DescSize,
+      finishTiles: finishTiles.length > 0 ? finishTiles : undefined,
       techDataSlides: techDataSlides.length > 0 ? techDataSlides : undefined,
     };
   } catch (e) {

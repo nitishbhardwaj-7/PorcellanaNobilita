@@ -1667,136 +1667,74 @@ function DimensionsTab() {
 // Finishes tab
 // ============================================================================
 
-interface FinishesSettings {
+interface FinishesHeadingSettings {
   finishesHeading: string | null;
   finishesHeadingColor: string | null;
   finishesHeadingFont: string | null;
   finishesHeadingSize: string | null;
-  finish1Name: string | null;
-  finish1Image: string | null;
-  finish1Desc: string | null;
-  finish1DescColor: string | null;
-  finish1DescFont: string | null;
-  finish1DescSize: string | null;
-  finish2Name: string | null;
-  finish2Image: string | null;
-  finish2Desc: string | null;
-  finish2DescColor: string | null;
-  finish2DescFont: string | null;
-  finish2DescSize: string | null;
-  finish3Name: string | null;
-  finish3Image: string | null;
-  finish3Desc: string | null;
-  finish3DescColor: string | null;
-  finish3DescFont: string | null;
-  finish3DescSize: string | null;
-  finish4Name: string | null;
-  finish4Image: string | null;
-  finish4Desc: string | null;
-  finish4DescColor: string | null;
-  finish4DescFont: string | null;
-  finish4DescSize: string | null;
-  finish5Name: string | null;
-  finish5Image: string | null;
-  finish5Desc: string | null;
-  finish5DescColor: string | null;
-  finish5DescFont: string | null;
-  finish5DescSize: string | null;
 }
 
-const FINISH_ROW_KEYS = [1, 2, 3, 4, 5] as const;
+interface FinishTile {
+  id: string;
+  order: number;
+  name: string;
+  filterName: string;
+  image: string;
+  desc: string;
+  descColor: string | null;
+  descFont: string | null;
+  descSize: string | null;
+  textStyle: string; // "dark" | "light"
+  lightWash: boolean;
+}
 
 function FinishesTab() {
-  const [settings, setSettings] = useState<FinishesSettings>({
+  const [settings, setSettings] = useState<FinishesHeadingSettings>({
     finishesHeading: "",
     finishesHeadingColor: "default",
     finishesHeadingFont: "default",
     finishesHeadingSize: "default",
-    finish1Name: "",
-    finish1Image: "",
-    finish1Desc: "",
-    finish1DescColor: "default",
-    finish1DescFont: "default",
-    finish1DescSize: "default",
-    finish2Name: "",
-    finish2Image: "",
-    finish2Desc: "",
-    finish2DescColor: "default",
-    finish2DescFont: "default",
-    finish2DescSize: "default",
-    finish3Name: "",
-    finish3Image: "",
-    finish3Desc: "",
-    finish3DescColor: "default",
-    finish3DescFont: "default",
-    finish3DescSize: "default",
-    finish4Name: "",
-    finish4Image: "",
-    finish4Desc: "",
-    finish4DescColor: "default",
-    finish4DescFont: "default",
-    finish4DescSize: "default",
-    finish5Name: "",
-    finish5Image: "",
-    finish5Desc: "",
-    finish5DescColor: "default",
-    finish5DescFont: "default",
-    finish5DescSize: "default",
   });
+  const [tiles, setTiles] = useState<FinishTile[]>([]);
+  const [finishOptions, setFinishOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [savedSettings, setSavedSettings] = useState(false);
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch("/api/settings")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data?.data) {
-          setSettings({
-            finishesHeading: data.data.finishesHeading || "",
-            finishesHeadingColor: data.data.finishesHeadingColor || "default",
-            finishesHeadingFont: data.data.finishesHeadingFont || "default",
-            finishesHeadingSize: data.data.finishesHeadingSize || "default",
-            finish1Name: data.data.finish1Name || "",
-            finish1Image: data.data.finish1Image || "",
-            finish1Desc: data.data.finish1Desc || "",
-            finish1DescColor: data.data.finish1DescColor || "default",
-            finish1DescFont: data.data.finish1DescFont || "default",
-            finish1DescSize: data.data.finish1DescSize || "default",
-            finish2Name: data.data.finish2Name || "",
-            finish2Image: data.data.finish2Image || "",
-            finish2Desc: data.data.finish2Desc || "",
-            finish2DescColor: data.data.finish2DescColor || "default",
-            finish2DescFont: data.data.finish2DescFont || "default",
-            finish2DescSize: data.data.finish2DescSize || "default",
-            finish3Name: data.data.finish3Name || "",
-            finish3Image: data.data.finish3Image || "",
-            finish3Desc: data.data.finish3Desc || "",
-            finish3DescColor: data.data.finish3DescColor || "default",
-            finish3DescFont: data.data.finish3DescFont || "default",
-            finish3DescSize: data.data.finish3DescSize || "default",
-            finish4Name: data.data.finish4Name || "",
-            finish4Image: data.data.finish4Image || "",
-            finish4Desc: data.data.finish4Desc || "",
-            finish4DescColor: data.data.finish4DescColor || "default",
-            finish4DescFont: data.data.finish4DescFont || "default",
-            finish4DescSize: data.data.finish4DescSize || "default",
-            finish5Name: data.data.finish5Name || "",
-            finish5Image: data.data.finish5Image || "",
-            finish5Desc: data.data.finish5Desc || "",
-            finish5DescColor: data.data.finish5DescColor || "default",
-            finish5DescFont: data.data.finish5DescFont || "default",
-            finish5DescSize: data.data.finish5DescSize || "default",
-          });
-        }
-      })
-      .catch((err) => setError(err.message || "Failed to load."))
-      .finally(() => setLoading(false));
+    fetchAll();
   }, []);
 
-  async function handleSave() {
-    setSaving(true);
+  async function fetchAll() {
+    try {
+      setLoading(true);
+      const [settingsRes, tilesRes, finishesRes] = await Promise.all([
+        fetch("/api/settings").then((r) => r.json()),
+        fetch("/api/home-finishes").then((r) => r.json()),
+        fetch("/api/finishes").then((r) => r.json()).catch(() => null),
+      ]);
+      if (settingsRes?.data) {
+        setSettings({
+          finishesHeading: settingsRes.data.finishesHeading || "",
+          finishesHeadingColor: settingsRes.data.finishesHeadingColor || "default",
+          finishesHeadingFont: settingsRes.data.finishesHeadingFont || "default",
+          finishesHeadingSize: settingsRes.data.finishesHeadingSize || "default",
+        });
+      }
+      if (tilesRes?.data) setTiles(tilesRes.data);
+      if (finishesRes?.data) setFinishOptions(finishesRes.data.map((f: { name: string }) => f.name));
+    } catch (err: any) {
+      setError(err.message || "Failed to load.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSaveSettings() {
+    setSavingSettings(true);
     setError(null);
     try {
       const res = await fetch("/api/settings", {
@@ -1806,12 +1744,81 @@ function FinishesTab() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save.");
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      setSavedSettings(true);
+      setTimeout(() => setSavedSettings(false), 2000);
     } catch (err: any) {
       setError(err.message);
     } finally {
-      setSaving(false);
+      setSavingSettings(false);
+    }
+  }
+
+  async function handleAddTile() {
+    setError(null);
+    try {
+      const res = await fetch("/api/home-finishes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "NEW FINISH", filterName: "New Finish", image: "", desc: "", textStyle: "dark", lightWash: false }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to add tile.");
+      setTiles((prev) => [...prev, data.data]);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function updateTile(id: string, patch: Partial<FinishTile>) {
+    setTiles((prev) => prev.map((t) => (t.id === id ? { ...t, ...patch } : t)));
+    try {
+      await fetch(`/api/home-finishes/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+    } catch {
+      setError("Failed to save tile changes.");
+    }
+  }
+
+  async function handleDeleteTile(id: string) {
+    if (!confirm("Delete this finish tile? This cannot be undone.")) return;
+    setError(null);
+    try {
+      const res = await fetch(`/api/home-finishes/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete.");
+      setTiles((prev) => prev.filter((t) => t.id !== id));
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function moveTile(from: number, to: number) {
+    if (from === to) return;
+    const reordered = [...tiles];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+    setTiles(reordered);
+
+    setError(null);
+    try {
+      await Promise.all(
+        reordered.map((tile, i) =>
+          tile.order === i
+            ? Promise.resolve()
+            : fetch(`/api/home-finishes/${tile.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order: i }),
+              })
+        )
+      );
+      setTiles((prev) => prev.map((t, i) => ({ ...t, order: i })));
+    } catch {
+      setError("Failed to save the new tile order.");
+      fetchAll();
     }
   }
 
@@ -1825,34 +1832,24 @@ function FinishesTab() {
     );
   }
 
-  const rowDefaults: Record<(typeof FINISH_ROW_KEYS)[number], { name: string; desc: string }> = {
-    1: { name: "POLISHED", desc: "A glossy, reflective finish that brings out the full richness of the design for a luxurious look." },
-    2: { name: "MATTE", desc: "A non-reflective and refined finish, with added slip resistance." },
-    3: { name: "HONED", desc: "A smooth, satin-like finish that balances subtle sheen with modern elegance." },
-    4: { name: "STRUCTURED MATTE", desc: "Leather-inspired texture with subtle richness and enhanced grip." },
-    5: { name: "3D / 5D MATTE", desc: "A multi-dimensional finish that brings depth, texture, and realism to stone surfaces." },
-  };
-
   return (
     <div className="space-y-6">
       {error && (
         <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
       )}
 
+      {/* Heading */}
       <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
         <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
           <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
             Finishes
           </p>
-          {saved && (
+          {savedSettings && (
             <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
               <Check size={11} /> Saved
             </span>
           )}
         </div>
-        <p className="text-[10px] text-[#8b8b8b] -mt-2">
-          The five-tile finishes accordion. Fixed order and click-to-filter behavior — only each tile's name, image, and description are editable.
-        </p>
 
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
@@ -1876,69 +1873,188 @@ function FinishesTab() {
           />
         </div>
 
-        {FINISH_ROW_KEYS.map((n) => {
-          const nameKey = `finish${n}Name` as keyof FinishesSettings;
-          const imageKey = `finish${n}Image` as keyof FinishesSettings;
-          const descKey = `finish${n}Desc` as keyof FinishesSettings;
-          const descColorKey = `finish${n}DescColor` as keyof FinishesSettings;
-          const descFontKey = `finish${n}DescFont` as keyof FinishesSettings;
-          const descSizeKey = `finish${n}DescSize` as keyof FinishesSettings;
-          return (
-            <div key={n} className="border-t border-[#1a1a1a]/8 pt-5 space-y-4">
-              <p className="text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/30" style={fontMichroma}>
-                Tile {n}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    value={settings[nameKey] || ""}
-                    onChange={(e) => setSettings((p) => ({ ...p, [nameKey]: e.target.value }))}
-                    placeholder={rowDefaults[n].name}
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                  />
-                </div>
-                <ImageField
-                  label="Image"
-                  value={settings[imageKey] || ""}
-                  onChange={(url) => setSettings((p) => ({ ...p, [imageKey]: url }))}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-                  Description
-                </label>
-                <textarea
-                  value={settings[descKey] || ""}
-                  onChange={(e) => setSettings((p) => ({ ...p, [descKey]: e.target.value }))}
-                  placeholder={rowDefaults[n].desc}
-                  rows={2}
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
-                />
-                <StyleRow
-                  color={(settings[descColorKey] as string) || "default"}
-                  onColorChange={(v) => setSettings((p) => ({ ...p, [descColorKey]: v }))}
-                  font={(settings[descFontKey] as string) || "default"}
-                  onFontChange={(v) => setSettings((p) => ({ ...p, [descFontKey]: v }))}
-                  size={(settings[descSizeKey] as string) || "default"}
-                  onSizeChange={(v) => setSettings((p) => ({ ...p, [descSizeKey]: v }))}
-                  sizeOptions={PARAGRAPH_SIZE_OPTIONS}
-                />
-              </div>
-            </div>
-          );
-        })}
-
         <button
-          onClick={handleSave}
-          disabled={saving}
+          onClick={handleSaveSettings}
+          disabled={savingSettings}
           className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
           style={fontMichroma}
         >
-          {saving ? "Saving…" : "Save Finishes"}
+          {savingSettings ? "Saving…" : "Save Heading"}
+        </button>
+      </div>
+
+      {/* Tiles */}
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-4">
+        <div>
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3 mb-1" style={fontMichroma}>
+            Tiles
+          </p>
+          <p className="text-[10px] text-[#8b8b8b] pt-2">
+            Drag the grip handle to reorder. Each field saves automatically as you edit it.
+            "Filter Value" is the Finish that a click on this tile filters Explore Collection to —
+            match it to a name in Admin &gt; Master Data &gt; Finishes so the click actually finds products.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {tiles.map((tile, idx) => (
+            <div
+              key={tile.id}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) setDragOverIdx(idx);
+              }}
+              onDragLeave={() => setDragOverIdx((cur) => (cur === idx ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) moveTile(draggedIdx, idx);
+                setDraggedIdx(null);
+                setDragOverIdx(null);
+              }}
+              className={`flex gap-3 items-start bg-[#f8f5f0] border p-3 transition-colors ${
+                draggedIdx === idx
+                  ? "opacity-40 border-[#1a1a1a]/10"
+                  : dragOverIdx === idx
+                    ? "border-[#007190]"
+                    : "border-[#1a1a1a]/10"
+              }`}
+            >
+              <div
+                draggable
+                onDragStart={() => setDraggedIdx(idx)}
+                onDragEnd={() => {
+                  setDraggedIdx(null);
+                  setDragOverIdx(null);
+                }}
+                className="flex-shrink-0 self-stretch flex items-center text-[#1a1a1a]/25 hover:text-[#1a1a1a]/60 cursor-grab active:cursor-grabbing transition-colors"
+                title="Drag to reorder"
+              >
+                <GripVertical size={15} />
+              </div>
+
+              <div className="w-16 h-16 flex-shrink-0 border border-[#1a1a1a]/10 bg-white overflow-hidden">
+                {tile.image ? (
+                  <img src={tile.image} alt="" className="w-full h-full object-cover" />
+                ) : null}
+              </div>
+
+              <div className="flex-1 space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Name</label>
+                    <input
+                      type="text"
+                      value={tile.name}
+                      onChange={(e) => updateTile(tile.id, { name: e.target.value })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Filter Value</label>
+                    <input
+                      type="text"
+                      list={`finish-options-${tile.id}`}
+                      value={tile.filterName}
+                      onChange={(e) => updateTile(tile.id, { filterName: e.target.value })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                    <datalist id={`finish-options-${tile.id}`}>
+                      {finishOptions.map((f) => (
+                        <option key={f} value={f} />
+                      ))}
+                    </datalist>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Image</label>
+                  <div className="flex gap-1">
+                    <input
+                      type="text"
+                      value={tile.image}
+                      onChange={(e) => updateTile(tile.id, { image: e.target.value })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                    <MediaPickerButton
+                      folder="products"
+                      onSelect={(url) => updateTile(tile.id, { image: url })}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-end">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Text Style</label>
+                    <div className="flex gap-1">
+                      {(["dark", "light"] as const).map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => updateTile(tile.id, { textStyle: s })}
+                          className={`flex-1 px-2 py-1 text-[10px] uppercase border transition-colors ${
+                            tile.textStyle === s
+                              ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
+                              : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {tile.textStyle === "dark" && (
+                    <label className="flex items-center gap-1.5 text-[10px] text-[#1a1a1a]/60 pb-1.5">
+                      <input
+                        type="checkbox"
+                        checked={tile.lightWash}
+                        onChange={(e) => updateTile(tile.id, { lightWash: e.target.checked })}
+                      />
+                      Light wash overlay (for busy/light images)
+                    </label>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Description</label>
+                  <textarea
+                    value={tile.desc}
+                    onChange={(e) => updateTile(tile.id, { desc: e.target.value })}
+                    rows={2}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none resize-none"
+                  />
+                  <div className="mt-1">
+                    <StyleRow
+                      color={tile.descColor || "default"}
+                      onColorChange={(v) => updateTile(tile.id, { descColor: v })}
+                      font={tile.descFont || "default"}
+                      onFontChange={(v) => updateTile(tile.id, { descFont: v })}
+                      size={tile.descSize || "default"}
+                      onSizeChange={(v) => updateTile(tile.id, { descSize: v })}
+                      sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleDeleteTile(tile.id)}
+                className="text-red-500 hover:text-red-700 transition-colors p-1 self-start"
+              >
+                <X size={15} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAddTile}
+          className="flex items-center gap-2 border border-[#007190] px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#007190] hover:bg-[#007190] hover:text-white transition-all"
+          style={fontMichroma}
+        >
+          <Plus size={13} />
+          Add Tile
         </button>
       </div>
     </div>
