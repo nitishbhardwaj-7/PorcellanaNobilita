@@ -357,9 +357,18 @@ model Settings {
   // overlays tied to its exact geometry, and the dimensions SVG is inlined
   // via dangerouslySetInnerHTML so isn't safe to point at arbitrary input).
   tdHeading    String? // default "ENGINEERED FOR PERFORMANCE"
+  tdHeadingColor String?
+  tdHeadingFont  String?
+  tdHeadingSize  String?
   tdHeroDesc   String? @db.Text
+  tdHeroDescColor String?
+  tdHeroDescFont  String?
+  tdHeroDescSize  String?
 
   tdCharHeading String? // default "CHARACTERISTICS" — fixed set of 9 items
+  tdCharHeadingColor String?
+  tdCharHeadingFont  String?
+  tdCharHeadingSize  String?
   tdChar1Title String?
   tdChar1Desc  String? @db.Text
   tdChar1Icon  String?
@@ -389,19 +398,52 @@ model Settings {
   tdChar9Icon  String?
 
   tdUgHeading String? // default "USER GUIDE"
+  tdUgHeadingColor String?
+  tdUgHeadingFont  String?
+  tdUgHeadingSize  String?
   tdUgDesc1   String? @db.Text
+  tdUgDesc1Color String?
+  tdUgDesc1Font  String?
+  tdUgDesc1Size  String?
   tdUgDesc2   String? @db.Text
+  tdUgDesc2Color String?
+  tdUgDesc2Font  String?
+  tdUgDesc2Size  String?
 
   tdDimHeading String? // default "FORMAT & DIMENSIONS"
+  tdDimHeadingColor String?
+  tdDimHeadingFont  String?
+  tdDimHeadingSize  String?
   tdDimDesc1   String? @db.Text
+  tdDimDesc1Color String?
+  tdDimDesc1Font  String?
+  tdDimDesc1Size  String?
   tdDimDesc2   String? @db.Text
+  tdDimDesc2Color String?
+  tdDimDesc2Font  String?
+  tdDimDesc2Size  String?
   tdDimDesc3   String? @db.Text
+  tdDimDesc3Color String?
+  tdDimDesc3Font  String?
+  tdDimDesc3Size  String?
 
   tdThickHeading String? // default "THICKNESSES"
+  tdThickHeadingColor String?
+  tdThickHeadingFont  String?
+  tdThickHeadingSize  String?
   tdThickDesc1   String? @db.Text
+  tdThickDesc1Color String?
+  tdThickDesc1Font  String?
+  tdThickDesc1Size  String?
   tdThickDesc2   String? @db.Text
+  tdThickDesc2Color String?
+  tdThickDesc2Font  String?
+  tdThickDesc2Size  String?
 
   tdSpecsHeading String? // default "TECHNICAL SPECIFICATIONS FOR PROFESSIONALS"
+  tdSpecsHeadingColor String?
+  tdSpecsHeadingFont  String?
+  tdSpecsHeadingSize  String?
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

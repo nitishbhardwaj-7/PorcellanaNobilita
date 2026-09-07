@@ -3,28 +3,98 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
+import { StyleRow } from "../_components/StyleControls";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
+const STYLE_SUFFIXES = ["Color", "Font", "Size"] as const;
+const STYLED_FIELDS = [
+  "tdHeading",
+  "tdHeroDesc",
+  "tdCharHeading",
+  "tdUgHeading",
+  "tdUgDesc1",
+  "tdUgDesc2",
+  "tdDimHeading",
+  "tdDimDesc1",
+  "tdDimDesc2",
+  "tdDimDesc3",
+  "tdThickHeading",
+  "tdThickDesc1",
+  "tdThickDesc2",
+  "tdSpecsHeading",
+] as const;
+const HEADING_FIELDS = new Set([
+  "tdHeading",
+  "tdCharHeading",
+  "tdUgHeading",
+  "tdDimHeading",
+  "tdThickHeading",
+  "tdSpecsHeading",
+]);
+
 interface TdSettings {
   tdHeading: string;
+  tdHeadingColor: string;
+  tdHeadingFont: string;
+  tdHeadingSize: string;
   tdHeroDesc: string;
+  tdHeroDescColor: string;
+  tdHeroDescFont: string;
+  tdHeroDescSize: string;
   tdCharHeading: string;
+  tdCharHeadingColor: string;
+  tdCharHeadingFont: string;
+  tdCharHeadingSize: string;
   [key: `tdChar${number}Title`]: string;
   [key: `tdChar${number}Desc`]: string;
   [key: `tdChar${number}Icon`]: string;
   tdUgHeading: string;
+  tdUgHeadingColor: string;
+  tdUgHeadingFont: string;
+  tdUgHeadingSize: string;
   tdUgDesc1: string;
+  tdUgDesc1Color: string;
+  tdUgDesc1Font: string;
+  tdUgDesc1Size: string;
   tdUgDesc2: string;
+  tdUgDesc2Color: string;
+  tdUgDesc2Font: string;
+  tdUgDesc2Size: string;
   tdDimHeading: string;
+  tdDimHeadingColor: string;
+  tdDimHeadingFont: string;
+  tdDimHeadingSize: string;
   tdDimDesc1: string;
+  tdDimDesc1Color: string;
+  tdDimDesc1Font: string;
+  tdDimDesc1Size: string;
   tdDimDesc2: string;
+  tdDimDesc2Color: string;
+  tdDimDesc2Font: string;
+  tdDimDesc2Size: string;
   tdDimDesc3: string;
+  tdDimDesc3Color: string;
+  tdDimDesc3Font: string;
+  tdDimDesc3Size: string;
   tdThickHeading: string;
+  tdThickHeadingColor: string;
+  tdThickHeadingFont: string;
+  tdThickHeadingSize: string;
   tdThickDesc1: string;
+  tdThickDesc1Color: string;
+  tdThickDesc1Font: string;
+  tdThickDesc1Size: string;
   tdThickDesc2: string;
+  tdThickDesc2Color: string;
+  tdThickDesc2Font: string;
+  tdThickDesc2Size: string;
   tdSpecsHeading: string;
+  tdSpecsHeadingColor: string;
+  tdSpecsHeadingFont: string;
+  tdSpecsHeadingSize: string;
 }
 
 const CHAR_ROWS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
@@ -54,7 +124,41 @@ function emptySettings(): TdSettings {
     base[`tdChar${n}Desc`] = "";
     base[`tdChar${n}Icon`] = "";
   });
+  STYLED_FIELDS.forEach((field) => {
+    STYLE_SUFFIXES.forEach((suffix) => {
+      base[`${field}${suffix}`] = "default";
+    });
+  });
   return base as TdSettings;
+}
+
+function FieldStyleRow({
+  field,
+  settings,
+  set,
+}: {
+  field: (typeof STYLED_FIELDS)[number];
+  settings: TdSettings;
+  set: <K extends keyof TdSettings>(key: K, value: string) => void;
+}) {
+  const colorKey = `${field}Color` as keyof TdSettings;
+  const fontKey = `${field}Font` as keyof TdSettings;
+  const sizeKey = `${field}Size` as keyof TdSettings;
+  return (
+    <StyleRow
+      color={settings[colorKey]}
+      onColorChange={(v) => set(colorKey, v)}
+      font={settings[fontKey]}
+      onFontChange={(v) => set(fontKey, v)}
+      size={settings[sizeKey]}
+      onSizeChange={(v) => set(sizeKey, v)}
+      sizeOptions={HEADING_FIELDS.has(field) ? HEADING_SIZE_OPTIONS : PARAGRAPH_SIZE_OPTIONS}
+    />
+  );
+}
+
+function styleFields(field: (typeof STYLED_FIELDS)[number]): (keyof TdSettings)[] {
+  return STYLE_SUFFIXES.map((s) => `${field}${s}` as keyof TdSettings);
 }
 
 function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
@@ -91,8 +195,11 @@ export default function TechnicalDataAdminPage() {
         if (data?.data) {
           const s = data.data;
           const next = emptySettings();
+          const styleKeys = new Set(
+            STYLED_FIELDS.flatMap((field) => STYLE_SUFFIXES.map((suffix) => `${field}${suffix}`))
+          );
           (Object.keys(next) as (keyof TdSettings)[]).forEach((k) => {
-            (next as any)[k] = s[k] || "";
+            (next as any)[k] = s[k] || (styleKeys.has(k) ? "default" : "");
           });
           setSettings(next);
         }
@@ -157,6 +264,7 @@ export default function TechnicalDataAdminPage() {
 
   const charFields: (keyof TdSettings)[] = [
     "tdCharHeading",
+    ...styleFields("tdCharHeading"),
     ...CHAR_ROWS.flatMap((n) => [`tdChar${n}Title`, `tdChar${n}Desc`, `tdChar${n}Icon`] as (keyof TdSettings)[]),
   ];
 
@@ -196,6 +304,7 @@ export default function TechnicalDataAdminPage() {
             placeholder="ENGINEERED FOR PERFORMANCE"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="tdHeading" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Description</label>
@@ -205,8 +314,9 @@ export default function TechnicalDataAdminPage() {
             rows={3}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
+          <FieldStyleRow field="tdHeroDesc" settings={settings} set={set} />
         </div>
-        <SaveButton section="hero" label="Save Hero" fields={["tdHeading", "tdHeroDesc"]} />
+        <SaveButton section="hero" label="Save Hero" fields={["tdHeading", "tdHeroDesc", ...styleFields("tdHeading"), ...styleFields("tdHeroDesc")]} />
       </div>
 
       {/* Characteristics */}
@@ -226,6 +336,7 @@ export default function TechnicalDataAdminPage() {
             placeholder="CHARACTERISTICS"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="tdCharHeading" settings={settings} set={set} />
         </div>
 
         {CHAR_ROWS.map((n) => {
@@ -282,6 +393,7 @@ export default function TechnicalDataAdminPage() {
             placeholder="USER GUIDE"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="tdUgHeading" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 1</label>
@@ -291,6 +403,7 @@ export default function TechnicalDataAdminPage() {
             rows={2}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
+          <FieldStyleRow field="tdUgDesc1" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 2</label>
@@ -300,8 +413,13 @@ export default function TechnicalDataAdminPage() {
             rows={2}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
+          <FieldStyleRow field="tdUgDesc2" settings={settings} set={set} />
         </div>
-        <SaveButton section="ug" label="Save Section" fields={["tdUgHeading", "tdUgDesc1", "tdUgDesc2"]} />
+        <SaveButton
+          section="ug"
+          label="Save Section"
+          fields={["tdUgHeading", "tdUgDesc1", "tdUgDesc2", ...styleFields("tdUgHeading"), ...styleFields("tdUgDesc1"), ...styleFields("tdUgDesc2")]}
+        />
       </div>
 
       {/* Dimensions */}
@@ -321,20 +439,31 @@ export default function TechnicalDataAdminPage() {
             placeholder="FORMAT & DIMENSIONS"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="tdDimHeading" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 1</label>
           <textarea value={settings.tdDimDesc1} onChange={(e) => set("tdDimDesc1", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <FieldStyleRow field="tdDimDesc1" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 2</label>
           <textarea value={settings.tdDimDesc2} onChange={(e) => set("tdDimDesc2", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <FieldStyleRow field="tdDimDesc2" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 3</label>
           <textarea value={settings.tdDimDesc3} onChange={(e) => set("tdDimDesc3", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <FieldStyleRow field="tdDimDesc3" settings={settings} set={set} />
         </div>
-        <SaveButton section="dim" label="Save Section" fields={["tdDimHeading", "tdDimDesc1", "tdDimDesc2", "tdDimDesc3"]} />
+        <SaveButton
+          section="dim"
+          label="Save Section"
+          fields={[
+            "tdDimHeading", "tdDimDesc1", "tdDimDesc2", "tdDimDesc3",
+            ...styleFields("tdDimHeading"), ...styleFields("tdDimDesc1"), ...styleFields("tdDimDesc2"), ...styleFields("tdDimDesc3"),
+          ]}
+        />
       </div>
 
       {/* Thicknesses */}
@@ -354,16 +483,23 @@ export default function TechnicalDataAdminPage() {
             placeholder="THICKNESSES"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="tdThickHeading" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 1</label>
           <textarea value={settings.tdThickDesc1} onChange={(e) => set("tdThickDesc1", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <FieldStyleRow field="tdThickDesc1" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 2</label>
           <textarea value={settings.tdThickDesc2} onChange={(e) => set("tdThickDesc2", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <FieldStyleRow field="tdThickDesc2" settings={settings} set={set} />
         </div>
-        <SaveButton section="thick" label="Save Section" fields={["tdThickHeading", "tdThickDesc1", "tdThickDesc2"]} />
+        <SaveButton
+          section="thick"
+          label="Save Section"
+          fields={["tdThickHeading", "tdThickDesc1", "tdThickDesc2", ...styleFields("tdThickHeading"), ...styleFields("tdThickDesc1"), ...styleFields("tdThickDesc2")]}
+        />
       </div>
 
       {/* Technical Specs */}
@@ -383,8 +519,9 @@ export default function TechnicalDataAdminPage() {
             placeholder="TECHNICAL SPECIFICATIONS FOR PROFESSIONALS"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="tdSpecsHeading" settings={settings} set={set} />
         </div>
-        <SaveButton section="specs" label="Save Section" fields={["tdSpecsHeading"]} />
+        <SaveButton section="specs" label="Save Section" fields={["tdSpecsHeading", ...styleFields("tdSpecsHeading")]} />
       </div>
     </div>
   );

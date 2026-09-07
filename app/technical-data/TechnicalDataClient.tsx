@@ -10,13 +10,17 @@ import { useSpillAnimations } from "@/hooks/useSpillAnimations";
 import OilSpillSVG from "@/components/OilSpillSVG";
 import CoffeeSpillSVG from "@/components/CoffeeSpillSVG";
 import WineSpillSVG from "@/components/WineSpillSVG";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface TdCmsData {
   tdHeading?: string | null;
+  tdHeadingColor?: string | null; tdHeadingFont?: string | null; tdHeadingSize?: string | null;
   tdHeroDesc?: string | null;
+  tdHeroDescColor?: string | null; tdHeroDescFont?: string | null; tdHeroDescSize?: string | null;
   tdCharHeading?: string | null;
+  tdCharHeadingColor?: string | null; tdCharHeadingFont?: string | null; tdCharHeadingSize?: string | null;
   tdChar1Title?: string | null; tdChar1Desc?: string | null; tdChar1Icon?: string | null;
   tdChar2Title?: string | null; tdChar2Desc?: string | null; tdChar2Icon?: string | null;
   tdChar3Title?: string | null; tdChar3Desc?: string | null; tdChar3Icon?: string | null;
@@ -27,16 +31,27 @@ interface TdCmsData {
   tdChar8Title?: string | null; tdChar8Desc?: string | null; tdChar8Icon?: string | null;
   tdChar9Title?: string | null; tdChar9Desc?: string | null; tdChar9Icon?: string | null;
   tdUgHeading?: string | null;
+  tdUgHeadingColor?: string | null; tdUgHeadingFont?: string | null; tdUgHeadingSize?: string | null;
   tdUgDesc1?: string | null;
+  tdUgDesc1Color?: string | null; tdUgDesc1Font?: string | null; tdUgDesc1Size?: string | null;
   tdUgDesc2?: string | null;
+  tdUgDesc2Color?: string | null; tdUgDesc2Font?: string | null; tdUgDesc2Size?: string | null;
   tdDimHeading?: string | null;
+  tdDimHeadingColor?: string | null; tdDimHeadingFont?: string | null; tdDimHeadingSize?: string | null;
   tdDimDesc1?: string | null;
+  tdDimDesc1Color?: string | null; tdDimDesc1Font?: string | null; tdDimDesc1Size?: string | null;
   tdDimDesc2?: string | null;
+  tdDimDesc2Color?: string | null; tdDimDesc2Font?: string | null; tdDimDesc2Size?: string | null;
   tdDimDesc3?: string | null;
+  tdDimDesc3Color?: string | null; tdDimDesc3Font?: string | null; tdDimDesc3Size?: string | null;
   tdThickHeading?: string | null;
+  tdThickHeadingColor?: string | null; tdThickHeadingFont?: string | null; tdThickHeadingSize?: string | null;
   tdThickDesc1?: string | null;
+  tdThickDesc1Color?: string | null; tdThickDesc1Font?: string | null; tdThickDesc1Size?: string | null;
   tdThickDesc2?: string | null;
+  tdThickDesc2Color?: string | null; tdThickDesc2Font?: string | null; tdThickDesc2Size?: string | null;
   tdSpecsHeading?: string | null;
+  tdSpecsHeadingColor?: string | null; tdSpecsHeadingFont?: string | null; tdSpecsHeadingSize?: string | null;
 }
 
 export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | null }) {
@@ -322,7 +337,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
         <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-start pt-28 md:pt-20 px-6 md:px-12 mt-0 md:mt-12 text-center">
 
           <div className="w-full flex flex-col md:flex-row items-center justify-center relative px-4 md:px-20 gap-4 md:gap-0">
-            <h1 className="font-ivymode font-light text-black uppercase tracking-[0.04em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em] px-2 md:px-0">
+            <h1 className={`${fontClass(d.tdHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdHeadingColor, "text-black")} uppercase tracking-[0.04em] md:tracking-[0.15em] ${headingSizeClass(d.tdHeadingSize, "text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)]")} leading-tight flex flex-wrap justify-center gap-x-[0.3em] md:gap-x-[0.4em] px-2 md:px-0`}>
               {(d.tdHeading || "ENGINEERED FOR PERFORMANCE").split(" ").map((word, wIdx) => (
                 <span key={wIdx} className="inline-block whitespace-nowrap">
                   {word.split("").map((char, cIdx) => (
@@ -335,7 +350,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
             </h1>
           </div>
           <p
-            className="hero-desc font-ivymode font-light text-black text-[15px] sm:text-[16px] md:text-[20px] tracking-wide max-w-[1150px] w-[92%] mx-auto mt-6 md:mt-10 text-justify"
+            className={`hero-desc ${fontClass(d.tdHeroDescFont, "font-ivymode")} font-light ${colorClass(d.tdHeroDescColor, "text-black")} ${paragraphSizeClass(d.tdHeroDescSize, "text-[15px] sm:text-[16px] md:text-[20px]")} tracking-wide max-w-[1150px] w-[92%] mx-auto mt-6 md:mt-10 text-justify`}
             style={{ textAlignLast: "center" }}
           >
             {d.tdHeroDesc || "Every NOBILITA surface is engineered for exceptional performance from specification to installation. Designed by architects and engineers, it combines technical precision with refined aesthetics, ensuring premium quality, consistency and reliability. NOBILITA offers outstanding durability, dimensional stability, stain resistance, and long-term performance."}
@@ -351,7 +366,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
           {/* A. Characteristics Grid */}
           <div className="space-y-16">
             <div className="char-title char-title-trigger">
-              <h2 className="font-ivymode font-light text-white uppercase tracking-[0.04em] md:tracking-[0.15em] text-[clamp(28px,6.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
+              <h2 className={`${fontClass(d.tdCharHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdCharHeadingColor, "text-white")} uppercase tracking-[0.04em] md:tracking-[0.15em] ${headingSizeClass(d.tdCharHeadingSize, "text-[clamp(28px,6.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)]")} leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]`}>
                 {(d.tdCharHeading || "CHARACTERISTICS").split(" ").map((word, wIdx) => (
                   <span key={wIdx} className="inline-block whitespace-nowrap">
                     {word.split("").map((char, cIdx) => (
@@ -542,7 +557,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
           <div className="pt-16">
             <div className="space-y-16">
               <div className="ug-title ug-title-trigger">
-                <h2 className="font-ivymode font-light text-white uppercase tracking-[0.06em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
+                <h2 className={`${fontClass(d.tdUgHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdUgHeadingColor, "text-white")} uppercase tracking-[0.06em] md:tracking-[0.15em] ${headingSizeClass(d.tdUgHeadingSize, "text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)]")} leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]`}>
                   {(d.tdUgHeading || "USER GUIDE").split(" ").map((word, wIdx) => (
                     <span key={wIdx} className="inline-block whitespace-nowrap">
                       {word.split("").map((char, cIdx) => (
@@ -554,11 +569,11 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
                   ))}
                 </h2>
               </div>
-              <div className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[20px] tracking-widest w-full space-y-8 md:space-y-12">
-                <p className="ug-desc">
+              <div className="tracking-widest w-full space-y-8 md:space-y-12">
+                <p className={`ug-desc ${fontClass(d.tdUgDesc1Font, "font-ivymode")} font-light ${colorClass(d.tdUgDesc1Color, "text-white/90")} ${paragraphSizeClass(d.tdUgDesc1Size, "text-[15px] sm:text-[16px] md:text-[20px]")}`}>
                   {d.tdUgDesc1 || "The lasting beauty and performance of a surface depend on proper care and maintenance. To help you preserve the exceptional qualities of NOBILITA porcelain surfaces, we have created a collection of maintenance guidelines."}
                 </p>
-                <p className="ug-desc">
+                <p className={`ug-desc ${fontClass(d.tdUgDesc2Font, "font-ivymode")} font-light ${colorClass(d.tdUgDesc2Color, "text-white/90")} ${paragraphSizeClass(d.tdUgDesc2Size, "text-[15px] sm:text-[16px] md:text-[20px]")}`}>
                   {d.tdUgDesc2 || "Explore our easy-to-follow care instructions and cleaning recommendations. Whether for residential or commercial applications, these guidelines ensure your NOBILITA surfaces continue to perform and look their best for generations to come."}
                 </p>
               </div>
@@ -711,7 +726,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
 
           {/* Subsection 1: Dimensions */}
           <div className="dim-title dim-title-trigger mb-12 md:mb-16 w-full text-left">
-            <h2 className="font-ivymode font-light text-white uppercase tracking-[0.06em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
+            <h2 className={`${fontClass(d.tdDimHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdDimHeadingColor, "text-white")} uppercase tracking-[0.06em] md:tracking-[0.15em] ${headingSizeClass(d.tdDimHeadingSize, "text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)]")} leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]`}>
               {(d.tdDimHeading || "FORMAT & DIMENSIONS").split(" ").map((word, wIdx) => (
                 <span key={wIdx} className="inline-block whitespace-nowrap">
                   {word.split("").map((char, cIdx) => (
@@ -739,14 +754,14 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
             )}
 
             {/* Slab Dimensions Description Text (Right Column) */}
-            <div className="dim-desc-trigger w-full lg:w-[48%] xl:w-[50%] flex flex-col justify-between text-left font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest gap-8 lg:gap-0 py-2">
-              <p className="dim-desc">
+            <div className="dim-desc-trigger w-full lg:w-[48%] xl:w-[50%] flex flex-col justify-between text-left tracking-widest gap-8 lg:gap-0 py-2">
+              <p className={`dim-desc ${fontClass(d.tdDimDesc1Font, "font-ivymode")} font-light ${colorClass(d.tdDimDesc1Color, "text-white/90")} ${paragraphSizeClass(d.tdDimDesc1Size, "text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px]")}`}>
                 {d.tdDimDesc1 || "NOBILITA offers large-format porcelain slabs in rectified and non-rectified formats to suit different applications."}
               </p>
-              <p className="dim-desc">
+              <p className={`dim-desc ${fontClass(d.tdDimDesc2Font, "font-ivymode")} font-light ${colorClass(d.tdDimDesc2Color, "text-white/90")} ${paragraphSizeClass(d.tdDimDesc2Size, "text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px]")}`}>
                 {d.tdDimDesc2 || "RECTIFIED SLABS are precisely trimmed for seamless installation, making them the preferred choice for tiling applications such as flooring, walls, and facades."}
               </p>
-              <p className="dim-desc">
+              <p className={`dim-desc ${fontClass(d.tdDimDesc3Font, "font-ivymode")} font-light ${colorClass(d.tdDimDesc3Color, "text-white/90")} ${paragraphSizeClass(d.tdDimDesc3Size, "text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px]")}`}>
                 {d.tdDimDesc3 || "NON-RECTIFIED SLABS (Gross) are ideal when custom cutting is required, making them perfect for counter tops, mill work, and furniture."}
               </p>
             </div>
@@ -760,7 +775,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
           {/* Left Column: Title and Paragraph */}
           <div className="thick-text-trigger w-full lg:w-[60%] xl:w-[62%] flex flex-col items-start justify-center text-left py-4">
             <div className="thick-title-trigger mb-6 md:mb-10 w-full text-left">
-              <h2 className="font-ivymode font-light text-white uppercase tracking-[0.06em] md:tracking-[0.15em] text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)] leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]">
+              <h2 className={`${fontClass(d.tdThickHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdThickHeadingColor, "text-white")} uppercase tracking-[0.06em] md:tracking-[0.15em] ${headingSizeClass(d.tdThickHeadingSize, "text-[clamp(26px,5.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)]")} leading-tight flex flex-wrap gap-x-[0.3em] md:gap-x-[0.4em]`}>
                 {(d.tdThickHeading || "THICKNESSES").split(" ").map((word, wIdx) => (
                   <span key={wIdx} className="inline-block whitespace-nowrap">
                     {word.split("").map((char, cIdx) => (
@@ -773,10 +788,10 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
               </h2>
             </div>
             <div className="thick-desc space-y-6 mt-6">
-              <p className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest leading-relaxed">
+              <p className={`${fontClass(d.tdThickDesc1Font, "font-ivymode")} font-light ${colorClass(d.tdThickDesc1Color, "text-white/90")} ${paragraphSizeClass(d.tdThickDesc1Size, "text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px]")} tracking-widest leading-relaxed`}>
                 {d.tdThickDesc1 || "6.5 MM – Lightweight and versatile, 6.5 MM porcelain is ideal for wall cladding, furniture applications and other interior surfaces where reduced weight is preferred."}
               </p>
-              <p className="font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px] tracking-widest leading-relaxed">
+              <p className={`${fontClass(d.tdThickDesc2Font, "font-ivymode")} font-light ${colorClass(d.tdThickDesc2Color, "text-white/90")} ${paragraphSizeClass(d.tdThickDesc2Size, "text-[15px] sm:text-[16px] md:text-[18px] xl:text-[20px]")} tracking-widest leading-relaxed`}>
                 {d.tdThickDesc2 || "12 MM – A robust and durable option, 12 MM porcelain is well suited for flooring, countertops, kitchen worktops and other high-use applications."}
               </p>
             </div>
@@ -817,7 +832,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
       <section className="relative w-full pt-16 mb-20 px-6 md:px-12 lg:px-20 xl:px-24 bg-white text-brand-dark">
         <div className="max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col items-start w-full space-y-16">
           <div className="text-center w-full">
-            <h2 className="specs-title font-ivymode font-light text-[#007190] uppercase tracking-[0.15em] text-[clamp(28px,4.5vw,42px)] leading-tight">
+            <h2 className={`specs-title ${fontClass(d.tdSpecsHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdSpecsHeadingColor, "text-[#007190]")} uppercase tracking-[0.15em] ${headingSizeClass(d.tdSpecsHeadingSize, "text-[clamp(28px,4.5vw,42px)]")} leading-tight`}>
               {d.tdSpecsHeading || "TECHNICAL SPECIFICATIONS FOR PROFESSIONALS"}
             </h2>
           </div>
