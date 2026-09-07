@@ -1892,7 +1892,7 @@ function FinishesTab() {
           <p className="text-[10px] text-[#8b8b8b] pt-2">
             Drag the grip handle to reorder. Each field saves automatically as you edit it.
             "Filter Value" is the Finish that a click on this tile filters Explore Collection to —
-            match it to a name in Admin &gt; Master Data &gt; Finishes so the click actually finds products.
+            match it to a name in Admin &gt; Explore The Collection &gt; Finishes so the click actually finds products.
           </p>
         </div>
 

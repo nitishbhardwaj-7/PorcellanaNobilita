@@ -69,12 +69,12 @@ export default function AdminDashboard() {
 
   const cards = [
     {
-      label: "Products",
+      label: "Explore The Collection",
       count: stats.productsCount,
       detail: `${stats.publishedProducts} published · ${stats.productsCount - stats.publishedProducts} draft`,
       href: "/admin/products",
       icon: Package,
-      cta: "Manage Products",
+      cta: "Manage Collection",
     },
     {
       label: "Blogs",

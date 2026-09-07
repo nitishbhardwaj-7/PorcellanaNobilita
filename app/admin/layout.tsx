@@ -18,7 +18,6 @@ import {
   MessageSquare,
   Download,
   Mail,
-  Palette,
   Type,
   BookOpen,
   Landmark,
@@ -38,14 +37,13 @@ const menuItems = [
   { name: "Our Story", path: "/admin/our-story", icon: BookOpen, exact: false },
   { name: "Made in Italy", path: "/admin/made-in-italy", icon: Landmark, exact: false },
   { name: "Technical Data", path: "/admin/technical-data", icon: Ruler, exact: false },
-  { name: "Products", path: "/admin/products", icon: Package, exact: false },
+  { name: "Explore The Collection", path: "/admin/products", icon: Package, exact: false },
   { name: "Blogs", path: "/admin/blogs", icon: Newspaper, exact: false },
   { name: "Queries", path: "/admin/queries", icon: MessageSquare, exact: false },
   { name: "Catalog Requests", path: "/admin/catalog-requests", icon: Download, exact: false },
   { name: "Datasheet Requests", path: "/admin/datasheet-requests", icon: FileText, exact: false },
   { name: "Newsletter", path: "/admin/newsletter", icon: Mail, exact: false },
   { name: "Media Library", path: "/admin/media", icon: ImageIcon, exact: false },
-  { name: "Master Data", path: "/admin/master-data", icon: Palette, exact: false },
   { name: "Page Titles", path: "/admin/page-titles", icon: Type, exact: false },
 ];
 

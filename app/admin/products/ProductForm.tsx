@@ -213,7 +213,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const [loadingProduct, setLoadingProduct] = useState(!isNew);
   const [error, setError] = useState<string | null>(null);
 
-  // Color/Finish master data — editable from Admin > Master Data instead of hardcoded.
+  // Color/Finish master data — editable from Admin > Explore The Collection > Colors/Finishes instead of hardcoded.
   const [colorOptions, setColorOptions] = useState<string[]>([]);
   const [finishOptions, setFinishOptions] = useState<string[]>([]);
 
@@ -329,7 +329,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
             style={fontMichroma}
           >
             <ArrowLeft size={12} />
-            Back to Products
+            Back to Explore The Collection
           </Link>
           <h2 className="text-3xl font-light text-[#1a1a1a]" style={fontIvymode}>
             {isNew ? "New Product" : form.name || "Edit Product"}

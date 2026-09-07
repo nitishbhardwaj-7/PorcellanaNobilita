@@ -145,7 +145,7 @@ const slabs = [
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
-// Fallback lists used until /api/colors and /api/finishes (Admin > Master Data) load.
+// Fallback lists used until /api/colors and /api/finishes (Admin > Explore The Collection) load.
 const DEFAULT_COLORS = ["White", "Beige", "Grey", "Green", "Brown"];
 const DEFAULT_FINISHES = ["Polished", "Matte", "Honed", "Structured Matte", "3D-5D Matte"];
 
