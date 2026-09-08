@@ -111,7 +111,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex min-h-screen bg-[#f8f5f0]" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
+    <div className="flex h-screen overflow-hidden bg-[#f8f5f0]" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
