@@ -1,0 +1,177 @@
+%!Adobe-FontList 1.25
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/Volumes/DATA/Nobilita Newsletter/Document fonts/AdobeFnt25.lst
+FileLength:3625
+FileModTime:810221700
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Michroma
+FamilyName:Michroma
+StyleName:Regular
+MenuName:Michroma
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Michroma
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/Nobilita Newsletter/Document fonts/Michroma.ttf
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:64940
+FileModTime:665715636
+NameArray:0,Mac,18,Michroma
+NameArray:0,Mac,4,Michroma
+NameArray:0,Win,1,Michroma
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+MenuName:Minion Pro
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Minion Pro
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/Nobilita Newsletter/Document fonts/MinionPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:217280
+FileModTime:775685357
+DesignSize:110
+NameArray:0,Mac,4,Minion Pro
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:IvyMode-Light
+FamilyName:Ivy Mode
+StyleName:Light
+MenuName:Ivy Mode Light
+StyleBits:0
+WeightClass:300
+WidthClass:5
+AngleClass:0
+FullName:IvyMode-Light
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/Nobilita Newsletter/Document fonts/ivy-mode-light.ttf
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:116476
+FileModTime:739887672
+NameArray:0,Mac,18,Ivy Mode Light
+NameArray:0,Mac,4,IvyMode-Light
+NameArray:0,Win,1,Ivy Mode Light
+NameArray:0,Win,16,Ivy Mode
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:IvyMode-Regular
+FamilyName:Ivy Mode
+StyleName:Regular
+MenuName:Ivy Mode
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:IvyMode-Regular
+WritingScript:Roman
+OutlineFileName:/Volumes/DATA/Nobilita Newsletter/Document fonts/ivy-mode-regular.ttf
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:116052
+FileModTime:739887752
+NameArray:0,Mac,18,Ivy Mode Regular
+NameArray:0,Mac,4,IvyMode-Regular
+NameArray:0,Win,1,Ivy Mode
+NameArray:0,Win,16,Ivy Mode
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:GurmukhiMN
+FamilyName:Gurmukhi MN
+StyleName:Regular
+MenuName:Gurmukhi MN
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Gurmukhi MN
+WritingScript:Gurmukhi
+OutlineFileName:/Volumes/DATA/Nobilita Newsletter/Document fonts/Gurmukhi MN.ttc
+TTCOffset:32
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:230292
+FileModTime:791618582
+NameArray:0,Mac,18,Gurmukhi MN
+NameArray:0,Mac,4,Gurmukhi MN
+NameArray:0,Win,1,Gurmukhi MN
+NameArray:9,Win,1,गुरुमुखी एमएन
+NameArray:10,Win,1,ਗੁਰਮੁਖੀ ਐਮਐੱਨ
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:GurmukhiMN-Bold
+FamilyName:Gurmukhi MN
+StyleName:Bold
+MenuName:Gurmukhi MN
+StyleBits:2
+WeightClass:700
+WidthClass:5
+AngleClass:0
+FullName:Gurmukhi MN Bold
+WritingScript:Gurmukhi
+OutlineFileName:/Volumes/DATA/Nobilita Newsletter/Document fonts/Gurmukhi MN.ttc
+TTCOffset:380
+DataFormat:sfntData
+hasSVG:no
+hasSBIX:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:230292
+FileModTime:791618582
+NameArray:0,Mac,18,Gurmukhi MN Bold
+NameArray:0,Mac,4,Gurmukhi MN Bold
+NameArray:0,Win,1,Gurmukhi MN
+NameArray:9,Win,1,गुरुमुखी एमएन
+NameArray:10,Win,1,ਗੁਰਮੁਖੀ ਐਮਐੱਨ
+%EndFont
+

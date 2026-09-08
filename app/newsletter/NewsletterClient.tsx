@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import NewsletterPromoSection from "@/components/NewsletterPromoSection";
 
 interface NewsletterCard {
   id: string;
@@ -14,14 +13,6 @@ interface NewsletterCard {
   date: string;
   href: string;
 }
-
-const applications = [
-  { name: "INTERIOR WALLS", icon: "/images/Nobilita Newsletter/icons/icons/Untitled-1-01.png" },
-  { name: "COUNTERTOPS", icon: "/images/Nobilita Newsletter/icons/icons/Untitled-1-02.png" },
-  { name: "FACADES", icon: "/images/Nobilita Newsletter/icons/icons/Untitled-1-03.png" },
-  { name: "FLOORING", icon: "/images/Nobilita Newsletter/icons/icons/Untitled-1-04.png" },
-  { name: "FURNITURES", icon: "/images/Nobilita Newsletter/icons/icons/Untitled-1-05.png" },
-];
 
 export default function NewsletterPage() {
   const containerVariants = {
@@ -94,17 +85,6 @@ export default function NewsletterPage() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleCatalogDownload = () => {
-    const link = document.createElement("a");
-    link.href = "/Pdfs/CATALOGUE.pdf";
-    link.download = "CATALOGUE.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    window.dispatchEvent(new CustomEvent("open-catalog-form"));
-  };
 
   return (
     <div className="min-h-screen bg-white text-brand-dark flex flex-col justify-between overflow-x-hidden relative">
@@ -203,58 +183,6 @@ export default function NewsletterPage() {
           </div>
         </motion.div>
       </main>
-
-      {/* Applications Teal Bar Section with PNG Icons */}
-      <section className="w-full bg-[#006F8E] text-white py-10 md:py-12 border-t border-b border-white/10">
-        <div className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 divide-y sm:divide-y-0 lg:divide-x divide-white/25">
-            {applications.map((app, idx) => (
-              <Link
-                key={idx}
-                href="/explore-collection"
-                className="flex flex-col items-center justify-center p-4 md:p-6 group hover:bg-white/5 transition-colors duration-300"
-              >
-                <div className="h-12 md:h-16 lg:h-20 flex items-center justify-center mb-3">
-                  <img
-                    src={app.icon}
-                    alt={app.name}
-                    className="max-h-full w-auto object-contain block transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-                <span className="font-michroma text-[clamp(12px,1.5vw,20px)] text-white tracking-[0.25em] uppercase font-light text-center">
-                  {app.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Statuario Ultimo 1 Background Footer Strip (NOBILITA.COM + DOWNLOAD CATALOG) */}
-      <section
-        className="relative w-full bg-cover bg-center py-12 md:py-20 px-6 md:px-16 overflow-hidden"
-        style={{ backgroundImage: "url('/images/Nobilita Newsletter/Links/Statuario Ultimo 1.jpg')" }}
-      >
-        <div className="absolute inset-0 bg-white/25 pointer-events-none" />
-
-        <div className="relative z-10 w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-          <Link
-            href="/"
-            className="font-michroma text-[clamp(12px,1.5vw,20px)] text-[#1a1a1a] tracking-[0.25em] font-light uppercase hover:opacity-75 transition-opacity"
-          >
-            NOBILITA.COM
-          </Link>
-
-          <button
-            onClick={handleCatalogDownload}
-            className="font-michroma text-[clamp(12px,1.5vw,20px)] text-[#1a1a1a] tracking-[0.25em] font-light uppercase hover:opacity-75 transition-opacity focus:outline-none cursor-pointer"
-          >
-            DOWNLOAD CATALOG
-          </button>
-        </div>
-      </section>
-
-      <NewsletterPromoSection />
 
       <Footer />
     </div>
