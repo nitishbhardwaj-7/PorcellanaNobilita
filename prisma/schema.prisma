@@ -93,6 +93,38 @@ model Blog {
   updatedAt      DateTime @updatedAt
 }
 
+// A single product-spotlight newsletter edition, shown at /newsletter (grid
+// of cards) and /newsletter/[slug] (detail page). Distinct from Blog — no
+// free-form article body; a fixed structured layout (hero image, subtitle,
+// and one product spec block) mirroring the launch newsletters seeded in
+// lib/hardcodedNewsletters.ts, which stay in place as permanent fallback
+// content the same way HARDCODED_BLOGS does for Blog — a CMS row always
+// wins over a hardcoded entry with the same slug.
+model Newsletter {
+  id                   String   @id @default(cuid())
+  slug                 String   @unique
+  title                String
+  subtitle             String?  @db.Text
+  cardImage            String? // thumbnail on the /newsletter listing grid
+  heroImage            String? // full-width banner on the detail page (falls back to cardImage if unset)
+  heroImageAlt         String?
+  author               String   @default("NOBILITA Editorial Team")
+  specProductName      String?
+  specSlabImage        String?
+  specDimensions       String[] @default([])
+  specFaces            String[] @default([])
+  specFinishes         String[] @default([])
+  specInspirationLine1 String?
+  specInspirationLine2 String?
+  seoTitle             String?
+  seoDescription       String?
+  order                Int      @default(0)
+  status               Status   @default(DRAFT)
+  publishedAt          DateTime @default(now())
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
 model Submission {
   id        String         @id @default(cuid())
   type      SubmissionType

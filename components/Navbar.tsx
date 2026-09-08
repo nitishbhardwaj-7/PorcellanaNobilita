@@ -10,11 +10,12 @@ export default function Navbar({ forceVisible = false }: { forceVisible?: boolea
   const isHomeScreen = pathname === "/";
   const isExplorePage = pathname === "/explore-collection";
   const isOurStoryPage = pathname === "/our-story";
+  const isNewsletterDetailPage = Boolean(pathname?.startsWith("/newsletter/") && pathname !== "/newsletter");
 
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [isInsideBrandIntro, setIsInsideBrandIntro] = useState(isHomeScreen || isExplorePage || isOurStoryPage);
+  const [isInsideBrandIntro, setIsInsideBrandIntro] = useState(isHomeScreen || isExplorePage || isOurStoryPage || isNewsletterDetailPage);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isMouseNearTop = useRef(false);
@@ -36,9 +37,9 @@ export default function Navbar({ forceVisible = false }: { forceVisible?: boolea
     resetHideTimeout();
   };
 
-  // Scroll event listener to check if we are in the initial section of the page (BrandIntro on Home, Hero on Explore)
+  // Scroll event listener to check if we are in the initial section of the page (BrandIntro on Home, Hero on Explore/Newsletter)
   useEffect(() => {
-    if (!isHomeScreen && !isExplorePage && !isOurStoryPage) {
+    if (!isHomeScreen && !isExplorePage && !isOurStoryPage && !isNewsletterDetailPage) {
       setIsInsideBrandIntro(false);
       return;
     }
@@ -49,6 +50,9 @@ export default function Navbar({ forceVisible = false }: { forceVisible?: boolea
         threshold = window.innerHeight * 0.9;
       } else if (isExplorePage) {
         const heroEl = document.getElementById("explore-hero");
+        threshold = heroEl ? heroEl.offsetHeight : 380;
+      } else if (isNewsletterDetailPage) {
+        const heroEl = document.getElementById("newsletter-hero");
         threshold = heroEl ? heroEl.offsetHeight : 380;
       }
     };
@@ -80,7 +84,7 @@ export default function Navbar({ forceVisible = false }: { forceVisible?: boolea
       window.removeEventListener("resize", handleResize);
       clearTimeout(timer);
     };
-  }, [isHomeScreen, isExplorePage, isOurStoryPage]);
+  }, [isHomeScreen, isExplorePage, isOurStoryPage, isNewsletterDetailPage]);
 
   // Mutation observer to hide navbar instantly when body overflow is hidden (modal open)
   useEffect(() => {
