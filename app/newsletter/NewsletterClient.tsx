@@ -52,20 +52,6 @@ export default function NewsletterPage() {
   // below) always wins over its hardcoded entry here.
   const hardcodedPosts: NewsletterCard[] = [
     {
-      id: "paonazzetto-inizio",
-      title: "PAONAZZETTO INIZIO",
-      image: "/images/newsletter page images/paonazzetto-inizio-newsletter.webp",
-      date: "2026-07-28",
-      href: "/newsletter/paonazzetto-inizio",
-    },
-    {
-      id: "striato-argento",
-      title: "STRIATO ARGENTO",
-      image: "/images/newsletter page images/striato-argento-newsletter.webp",
-      date: "2026-07-28",
-      href: "/newsletter/striato-argento",
-    },
-    {
       id: "macchia-vecchia-max",
       title: "MACCHIA VECCHIA MAX",
       image: "/images/Nobilita Newsletter/Links/Macchia Vecchia Max App.jpg",
