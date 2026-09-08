@@ -105,17 +105,26 @@ model Newsletter {
   slug                 String   @unique
   title                String
   subtitle             String?  @db.Text
+  subtitleColor        String?
+  subtitleFont         String?
+  subtitleSize         String?
   cardImage            String? // thumbnail on the /newsletter listing grid
   heroImage            String? // full-width banner on the detail page (falls back to cardImage if unset)
   heroImageAlt         String?
   author               String   @default("NOBILITA Editorial Team")
   specProductName      String?
+  specProductNameColor String?
+  specProductNameFont  String?
+  specProductNameSize  String?
   specSlabImage        String?
   specDimensions       String[] @default([])
   specFaces            String[] @default([])
   specFinishes         String[] @default([])
   specInspirationLine1 String?
   specInspirationLine2 String?
+  specInspirationColor String?
+  specInspirationFont  String?
+  specInspirationSize  String?
   seoTitle             String?
   seoDescription       String?
   order                Int      @default(0)

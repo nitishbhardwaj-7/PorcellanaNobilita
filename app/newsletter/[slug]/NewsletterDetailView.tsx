@@ -9,6 +9,7 @@ import NavigationOverlay from "@/components/NavigationOverlay";
 import NewsletterPromoSection from "@/components/NewsletterPromoSection";
 import FeaturedProduct from "@/components/FeaturedProduct";
 import { NewsletterPost } from "@/lib/hardcodedNewsletters";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 interface Props {
   post: NewsletterPost;
@@ -135,7 +136,7 @@ export default function NewsletterDetailView({ post }: Props) {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 1, 0.5, 1] }}
           className="max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] mx-auto text-center"
         >
-          <p className="font-ivymode font-light text-[clamp(22px,2.8vw,42px)] leading-[1.35] text-[#1a1a1a] tracking-normal">
+          <p className={`${fontClass(post.subtitleFont, "font-ivymode")} font-light ${paragraphSizeClass(post.subtitleSize, "text-[clamp(22px,2.8vw,42px)]")} leading-[1.35] ${colorClass(post.subtitleColor, "text-[#1a1a1a]")} tracking-normal`}>
             {post.subtitle || "A collection where timeless Italian elegance meets advanced porcelain technology."}
           </p>
         </motion.div>
@@ -179,7 +180,7 @@ export default function NewsletterDetailView({ post }: Props) {
             <div className="flex flex-col justify-between py-0 text-left flex-1 max-w-xl">
               {/* Top: Product Title */}
               <div>
-                <h2 className="font-ivymode text-3xl sm:text-4xl lg:text-5xl font-light text-[#1a1a1a] tracking-wider uppercase leading-none mt-0">
+                <h2 className={`${fontClass(spec.productNameFont, "font-ivymode")} ${headingSizeClass(spec.productNameSize, "text-3xl sm:text-4xl lg:text-5xl")} font-light ${colorClass(spec.productNameColor, "text-[#1a1a1a]")} tracking-wider uppercase leading-none mt-0`}>
                   {spec.productName}
                 </h2>
               </div>
@@ -272,7 +273,7 @@ export default function NewsletterDetailView({ post }: Props) {
 
           {/* Bottom Inspiration Sentence */}
           <div className="mt-14 md:mt-20 pt-8 text-center border-t border-gray-100/80">
-            <p className="font-ivymode font-light text-[clamp(18px,2.2vw,28px)] text-[#1a1a1a] leading-relaxed max-w-3xl mx-auto">
+            <p className={`${fontClass(spec.inspirationFont, "font-ivymode")} font-light ${paragraphSizeClass(spec.inspirationSize, "text-[clamp(18px,2.2vw,28px)]")} ${colorClass(spec.inspirationColor, "text-[#1a1a1a]")} leading-relaxed max-w-3xl mx-auto`}>
               {spec.inspirationLine1 || "Inspired by Italy's noble heritage and baroque architecture,"}
               <br className="hidden sm:block" />
               {" "}

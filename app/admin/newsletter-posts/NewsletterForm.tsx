@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, X, ChevronDown } from "lucide-react";
 import { MediaPickerField } from "../_components/MediaPicker";
+import { StyleRow } from "../_components/StyleControls";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 function CustomSelect({
   value,
@@ -153,17 +155,26 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
     title: "",
     slug: "",
     subtitle: "",
+    subtitleColor: "default",
+    subtitleFont: "default",
+    subtitleSize: "default",
     author: "NOBILITA Editorial Team",
     cardImage: "",
     heroImage: "",
     heroImageAlt: "",
     specProductName: "",
+    specProductNameColor: "default",
+    specProductNameFont: "default",
+    specProductNameSize: "default",
     specSlabImage: "",
     specDimensions: [] as string[],
     specFaces: [] as string[],
     specFinishes: [] as string[],
     specInspirationLine1: "",
     specInspirationLine2: "",
+    specInspirationColor: "default",
+    specInspirationFont: "default",
+    specInspirationSize: "default",
     seoTitle: "",
     seoDescription: "",
     order: 0,
@@ -190,17 +201,26 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
               title: n.title,
               slug: n.slug,
               subtitle: n.subtitle || "",
+              subtitleColor: n.subtitleColor || "default",
+              subtitleFont: n.subtitleFont || "default",
+              subtitleSize: n.subtitleSize || "default",
               author: n.author || "NOBILITA Editorial Team",
               cardImage: n.cardImage || "",
               heroImage: n.heroImage || "",
               heroImageAlt: n.heroImageAlt || "",
               specProductName: n.specProductName || "",
+              specProductNameColor: n.specProductNameColor || "default",
+              specProductNameFont: n.specProductNameFont || "default",
+              specProductNameSize: n.specProductNameSize || "default",
               specSlabImage: n.specSlabImage || "",
               specDimensions: n.specDimensions || [],
               specFaces: n.specFaces || [],
               specFinishes: n.specFinishes || [],
               specInspirationLine1: n.specInspirationLine1 || "",
               specInspirationLine2: n.specInspirationLine2 || "",
+              specInspirationColor: n.specInspirationColor || "default",
+              specInspirationFont: n.specInspirationFont || "default",
+              specInspirationSize: n.specInspirationSize || "default",
               seoTitle: n.seoTitle || "",
               seoDescription: n.seoDescription || "",
               order: n.order ?? 0,
@@ -358,6 +378,15 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   placeholder="A collection where timeless Italian elegance meets advanced porcelain technology."
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
                 />
+                <StyleRow
+                  color={form.subtitleColor}
+                  onColorChange={(v) => setForm((p) => ({ ...p, subtitleColor: v }))}
+                  font={form.subtitleFont}
+                  onFontChange={(v) => setForm((p) => ({ ...p, subtitleFont: v }))}
+                  size={form.subtitleSize}
+                  onSizeChange={(v) => setForm((p) => ({ ...p, subtitleSize: v }))}
+                  sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                />
                 <p className="text-[10px] text-[#8b8b8b]">Shown in the white banner below the hero on the detail page.</p>
               </div>
 
@@ -395,6 +424,15 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, specProductName: e.target.value }))}
                   placeholder="e.g. PAONAZZETTO INIZIO"
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                />
+                <StyleRow
+                  color={form.specProductNameColor}
+                  onColorChange={(v) => setForm((p) => ({ ...p, specProductNameColor: v }))}
+                  font={form.specProductNameFont}
+                  onFontChange={(v) => setForm((p) => ({ ...p, specProductNameFont: v }))}
+                  size={form.specProductNameSize}
+                  onSizeChange={(v) => setForm((p) => ({ ...p, specProductNameSize: v }))}
+                  sizeOptions={HEADING_SIZE_OPTIONS}
                 />
               </div>
 
@@ -451,6 +489,21 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                     className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
                   />
                 </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
+                  Inspiration Text Style
+                </label>
+                <StyleRow
+                  color={form.specInspirationColor}
+                  onColorChange={(v) => setForm((p) => ({ ...p, specInspirationColor: v }))}
+                  font={form.specInspirationFont}
+                  onFontChange={(v) => setForm((p) => ({ ...p, specInspirationFont: v }))}
+                  size={form.specInspirationSize}
+                  onSizeChange={(v) => setForm((p) => ({ ...p, specInspirationSize: v }))}
+                  sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                />
+                <p className="text-[10px] text-[#8b8b8b]">Applies to both inspiration lines together — they render as one paragraph.</p>
               </div>
             </div>
 

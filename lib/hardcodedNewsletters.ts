@@ -8,12 +8,18 @@ export interface NewsletterContentBlock {
 
 export interface ProductSpec {
   productName: string;
+  productNameColor?: string | null;
+  productNameFont?: string | null;
+  productNameSize?: string | null;
   slabImage: string;
   dimensions: string[];
   faces: string[];
   finishes: string[];
   inspirationLine1?: string;
   inspirationLine2?: string;
+  inspirationColor?: string | null;
+  inspirationFont?: string | null;
+  inspirationSize?: string | null;
 }
 
 export interface NewsletterPost {
@@ -22,6 +28,9 @@ export interface NewsletterPost {
   title: string;
   bannerTagline: string;
   subtitle: string;
+  subtitleColor?: string | null;
+  subtitleFont?: string | null;
+  subtitleSize?: string | null;
   heroImage: string;
   heroImageAlt?: string;
   date: string;
