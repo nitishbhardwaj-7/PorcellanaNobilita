@@ -196,18 +196,29 @@ function styleFields(field: (typeof STYLED_FIELDS)[number]): (keyof StorySetting
   return STYLE_SUFFIXES.map((s) => `${field}${s}` as keyof StorySettings);
 }
 
-function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+// `defaultSrc` is the hardcoded fallback the public page actually renders
+// when this field is empty — shown as a dimmed "(Default)" preview so an
+// admin can see what's currently live, not just an empty box.
+function ImageField({ label, value, onChange, defaultSrc }: { label: string; value: string; onChange: (url: string) => void; defaultSrc?: string }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />}
+      {value ? (
+        <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+      ) : defaultSrc ? (
+        <div className="relative">
+          <img src={defaultSrc} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+        </div>
+      ) : null}
       <div className="flex gap-1">
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={defaultSrc}
           className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
         />
         <MediaPickerButton folder="products" onSelect={onChange} />
@@ -216,20 +227,26 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
-function VideoField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+function VideoField({ label, value, onChange, defaultSrc }: { label: string; value: string; onChange: (url: string) => void; defaultSrc?: string }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && (
+      {value ? (
         <video src={value} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
-      )}
+      ) : defaultSrc ? (
+        <div className="relative">
+          <video src={defaultSrc} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5 pointer-events-none">Currently Live (Default)</span>
+        </div>
+      ) : null}
       <div className="flex gap-1">
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={defaultSrc}
           className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
         />
         <MediaPickerButton folder="our-story" accept="video/*" onSelect={onChange} />
@@ -424,6 +441,7 @@ export default function OurStoryAdminPage() {
             value={settings.storyHeroPara1}
             onChange={(e) => set("storyHeroPara1", e.target.value)}
             rows={2}
+            placeholder="In the grand halls of Renaissance palaces and Baroque villas, architecture was never just about building. It was an expression of culture, craftsmanship, and an enduring pursuit of beauty."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="storyHeroPara1" settings={settings} set={set} />
@@ -434,6 +452,7 @@ export default function OurStoryAdminPage() {
             value={settings.storyHeroPara2}
             onChange={(e) => set("storyHeroPara2", e.target.value)}
             rows={2}
+            placeholder="The world's greatest cities were shaped by spaces that celebrated proportion, artistry, and material excellence."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="storyHeroPara2" settings={settings} set={set} />
@@ -444,6 +463,7 @@ export default function OurStoryAdminPage() {
             value={settings.storyHeroPara3}
             onChange={(e) => set("storyHeroPara3", e.target.value)}
             rows={3}
+            placeholder={'Among their defining features was the "Piano Nobile – the noble floor." Elevated above the bustle of the streets, it was the heart of the home, where marble, light, and masterful detailing came together to create spaces of remarkable elegance.'}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "Piano Nobile — the noble floor."</p>
@@ -481,6 +501,7 @@ export default function OurStoryAdminPage() {
             value={settings.storySec2Line1}
             onChange={(e) => set("storySec2Line1", e.target.value)}
             rows={2}
+            placeholder="NOBILITA takes its name from this tradition."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="storySec2Line1" settings={settings} set={set} />
@@ -491,6 +512,7 @@ export default function OurStoryAdminPage() {
             value={settings.storySec2Line2}
             onChange={(e) => set("storySec2Line2", e.target.value)}
             rows={3}
+            placeholder={'NOBILITA represents a philosophy rather than a status. It is a belief that exceptional materials, thoughtful design, and skilled craftsmanship have the power to elevate everyday spaces into something "extraordinary."'}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "extraordinary."</p>
@@ -502,14 +524,15 @@ export default function OurStoryAdminPage() {
             value={settings.storySec2Line3}
             onChange={(e) => set("storySec2Line3", e.target.value)}
             rows={2}
+            placeholder="Today, that philosophy guides everything we do."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="storySec2Line3" settings={settings} set={set} />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <ImageField label="Background Image" value={settings.storySec2BgImage} onChange={(v) => set("storySec2BgImage", v)} />
-          <ImageField label="Product Photo" value={settings.storySec2Image} onChange={(v) => set("storySec2Image", v)} />
+          <ImageField label="Background Image" value={settings.storySec2BgImage} onChange={(v) => set("storySec2BgImage", v)} defaultSrc="/images/Links/Arbescato Fjord Face 1.jpg" />
+          <ImageField label="Product Photo" value={settings.storySec2Image} onChange={(v) => set("storySec2Image", v)} defaultSrc="/images/Our story/Verde profondo application.jpg" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="space-y-1.5">
@@ -542,8 +565,8 @@ export default function OurStoryAdminPage() {
           <SavedBadge section="sec3" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <VideoField label="Background Video" value={settings.storySec3Video} onChange={(v) => set("storySec3Video", v)} />
-          <ImageField label="Tagline Graphic" value={settings.storySec3TagImage} onChange={(v) => set("storySec3TagImage", v)} />
+          <VideoField label="Background Video" value={settings.storySec3Video} onChange={(v) => set("storySec3Video", v)} defaultSrc="/images/Our story/qqq.mp4" />
+          <ImageField label="Tagline Graphic" value={settings.storySec3TagImage} onChange={(v) => set("storySec3TagImage", v)} defaultSrc="/images/Links/tag.png" />
         </div>
 
         <div className="space-y-1.5">
@@ -552,6 +575,7 @@ export default function OurStoryAdminPage() {
             value={settings.storySec3Para}
             onChange={(e) => set("storySec3Para", e.target.value)}
             rows={3}
+            placeholder="At NOBILITA, we work closely with architects, designers, and discerning clients to create architectural experiences. Through careful selection, expert craftsmanship, and a deep understanding of design, we help create spaces that feel timeless rather than trend-driven."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="storySec3Para" settings={settings} set={set} />
@@ -601,6 +625,7 @@ export default function OurStoryAdminPage() {
             value={settings.storySec4Line1}
             onChange={(e) => set("storySec4Line1", e.target.value)}
             rows={3}
+            placeholder="Our inspiration comes from the great interiors of the past, but our vision is firmly contemporary: bringing the beauty, depth, and sophistication of natural stone into modern spaces through advanced porcelain surfaces."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="storySec4Line1" settings={settings} set={set} />
@@ -611,6 +636,7 @@ export default function OurStoryAdminPage() {
             value={settings.storySec4Line2}
             onChange={(e) => set("storySec4Line2", e.target.value)}
             rows={2}
+            placeholder="Because true luxury is not defined by excess."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="storySec4Line2" settings={settings} set={set} />
@@ -621,6 +647,7 @@ export default function OurStoryAdminPage() {
             value={settings.storySec4Line3}
             onChange={(e) => set("storySec4Line3", e.target.value)}
             rows={2}
+            placeholder={'It is defined by "beauty that endures."'}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "beauty that endures."</p>
@@ -628,8 +655,8 @@ export default function OurStoryAdminPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <ImageField label="Background Image" value={settings.storySec4BgImage} onChange={(v) => set("storySec4BgImage", v)} />
-          <ImageField label="Product Photo" value={settings.storySec4Image} onChange={(v) => set("storySec4Image", v)} />
+          <ImageField label="Background Image" value={settings.storySec4BgImage} onChange={(v) => set("storySec4BgImage", v)} defaultSrc="/images/Links/Fior Di Melo Face 1.jpg" />
+          <ImageField label="Product Photo" value={settings.storySec4Image} onChange={(v) => set("storySec4Image", v)} defaultSrc="/images/Our story/Ferro Industriale (2).jpg" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="space-y-1.5">

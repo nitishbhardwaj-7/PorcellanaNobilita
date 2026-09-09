@@ -122,18 +122,29 @@ function styleFields(field: (typeof STYLED_FIELDS)[number]): (keyof MiSettings)[
   return STYLE_SUFFIXES.map((s) => `${field}${s}` as keyof MiSettings);
 }
 
-function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+// `defaultSrc` is the hardcoded fallback the public page actually renders
+// when this field is empty — shown as a dimmed "(Default)" preview so an
+// admin can see what's currently live, not just an empty box.
+function ImageField({ label, value, onChange, defaultSrc }: { label: string; value: string; onChange: (url: string) => void; defaultSrc?: string }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />}
+      {value ? (
+        <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+      ) : defaultSrc ? (
+        <div className="relative">
+          <img src={defaultSrc} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+        </div>
+      ) : null}
       <div className="flex gap-1">
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={defaultSrc}
           className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
         />
         <MediaPickerButton folder="products" onSelect={onChange} />
@@ -142,20 +153,26 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
-function VideoField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+function VideoField({ label, value, onChange, defaultSrc }: { label: string; value: string; onChange: (url: string) => void; defaultSrc?: string }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && (
+      {value ? (
         <video src={value} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
-      )}
+      ) : defaultSrc ? (
+        <div className="relative">
+          <video src={defaultSrc} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5 pointer-events-none">Currently Live (Default)</span>
+        </div>
+      ) : null}
       <div className="flex gap-1">
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={defaultSrc}
           className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
         />
         <MediaPickerButton folder="made-in-italy" accept="video/*" onSelect={onChange} />
@@ -291,7 +308,7 @@ export default function MadeInItalyAdminPage() {
           <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Duomo Video Hero</p>
           <SavedBadge section="sec1" />
         </div>
-        <VideoField label="Background Video" value={settings.miSec1Video} onChange={(v) => set("miSec1Video", v)} />
+        <VideoField label="Background Video" value={settings.miSec1Video} onChange={(v) => set("miSec1Video", v)} defaultSrc="/images/made-in-italy/duomo 2.mp4" />
 
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Heading</label>
@@ -331,6 +348,7 @@ export default function MadeInItalyAdminPage() {
             value={settings.miSec2Para1}
             onChange={(e) => set("miSec2Para1", e.target.value)}
             rows={3}
+            placeholder="In the heart of Italy, where rolling hills meet centuries of craftsmanship, lies Modena, a region shaped by the relentless pursuit of excellence. Home to Ferrari, Acetaia Giusti, and Brioni, Modena has long been a place where mastery is refined through patience, precision, and dedication to craft."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="miSec2Para1" settings={settings} set={set} />
@@ -341,6 +359,7 @@ export default function MadeInItalyAdminPage() {
             value={settings.miSec2Para2}
             onChange={(e) => set("miSec2Para2", e.target.value)}
             rows={3}
+            placeholder={'The same spirit defines its porcelain industry. Here, innovation and heritage exist side by side, transforming raw materials into surfaces of "exceptional quality and enduring beauty."'}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "exceptional quality and enduring beauty."</p>
@@ -348,7 +367,7 @@ export default function MadeInItalyAdminPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <ImageField label="Image" value={settings.miSec2Image} onChange={(v) => set("miSec2Image", v)} />
+          <ImageField label="Image" value={settings.miSec2Image} onChange={(v) => set("miSec2Image", v)} defaultSrc="/images/made-in-italy/Palazzo_della_civiltà_del_lavoro_(EUR,_Rome)_(5904657870).jpg" />
           <div className="space-y-1.5">
             <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Image Caption</label>
             <input
@@ -377,6 +396,7 @@ export default function MadeInItalyAdminPage() {
             value={settings.miSec3Line1}
             onChange={(e) => set("miSec3Line1", e.target.value)}
             rows={2}
+            placeholder="Every NOBILITA slab is born from this tradition, crafted with Italian expertise, engineered for performance, and designed to stand the test of time."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="miSec3Line1" settings={settings} set={set} />
@@ -387,6 +407,7 @@ export default function MadeInItalyAdminPage() {
             value={settings.miSec3Line2}
             onChange={(e) => set("miSec3Line2", e.target.value)}
             rows={2}
+            placeholder={'More than a surface, it is a "legacy of craftsmanship made for generations to come."'}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "legacy of craftsmanship made for generations to come."</p>
@@ -394,8 +415,8 @@ export default function MadeInItalyAdminPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <ImageField label="Left Image (Factory)" value={settings.miSec3LeftImage} onChange={(v) => set("miSec3LeftImage", v)} />
-          <ImageField label="Right Image (Processing Unit)" value={settings.miSec3RightImage} onChange={(v) => set("miSec3RightImage", v)} />
+          <ImageField label="Left Image (Factory)" value={settings.miSec3LeftImage} onChange={(v) => set("miSec3LeftImage", v)} defaultSrc="/images/made-in-italy/factory-image.jpeg" />
+          <ImageField label="Right Image (Processing Unit)" value={settings.miSec3RightImage} onChange={(v) => set("miSec3RightImage", v)} defaultSrc="/images/made-in-italy/continua-impianto-hd-2.jpg" />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Right Image Caption</label>
@@ -413,6 +434,7 @@ export default function MadeInItalyAdminPage() {
             value={settings.miSec3BottomPara}
             onChange={(e) => set("miSec3BottomPara", e.target.value)}
             rows={3}
+            placeholder="NOBILITA works at the forefront of large-format surface innovation, with state-of-the-art production systems capable of creating ultra-large slabs in exceptional formats and multiple thicknesses. These advancements have redefined what is possible in contemporary architecture, enabling seamless surfaces, reduced visual fragmentation, and a more monolithic architectural language."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="miSec3BottomPara" settings={settings} set={set} />
@@ -435,10 +457,10 @@ export default function MadeInItalyAdminPage() {
           <SavedBadge section="sec4" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <ImageField label="Background Image (Desktop)" value={settings.miSec4BgImage} onChange={(v) => set("miSec4BgImage", v)} />
-          <ImageField label="Background Image (Mobile)" value={settings.miSec4BgImageMobile} onChange={(v) => set("miSec4BgImageMobile", v)} />
+          <ImageField label="Background Image (Desktop)" value={settings.miSec4BgImage} onChange={(v) => set("miSec4BgImage", v)} defaultSrc="/images/made-in-italy/colosseo-2020-compressed.jpg" />
+          <ImageField label="Background Image (Mobile)" value={settings.miSec4BgImageMobile} onChange={(v) => set("miSec4BgImageMobile", v)} defaultSrc="/images/made-in-italy/colosseo-mobile.jpg" />
         </div>
-        <ImageField label="Tagline Graphic (Il Gres Imperiale d'Italia)" value={settings.miSec4TagImage} onChange={(v) => set("miSec4TagImage", v)} />
+        <ImageField label="Tagline Graphic (Il Gres Imperiale d'Italia)" value={settings.miSec4TagImage} onChange={(v) => set("miSec4TagImage", v)} defaultSrc="/images/Links/tag grey.png" />
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Caption</label>
           <input

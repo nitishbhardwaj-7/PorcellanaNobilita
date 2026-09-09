@@ -228,18 +228,29 @@ function styleFields(field: (typeof STYLED_FIELDS)[number]): (keyof TdSettings)[
   return STYLE_SUFFIXES.map((s) => `${field}${s}` as keyof TdSettings);
 }
 
-function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+// `defaultSrc` is the hardcoded fallback the public page actually renders
+// when this field is empty — shown as a dimmed "(Default)" preview so an
+// admin can see what's currently live, not just an empty box.
+function ImageField({ label, value, onChange, defaultSrc }: { label: string; value: string; onChange: (url: string) => void; defaultSrc?: string }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && <img src={value} alt="" className="h-28 w-28 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-3" />}
+      {value ? (
+        <img src={value} alt="" className="h-28 w-28 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-3" />
+      ) : defaultSrc ? (
+        <div className="relative h-28 w-28">
+          <img src={defaultSrc} alt="" className="h-28 w-28 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-3 opacity-60" />
+          <span className="absolute top-0.5 left-0.5 bg-[#1a1a1a]/70 text-white text-[7px] tracking-[0.1em] uppercase px-1 py-0.5">Default</span>
+        </div>
+      ) : null}
       <div className="flex gap-1">
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={defaultSrc}
           className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
         />
         <MediaPickerButton folder="products" onSelect={onChange} />
@@ -248,20 +259,26 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
-function VideoField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+function VideoField({ label, value, onChange, defaultSrc }: { label: string; value: string; onChange: (url: string) => void; defaultSrc?: string }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && (
+      {value ? (
         <video src={value} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
-      )}
+      ) : defaultSrc ? (
+        <div className="relative">
+          <video src={defaultSrc} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5 pointer-events-none">Currently Live (Default)</span>
+        </div>
+      ) : null}
       <div className="flex gap-1">
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={defaultSrc}
           className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
         />
         <MediaPickerButton folder="technical-data" accept="video/*" onSelect={onChange} />
@@ -577,11 +594,12 @@ export default function TechnicalDataAdminPage() {
             value={settings.tdHeroDesc}
             onChange={(e) => set("tdHeroDesc", e.target.value)}
             rows={3}
+            placeholder="Every NOBILITA surface is engineered for exceptional performance from specification to installation. Designed by architects and engineers, it combines technical precision with refined aesthetics, ensuring premium quality, consistency and reliability. NOBILITA offers outstanding durability, dimensional stability, stain resistance, and long-term performance."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="tdHeroDesc" settings={settings} set={set} />
         </div>
-        <VideoField label="Background Video" value={settings.tdHeroVideo} onChange={(v) => set("tdHeroVideo", v)} />
+        <VideoField label="Background Video" value={settings.tdHeroVideo} onChange={(v) => set("tdHeroVideo", v)} defaultSrc="/images/technical data/engineered for perfomace.mp4" />
         <SaveButton section="hero" label="Save Hero" fields={["tdHeading", "tdHeroVideo", "tdHeroDesc", ...styleFields("tdHeading"), ...styleFields("tdHeroDesc")]} />
       </div>
 
@@ -623,7 +641,7 @@ export default function TechnicalDataAdminPage() {
                     className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                   />
                 </div>
-                <ImageField label="Icon" value={settings[iconKey]} onChange={(v) => set(iconKey, v)} />
+                <ImageField label="Icon" value={settings[iconKey]} onChange={(v) => set(iconKey, v)} defaultSrc={CHAR_DEFAULTS[n].icon} />
               </div>
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Description</label>
@@ -665,6 +683,7 @@ export default function TechnicalDataAdminPage() {
             value={settings.tdUgDesc1}
             onChange={(e) => set("tdUgDesc1", e.target.value)}
             rows={2}
+            placeholder="The lasting beauty and performance of a surface depend on proper care and maintenance. To help you preserve the exceptional qualities of NOBILITA porcelain surfaces, we have created a collection of maintenance guidelines."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="tdUgDesc1" settings={settings} set={set} />
@@ -675,6 +694,7 @@ export default function TechnicalDataAdminPage() {
             value={settings.tdUgDesc2}
             onChange={(e) => set("tdUgDesc2", e.target.value)}
             rows={2}
+            placeholder="Explore our easy-to-follow care instructions and cleaning recommendations. Whether for residential or commercial applications, these guidelines ensure your NOBILITA surfaces continue to perform and look their best for generations to come."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <FieldStyleRow field="tdUgDesc2" settings={settings} set={set} />
@@ -781,17 +801,17 @@ export default function TechnicalDataAdminPage() {
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 1</label>
-          <textarea value={settings.tdDimDesc1} onChange={(e) => set("tdDimDesc1", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <textarea value={settings.tdDimDesc1} onChange={(e) => set("tdDimDesc1", e.target.value)} rows={2} placeholder="NOBILITA offers large-format porcelain slabs in rectified and non-rectified formats to suit different applications." className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
           <FieldStyleRow field="tdDimDesc1" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 2</label>
-          <textarea value={settings.tdDimDesc2} onChange={(e) => set("tdDimDesc2", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <textarea value={settings.tdDimDesc2} onChange={(e) => set("tdDimDesc2", e.target.value)} rows={2} placeholder="RECTIFIED SLABS are precisely trimmed for seamless installation, making them the preferred choice for tiling applications such as flooring, walls, and facades." className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
           <FieldStyleRow field="tdDimDesc2" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 3</label>
-          <textarea value={settings.tdDimDesc3} onChange={(e) => set("tdDimDesc3", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <textarea value={settings.tdDimDesc3} onChange={(e) => set("tdDimDesc3", e.target.value)} rows={2} placeholder="NON-RECTIFIED SLABS (Gross) are ideal when custom cutting is required, making them perfect for counter tops, mill work, and furniture." className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
           <FieldStyleRow field="tdDimDesc3" settings={settings} set={set} />
         </div>
         <SaveButton
@@ -825,12 +845,12 @@ export default function TechnicalDataAdminPage() {
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 1</label>
-          <textarea value={settings.tdThickDesc1} onChange={(e) => set("tdThickDesc1", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <textarea value={settings.tdThickDesc1} onChange={(e) => set("tdThickDesc1", e.target.value)} rows={2} placeholder="6.5 MM – Lightweight and versatile, 6.5 MM porcelain is ideal for wall cladding, furniture applications and other interior surfaces where reduced weight is preferred." className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
           <FieldStyleRow field="tdThickDesc1" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 2</label>
-          <textarea value={settings.tdThickDesc2} onChange={(e) => set("tdThickDesc2", e.target.value)} rows={2} className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
+          <textarea value={settings.tdThickDesc2} onChange={(e) => set("tdThickDesc2", e.target.value)} rows={2} placeholder="12 MM – A robust and durable option, 12 MM porcelain is well suited for flooring, countertops, kitchen worktops and other high-use applications." className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none" />
           <FieldStyleRow field="tdThickDesc2" settings={settings} set={set} />
         </div>
         <SaveButton

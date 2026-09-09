@@ -301,6 +301,7 @@ function HeroTab() {
             value={settings.heroSubtitle || ""}
             onChange={(e) => setSettings((p) => ({ ...p, heroSubtitle: e.target.value }))}
             rows={3}
+            placeholder="At NOBILITA, we believe that true luxury is not about trends, it is timeless design, enduring quality, and a deep respect for architectural legacy. Our porcelain tiles are not just surfaces, they are foundations for homes, businesses, and landmarks that will stand for generations."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <StyleRow
@@ -586,14 +587,20 @@ function BrandIntroTab() {
               Tag Image
             </label>
             <p className="text-[10px] text-[#8b8b8b]">The "Il Gres Imperiale d'Italia" graphic at the top.</p>
-            {settings.brandTagImage && (
+            {settings.brandTagImage ? (
               <img src={settings.brandTagImage} alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
+            ) : (
+              <div className="relative">
+                <img src="/images/Links/tag.png" alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3 opacity-60" />
+                <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+              </div>
             )}
             <div className="flex gap-1">
               <input
                 type="text"
                 value={settings.brandTagImage || ""}
                 onChange={(e) => setSettings((p) => ({ ...p, brandTagImage: e.target.value }))}
+                placeholder="/images/Links/tag.png"
                 className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
               />
               <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, brandTagImage: url }))} />
@@ -605,14 +612,20 @@ function BrandIntroTab() {
               Logo Image
             </label>
             <p className="text-[10px] text-[#8b8b8b]">The NOBILITA logo in the middle.</p>
-            {settings.brandImg && (
+            {settings.brandImg ? (
               <img src={settings.brandImg} alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
+            ) : (
+              <div className="relative">
+                <img src="/images/NOBILITA_white.png" alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3 opacity-60" />
+                <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+              </div>
             )}
             <div className="flex gap-1">
               <input
                 type="text"
                 value={settings.brandImg || ""}
                 onChange={(e) => setSettings((p) => ({ ...p, brandImg: e.target.value }))}
+                placeholder="/images/NOBILITA_white.png"
                 className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
               />
               <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, brandImg: url }))} />
@@ -641,6 +654,7 @@ function BrandIntroTab() {
             value={settings.brandSubtitle || ""}
             onChange={(e) => setSettings((p) => ({ ...p, brandSubtitle: e.target.value }))}
             rows={4}
+            placeholder="Inspired by Italy's noble heritage and Baroque architecture, NOBILITA porcelain is crafted in Modena, Italy, home to Ferrari, Acetaia Giusti, and Brioni. A collection where timeless Italian elegance meets advanced porcelain technology."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <StyleRow
@@ -843,6 +857,7 @@ function CraftsmanshipTab() {
             value={settings.craftParagraph || ""}
             onChange={(e) => setSettings((p) => ({ ...p, craftParagraph: e.target.value }))}
             rows={3}
+            placeholder="In the heart of Modena, where centuries of Italian expertise meet innovation, NOBILITA creates porcelain surfaces that embody the art of timeless craftsmanship."
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
           />
           <StyleRow
@@ -863,14 +878,20 @@ function CraftsmanshipTab() {
             <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
               Background Image (Desktop)
             </label>
-            {settings.craftBgImage && (
+            {settings.craftBgImage ? (
               <img src={settings.craftBgImage} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+            ) : (
+              <div className="relative">
+                <img src="/images/Links/MEDICI VILLA copy (7).png" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+                <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+              </div>
             )}
             <div className="flex gap-1">
               <input
                 type="text"
                 value={settings.craftBgImage || ""}
                 onChange={(e) => setSettings((p) => ({ ...p, craftBgImage: e.target.value }))}
+                placeholder="/images/Links/MEDICI VILLA copy (7).png"
                 className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
               />
               <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, craftBgImage: url }))} />
@@ -881,14 +902,20 @@ function CraftsmanshipTab() {
             <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
               Background Image (Mobile)
             </label>
-            {settings.craftBgImageMobile && (
+            {settings.craftBgImageMobile ? (
               <img src={settings.craftBgImageMobile} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+            ) : (
+              <div className="relative">
+                <img src="/images/Links/medici-villa-mobile.png" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+                <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+              </div>
             )}
             <div className="flex gap-1">
               <input
                 type="text"
                 value={settings.craftBgImageMobile || ""}
                 onChange={(e) => setSettings((p) => ({ ...p, craftBgImageMobile: e.target.value }))}
+                placeholder="/images/Links/medici-villa-mobile.png"
                 className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
               />
               <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, craftBgImageMobile: url }))} />
@@ -964,26 +991,39 @@ interface LegacySettings {
   legacyRightLabel: string | null;
 }
 
+// `defaultSrc` is the hardcoded fallback the public page actually renders
+// when this field is empty — shown as a dimmed "(Default)" preview so an
+// admin can see what's currently live, not just an empty box.
 function ImageField({
   label,
   value,
   onChange,
+  defaultSrc,
 }: {
   label: string;
   value: string;
   onChange: (url: string) => void;
+  defaultSrc?: string;
 }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
         {label}
       </label>
-      {value && <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />}
+      {value ? (
+        <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+      ) : defaultSrc ? (
+        <div className="relative">
+          <img src={defaultSrc} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+        </div>
+      ) : null}
       <div className="flex gap-1">
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={defaultSrc}
           className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
         />
         <MediaPickerButton folder="products" onSelect={onChange} />
@@ -1083,6 +1123,7 @@ function LegacyTab() {
             label="Left Panel Photo"
             value={settings.legacyLeftImage || ""}
             onChange={(url) => setSettings((p) => ({ ...p, legacyLeftImage: url }))}
+            defaultSrc="/images/Links/Trevi-Fountain-Large.jpeg"
           />
           <div className="space-y-1.5">
             <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
@@ -1103,6 +1144,7 @@ function LegacyTab() {
             label="Right Panel Photo"
             value={settings.legacyRightImage || ""}
             onChange={(url) => setSettings((p) => ({ ...p, legacyRightImage: url }))}
+            defaultSrc="/images/rightlegacy.jpg"
           />
           <div className="space-y-1.5">
             <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
@@ -1123,16 +1165,19 @@ function LegacyTab() {
             label="Center Sketch"
             value={settings.legacySketchImage || ""}
             onChange={(url) => setSettings((p) => ({ ...p, legacySketchImage: url }))}
+            defaultSrc="/images/Links/DP8017299.png"
           />
           <ImageField
             label="Center Logo"
             value={settings.legacyLogoImage || ""}
             onChange={(url) => setSettings((p) => ({ ...p, legacyLogoImage: url }))}
+            defaultSrc="/images/Links/NOBILITA Logo BLACK.png"
           />
           <ImageField
             label="Center Tagline Graphic"
             value={settings.legacyTaglineImage || ""}
             onChange={(url) => setSettings((p) => ({ ...p, legacyTaglineImage: url }))}
+            defaultSrc="/images/Links/tag grey.png"
           />
         </div>
 
@@ -1635,6 +1680,7 @@ function DimensionsTab() {
             label="Feature Image"
             value={settings.dimImage || ""}
             onChange={(url) => setSettings((p) => ({ ...p, dimImage: url }))}
+            defaultSrc="/images/format & dimensions application copy new.jpg"
           />
           <div className="space-y-5">
             <div className="space-y-1.5">
