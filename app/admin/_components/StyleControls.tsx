@@ -8,20 +8,38 @@ import { COLOR_OPTIONS, FONT_OPTIONS } from "@/lib/textStyle";
 // (Homepage, Our Story, Made in Italy, Technical Data, Newsletter Posts) so
 // the control markup only exists once.
 
+// Maps a human default label (as passed to StyleRow) to the literal option
+// value it duplicates, so that option can be dropped from the list below.
+const DEFAULT_LABEL_TO_VALUE: Record<string, string> = {
+  Black: "black",
+  Teal: "teal",
+  Grey: "grey",
+  White: "white",
+  Ivymode: "ivymode",
+  Michroma: "michroma",
+};
+
 // Replaces the "Default" option's label with "<actual value> (Default)" so
 // admins can see what "Default" resolves to for THIS field without having
 // to check the live page — e.g. "Ivymode (Default)" instead of a bare
-// "Default" sitting next to a separate, seemingly-unrelated "Ivymode"
-// option. Leaves every other option (and the whole list, when no label is
-// given) untouched.
+// "Default". Also drops the plain option that would otherwise duplicate it
+// (e.g. a separate "Ivymode" sitting right below "Ivymode (Default)") — the
+// relabeled Default option already covers that choice. The duplicate is
+// kept, unrelabeled, if it's the field's *current* stored value — e.g. a
+// field explicitly saved as "ivymode" before this field had a default
+// label keeps its own distinct "Ivymode" option so the dropdown still shows
+// a real selection instead of silently falling back to none. Leaves every
+// other option (and the whole list, when no label is given) untouched.
 function withDefaultLabel(
   options: { value: string; label: string }[],
-  actualLabel?: string
+  actualLabel: string | undefined,
+  currentValue: string
 ): { value: string; label: string }[] {
   if (!actualLabel) return options;
-  return options.map((o) =>
-    o.value === "default" ? { ...o, label: `${actualLabel} (Default)` } : o
-  );
+  const duplicateValue = DEFAULT_LABEL_TO_VALUE[actualLabel];
+  return options
+    .filter((o) => o.value !== duplicateValue || o.value === currentValue)
+    .map((o) => (o.value === "default" ? { ...o, label: `${actualLabel} (Default)` } : o));
 }
 
 function MiniSelect({
@@ -76,15 +94,15 @@ export function StyleRow({
     <div className="grid grid-cols-3 gap-2">
       <div>
         <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-        <MiniSelect value={color} onChange={onColorChange} options={withDefaultLabel(COLOR_OPTIONS, colorDefaultLabel)} />
+        <MiniSelect value={color} onChange={onColorChange} options={withDefaultLabel(COLOR_OPTIONS, colorDefaultLabel, color)} />
       </div>
       <div>
         <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
-        <MiniSelect value={font} onChange={onFontChange} options={withDefaultLabel(FONT_OPTIONS, fontDefaultLabel)} />
+        <MiniSelect value={font} onChange={onFontChange} options={withDefaultLabel(FONT_OPTIONS, fontDefaultLabel, font)} />
       </div>
       <div>
         <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
-        <MiniSelect value={size} onChange={onSizeChange} options={withDefaultLabel(sizeOptions, sizeDefaultLabel)} />
+        <MiniSelect value={size} onChange={onSizeChange} options={withDefaultLabel(sizeOptions, sizeDefaultLabel, size)} />
       </div>
     </div>
   );
