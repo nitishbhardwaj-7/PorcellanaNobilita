@@ -494,6 +494,10 @@ interface BrandSettings {
   brandSubtitleSize: string | null;
   brandBtn: string | null;
   brandBtnLink: string | null;
+  socialWhatsapp: string | null;
+  socialInstagram: string | null;
+  socialFacebook: string | null;
+  socialLinkedin: string | null;
 }
 
 function BrandIntroTab() {
@@ -507,6 +511,10 @@ function BrandIntroTab() {
     brandSubtitleSize: "default",
     brandBtn: "",
     brandBtnLink: "",
+    socialWhatsapp: "",
+    socialInstagram: "",
+    socialFacebook: "",
+    socialLinkedin: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -528,6 +536,10 @@ function BrandIntroTab() {
             brandSubtitleSize: data.data.brandSubtitleSize || "default",
             brandBtn: data.data.brandBtn || "",
             brandBtnLink: data.data.brandBtnLink || "",
+            socialWhatsapp: data.data.socialWhatsapp || "",
+            socialInstagram: data.data.socialInstagram || "",
+            socialFacebook: data.data.socialFacebook || "",
+            socialLinkedin: data.data.socialLinkedin || "",
           });
         }
       })
@@ -696,6 +708,57 @@ function BrandIntroTab() {
               placeholder="/our-story"
               className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none font-mono"
             />
+          </div>
+        </div>
+
+        <div className="space-y-1.5 pt-2 border-t border-[#1a1a1a]/8">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Social Links
+          </label>
+          <p className="text-[10px] text-[#8b8b8b]">
+            The WhatsApp / Instagram / Facebook / LinkedIn icons in the vertical sidebar. Leave blank to keep the placeholder links.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div className="space-y-1">
+              <label className="block text-[8px] text-[#8b8b8b] uppercase">WhatsApp</label>
+              <input
+                type="text"
+                value={settings.socialWhatsapp || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, socialWhatsapp: e.target.value }))}
+                placeholder="https://wa.me/971500000000"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none font-mono"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-[8px] text-[#8b8b8b] uppercase">Instagram</label>
+              <input
+                type="text"
+                value={settings.socialInstagram || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, socialInstagram: e.target.value }))}
+                placeholder="https://instagram.com/nobilita"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none font-mono"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-[8px] text-[#8b8b8b] uppercase">Facebook</label>
+              <input
+                type="text"
+                value={settings.socialFacebook || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, socialFacebook: e.target.value }))}
+                placeholder="https://facebook.com/nobilita"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none font-mono"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-[8px] text-[#8b8b8b] uppercase">LinkedIn</label>
+              <input
+                type="text"
+                value={settings.socialLinkedin || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, socialLinkedin: e.target.value }))}
+                placeholder="https://linkedin.com/company/nobilita"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none font-mono"
+              />
+            </div>
           </div>
         </div>
 

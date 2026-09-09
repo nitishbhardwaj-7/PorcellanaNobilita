@@ -20,9 +20,13 @@ interface Props {
   buttonLink?: string;
   image?: string;
   isLoaderActive?: boolean;
+  socialWhatsapp?: string | null;
+  socialInstagram?: string | null;
+  socialFacebook?: string | null;
+  socialLinkedin?: string | null;
 }
 
-export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleColor, subtitleFont, subtitleSize, buttonText, buttonLink, image, isLoaderActive = false }: Props) {
+export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleColor, subtitleFont, subtitleSize, buttonText, buttonLink, image, isLoaderActive = false, socialWhatsapp, socialInstagram, socialFacebook, socialLinkedin }: Props) {
   const defaultSubtitle = "Inspired by Italy's noble heritage and Baroque architecture, NOBILITA porcelain is crafted in Modena, Italy, home to Ferrari, Acetaia Giusti, and Brioni. A collection where timeless Italian elegance meets advanced porcelain technology.";
   const sectionRef = useRef<HTMLElement>(null);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -156,7 +160,7 @@ export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleCol
 
         {/* WhatsApp */}
         <a
-          href="https://wa.me/"
+          href={socialWhatsapp || "https://wa.me/"}
           target="_blank"
           rel="noopener noreferrer"
           className="text-white/90 hover:text-white transition-all duration-300 transform hover:scale-110 shrink-0"
@@ -169,7 +173,7 @@ export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleCol
 
         {/* Instagram */}
         <a
-          href="https://instagram.com"
+          href={socialInstagram || "https://instagram.com"}
           target="_blank"
           rel="noopener noreferrer"
           className="text-white/90 hover:text-white transition-all duration-300 transform hover:scale-110 shrink-0"
@@ -184,7 +188,7 @@ export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleCol
 
         {/* Facebook */}
         <a
-          href="https://facebook.com"
+          href={socialFacebook || "https://facebook.com"}
           target="_blank"
           rel="noopener noreferrer"
           className="text-white/90 hover:text-white transition-all duration-300 transform hover:scale-110 shrink-0"
@@ -197,7 +201,7 @@ export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleCol
 
         {/* LinkedIn */}
         <a
-          href="https://linkedin.com"
+          href={socialLinkedin || "https://linkedin.com"}
           target="_blank"
           rel="noopener noreferrer"
           className="text-white/90 hover:text-white transition-all duration-300 transform hover:scale-110 shrink-0"

@@ -189,6 +189,14 @@ model Settings {
   brandSubtitleSize  String?
   brandBtn        String? // button text
   brandBtnLink    String? // button link
+  // Social icon links shown in the vertical sidebar over the Brand Intro
+  // section. Defaults are the original placeholder URLs (not real
+  // profiles) if left unset. Distinct from the unused legacy
+  // `socialLinks` Json field above, which nothing currently reads.
+  socialWhatsapp  String? // default "https://wa.me/"
+  socialInstagram String? // default "https://instagram.com"
+  socialFacebook  String? // default "https://facebook.com"
+  socialLinkedin  String? // default "https://linkedin.com"
 
   // Homepage Craftsmanship section — editable from Admin > Homepage.
   craftHeading        String?

@@ -108,6 +108,10 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         buttonText={d.brandBtn}
         buttonLink={d.brandBtnLink}
         image={d.brandImg}
+        socialWhatsapp={d.socialWhatsapp}
+        socialInstagram={d.socialInstagram}
+        socialFacebook={d.socialFacebook}
+        socialLinkedin={d.socialLinkedin}
         isLoaderActive={isLoading}
       />
       <CraftsmanshipSection
