@@ -41,12 +41,12 @@ const menuItems = [
   { name: "Explore The Collection", path: "/admin/products", icon: Package, exact: false },
   { name: "Blogs", path: "/admin/blogs", icon: Newspaper, exact: false },
   { name: "Newsletter Posts", path: "/admin/newsletter-posts", icon: Send, exact: false },
-  { name: "Queries", path: "/admin/queries", icon: MessageSquare, exact: false },
-  { name: "Catalog Requests", path: "/admin/catalog-requests", icon: Download, exact: false },
-  { name: "Datasheet Requests", path: "/admin/datasheet-requests", icon: FileText, exact: false },
   { name: "Newsletter", path: "/admin/newsletter", icon: Mail, exact: false },
   { name: "Media Library", path: "/admin/media", icon: ImageIcon, exact: false },
   { name: "Page Titles (SEO)", path: "/admin/page-titles", icon: Type, exact: false },
+  { name: "Queries", path: "/admin/queries", icon: MessageSquare, exact: false },
+  { name: "Catalog Requests", path: "/admin/catalog-requests", icon: Download, exact: false },
+  { name: "Datasheet Requests", path: "/admin/datasheet-requests", icon: FileText, exact: false },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
