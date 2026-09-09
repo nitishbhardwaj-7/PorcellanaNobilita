@@ -226,7 +226,7 @@ export default function NewsletterPostsAdminPage() {
             <img src={hero.newsletterHeroImage} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
           ) : (
             <div className="relative">
-              <img src="/images/newsletter page images/fior-di-melo-newsletter-hero.webp" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+              <img src="/images/newsletter page images/fior-di-melo-newsletter-hero.webp" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
               <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
             </div>
           )}

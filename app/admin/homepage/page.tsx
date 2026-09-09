@@ -591,7 +591,7 @@ function BrandIntroTab() {
               <img src={settings.brandTagImage} alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
             ) : (
               <div className="relative">
-                <img src="/images/Links/tag.png" alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3 opacity-60" />
+                <img src="/images/Links/tag.png" alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
                 <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
               </div>
             )}
@@ -616,7 +616,7 @@ function BrandIntroTab() {
               <img src={settings.brandImg} alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
             ) : (
               <div className="relative">
-                <img src="/images/NOBILITA_white.png" alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3 opacity-60" />
+                <img src="/images/NOBILITA_white.png" alt="" className="w-full max-h-56 object-contain bg-[#007190] p-3" />
                 <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
               </div>
             )}
@@ -882,7 +882,7 @@ function CraftsmanshipTab() {
               <img src={settings.craftBgImage} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
             ) : (
               <div className="relative">
-                <img src="/images/Links/MEDICI VILLA copy (7).png" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+                <img src="/images/Links/MEDICI VILLA copy (7).png" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
                 <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
               </div>
             )}
@@ -906,7 +906,7 @@ function CraftsmanshipTab() {
               <img src={settings.craftBgImageMobile} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
             ) : (
               <div className="relative">
-                <img src="/images/Links/medici-villa-mobile.png" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+                <img src="/images/Links/medici-villa-mobile.png" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
                 <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
               </div>
             )}
@@ -1014,7 +1014,7 @@ function ImageField({
         <img src={value} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
       ) : defaultSrc ? (
         <div className="relative">
-          <img src={defaultSrc} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <img src={defaultSrc} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
           <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
         </div>
       ) : null}

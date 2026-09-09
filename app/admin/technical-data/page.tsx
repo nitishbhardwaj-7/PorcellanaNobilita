@@ -241,7 +241,7 @@ function ImageField({ label, value, onChange, defaultSrc }: { label: string; val
         <img src={value} alt="" className="h-28 w-28 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-3" />
       ) : defaultSrc ? (
         <div className="relative h-28 w-28">
-          <img src={defaultSrc} alt="" className="h-28 w-28 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-3 opacity-60" />
+          <img src={defaultSrc} alt="" className="h-28 w-28 object-contain border border-[#1a1a1a]/10 bg-[#007190] p-3" />
           <span className="absolute top-0.5 left-0.5 bg-[#1a1a1a]/70 text-white text-[7px] tracking-[0.1em] uppercase px-1 py-0.5">Default</span>
         </div>
       ) : null}
@@ -269,7 +269,7 @@ function VideoField({ label, value, onChange, defaultSrc }: { label: string; val
         <video src={value} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
       ) : defaultSrc ? (
         <div className="relative">
-          <video src={defaultSrc} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+          <video src={defaultSrc} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
           <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5 pointer-events-none">Currently Live (Default)</span>
         </div>
       ) : null}
