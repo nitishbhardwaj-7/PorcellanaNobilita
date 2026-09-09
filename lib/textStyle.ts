@@ -21,6 +21,9 @@ export const FONT_OPTIONS = [
   { value: "default", label: "Default" },
   { value: "ivymode", label: "Ivymode" },
   { value: "michroma", label: "Michroma" },
+  { value: "didot", label: "Didot" },
+  { value: "metropolis", label: "Metropolis" },
+  { value: "gruppo", label: "Gruppo" },
 ];
 
 // Each size dropdown shows its actual pixel value (the desktop/ceiling size —
@@ -69,6 +72,9 @@ const COLOR_CLASSES: Record<string, string> = {
 const FONT_CLASSES: Record<string, string> = {
   ivymode: "font-ivymode",
   michroma: "font-michroma",
+  didot: "font-didot",
+  metropolis: "font-metropolis",
+  gruppo: "font-gruppo",
 };
 
 // Desktop-ceiling size, scaled down at smaller breakpoints — matches the

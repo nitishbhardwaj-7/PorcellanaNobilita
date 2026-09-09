@@ -17,6 +17,8 @@ const config: Config = {
         didotbold: ["var(--font-didotbold)", "serif"],
         michroma: ["var(--font-michroma)", "sans-serif"],
         ivymode: ["var(--font-ivymode)", "serif"],
+        metropolis: ["var(--font-metropolis)", "sans-serif"],
+        gruppo: ["var(--font-gruppo)", "sans-serif"],
       },
       colors: {
         teal: {

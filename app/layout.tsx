@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import { Cormorant_Garamond, Montserrat, Gruppo } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
@@ -25,6 +25,13 @@ const ivymode = localFont({
   variable: "--font-ivymode",
 });
 
+// Metropolis — free/open geometric sans (Unlicense/public domain), added to
+// the CMS font picker. Self-hosted the same way as Ivymode/Michroma.
+const metropolis = localFont({
+  src: "./fonts/Metropolis-Regular.ttf",
+  variable: "--font-metropolis",
+});
+
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "600"],
@@ -37,6 +44,14 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-montserrat",
+  display: "swap",
+});
+
+// Gruppo — free Google Font (SIL OFL), added to the CMS font picker.
+const gruppo = Gruppo({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-gruppo",
   display: "swap",
 });
 
@@ -57,7 +72,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${montserrat.variable} ${didot.variable} ${didotBold.variable} ${michroma.variable} ${ivymode.variable}`}
+      className={`${cormorant.variable} ${montserrat.variable} ${didot.variable} ${didotBold.variable} ${michroma.variable} ${ivymode.variable} ${metropolis.variable} ${gruppo.variable}`}
     >
       <head>
         {/* Google Tag Manager */}
