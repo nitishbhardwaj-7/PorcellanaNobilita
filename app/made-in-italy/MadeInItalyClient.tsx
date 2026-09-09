@@ -31,6 +31,7 @@ interface MadeInItalyCmsData {
   miHeadingColor?: string | null;
   miHeadingFont?: string | null;
   miHeadingSize?: string | null;
+  miSec1Video?: string | null;
   miSec1Label?: string | null;
   miSec2Para1?: string | null;
   miSec2Para1Color?: string | null;
@@ -59,6 +60,7 @@ interface MadeInItalyCmsData {
   miSec3BottomParaSize?: string | null;
   miSec4BgImage?: string | null;
   miSec4BgImageMobile?: string | null;
+  miSec4TagImage?: string | null;
   miSec4Label?: string | null;
 }
 
@@ -190,7 +192,8 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
           {/* Top Full-width Image/Video Container */}
           <div className="w-full relative aspect-[21/9] md:aspect-[2.39/1] overflow-hidden group mt-0">
             <video
-              src="/images/made-in-italy/duomo 2.mp4"
+              key={d.miSec1Video || "default"}
+              src={d.miSec1Video || "/images/made-in-italy/duomo 2.mp4"}
               autoPlay
               loop
               muted
@@ -368,7 +371,7 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
           {/* Headline Image Overlay - Positioned at top */}
           <div className="absolute top-8 md:top-14 lg:top-16 left-1/2 -translate-x-1/2 z-30 flex justify-center px-4 w-full pointer-events-none">
             <img
-              src="/images/Links/tag grey.png"
+              src={d.miSec4TagImage || "/images/Links/tag grey.png"}
               alt="Il Gres Imperiale d'Italia"
               className="sec4-tag w-full max-w-sm md:max-w-2xl lg:max-w-5xl h-auto object-contain drop-shadow-sm opacity-90"
               loading="lazy"

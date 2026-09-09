@@ -294,6 +294,8 @@ model Settings {
   storySec2Image      String? // Verde Profondo application photo
   storySec2BtnText    String? // default "VERDE PROFONDO"
   storySec2ProductName String? // which product the button opens
+  storySec3Video       String? // Arabescato Vagli bookmatch background video
+  storySec3TagImage    String? // "Il Gres Imperiale d'Italia" tagline overlay graphic
   storySec3Para        String? @db.Text
   storySec3ParaColor   String?
   storySec3ParaFont    String?
@@ -324,13 +326,14 @@ model Settings {
 
   // Made in Italy page — editable from Admin > Made in Italy. Layout,
   // GSAP/Framer animations, and section order stay fixed; only text and
-  // images are editable. The Duomo video and the Colosseum tag graphic stay
-  // hardcoded. Paragraphs carrying an inline colored highlight phrase use
-  // the "quoted text" convention (see splitHighlighted() in lib/textStyle.ts).
+  // images are editable. Paragraphs carrying an inline colored highlight
+  // phrase use the "quoted text" convention (see splitHighlighted() in
+  // lib/textStyle.ts).
   miHeading             String? // default "MADE IN ITALY"
   miHeadingColor        String?
   miHeadingFont         String?
   miHeadingSize         String?
+  miSec1Video           String? // Duomo di Milano hero background video
   miSec1Label           String? // default "DUOMO DI MILANO"
   miSec2Para1           String? @db.Text
   miSec2Para1Color      String?
@@ -361,20 +364,21 @@ model Settings {
   miSec3BottomParaSize  String?
   miSec4BgImage         String? // Colosseum photo (desktop)
   miSec4BgImageMobile   String? // Colosseum photo (mobile)
+  miSec4TagImage        String? // "Il Gres Imperiale d'Italia" tagline overlay graphic
   miSec4Label           String? // default "COLOSSEUM"
 
   // Technical Data page (/technical-data) — editable from Admin > Technical
-  // Data. Layout, GSAP animations, and section order stay fixed. The Duomo
-  // video-style hero background, the spill-care how-to subsections (Oil /
-  // Coffee / Wine), the inlined format & dimensions SVG diagram, and the
-  // labeled thickness diagram image stay hardcoded — out of plain-text/safe
-  // -image scope (the thickness image has percentage-positioned text
-  // overlays tied to its exact geometry, and the dimensions SVG is inlined
-  // via dangerouslySetInnerHTML so isn't safe to point at arbitrary input).
+  // Data. Layout, GSAP animations, and section order stay fixed. The
+  // inlined format & dimensions SVG diagram and the labeled thickness
+  // diagram image stay hardcoded — out of safe-image scope (the thickness
+  // image has percentage-positioned text overlays tied to its exact
+  // geometry, and the dimensions SVG is inlined via
+  // dangerouslySetInnerHTML so isn't safe to point at arbitrary input).
   tdHeading    String? // default "ENGINEERED FOR PERFORMANCE"
   tdHeadingColor String?
   tdHeadingFont  String?
   tdHeadingSize  String?
+  tdHeroVideo  String? // Duomo-style hero background video
   tdHeroDesc   String? @db.Text
   tdHeroDescColor String?
   tdHeroDescFont  String?
@@ -424,6 +428,29 @@ model Settings {
   tdUgDesc2Color String?
   tdUgDesc2Font  String?
   tdUgDesc2Size  String?
+
+  // Spill-care how-to subsections (Oil / Coffee / Wine) — a fixed set of
+  // numbered steps per subsection, matching the tdChar1-9 plain-field
+  // pattern (no per-field Color/Font/Size; the section shares one look).
+  tdOilHeading String? // default "OIL SPILLS"
+  tdOilStep1   String? @db.Text
+  tdOilStep2   String? @db.Text
+  tdOilStep3   String? @db.Text
+  tdOilStep4   String? @db.Text
+  tdCoffeeHeading String? // default "COFFEE SPILLS"
+  tdCoffeeStep1   String? @db.Text
+  tdCoffeeStep2   String? @db.Text
+  tdCoffeeStep3   String? @db.Text
+  tdCoffeeStep4   String? @db.Text
+  tdCoffeeStep5   String? @db.Text
+  tdWineHeading   String? // default "WINE SPILLS"
+  tdWineStep1     String? @db.Text
+  tdWineStep2     String? @db.Text
+  tdWineStep3     String? @db.Text
+  tdWineStep4     String? @db.Text
+  tdWineSubnoteHeading String? // default "For dried or stubborn stains:"
+  tdWineSubnoteStep1   String? @db.Text
+  tdWineSubnoteStep2   String? @db.Text
 
   tdDimHeading String? // default "FORMAT & DIMENSIONS"
   tdDimHeadingColor String?

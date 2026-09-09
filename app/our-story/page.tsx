@@ -53,6 +53,8 @@ export default async function OurStoryPage() {
       storySec2Image: settings?.storySec2Image,
       storySec2BtnText: settings?.storySec2BtnText,
       storySec2ProductName: settings?.storySec2ProductName,
+      storySec3Video: settings?.storySec3Video,
+      storySec3TagImage: settings?.storySec3TagImage,
       storySec3Para: settings?.storySec3Para,
       storySec3ParaColor: settings?.storySec3ParaColor,
       storySec3ParaFont: settings?.storySec3ParaFont,

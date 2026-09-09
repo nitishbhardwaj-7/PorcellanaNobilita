@@ -12,7 +12,7 @@ interface MediaFile {
   folder: string;
 }
 
-const FOLDERS = ["products", "blogs", "newsletters", "certifications"];
+const FOLDERS = ["products", "blogs", "newsletters", "certifications", "our-story", "made-in-italy", "technical-data"];
 const PAGES = [
   { key: "homepage", label: "Homepage" },
   { key: "our-story", label: "Our Story" },
@@ -123,7 +123,7 @@ function MediaPickerModal({
 
         {/* Toolbar */}
         <div className="flex flex-col gap-3 border-b border-[#1a1a1a]/8 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex gap-1">
+          <div className="flex flex-wrap gap-1">
             {FOLDERS.map((f) => (
               <button
                 key={f}

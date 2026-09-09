@@ -21,6 +21,7 @@ export default async function MadeInItalyPage() {
       miHeadingColor: settings?.miHeadingColor,
       miHeadingFont: settings?.miHeadingFont,
       miHeadingSize: settings?.miHeadingSize,
+      miSec1Video: settings?.miSec1Video,
       miSec1Label: settings?.miSec1Label,
       miSec2Para1: settings?.miSec2Para1,
       miSec2Para1Color: settings?.miSec2Para1Color,
@@ -49,6 +50,7 @@ export default async function MadeInItalyPage() {
       miSec3BottomParaSize: settings?.miSec3BottomParaSize,
       miSec4BgImage: settings?.miSec4BgImage,
       miSec4BgImageMobile: settings?.miSec4BgImageMobile,
+      miSec4TagImage: settings?.miSec4TagImage,
       miSec4Label: settings?.miSec4Label,
     };
   } catch (e) {

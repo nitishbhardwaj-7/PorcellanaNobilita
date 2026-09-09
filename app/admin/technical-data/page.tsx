@@ -75,6 +75,7 @@ interface TdSettings {
   tdHeadingColor: string;
   tdHeadingFont: string;
   tdHeadingSize: string;
+  tdHeroVideo: string;
   tdHeroDesc: string;
   tdHeroDescColor: string;
   tdHeroDescFont: string;
@@ -98,6 +99,25 @@ interface TdSettings {
   tdUgDesc2Color: string;
   tdUgDesc2Font: string;
   tdUgDesc2Size: string;
+  tdOilHeading: string;
+  tdOilStep1: string;
+  tdOilStep2: string;
+  tdOilStep3: string;
+  tdOilStep4: string;
+  tdCoffeeHeading: string;
+  tdCoffeeStep1: string;
+  tdCoffeeStep2: string;
+  tdCoffeeStep3: string;
+  tdCoffeeStep4: string;
+  tdCoffeeStep5: string;
+  tdWineHeading: string;
+  tdWineStep1: string;
+  tdWineStep2: string;
+  tdWineStep3: string;
+  tdWineStep4: string;
+  tdWineSubnoteHeading: string;
+  tdWineSubnoteStep1: string;
+  tdWineSubnoteStep2: string;
   tdDimHeading: string;
   tdDimHeadingColor: string;
   tdDimHeadingFont: string;
@@ -152,8 +172,12 @@ const CHAR_DEFAULTS: Record<(typeof CHAR_ROWS)[number], { title: string; desc: s
 
 function emptySettings(): TdSettings {
   const base: any = {
-    tdHeading: "", tdHeroDesc: "", tdCharHeading: "",
+    tdHeading: "", tdHeroVideo: "", tdHeroDesc: "", tdCharHeading: "",
     tdUgHeading: "", tdUgDesc1: "", tdUgDesc2: "",
+    tdOilHeading: "", tdOilStep1: "", tdOilStep2: "", tdOilStep3: "", tdOilStep4: "",
+    tdCoffeeHeading: "", tdCoffeeStep1: "", tdCoffeeStep2: "", tdCoffeeStep3: "", tdCoffeeStep4: "", tdCoffeeStep5: "",
+    tdWineHeading: "", tdWineStep1: "", tdWineStep2: "", tdWineStep3: "", tdWineStep4: "",
+    tdWineSubnoteHeading: "", tdWineSubnoteStep1: "", tdWineSubnoteStep2: "",
     tdDimHeading: "", tdDimDesc1: "", tdDimDesc2: "", tdDimDesc3: "",
     tdThickHeading: "", tdThickDesc1: "", tdThickDesc2: "",
     tdSpecsHeading: "",
@@ -219,6 +243,74 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
         />
         <MediaPickerButton folder="products" onSelect={onChange} />
       </div>
+    </div>
+  );
+}
+
+function VideoField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+        {label}
+      </label>
+      {value && (
+        <video src={value} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+      )}
+      <div className="flex gap-1">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+        />
+        <MediaPickerButton folder="technical-data" accept="video/*" onSelect={onChange} />
+      </div>
+    </div>
+  );
+}
+
+// One spill-care subsection (Oil / Coffee / Wine, or the wine subnote): a
+// heading plus a fixed, numbered list of step textareas.
+function SpillSubsection({
+  title,
+  headingField,
+  headingPlaceholder,
+  steps,
+  settings,
+  set,
+}: {
+  title: string;
+  headingField: keyof TdSettings;
+  headingPlaceholder: string;
+  steps: { field: keyof TdSettings; placeholder: string }[];
+  settings: TdSettings;
+  set: <K extends keyof TdSettings>(key: K, value: string) => void;
+}) {
+  return (
+    <div className="border-t border-[#1a1a1a]/8 pt-5 space-y-4">
+      <p className="text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/30" style={fontMichroma}>{title}</p>
+      <div className="space-y-1.5">
+        <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Heading</label>
+        <input
+          type="text"
+          value={settings[headingField]}
+          onChange={(e) => set(headingField, e.target.value)}
+          placeholder={headingPlaceholder}
+          className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+        />
+      </div>
+      {steps.map((s, i) => (
+        <div key={s.field} className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Step {i + 1}</label>
+          <textarea
+            value={settings[s.field]}
+            onChange={(e) => set(s.field, e.target.value)}
+            placeholder={s.placeholder}
+            rows={2}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+        </div>
+      ))}
     </div>
   );
 }
@@ -451,7 +543,7 @@ export default function TechnicalDataAdminPage() {
           Technical Data
         </h2>
         <p className="mt-2 text-sm text-[#8b8b8b]">
-          Edit the Technical Data page's text and images. Layout and animations stay fixed. The Duomo-style hero video, spill-care how-to steps, the inlined dimensions diagram, and the labeled thickness image aren't editable here.
+          Edit the Technical Data page's text, images, and video. Layout and animations stay fixed. The inlined dimensions diagram and the labeled thickness image aren't editable here.
         </p>
       </div>
 
@@ -488,7 +580,8 @@ export default function TechnicalDataAdminPage() {
           />
           <FieldStyleRow field="tdHeroDesc" settings={settings} set={set} />
         </div>
-        <SaveButton section="hero" label="Save Hero" fields={["tdHeading", "tdHeroDesc", ...styleFields("tdHeading"), ...styleFields("tdHeroDesc")]} />
+        <VideoField label="Background Video" value={settings.tdHeroVideo} onChange={(v) => set("tdHeroVideo", v)} />
+        <SaveButton section="hero" label="Save Hero" fields={["tdHeading", "tdHeroVideo", "tdHeroDesc", ...styleFields("tdHeading"), ...styleFields("tdHeroDesc")]} />
       </div>
 
       {/* Characteristics */}
@@ -554,8 +647,6 @@ export default function TechnicalDataAdminPage() {
           <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>User Guide</p>
           <SavedBadge section="ug" />
         </div>
-        <p className="text-[10px] text-[#8b8b8b] -mt-2">The Oil/Coffee/Wine spill care-instructions below aren't editable here.</p>
-
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Heading</label>
           <input
@@ -591,6 +682,80 @@ export default function TechnicalDataAdminPage() {
           section="ug"
           label="Save Section"
           fields={["tdUgHeading", "tdUgDesc1", "tdUgDesc2", ...styleFields("tdUgHeading"), ...styleFields("tdUgDesc1"), ...styleFields("tdUgDesc2")]}
+        />
+      </div>
+
+      {/* Spill Care */}
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Spill Care</p>
+          <SavedBadge section="spill" />
+        </div>
+
+        <SpillSubsection
+          title="Oil Spills"
+          headingField="tdOilHeading"
+          headingPlaceholder="OIL SPILLS"
+          settings={settings}
+          set={set}
+          steps={[
+            { field: "tdOilStep1", placeholder: "Apply the cleaning product and leave for 5 minutes." },
+            { field: "tdOilStep2", placeholder: "Rub with a scouring pad (use a magic sponge for Polished and Honed finishes)." },
+            { field: "tdOilStep3", placeholder: "If the stain remains, reapply the product and leave for up to 5 more minutes (do not exceed five minutes on Polished finishes)." },
+            { field: "tdOilStep4", placeholder: "Rub again using a scouring pad and wipe with a damp cloth and dry thoroughly." },
+          ]}
+        />
+
+        <SpillSubsection
+          title="Coffee Spills"
+          headingField="tdCoffeeHeading"
+          headingPlaceholder="COFFEE SPILLS"
+          settings={settings}
+          set={set}
+          steps={[
+            { field: "tdCoffeeStep1", placeholder: "Remove any excess liquid immediately." },
+            { field: "tdCoffeeStep2", placeholder: "Apply a suitable cleaning product and leave for 3–5 minutes." },
+            { field: "tdCoffeeStep3", placeholder: "Rub with a non-abrasive scouring pad (use a magic sponge for Polished and Honed finishes)." },
+            { field: "tdCoffeeStep4", placeholder: "Wipe with a damp cloth to remove any residue." },
+            { field: "tdCoffeeStep5", placeholder: "Dry thoroughly with a clean, soft cloth or paper towel." },
+          ]}
+        />
+
+        <SpillSubsection
+          title="Wine Spills"
+          headingField="tdWineHeading"
+          headingPlaceholder="WINE SPILLS"
+          settings={settings}
+          set={set}
+          steps={[
+            { field: "tdWineStep1", placeholder: "Rinse the affected area with warm water." },
+            { field: "tdWineStep2", placeholder: "Apply a pH-neutral cleaner and allow it to act for a few minutes." },
+            { field: "tdWineStep3", placeholder: "Gently clean the surface using a soft sponge or non-abrasive pad." },
+            { field: "tdWineStep4", placeholder: "Wipe away any residue with a damp cloth and dry the surface completely." },
+          ]}
+        />
+
+        <SpillSubsection
+          title="Wine Spills — Subnote"
+          headingField="tdWineSubnoteHeading"
+          headingPlaceholder="For dried or stubborn stains:"
+          settings={settings}
+          set={set}
+          steps={[
+            { field: "tdWineSubnoteStep1", placeholder: "Reapply the cleaner and leave for up to 5 minutes." },
+            { field: "tdWineSubnoteStep2", placeholder: "Gently rub the area and rinse thoroughly before drying." },
+          ]}
+        />
+
+        <SaveButton
+          section="spill"
+          label="Save Section"
+          fields={[
+            "tdOilHeading", "tdOilStep1", "tdOilStep2", "tdOilStep3", "tdOilStep4",
+            "tdCoffeeHeading", "tdCoffeeStep1", "tdCoffeeStep2", "tdCoffeeStep3", "tdCoffeeStep4", "tdCoffeeStep5",
+            "tdWineHeading", "tdWineStep1", "tdWineStep2", "tdWineStep3", "tdWineStep4",
+            "tdWineSubnoteHeading", "tdWineSubnoteStep1", "tdWineSubnoteStep2",
+          ]}
         />
       </div>
 

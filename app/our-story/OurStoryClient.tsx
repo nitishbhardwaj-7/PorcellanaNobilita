@@ -81,6 +81,8 @@ interface StoryCmsData {
   storySec2Image?: string | null;
   storySec2BtnText?: string | null;
   storySec2ProductName?: string | null;
+  storySec3Video?: string | null;
+  storySec3TagImage?: string | null;
   storySec3Para?: string | null;
   storySec3ParaColor?: string | null;
   storySec3ParaFont?: string | null;
@@ -439,7 +441,8 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
         {/* Top Full-width Image */}
         <div className="w-full relative overflow-hidden group">
           <video
-            src="/images/Our%20story/qqq.mp4"
+            key={d.storySec3Video || "default"}
+            src={d.storySec3Video || "/images/Our%20story/qqq.mp4"}
             autoPlay
             loop
             muted
@@ -454,7 +457,7 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
           {/* Tagline Image (tag) */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-[75%] max-w-[340px] sm:max-w-[500px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px] pointer-events-none flex justify-center">
             <img
-              src="/images/Links/tag.png"
+              src={d.storySec3TagImage || "/images/Links/tag.png"}
               alt="Il Gres Imperiale d'Italia"
               className="sec3-tag-grey w-full h-auto object-contain transform-gpu"
               loading="lazy"

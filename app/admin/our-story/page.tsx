@@ -63,6 +63,8 @@ interface StorySettings {
   storySec2Image: string;
   storySec2BtnText: string;
   storySec2ProductName: string;
+  storySec3Video: string;
+  storySec3TagImage: string;
   storySec3Para: string;
   storySec3ParaColor: string;
   storySec3ParaFont: string;
@@ -128,6 +130,8 @@ const EMPTY: StorySettings = {
   storySec2Image: "",
   storySec2BtnText: "",
   storySec2ProductName: "",
+  storySec3Video: "",
+  storySec3TagImage: "",
   storySec3Para: "",
   storySec3ParaColor: "default",
   storySec3ParaFont: "default",
@@ -212,6 +216,28 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
+function VideoField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+        {label}
+      </label>
+      {value && (
+        <video src={value} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+      )}
+      <div className="flex gap-1">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+        />
+        <MediaPickerButton folder="our-story" accept="video/*" onSelect={onChange} />
+      </div>
+    </div>
+  );
+}
+
 function ProductSelect({ label, value, productNames, onChange }: { label: string; value: string; productNames: string[]; onChange: (name: string) => void }) {
   return (
     <div className="space-y-1.5">
@@ -267,6 +293,8 @@ export default function OurStoryAdminPage() {
           storySec2Image: s.storySec2Image || "",
           storySec2BtnText: s.storySec2BtnText || "",
           storySec2ProductName: s.storySec2ProductName || "",
+          storySec3Video: s.storySec3Video || "",
+          storySec3TagImage: s.storySec3TagImage || "",
           storySec3Para: s.storySec3Para || "",
           storySec3BtnText: s.storySec3BtnText || "",
           storySec3ProductName: s.storySec3ProductName || "",
@@ -513,9 +541,10 @@ export default function OurStoryAdminPage() {
           <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Bookmatch Video Section</p>
           <SavedBadge section="sec3" />
         </div>
-        <p className="text-[10px] text-[#8b8b8b] -mt-2">
-          The background video and tagline graphic are fixed brand assets and aren't editable here.
-        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <VideoField label="Background Video" value={settings.storySec3Video} onChange={(v) => set("storySec3Video", v)} />
+          <ImageField label="Tagline Graphic" value={settings.storySec3TagImage} onChange={(v) => set("storySec3TagImage", v)} />
+        </div>
 
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph</label>
@@ -544,7 +573,7 @@ export default function OurStoryAdminPage() {
         <SaveButton
           section="sec3"
           label="Save Section"
-          fields={["storySec3Para", "storySec3BtnText", "storySec3ProductName", ...styleFields("storySec3Para")]}
+          fields={["storySec3Video", "storySec3TagImage", "storySec3Para", "storySec3BtnText", "storySec3ProductName", ...styleFields("storySec3Para")]}
         />
       </div>
 

@@ -17,6 +17,7 @@ gsap.registerPlugin(ScrollTrigger);
 interface TdCmsData {
   tdHeading?: string | null;
   tdHeadingColor?: string | null; tdHeadingFont?: string | null; tdHeadingSize?: string | null;
+  tdHeroVideo?: string | null;
   tdHeroDesc?: string | null;
   tdHeroDescColor?: string | null; tdHeroDescFont?: string | null; tdHeroDescSize?: string | null;
   tdCharHeading?: string | null;
@@ -36,6 +37,14 @@ interface TdCmsData {
   tdUgDesc1Color?: string | null; tdUgDesc1Font?: string | null; tdUgDesc1Size?: string | null;
   tdUgDesc2?: string | null;
   tdUgDesc2Color?: string | null; tdUgDesc2Font?: string | null; tdUgDesc2Size?: string | null;
+  tdOilHeading?: string | null;
+  tdOilStep1?: string | null; tdOilStep2?: string | null; tdOilStep3?: string | null; tdOilStep4?: string | null;
+  tdCoffeeHeading?: string | null;
+  tdCoffeeStep1?: string | null; tdCoffeeStep2?: string | null; tdCoffeeStep3?: string | null; tdCoffeeStep4?: string | null; tdCoffeeStep5?: string | null;
+  tdWineHeading?: string | null;
+  tdWineStep1?: string | null; tdWineStep2?: string | null; tdWineStep3?: string | null; tdWineStep4?: string | null;
+  tdWineSubnoteHeading?: string | null;
+  tdWineSubnoteStep1?: string | null; tdWineSubnoteStep2?: string | null;
   tdDimHeading?: string | null;
   tdDimHeadingColor?: string | null; tdDimHeadingFont?: string | null; tdDimHeadingSize?: string | null;
   tdDimDesc1?: string | null;
@@ -432,7 +441,8 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <video
-            src="/images/technical data/engineered for perfomace.mp4"
+            key={d.tdHeroVideo || "default"}
+            src={d.tdHeroVideo || "/images/technical data/engineered for perfomace.mp4"}
             autoPlay
             loop
             muted
@@ -690,7 +700,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
             {/* B1. Oil Spills Subsection */}
             <div className="spill-sec pt-16">
               <h3 className="font-ivymode font-light text-white uppercase tracking-[0.10em] text-[clamp(22px,3vw,36px)] leading-tight mb-8 md:mb-12">
-                OIL SPILLS
+                {d.tdOilHeading || "OIL SPILLS"}
               </h3>
 
               <div className="flex flex-col md:flex-row items-center md:items-center gap-12 md:gap-16">
@@ -703,19 +713,19 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
                 <div className="spill-text flex-1 space-y-2 font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[20px] tracking-widest">
                   <div className="flex items-start gap-5">
                     <span className="font-normal text-[#cce3eb]">1.</span>
-                    <p>Apply the cleaning product and leave for 5 minutes.</p>
+                    <p>{d.tdOilStep1 || "Apply the cleaning product and leave for 5 minutes."}</p>
                   </div>
                   <div className="flex items-start gap-4">
                     <span className="font-normal text-[#cce3eb]">2.</span>
-                    <p>Rub with a scouring pad (use a magic sponge for Polished and Honed finishes).</p>
+                    <p>{d.tdOilStep2 || "Rub with a scouring pad (use a magic sponge for Polished and Honed finishes)."}</p>
                   </div>
                   <div className="flex items-start gap-4">
                     <span className="font-normal text-[#cce3eb]">3.</span>
-                    <p>If the stain remains, reapply the product and leave for up to 5 more minutes (do not exceed five minutes on Polished finishes).</p>
+                    <p>{d.tdOilStep3 || "If the stain remains, reapply the product and leave for up to 5 more minutes (do not exceed five minutes on Polished finishes)."}</p>
                   </div>
                   <div className="flex items-start gap-4">
                     <span className="font-normal text-[#cce3eb]">4.</span>
-                    <p>Rub again using a scouring pad and wipe with a damp cloth and dry thoroughly.</p>
+                    <p>{d.tdOilStep4 || "Rub again using a scouring pad and wipe with a damp cloth and dry thoroughly."}</p>
                   </div>
                 </div>
               </div>
@@ -724,7 +734,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
             {/* B2. Coffee Spills Subsection */}
             <div className="spill-sec pt-12">
               <h3 className="font-ivymode font-light text-white uppercase tracking-[0.10em] text-[clamp(22px,3vw,36px)] leading-tight mb-8 md:mb-12">
-                COFFEE SPILLS
+                {d.tdCoffeeHeading || "COFFEE SPILLS"}
               </h3>
 
               <div className="flex flex-col md:flex-row items-center md:items-center gap-12 md:gap-16">
@@ -739,23 +749,23 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
                 <div className="spill-text flex-1 space-y-2 font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[20px] tracking-widest">
                   <div className="flex items-start gap-5">
                     <span className="font-normal text-[#cce3eb]">1.</span>
-                    <p>Remove any excess liquid immediately.</p>
+                    <p>{d.tdCoffeeStep1 || "Remove any excess liquid immediately."}</p>
                   </div>
                   <div className="flex items-start gap-4">
                     <span className="font-normal text-[#cce3eb]">2.</span>
-                    <p>Apply a suitable cleaning product and leave for 3–5 minutes.</p>
+                    <p>{d.tdCoffeeStep2 || "Apply a suitable cleaning product and leave for 3–5 minutes."}</p>
                   </div>
                   <div className="flex items-start gap-4">
                     <span className="font-normal text-[#cce3eb]">3.</span>
-                    <p>Rub with a non-abrasive scouring pad (use a magic sponge for Polished and Honed finishes).</p>
+                    <p>{d.tdCoffeeStep3 || "Rub with a non-abrasive scouring pad (use a magic sponge for Polished and Honed finishes)."}</p>
                   </div>
                   <div className="flex items-start gap-4">
                     <span className="font-normal text-[#cce3eb]">4.</span>
-                    <p>Wipe with a damp cloth to remove any residue.</p>
+                    <p>{d.tdCoffeeStep4 || "Wipe with a damp cloth to remove any residue."}</p>
                   </div>
                   <div className="flex items-start gap-4">
                     <span className="font-normal text-[#cce3eb]">5.</span>
-                    <p>Dry thoroughly with a clean, soft cloth or paper towel.</p>
+                    <p>{d.tdCoffeeStep5 || "Dry thoroughly with a clean, soft cloth or paper towel."}</p>
                   </div>
                 </div>
               </div>
@@ -764,7 +774,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
             {/* B3. Wine Spills Subsection */}
             <div className="spill-sec pt-12">
               <h3 className="font-ivymode font-light text-white uppercase tracking-[0.10em] text-[clamp(22px,3vw,36px)] leading-tight mb-8 md:mb-12">
-                WINE SPILLS
+                {d.tdWineHeading || "WINE SPILLS"}
               </h3>
 
               <div className="space-y-20">
@@ -781,19 +791,19 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
                   <div className="spill-text flex-1 space-y-2 font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[20px] tracking-widest">
                     <div className="flex items-start gap-5">
                       <span className="font-normal text-[#cce3eb]">1.</span>
-                      <p>Rinse the affected area with warm water.</p>
+                      <p>{d.tdWineStep1 || "Rinse the affected area with warm water."}</p>
                     </div>
                     <div className="flex items-start gap-4">
                       <span className="font-normal text-[#cce3eb]">2.</span>
-                      <p>Apply a pH-neutral cleaner and allow it to act for a few minutes.</p>
+                      <p>{d.tdWineStep2 || "Apply a pH-neutral cleaner and allow it to act for a few minutes."}</p>
                     </div>
                     <div className="flex items-start gap-4">
                       <span className="font-normal text-[#cce3eb]">3.</span>
-                      <p>Gently clean the surface using a soft sponge or non-abrasive pad.</p>
+                      <p>{d.tdWineStep3 || "Gently clean the surface using a soft sponge or non-abrasive pad."}</p>
                     </div>
                     <div className="flex items-start gap-4">
                       <span className="font-normal text-[#cce3eb]">4.</span>
-                      <p>Wipe away any residue with a damp cloth and dry the surface completely.</p>
+                      <p>{d.tdWineStep4 || "Wipe away any residue with a damp cloth and dry the surface completely."}</p>
                     </div>
                   </div>
                 </div>
@@ -806,16 +816,16 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
                   {/* Subnote Content */}
                   <div className="flex-1 space-y-2 font-ivymode font-light text-white/90 text-[15px] sm:text-[16px] md:text-[20px] tracking-widest">
                     <h4 className="font-semibold text-white tracking-[0.05em] text-[20px] md:text-[22px]">
-                      For dried or stubborn stains:
+                      {d.tdWineSubnoteHeading || "For dried or stubborn stains:"}
                     </h4>
                     <div className="space-y-3">
                       <div className="flex items-start gap-5">
                         <span className="font-normal text-[#cce3eb]">1.</span>
-                        <p>Reapply the cleaner and leave for up to 5 minutes.</p>
+                        <p>{d.tdWineSubnoteStep1 || "Reapply the cleaner and leave for up to 5 minutes."}</p>
                       </div>
                       <div className="flex items-start gap-4">
                         <span className="font-normal text-[#cce3eb]">2.</span>
-                        <p>Gently rub the area and rinse thoroughly before drying.</p>
+                        <p>{d.tdWineSubnoteStep2 || "Gently rub the area and rinse thoroughly before drying."}</p>
                       </div>
                     </div>
                   </div>

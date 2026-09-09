@@ -18,6 +18,7 @@ interface MiSettings {
   miHeadingColor: string;
   miHeadingFont: string;
   miHeadingSize: string;
+  miSec1Video: string;
   miSec1Label: string;
   miSec2Para1: string;
   miSec2Para1Color: string;
@@ -46,6 +47,7 @@ interface MiSettings {
   miSec3BottomParaSize: string;
   miSec4BgImage: string;
   miSec4BgImageMobile: string;
+  miSec4TagImage: string;
   miSec4Label: string;
 }
 
@@ -54,6 +56,7 @@ const EMPTY: MiSettings = {
   miHeadingColor: "default",
   miHeadingFont: "default",
   miHeadingSize: "default",
+  miSec1Video: "",
   miSec1Label: "",
   miSec2Para1: "",
   miSec2Para1Color: "default",
@@ -82,6 +85,7 @@ const EMPTY: MiSettings = {
   miSec3BottomParaSize: "default",
   miSec4BgImage: "",
   miSec4BgImageMobile: "",
+  miSec4TagImage: "",
   miSec4Label: "",
 };
 
@@ -138,6 +142,28 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
+function VideoField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+        {label}
+      </label>
+      {value && (
+        <video src={value} controls muted className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+      )}
+      <div className="flex gap-1">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+        />
+        <MediaPickerButton folder="made-in-italy" accept="video/*" onSelect={onChange} />
+      </div>
+    </div>
+  );
+}
+
 export default function MadeInItalyAdminPage() {
   const [settings, setSettings] = useState<MiSettings>(EMPTY);
   const [loading, setLoading] = useState(true);
@@ -154,6 +180,7 @@ export default function MadeInItalyAdminPage() {
           const next: MiSettings = {
             ...EMPTY,
             miHeading: s.miHeading || "",
+            miSec1Video: s.miSec1Video || "",
             miSec1Label: s.miSec1Label || "",
             miSec2Para1: s.miSec2Para1 || "",
             miSec2Para2: s.miSec2Para2 || "",
@@ -167,6 +194,7 @@ export default function MadeInItalyAdminPage() {
             miSec3BottomPara: s.miSec3BottomPara || "",
             miSec4BgImage: s.miSec4BgImage || "",
             miSec4BgImageMobile: s.miSec4BgImageMobile || "",
+            miSec4TagImage: s.miSec4TagImage || "",
             miSec4Label: s.miSec4Label || "",
           };
           STYLED_FIELDS.forEach((field) => {
@@ -263,9 +291,7 @@ export default function MadeInItalyAdminPage() {
           <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Duomo Video Hero</p>
           <SavedBadge section="sec1" />
         </div>
-        <p className="text-[10px] text-[#8b8b8b] -mt-2">
-          The background video is a fixed brand asset and isn't editable here.
-        </p>
+        <VideoField label="Background Video" value={settings.miSec1Video} onChange={(v) => set("miSec1Video", v)} />
 
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Heading</label>
@@ -289,7 +315,7 @@ export default function MadeInItalyAdminPage() {
           />
         </div>
 
-        <SaveButton section="sec1" label="Save Section" fields={["miHeading", "miSec1Label", ...styleFields("miHeading")]} />
+        <SaveButton section="sec1" label="Save Section" fields={["miSec1Video", "miHeading", "miSec1Label", ...styleFields("miHeading")]} />
       </div>
 
       {/* Section 2: Intro */}
@@ -408,14 +434,11 @@ export default function MadeInItalyAdminPage() {
           <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Colosseum Reveal</p>
           <SavedBadge section="sec4" />
         </div>
-        <p className="text-[10px] text-[#8b8b8b] -mt-2">
-          The "Il Gres Imperiale d'Italia" tagline graphic is a fixed brand asset and isn't editable here.
-        </p>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <ImageField label="Background Image (Desktop)" value={settings.miSec4BgImage} onChange={(v) => set("miSec4BgImage", v)} />
           <ImageField label="Background Image (Mobile)" value={settings.miSec4BgImageMobile} onChange={(v) => set("miSec4BgImageMobile", v)} />
         </div>
+        <ImageField label="Tagline Graphic (Il Gres Imperiale d'Italia)" value={settings.miSec4TagImage} onChange={(v) => set("miSec4TagImage", v)} />
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Caption</label>
           <input
@@ -427,7 +450,7 @@ export default function MadeInItalyAdminPage() {
           />
         </div>
 
-        <SaveButton section="sec4" label="Save Section" fields={["miSec4BgImage", "miSec4BgImageMobile", "miSec4Label"]} />
+        <SaveButton section="sec4" label="Save Section" fields={["miSec4BgImage", "miSec4BgImageMobile", "miSec4TagImage", "miSec4Label"]} />
       </div>
     </div>
   );
