@@ -19,12 +19,13 @@ export default async function Home() {
   // HeroSection's own hardcoded defaults if the DB is briefly unreachable.
   let cmsData: any = null;
   try {
-    const [settings, heroSlides, applicationTiles, techDataSlides, finishTiles] = await Promise.all([
+    const [settings, heroSlides, applicationTiles, techDataSlides, finishTiles, locations] = await Promise.all([
       prisma.settings.findUnique({ where: { id: "global" } }),
       prisma.heroSlide.findMany({ orderBy: { order: "asc" } }),
       prisma.applicationTile.findMany({ orderBy: [{ row: "asc" }, { order: "asc" }] }),
       prisma.techDataSlide.findMany({ orderBy: { order: "asc" } }),
       prisma.homeFinishTile.findMany({ orderBy: { order: "asc" } }),
+      prisma.location.findMany({ orderBy: { order: "asc" } }),
     ]);
     cmsData = {
       heroTitle: settings?.heroTitle,
@@ -94,6 +95,7 @@ export default async function Home() {
       finishesHeadingSize: settings?.finishesHeadingSize,
       finishTiles: finishTiles.length > 0 ? finishTiles : undefined,
       techDataSlides: techDataSlides.length > 0 ? techDataSlides : undefined,
+      locations: locations.length > 0 ? locations : undefined,
     };
   } catch (e) {
     cmsData = null;

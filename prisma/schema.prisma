@@ -586,6 +586,27 @@ model HomeFinishTile {
   updatedAt   DateTime @updatedAt
 }
 
+// Homepage — Locations section (LocationsSection.tsx). Fully dynamic
+// add/remove/reorder list — replaces the 3 originally hardcoded showroom
+// locations (Sharjah, Abu Dhabi, Dubai). "order" controls left-to-right
+// display order in the grid.
+model Location {
+  id            String   @id @default(cuid())
+  order         Int      @default(0)
+  name          String
+  line1         String? // map-pin label, line 1 — e.g. "Glaze Granite & Marble,"
+  line2         String? // map-pin label, line 2 — e.g. "EIC Sharjah, UAE"
+  address       String?  @db.Text
+  phone         String?
+  email         String?
+  mapEmbedUrl   String?  @db.Text
+  googleMapsUrl String?  @db.Text
+  lat           Float?
+  lng           Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 // One certification card in the Technical Data page's Certifications
 // section. Add/remove/reorder freely — no fixed count. `certFile` is an
 // optional uploaded PDF; when set, "Download Certificate" downloads it

@@ -181,7 +181,7 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         slides={d.heroSlides}
       />
       <TechnicalDataSection slides={d.techDataSlides} />
-      <LocationsSection />
+      <LocationsSection locations={d.locations} />
       <Footer />
       <FeaturedProduct
         activeProduct={activeProduct}

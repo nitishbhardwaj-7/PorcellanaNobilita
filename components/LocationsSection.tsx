@@ -26,6 +26,23 @@ interface LocationDetail {
   line2: string;
 }
 
+// Shape a Location row from the CMS (Admin > Homepage > Locations) actually
+// arrives in — lat/lng as separate nullable Floats, everything else
+// nullable text. Mapped to LocationDetail below.
+interface LocationCms {
+  id: string;
+  name: string;
+  line1?: string | null;
+  line2?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  mapEmbedUrl?: string | null;
+  googleMapsUrl?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+}
+
 const locationsData: LocationDetail[] = [
   {
     name: "Sharjah",
@@ -109,8 +126,26 @@ const MailIcon = () => (
   </svg>
 );
 
-export default function LocationsSection() {
+export default function LocationsSection({ locations: cmsLocations }: { locations?: LocationCms[] | null }) {
   const sectionRef = useRef<HTMLElement>(null);
+
+  // CMS-managed locations (Admin > Homepage > Locations) win when present;
+  // otherwise fall back to the bundled 3 default locations so the section
+  // never renders empty.
+  const locations: LocationDetail[] =
+    cmsLocations && cmsLocations.length > 0
+      ? cmsLocations.map((l) => ({
+          name: l.name,
+          line1: l.line1 || "",
+          line2: l.line2 || "",
+          address: l.address || "",
+          phone: l.phone || "",
+          email: l.email || "",
+          mapEmbedUrl: l.mapEmbedUrl || "",
+          googleMapsUrl: l.googleMapsUrl || "",
+          coordinates: [l.lat ?? 0, l.lng ?? 0],
+        }))
+      : locationsData;
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -177,7 +212,7 @@ export default function LocationsSection() {
 
         {/* 3 Locations Grid */}
         <div className="loc-grid-trigger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-8 xl:gap-12">
-          {locationsData.map((loc) => {
+          {locations.map((loc) => {
             const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
               loc.googleMapsUrl
             )}`;

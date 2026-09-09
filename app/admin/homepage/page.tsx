@@ -9,7 +9,7 @@ import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data", "locations"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
   hero: "Explore The Collection",
@@ -20,6 +20,7 @@ const TAB_LABELS: Record<Tab, string> = {
   dimensions: "Dimensions",
   finishes: "Finishes",
   "technical-data": "Slideshow",
+  locations: "Locations",
 };
 
 export default function HomepagePage() {
@@ -43,7 +44,7 @@ export default function HomepagePage() {
       <div className="h-px bg-[#1a1a1a]/8" />
 
       {/* Tabs */}
-      <div className="flex gap-1">
+      <div className="flex flex-wrap gap-1">
         {TABS.map((tab) => (
           <button
             key={tab}
@@ -68,6 +69,7 @@ export default function HomepagePage() {
       {activeTab === "dimensions" && <DimensionsTab />}
       {activeTab === "finishes" && <FinishesTab />}
       {activeTab === "technical-data" && <TechnicalDataTab />}
+      {activeTab === "locations" && <LocationsTab />}
     </div>
   );
 }
@@ -2362,6 +2364,322 @@ function TechnicalDataTab() {
         >
           <Plus size={13} />
           Add Slide
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+// ============================================================================
+// Locations tab
+// ============================================================================
+
+interface Location {
+  id: string;
+  order: number;
+  name: string;
+  line1: string | null;
+  line2: string | null;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  mapEmbedUrl: string | null;
+  googleMapsUrl: string | null;
+  lat: number | null;
+  lng: number | null;
+}
+
+function LocationsTab() {
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  async function fetchLocations() {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/locations");
+      const data = await res.json();
+      if (data?.data) setLocations(data.data);
+    } catch (err: any) {
+      setError(err.message || "Failed to load.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleAddLocation() {
+    setError(null);
+    try {
+      const res = await fetch("/api/locations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "NEW LOCATION" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to add location.");
+      setLocations((prev) => [...prev, data.data]);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function updateLocation(id: string, patch: Partial<Location>) {
+    setLocations((prev) => prev.map((l) => (l.id === id ? { ...l, ...patch } : l)));
+    try {
+      await fetch(`/api/locations/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+    } catch {
+      setError("Failed to save location changes.");
+    }
+  }
+
+  async function handleDeleteLocation(id: string) {
+    if (!confirm("Delete this location? This cannot be undone.")) return;
+    setError(null);
+    try {
+      const res = await fetch(`/api/locations/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete.");
+      setLocations((prev) => prev.filter((l) => l.id !== id));
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function moveLocation(from: number, to: number) {
+    if (from === to) return;
+    const reordered = [...locations];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+    setLocations(reordered);
+
+    setError(null);
+    try {
+      await Promise.all(
+        reordered.map((loc, i) =>
+          loc.order === i
+            ? Promise.resolve()
+            : fetch(`/api/locations/${loc.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order: i }),
+              })
+        )
+      );
+      setLocations((prev) => prev.map((l, i) => ({ ...l, order: i })));
+    } catch {
+      setError("Failed to save the new location order.");
+      fetchLocations();
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3].map((n) => (
+          <div key={n} className="h-24 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-4">
+        <div>
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3 mb-1" style={fontMichroma}>
+            Locations
+          </p>
+          <p className="text-[10px] text-[#8b8b8b] pt-2">
+            Drag the grip handle to reorder — this is the left-to-right display order in the grid.
+            Each field saves automatically as you edit it. Lat/Lng position the map pin and QR code link.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {locations.map((loc, idx) => (
+            <div
+              key={loc.id}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) setDragOverIdx(idx);
+              }}
+              onDragLeave={() => setDragOverIdx((cur) => (cur === idx ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) moveLocation(draggedIdx, idx);
+                setDraggedIdx(null);
+                setDragOverIdx(null);
+              }}
+              className={`flex gap-3 items-start bg-[#f8f5f0] border p-3 transition-colors ${
+                draggedIdx === idx
+                  ? "opacity-40 border-[#1a1a1a]/10"
+                  : dragOverIdx === idx
+                    ? "border-[#007190]"
+                    : "border-[#1a1a1a]/10"
+              }`}
+            >
+              <div
+                draggable
+                onDragStart={() => setDraggedIdx(idx)}
+                onDragEnd={() => {
+                  setDraggedIdx(null);
+                  setDragOverIdx(null);
+                }}
+                className="flex-shrink-0 self-stretch flex items-center text-[#1a1a1a]/25 hover:text-[#1a1a1a]/60 cursor-grab active:cursor-grabbing transition-colors"
+                title="Drag to reorder"
+              >
+                <GripVertical size={15} />
+              </div>
+
+              <div className="flex-1 space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Name</label>
+                    <input
+                      type="text"
+                      value={loc.name}
+                      onChange={(e) => updateLocation(loc.id, { name: e.target.value })}
+                      placeholder="e.g. Sharjah"
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[8px] text-[#8b8b8b] uppercase">Phone</label>
+                      <input
+                        type="text"
+                        value={loc.phone || ""}
+                        onChange={(e) => updateLocation(loc.id, { phone: e.target.value })}
+                        className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[8px] text-[#8b8b8b] uppercase">Email</label>
+                      <input
+                        type="text"
+                        value={loc.email || ""}
+                        onChange={(e) => updateLocation(loc.id, { email: e.target.value })}
+                        className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Address</label>
+                  <textarea
+                    value={loc.address || ""}
+                    onChange={(e) => updateLocation(loc.id, { address: e.target.value })}
+                    rows={2}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none resize-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Map Pin Label — Line 1</label>
+                    <input
+                      type="text"
+                      value={loc.line1 || ""}
+                      onChange={(e) => updateLocation(loc.id, { line1: e.target.value })}
+                      placeholder="e.g. Glaze Granite & Marble,"
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Map Pin Label — Line 2</label>
+                    <input
+                      type="text"
+                      value={loc.line2 || ""}
+                      onChange={(e) => updateLocation(loc.id, { line2: e.target.value })}
+                      placeholder="e.g. EIC Sharjah, UAE"
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Latitude</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={loc.lat ?? ""}
+                      onChange={(e) => updateLocation(loc.id, { lat: e.target.value === "" ? null : Number(e.target.value) })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Longitude</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={loc.lng ?? ""}
+                      onChange={(e) => updateLocation(loc.id, { lng: e.target.value === "" ? null : Number(e.target.value) })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Google Maps URL</label>
+                  <p className="text-[8px] text-[#8b8b8b] mb-0.5">Used for the "Scan QR Code" link on the card.</p>
+                  <input
+                    type="text"
+                    value={loc.googleMapsUrl || ""}
+                    onChange={(e) => updateLocation(loc.id, { googleMapsUrl: e.target.value })}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Map Embed URL</label>
+                  <p className="text-[8px] text-[#8b8b8b] mb-0.5">
+                    From Google Maps: Share &gt; Embed a map &gt; copy the src="..." URL out of the iframe code.
+                  </p>
+                  <input
+                    type="text"
+                    value={loc.mapEmbedUrl || ""}
+                    onChange={(e) => updateLocation(loc.id, { mapEmbedUrl: e.target.value })}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none font-mono"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleDeleteLocation(loc.id)}
+                className="text-red-500 hover:text-red-700 transition-colors p-1 self-start"
+              >
+                <X size={15} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAddLocation}
+          className="flex items-center gap-2 border border-[#007190] px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#007190] hover:bg-[#007190] hover:text-white transition-all"
+          style={fontMichroma}
+        >
+          <Plus size={13} />
+          Add Location
         </button>
       </div>
     </div>
