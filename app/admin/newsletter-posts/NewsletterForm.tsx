@@ -341,15 +341,15 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                   Title *
                 </label>
-                <input
+                <textarea
                   required
-                  type="text"
+                  rows={2}
                   value={form.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
                   placeholder="e.g. MACCHIA VECCHIA MAX"
                 />
-                <p className="text-[10px] text-[#8b8b8b]">Shown on the /newsletter listing card and used as the browser tab title.</p>
+                <p className="text-[10px] text-[#8b8b8b]">Press Enter for a manual line break on the /newsletter listing card. Also used as the browser tab title.</p>
               </div>
 
               <div className="space-y-1.5">

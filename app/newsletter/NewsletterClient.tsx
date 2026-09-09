@@ -157,7 +157,7 @@ export default function NewsletterPage() {
                       )}
                       {/* Centered Newsletter Title */}
                       <div className="absolute inset-0 flex items-center justify-center p-6 md:p-8 text-center z-10 pointer-events-none">
-                        <h2 className="font-ivymode font-light text-white text-[clamp(22px,2.6vw,44px)] tracking-[0.08em] group-hover:tracking-[0.22em] transition-all duration-500 ease-out leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)] uppercase">
+                        <h2 className="font-ivymode font-light text-white text-[clamp(22px,2.6vw,44px)] tracking-[0.08em] group-hover:tracking-[0.22em] transition-all duration-500 ease-out leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)] whitespace-pre-line uppercase">
                           {post.title}
                         </h2>
                       </div>
