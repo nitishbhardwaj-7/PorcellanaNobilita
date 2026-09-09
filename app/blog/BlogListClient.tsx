@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
 
 import { HARDCODED_BLOGS } from "@/lib/hardcodedBlogs";
 
@@ -23,7 +24,16 @@ interface BlogListItem {
   href: string;
 }
 
-export default function BlogPage() {
+interface BlogListCmsData {
+  blogHeroImage?: string | null;
+  blogHeroTitle?: string | null;
+  blogHeroTitleColor?: string | null;
+  blogHeroTitleFont?: string | null;
+  blogHeroTitleSize?: string | null;
+}
+
+export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null }) {
+  const d = cmsData || {};
   const blogTileRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogListItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -203,7 +213,7 @@ export default function BlogPage() {
           initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-          src="/images/blogs page images/ferro-industriale-blog-hero.webp"
+          src={d.blogHeroImage || "/images/blogs page images/ferro-industriale-blog-hero.webp"}
           alt="Blog Background"
           className="w-full h-full object-cover object-center block"
         />
@@ -215,9 +225,9 @@ export default function BlogPage() {
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-              className="font-ivymode font-light text-white uppercase tracking-[0.10em] text-[clamp(36px,6.5vw,80px)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+              className={`${fontClass(d.blogHeroTitleFont, "font-ivymode")} font-light ${colorClass(d.blogHeroTitleColor, "text-white")} uppercase tracking-[0.10em] ${headingSizeClass(d.blogHeroTitleSize, "text-[clamp(36px,6.5vw,80px)]")} drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]`}
             >
-              BLOG
+              {d.blogHeroTitle || "BLOG"}
             </motion.h1>
           </div>
         </div>

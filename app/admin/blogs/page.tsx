@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Check } from "lucide-react";
+import { MediaPickerButton } from "../_components/MediaPicker";
+import { StyleRow } from "../_components/StyleControls";
+import { HEADING_SIZE_OPTIONS } from "@/lib/textStyle";
 
 interface Blog {
   id: string;
@@ -17,17 +20,80 @@ interface Blog {
   updatedAt: string;
 }
 
+interface HeroSettings {
+  blogHeroImage: string;
+  blogHeroTitle: string;
+  blogHeroTitleColor: string;
+  blogHeroTitleFont: string;
+  blogHeroTitleSize: string;
+}
+
+const EMPTY_HERO: HeroSettings = {
+  blogHeroImage: "",
+  blogHeroTitle: "",
+  blogHeroTitleColor: "default",
+  blogHeroTitleFont: "default",
+  blogHeroTitleSize: "default",
+};
+
 export default function BlogsAdminPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hero, setHero] = useState<HeroSettings>(EMPTY_HERO);
+  const [savingHero, setSavingHero] = useState(false);
+  const [heroSaved, setHeroSaved] = useState(false);
 
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
   const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
   useEffect(() => {
     fetchBlogs();
+    fetchHero();
   }, []);
+
+  async function fetchHero() {
+    try {
+      const res = await fetch("/api/settings");
+      const data = await res.json();
+      if (data?.data) {
+        const s = data.data;
+        setHero({
+          blogHeroImage: s.blogHeroImage || "",
+          blogHeroTitle: s.blogHeroTitle || "",
+          blogHeroTitleColor: s.blogHeroTitleColor || "default",
+          blogHeroTitleFont: s.blogHeroTitleFont || "default",
+          blogHeroTitleSize: s.blogHeroTitleSize || "default",
+        });
+      }
+    } catch {
+      // Non-fatal — the page header form just stays empty if this fails.
+    }
+  }
+
+  function setHeroField<K extends keyof HeroSettings>(key: K, value: string) {
+    setHero((p) => ({ ...p, [key]: value }));
+  }
+
+  async function saveHero() {
+    setSavingHero(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(hero),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setHeroSaved(true);
+      setTimeout(() => setHeroSaved(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSavingHero(false);
+    }
+  }
 
   async function fetchBlogs() {
     try {
@@ -114,6 +180,74 @@ export default function BlogsAdminPage() {
       {error && (
         <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
       )}
+
+      {/* Page Header — the /blog listing page's top hero banner (background
+          image + title). Separate from each blog post's own heroImage. */}
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Page Header</p>
+          {heroSaved && (
+            <span className="flex items-center gap-1 text-[9px] tracking-[0.15em] uppercase text-[#007190]">
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+        <p className="text-[10px] text-[#8b8b8b] -mt-2">The banner shown at the top of the /blog listing page.</p>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Title</label>
+          <input
+            type="text"
+            value={hero.blogHeroTitle}
+            onChange={(e) => setHeroField("blogHeroTitle", e.target.value)}
+            placeholder="BLOG"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={hero.blogHeroTitleColor}
+            onColorChange={(v) => setHeroField("blogHeroTitleColor", v)}
+            font={hero.blogHeroTitleFont}
+            onFontChange={(v) => setHeroField("blogHeroTitleFont", v)}
+            size={hero.blogHeroTitleSize}
+            onSizeChange={(v) => setHeroField("blogHeroTitleSize", v)}
+            sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Background Image</label>
+          {hero.blogHeroImage ? (
+            <img src={hero.blogHeroImage} alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+          ) : (
+            <div className="relative">
+              <img src="/images/blogs page images/ferro-industriale-blog-hero.webp" alt="" className="w-full max-h-72 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6] opacity-60" />
+              <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+            </div>
+          )}
+          <div className="flex gap-1">
+            <input
+              type="text"
+              value={hero.blogHeroImage}
+              onChange={(e) => setHeroField("blogHeroImage", e.target.value)}
+              placeholder="/images/blogs page images/ferro-industriale-blog-hero.webp"
+              className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <MediaPickerButton folder="blogs" onSelect={(url) => setHeroField("blogHeroImage", url)} />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={saveHero}
+          disabled={savingHero}
+          className="flex items-center gap-2 border border-[#007190] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-[#007190] hover:bg-[#007190] hover:text-white transition-all disabled:opacity-50"
+          style={fontMichroma}
+        >
+          {savingHero ? "Saving…" : "Save Page Header"}
+        </button>
+      </div>
 
       {blogs.length === 0 ? (
         <div className="bg-white border border-[#1a1a1a]/8 p-16 text-center">

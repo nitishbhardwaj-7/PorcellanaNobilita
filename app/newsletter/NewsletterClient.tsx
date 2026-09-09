@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
 
 interface NewsletterCard {
   id: string;
@@ -14,7 +15,16 @@ interface NewsletterCard {
   href: string;
 }
 
-export default function NewsletterPage() {
+interface NewsletterListCmsData {
+  newsletterHeroImage?: string | null;
+  newsletterHeroTitle?: string | null;
+  newsletterHeroTitleColor?: string | null;
+  newsletterHeroTitleFont?: string | null;
+  newsletterHeroTitleSize?: string | null;
+}
+
+export default function NewsletterPage({ cmsData }: { cmsData?: NewsletterListCmsData | null }) {
+  const d = cmsData || {};
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -104,7 +114,7 @@ export default function NewsletterPage() {
           initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-          src="/images/newsletter page images/fior-di-melo-newsletter-hero.webp"
+          src={d.newsletterHeroImage || "/images/newsletter page images/fior-di-melo-newsletter-hero.webp"}
           alt="Newsletter Background"
           className="w-full h-full object-cover object-center block"
         />
@@ -116,9 +126,9 @@ export default function NewsletterPage() {
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-              className="font-ivymode font-light text-white uppercase tracking-[0.10em] text-[clamp(36px,6.5vw,80px)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+              className={`${fontClass(d.newsletterHeroTitleFont, "font-ivymode")} font-light ${colorClass(d.newsletterHeroTitleColor, "text-white")} uppercase tracking-[0.10em] ${headingSizeClass(d.newsletterHeroTitleSize, "text-[clamp(36px,6.5vw,80px)]")} drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]`}
             >
-              NEWSLETTER
+              {d.newsletterHeroTitle || "NEWSLETTER"}
             </motion.h1>
           </div>
         </div>

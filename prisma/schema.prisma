@@ -495,6 +495,24 @@ model Settings {
   tdCertHeadingFont  String?
   tdCertHeadingSize  String?
 
+  // Blog listing page (/blog) — the top hero banner (background image +
+  // title). Individual blog posts have their own heroImage on the Blog
+  // model, unrelated to this listing-page banner.
+  blogHeroImage      String?
+  blogHeroTitle      String? // default "BLOG"
+  blogHeroTitleColor String?
+  blogHeroTitleFont  String?
+  blogHeroTitleSize  String?
+
+  // Newsletter listing page (/newsletter) — the top hero banner
+  // (background image + title). Individual newsletter posts have their
+  // own heroImage on the Newsletter model, unrelated to this banner.
+  newsletterHeroImage      String?
+  newsletterHeroTitle      String? // default "NEWSLETTER"
+  newsletterHeroTitleColor String?
+  newsletterHeroTitleFont  String?
+  newsletterHeroTitleSize  String?
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
