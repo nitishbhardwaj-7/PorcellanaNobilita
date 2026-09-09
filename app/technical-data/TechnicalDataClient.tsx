@@ -999,7 +999,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
             {certifications.map((cert) => (
               <div key={cert.id} className="cert-card flex flex-col h-full">
                 {/* Header */}
-                <div className="space-y-3">
+                <div className="space-y-0">
                   <h3 className="font-ivymode font-light text-[clamp(20px,2.2vw,34px)] text-[#444444] leading-tight whitespace-normal lg:whitespace-nowrap">
                     {cert.title}
                   </h3>
@@ -1039,11 +1039,15 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
 
                 {/* Logo */}
                 {cert.logoImage && (
-                  <div className="h-24 md:h-28 flex items-center justify-start">
+                  <div className="h-20 sm:h-24 md:h-28 flex items-center justify-start max-w-full">
                     <img
                       src={cert.logoImage}
                       alt={cert.title}
-                      className={cert.logoImage.includes("Ceramics") ? "h-24 sm:h-26 md:h-28 lg:h-30 w-auto object-contain object-left -ml-2" : "h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"}
+                      className={
+                        cert.logoImage.includes("Ceramics")
+                          ? "h-[76px] sm:h-[84px] md:h-[92px] max-h-full max-w-[200px] w-auto object-contain object-left -ml-2.5"
+                          : "h-[54px] sm:h-[62px] md:h-[70px] max-h-full max-w-[180px] w-auto object-contain object-left"
+                      }
                     />
                   </div>
                 )}
