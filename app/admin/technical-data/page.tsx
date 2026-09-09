@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Check, Plus, X, GripVertical, Upload, FileText, ExternalLink } from "lucide-react";
-import { MediaPickerButton, MediaPickerField } from "../_components/MediaPicker";
+import { MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
 import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
@@ -694,6 +694,157 @@ export default function TechnicalDataAdminPage() {
           <FieldStyleRow field="tdSpecsHeading" settings={settings} set={set} />
         </div>
         <SaveButton section="specs" label="Save Section" fields={["tdSpecsHeading", ...styleFields("tdSpecsHeading")]} />
+      </div>
+
+      {/* Certifications */}
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Certifications</p>
+          <SavedBadge section="cert-heading" />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Section Heading</label>
+          <input
+            type="text"
+            value={settings.tdCertHeading}
+            onChange={(e) => set("tdCertHeading", e.target.value)}
+            placeholder="CERTIFICATIONS"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <FieldStyleRow field="tdCertHeading" settings={settings} set={set} />
+        </div>
+        <SaveButton section="cert-heading" label="Save Heading" fields={["tdCertHeading", ...styleFields("tdCertHeading")]} />
+
+        <div className="border-t border-[#1a1a1a]/8 pt-5 space-y-4">
+          <p className="text-[10px] text-[#8b8b8b]">
+            Drag the grip handle to reorder. Each field saves automatically as you edit it.
+          </p>
+
+          {certifications.map((cert, idx) => (
+            <div
+              key={cert.id}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggedCertIdx !== null) setDragOverCertIdx(idx);
+              }}
+              onDragLeave={() => setDragOverCertIdx((cur) => (cur === idx ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (draggedCertIdx !== null) moveCertification(draggedCertIdx, idx);
+                setDraggedCertIdx(null);
+                setDragOverCertIdx(null);
+              }}
+              className={`flex gap-3 items-start bg-[#f8f5f0] border p-3 transition-colors ${
+                draggedCertIdx === idx
+                  ? "opacity-40 border-[#1a1a1a]/10"
+                  : dragOverCertIdx === idx
+                    ? "border-[#007190]"
+                    : "border-[#1a1a1a]/10"
+              }`}
+            >
+              <div
+                draggable
+                onDragStart={() => setDraggedCertIdx(idx)}
+                onDragEnd={() => {
+                  setDraggedCertIdx(null);
+                  setDragOverCertIdx(null);
+                }}
+                className="flex-shrink-0 self-stretch flex items-center text-[#1a1a1a]/25 hover:text-[#1a1a1a]/60 cursor-grab active:cursor-grabbing transition-colors"
+                title="Drag to reorder"
+              >
+                <GripVertical size={15} />
+              </div>
+
+              <div className="flex-1 space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Title</label>
+                    <input
+                      type="text"
+                      value={cert.title}
+                      onChange={(e) => updateCertification(cert.id, { title: e.target.value })}
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Subtitle</label>
+                    <input
+                      type="text"
+                      value={cert.subtitle || ""}
+                      onChange={(e) => updateCertification(cert.id, { subtitle: e.target.value })}
+                      placeholder="e.g. CERTIFIED ITALIAN CERAMIC PRODUCTION"
+                      className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Description</label>
+                  <textarea
+                    value={cert.description || ""}
+                    onChange={(e) => updateCertification(cert.id, { description: e.target.value })}
+                    rows={2}
+                    className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none resize-none"
+                  />
+                  <div className="mt-1">
+                    <StyleRow
+                      color={cert.descriptionColor || "default"}
+                      onColorChange={(v) => updateCertification(cert.id, { descriptionColor: v })}
+                      font={cert.descriptionFont || "default"}
+                      onFontChange={(v) => updateCertification(cert.id, { descriptionFont: v })}
+                      size={cert.descriptionSize || "default"}
+                      onSizeChange={(v) => updateCertification(cert.id, { descriptionSize: v })}
+                      sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                      colorDefaultLabel="Grey"
+                      fontDefaultLabel="Ivymode"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Logo</label>
+                    {cert.logoImage && (
+                      <img src={cert.logoImage} alt="" className="h-14 w-auto object-contain border border-[#1a1a1a]/10 bg-white p-1.5" />
+                    )}
+                    <div className="flex gap-1">
+                      <input
+                        type="text"
+                        value={cert.logoImage || ""}
+                        onChange={(e) => updateCertification(cert.id, { logoImage: e.target.value })}
+                        className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
+                      />
+                      <MediaPickerButton folder="certifications" onSelect={(url) => updateCertification(cert.id, { logoImage: url })} />
+                    </div>
+                  </div>
+                  <CertFileField
+                    value={cert.certFile || ""}
+                    onChange={(url) => updateCertification(cert.id, { certFile: url })}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleDeleteCertification(cert.id)}
+                className="text-red-500 hover:text-red-700 transition-colors p-1 self-start"
+              >
+                <X size={15} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAddCertification}
+          className="flex items-center gap-2 border border-[#007190] px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#007190] hover:bg-[#007190] hover:text-white transition-all"
+          style={fontMichroma}
+        >
+          <Plus size={13} />
+          Add Certification
+        </button>
       </div>
     </div>
   );

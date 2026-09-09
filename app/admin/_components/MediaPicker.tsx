@@ -12,7 +12,7 @@ interface MediaFile {
   folder: string;
 }
 
-const FOLDERS = ["products", "blogs", "newsletters"];
+const FOLDERS = ["products", "blogs", "newsletters", "certifications"];
 const PAGES = [
   { key: "homepage", label: "Homepage" },
   { key: "our-story", label: "Our Story" },
