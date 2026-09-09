@@ -386,6 +386,8 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   size={form.subtitleSize}
                   onSizeChange={(v) => setForm((p) => ({ ...p, subtitleSize: v }))}
                   sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                  colorDefaultLabel="Black"
+                  fontDefaultLabel="Ivymode"
                 />
                 <p className="text-[10px] text-[#8b8b8b]">Shown in the white banner below the hero on the detail page.</p>
               </div>
@@ -433,6 +435,8 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   size={form.specProductNameSize}
                   onSizeChange={(v) => setForm((p) => ({ ...p, specProductNameSize: v }))}
                   sizeOptions={HEADING_SIZE_OPTIONS}
+                  colorDefaultLabel="Black"
+                  fontDefaultLabel="Ivymode"
                 />
               </div>
 
@@ -502,6 +506,8 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   size={form.specInspirationSize}
                   onSizeChange={(v) => setForm((p) => ({ ...p, specInspirationSize: v }))}
                   sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                  colorDefaultLabel="Black"
+                  fontDefaultLabel="Ivymode"
                 />
                 <p className="text-[10px] text-[#8b8b8b]">Applies to both inspiration lines together — they render as one paragraph.</p>
               </div>

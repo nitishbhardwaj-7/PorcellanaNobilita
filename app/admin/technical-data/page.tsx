@@ -34,6 +34,25 @@ const HEADING_FIELDS = new Set([
   "tdThickHeading",
   "tdSpecsHeading",
 ]);
+// What each field's Color actually renders as when left at "Default" — the
+// page's own hardcoded fallback color — shown in the dropdown as e.g.
+// "White (Default)" instead of a bare "Default".
+const COLOR_DEFAULTS: Record<(typeof STYLED_FIELDS)[number], string> = {
+  tdHeading: "Black",
+  tdHeroDesc: "Black",
+  tdCharHeading: "White",
+  tdUgHeading: "White",
+  tdUgDesc1: "White",
+  tdUgDesc2: "White",
+  tdDimHeading: "White",
+  tdDimDesc1: "White",
+  tdDimDesc2: "White",
+  tdDimDesc3: "White",
+  tdThickHeading: "White",
+  tdThickDesc1: "White",
+  tdThickDesc2: "White",
+  tdSpecsHeading: "Teal",
+};
 
 interface TdSettings {
   tdHeading: string;
@@ -153,6 +172,8 @@ function FieldStyleRow({
       size={settings[sizeKey]}
       onSizeChange={(v) => set(sizeKey, v)}
       sizeOptions={HEADING_FIELDS.has(field) ? HEADING_SIZE_OPTIONS : PARAGRAPH_SIZE_OPTIONS}
+      colorDefaultLabel={COLOR_DEFAULTS[field]}
+      fontDefaultLabel="Ivymode"
     />
   );
 }

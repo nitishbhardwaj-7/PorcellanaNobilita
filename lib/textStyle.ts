@@ -28,7 +28,7 @@ export const FONT_OPTIONS = [
 // natural responsive sizing) so admins pick a concrete size, not a vague
 // "Large". "Default" preserves the section's original responsive clamp().
 export const HEADING_SIZE_OPTIONS = [
-  { value: "default", label: "Default (Responsive)" },
+  { value: "default", label: "Responsive (Default)" },
   { value: "24", label: "24px" },
   { value: "28", label: "28px" },
   { value: "32", label: "32px" },
@@ -45,7 +45,7 @@ export const HEADING_SIZE_OPTIONS = [
 ];
 
 export const PARAGRAPH_SIZE_OPTIONS = [
-  { value: "default", label: "Default (Responsive)" },
+  { value: "default", label: "Responsive (Default)" },
   { value: "12", label: "12px" },
   { value: "14", label: "14px" },
   { value: "16", label: "16px" },

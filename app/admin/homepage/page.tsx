@@ -288,6 +288,8 @@ function HeroTab() {
             size={settings.heroTitleSize || "default"}
             onSizeChange={(v) => setSettings((p) => ({ ...p, heroTitleSize: v }))}
             sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
           />
         </div>
 
@@ -309,6 +311,8 @@ function HeroTab() {
             size={settings.heroSubtitleSize || "default"}
             onSizeChange={(v) => setSettings((p) => ({ ...p, heroSubtitleSize: v }))}
             sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
           />
         </div>
 
@@ -647,6 +651,8 @@ function BrandIntroTab() {
             size={settings.brandSubtitleSize || "default"}
             onSizeChange={(v) => setSettings((p) => ({ ...p, brandSubtitleSize: v }))}
             sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
           />
         </div>
 
@@ -824,6 +830,8 @@ function CraftsmanshipTab() {
             size={settings.craftHeadingSize || "default"}
             onSizeChange={(v) => setSettings((p) => ({ ...p, craftHeadingSize: v }))}
             sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
           />
         </div>
 
@@ -845,6 +853,8 @@ function CraftsmanshipTab() {
             size={settings.craftParagraphSize || "default"}
             onSizeChange={(v) => setSettings((p) => ({ ...p, craftParagraphSize: v }))}
             sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
           />
         </div>
 
@@ -1283,6 +1293,8 @@ function ApplicationsTab() {
             size={headingSize}
             onSizeChange={setHeadingSize}
             sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="Grey"
+            fontDefaultLabel="Ivymode"
           />
         </div>
         <button
@@ -1530,6 +1542,8 @@ function DimensionsTab() {
             size={settings.dimHeadingSize || "default"}
             onSizeChange={(v) => setSettings((p) => ({ ...p, dimHeadingSize: v }))}
             sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="Grey"
+            fontDefaultLabel="Ivymode"
           />
         </div>
 
@@ -1870,6 +1884,8 @@ function FinishesTab() {
             size={settings.finishesHeadingSize || "default"}
             onSizeChange={(v) => setSettings((p) => ({ ...p, finishesHeadingSize: v }))}
             sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="Grey"
+            fontDefaultLabel="Ivymode"
           />
         </div>
 
@@ -2031,6 +2047,8 @@ function FinishesTab() {
                       size={tile.descSize || "default"}
                       onSizeChange={(v) => updateTile(tile.id, { descSize: v })}
                       sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                      colorDefaultLabel={tile.textStyle === "light" ? "White" : "Grey"}
+                      fontDefaultLabel="Michroma"
                     />
                   </div>
                 </div>

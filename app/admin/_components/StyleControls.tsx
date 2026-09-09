@@ -5,8 +5,25 @@ import { COLOR_OPTIONS, FONT_OPTIONS } from "@/lib/textStyle";
 
 // A field's Color / Font / Size — three plain <select> dropdowns in a row.
 // Shared across every admin page that exposes per-field text styling
-// (Homepage, Our Story, Made in Italy, Technical Data) so the control markup
-// only exists once.
+// (Homepage, Our Story, Made in Italy, Technical Data, Newsletter Posts) so
+// the control markup only exists once.
+
+// Replaces the "Default" option's label with "<actual value> (Default)" so
+// admins can see what "Default" resolves to for THIS field without having
+// to check the live page — e.g. "Ivymode (Default)" instead of a bare
+// "Default" sitting next to a separate, seemingly-unrelated "Ivymode"
+// option. Leaves every other option (and the whole list, when no label is
+// given) untouched.
+function withDefaultLabel(
+  options: { value: string; label: string }[],
+  actualLabel?: string
+): { value: string; label: string }[] {
+  if (!actualLabel) return options;
+  return options.map((o) =>
+    o.value === "default" ? { ...o, label: `${actualLabel} (Default)` } : o
+  );
+}
+
 function MiniSelect({
   value,
   onChange,
@@ -37,6 +54,9 @@ export function StyleRow({
   size,
   onSizeChange,
   sizeOptions,
+  colorDefaultLabel,
+  fontDefaultLabel,
+  sizeDefaultLabel,
 }: {
   color: string;
   onColorChange: (v: string) => void;
@@ -45,20 +65,26 @@ export function StyleRow({
   size: string;
   onSizeChange: (v: string) => void;
   sizeOptions: { value: string; label: string }[];
+  /** What "Default" actually renders as for this field, e.g. "Black", "White", "Grey", "Teal" — shown as "<label> (Default)". Omit to show a bare "Default". */
+  colorDefaultLabel?: string;
+  /** What "Default" actually renders as for this field, e.g. "Ivymode", "Michroma". Omit to show a bare "Default". */
+  fontDefaultLabel?: string;
+  /** Overrides the size dropdown's built-in "Responsive (Default)" label when a field's default is a fixed value rather than responsive. */
+  sizeDefaultLabel?: string;
 }) {
   return (
     <div className="grid grid-cols-3 gap-2">
       <div>
         <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-        <MiniSelect value={color} onChange={onColorChange} options={COLOR_OPTIONS} />
+        <MiniSelect value={color} onChange={onColorChange} options={withDefaultLabel(COLOR_OPTIONS, colorDefaultLabel)} />
       </div>
       <div>
         <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
-        <MiniSelect value={font} onChange={onFontChange} options={FONT_OPTIONS} />
+        <MiniSelect value={font} onChange={onFontChange} options={withDefaultLabel(FONT_OPTIONS, fontDefaultLabel)} />
       </div>
       <div>
         <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
-        <MiniSelect value={size} onChange={onSizeChange} options={sizeOptions} />
+        <MiniSelect value={size} onChange={onSizeChange} options={withDefaultLabel(sizeOptions, sizeDefaultLabel)} />
       </div>
     </div>
   );

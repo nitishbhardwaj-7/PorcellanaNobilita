@@ -155,6 +155,8 @@ function FieldStyleRow({
       size={settings[sizeKey]}
       onSizeChange={(v) => set(sizeKey, v)}
       sizeOptions={HEADING_FIELDS.has(field) ? HEADING_SIZE_OPTIONS : PARAGRAPH_SIZE_OPTIONS}
+      colorDefaultLabel="Grey"
+      fontDefaultLabel="Ivymode"
     />
   );
 }
