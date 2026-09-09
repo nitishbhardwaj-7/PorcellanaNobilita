@@ -258,6 +258,38 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
           }
         }
       );
+
+      // 5. Certifications Section Reveal
+      gsap.fromTo(".cert-title",
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".cert-title",
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      gsap.fromTo(".cert-card",
+        { y: 35, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".cert-grid",
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
     });
 
     return () => ctx.revert();
@@ -829,7 +861,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
       </div>
 
       {/* C. Technical Specifications Section */}
-      <section className="relative w-full pt-16 mb-20 px-6 md:px-12 lg:px-20 xl:px-24 bg-white text-brand-dark">
+      <section className="relative w-full pt-16 pb-12 md:pb-16 px-6 md:px-12 lg:px-20 xl:px-24 bg-white text-brand-dark">
         <div className="max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col items-start w-full space-y-16">
           <div className="text-center w-full">
             <h2 className={`specs-title ${fontClass(d.tdSpecsHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdSpecsHeadingColor, "text-[#007190]")} uppercase tracking-[0.15em] ${headingSizeClass(d.tdSpecsHeadingSize, "text-[clamp(28px,4.5vw,42px)]")} leading-tight`}>
@@ -863,6 +895,271 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
               <span className="relative z-10 font-michroma text-[#007190] text-base md:text-lg tracking-[0.2em] transition-colors duration-500 group-hover:text-white">DOWNLOAD</span>
               <span className="relative z-10 font-michroma text-[#007190] text-base md:text-lg tracking-[0.2em] transition-colors duration-500 group-hover:text-white">ENGLISH</span>
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* D. Certifications Section */}
+      <section className="relative w-full pt-8 md:pt-12 pb-24 md:pb-32 px-6 md:px-12 lg:px-20 xl:px-24 bg-white text-brand-dark">
+        <div className="max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col items-start w-full space-y-16 md:space-y-20">
+          <div className="text-center w-full">
+            <h2 className={`cert-title ${fontClass(d.tdSpecsHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdSpecsHeadingColor, "text-[#007190]")} uppercase tracking-[0.15em] ${headingSizeClass(d.tdSpecsHeadingSize, "text-[clamp(28px,4.5vw,42px)]")} leading-tight`}>
+              CERTIFICATIONS
+            </h2>
+          </div>
+
+          <div className="cert-grid grid grid-cols-1 md:grid-cols-2 gap-x-12 md:gap-x-16 lg:gap-x-24 xl:gap-x-32 gap-y-16 md:gap-y-24 w-full items-stretch">
+            {/* Column 1: Ceramics of Italy */}
+            <div className="cert-card flex flex-col h-full">
+              {/* Header */}
+              <div className="space-y-3">
+                <h3 className="font-ivymode font-light text-[clamp(28px,3.5vw,44px)] text-[#444444] leading-tight">
+                  Ceramics of Italy
+                </h3>
+                <p className="font-ivymode font-normal text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] tracking-[0.12em] uppercase text-[#666666]">
+                  CERTIFIED ITALIAN CERAMIC PRODUCTION
+                </p>
+              </div>
+
+              {/* Paragraph */}
+              <div className="flex-1 pt-4 pb-8 flex flex-col justify-start">
+                <p className="font-ivymode font-light text-[#595959] text-[15px] sm:text-[16px] md:text-[18px] lg:text-[19px] tracking-wide leading-relaxed">
+                  Ceramics of Italy is the internationally recognised collective mark of the Italian ceramic industry, representing values of quality, transparency, design, innovation and sustainability. The mark is reserved for ceramic products manufactured in Italy by companies authorised to use the designation, providing assurance of authentic Italian craftsmanship.
+                </p>
+              </div>
+
+              {/* Download Certificate Button */}
+              <div className="pb-8">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-datasheet-form", { detail: { language: "english" } }));
+                  }}
+                  className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
+                >
+                  DOWNLOAD CERTIFICATE
+                </button>
+              </div>
+
+              {/* Logo */}
+              <div className="h-24 md:h-28 flex items-center justify-start">
+                <img
+                  src="/images/Certifications/Ceramics Of Italy.png"
+                  alt="Ceramics of Italy"
+                  className="h-24 sm:h-26 md:h-28 lg:h-30 w-auto object-contain object-left -ml-2"
+                />
+              </div>
+            </div>
+
+            {/* Column 2: Produzione Biocompatibile */}
+            <div className="cert-card flex flex-col h-full">
+              {/* Header */}
+              <div className="space-y-3">
+                <h3 className="font-ivymode font-light text-[clamp(28px,3.5vw,44px)] text-[#444444] leading-tight">
+                  Produzione Biocompatibile
+                </h3>
+                <p className="font-ivymode font-normal text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] tracking-[0.12em] uppercase text-[#666666]">
+                  BIOCOMPATIBLE PRODUCTION
+                </p>
+              </div>
+
+              {/* Paragraph */}
+              <div className="flex-1 pt-4 pb-8 flex flex-col justify-start">
+                <p className="font-ivymode font-light text-[#595959] text-[15px] sm:text-[16px] md:text-[18px] lg:text-[19px] tracking-wide leading-relaxed">
+                  The Produzione Biocompatibile certification recognises production practices developed with attention to the relationship between materials, people and the environment. It reflects an approach to manufacturing that considers the health, environmental and sustainability characteristics of materials throughout the production process.
+                </p>
+              </div>
+
+              {/* Download Certificate Button */}
+              <div className="pb-8">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-datasheet-form", { detail: { language: "english" } }));
+                  }}
+                  className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
+                >
+                  DOWNLOAD CERTIFICATE
+                </button>
+              </div>
+
+              {/* Logo */}
+              <div className="h-24 md:h-28 flex items-center justify-start">
+                <img
+                  src="/images/Certifications/bio.png"
+                  alt="Produzione Biocompatibile"
+                  className="h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"
+                />
+              </div>
+            </div>
+
+            {/* Column 3: NSF */}
+            <div className="cert-card flex flex-col h-full">
+              {/* Header */}
+              <div className="space-y-3">
+                <h3 className="font-ivymode font-light text-[clamp(28px,3.5vw,44px)] text-[#444444] leading-tight">
+                  NSF
+                </h3>
+                <p className="font-ivymode font-normal text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] tracking-[0.12em] uppercase text-[#666666]">
+                  NSF/ANSI 51 CERTIFIED
+                </p>
+              </div>
+
+              {/* Paragraph */}
+              <div className="flex-1 pt-4 pb-8 flex flex-col justify-start">
+                <p className="font-ivymode font-light text-[#595959] text-[15px] sm:text-[16px] md:text-[18px] lg:text-[19px] tracking-wide leading-relaxed">
+                  All NOBILITA surfaces are certified to NSF/ANSI 51, meeting established requirements for materials used in food equipment and food-service environments. The certification makes NOBILITA suitable for demanding applications where hygiene and material safety are essential, including hospitals, healthcare facilities, commercial kitchens and restaurants.
+                </p>
+              </div>
+
+              {/* Download Certificate Button */}
+              <div className="pb-8">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-datasheet-form", { detail: { language: "english" } }));
+                  }}
+                  className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
+                >
+                  DOWNLOAD CERTIFICATE
+                </button>
+              </div>
+
+              {/* Logo */}
+              <div className="h-24 md:h-28 flex items-center justify-start">
+                <img
+                  src="/images/Certifications/NSF logo.png"
+                  alt="NSF Certified"
+                  className="h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"
+                />
+              </div>
+            </div>
+
+            {/* Column 4: CCC */}
+            <div className="cert-card flex flex-col h-full">
+              {/* Header */}
+              <div className="space-y-3">
+                <h3 className="font-ivymode font-light text-[clamp(28px,3.5vw,44px)] text-[#444444] leading-tight">
+                  CCC
+                </h3>
+                <p className="font-ivymode font-normal text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] tracking-[0.12em] uppercase text-[#666666]">
+                  CHINA COMPULSORY CERTIFICATION
+                </p>
+              </div>
+
+              {/* Paragraph */}
+              <div className="flex-1 pt-4 pb-8 flex flex-col justify-start">
+                <p className="font-ivymode font-light text-[#595959] text-[15px] sm:text-[16px] md:text-[18px] lg:text-[19px] tracking-wide leading-relaxed">
+                  The China Compulsory Certification (CCC) symbol demonstrates compliance with applicable Chinese national requirements for products within the CCC certification system. It is a regulated conformity assessment that addresses requirements relating to product use quality, safety, performance and reliability.
+                </p>
+              </div>
+
+              {/* Download Certificate Button */}
+              <div className="pb-8">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-datasheet-form", { detail: { language: "english" } }));
+                  }}
+                  className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
+                >
+                  DOWNLOAD CERTIFICATE
+                </button>
+              </div>
+
+              {/* Logo */}
+              <div className="h-24 md:h-28 flex items-center justify-start">
+                <img
+                  src="/images/Certifications/ccc.png"
+                  alt="China Compulsory Certification"
+                  className="h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"
+                />
+              </div>
+            </div>
+
+            {/* Column 5: ISO 9001 */}
+            <div className="cert-card flex flex-col h-full">
+              {/* Header */}
+              <div className="space-y-3">
+                <h3 className="font-ivymode font-light text-[clamp(28px,3.5vw,44px)] text-[#444444] leading-tight">
+                  ISO 9001
+                </h3>
+                <p className="font-ivymode font-normal text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] tracking-[0.12em] uppercase text-[#666666]">
+                  QUALITY MANAGEMENT SYSTEM
+                </p>
+              </div>
+
+              {/* Paragraph */}
+              <div className="flex-1 pt-4 pb-8 flex flex-col justify-start">
+                <p className="font-ivymode font-light text-[#595959] text-[15px] sm:text-[16px] md:text-[18px] lg:text-[19px] tracking-wide leading-relaxed">
+                  ISO 9001 is an internationally recognised standard for quality management systems. NOBILITA's certification reflects a structured approach to quality across its production processes, with established procedures for maintaining consistency, monitoring performance and continually improving its products and operations.
+                </p>
+              </div>
+
+              {/* Download Certificate Button */}
+              <div className="pb-8">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-datasheet-form", { detail: { language: "english" } }));
+                  }}
+                  className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
+                >
+                  DOWNLOAD CERTIFICATE
+                </button>
+              </div>
+
+              {/* Logo */}
+              <div className="h-24 md:h-28 flex items-center justify-start">
+                <img
+                  src="/images/Certifications/ISO 9001.png"
+                  alt="ISO 9001:2015"
+                  className="h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"
+                />
+              </div>
+            </div>
+
+            {/* Column 6: USGBC & LEED CONTRIBUTION */}
+            <div className="cert-card flex flex-col h-full">
+              {/* Header */}
+              <div className="space-y-3">
+                <h3 className="font-ivymode font-light text-[clamp(28px,3.5vw,44px)] text-[#444444] leading-tight">
+                  USGBC & LEED CONTRIBUTION
+                </h3>
+                <p className="font-ivymode font-normal text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] tracking-[0.12em] uppercase text-[#666666]">
+                  U.S. GREEN BUILDING COUNCIL GOLD MEMBER
+                </p>
+              </div>
+
+              {/* Paragraph */}
+              <div className="flex-1 pt-4 pb-8 flex flex-col justify-start">
+                <p className="font-ivymode font-light text-[#595959] text-[15px] sm:text-[16px] md:text-[18px] lg:text-[19px] tracking-wide leading-relaxed">
+                  NOBILITA is a Gold Member of the U.S. Green Building Council (USGBC), supporting the advancement of sustainable practices in the built environment. NOBILITA products are also eligible to contribute LEED points across applicable credits, supporting projects in achieving Certified, Silver, Gold or Platinum LEED certification.
+                </p>
+              </div>
+
+              {/* Download Certificate Button */}
+              <div className="pb-8">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("open-datasheet-form", { detail: { language: "english" } }));
+                  }}
+                  className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
+                >
+                  DOWNLOAD CERTIFICATE
+                </button>
+              </div>
+
+              {/* Logo */}
+              <div className="h-24 md:h-28 flex items-center justify-start">
+                <img
+                  src="/images/Certifications/U.S._Green_Building_Council_logo.svg"
+                  alt="U.S. Green Building Council"
+                  className="h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
