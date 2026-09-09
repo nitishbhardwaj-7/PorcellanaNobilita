@@ -16,6 +16,7 @@ interface Certification {
   descriptionFont: string | null;
   descriptionSize: string | null;
   logoImage: string | null;
+  showDownload: boolean;
   certFile: string | null;
 }
 
@@ -983,10 +984,28 @@ export default function TechnicalDataAdminPage() {
                       <MediaPickerButton folder="certifications" onSelect={(url) => updateCertification(cert.id, { logoImage: url })} />
                     </div>
                   </div>
-                  <CertFileField
-                    value={cert.certFile || ""}
-                    onChange={(url) => updateCertification(cert.id, { certFile: url })}
-                  />
+
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-[8px] text-[#8b8b8b] uppercase cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={cert.showDownload}
+                        onChange={(e) => updateCertification(cert.id, { showDownload: e.target.checked })}
+                        className="accent-[#007190]"
+                      />
+                      Show Download Certificate
+                    </label>
+                    {cert.showDownload ? (
+                      <CertFileField
+                        value={cert.certFile || ""}
+                        onChange={(url) => updateCertification(cert.id, { certFile: url })}
+                      />
+                    ) : (
+                      <p className="text-[9px] text-[#8b8b8b]">
+                        Hidden on the public page — no "Download Certificate" button shows for this card. Tick the box above to upload a PDF and reveal it.
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 

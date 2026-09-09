@@ -34,6 +34,10 @@ export async function POST(request: Request) {
         description: description || null,
         logoImage: logoImage || null,
         certFile: certFile || null,
+        // New certifications start with the Download Certificate button
+        // hidden — an admin ticks "Show Download Certificate" to reveal
+        // the PDF upload and the public button.
+        showDownload: false,
         order: (maxOrder._max.order ?? -1) + 1,
       },
     });

@@ -75,6 +75,7 @@ interface CertificationItem {
   descriptionFont?: string | null;
   descriptionSize?: string | null;
   logoImage?: string | null;
+  showDownload?: boolean;
   certFile?: string | null;
 }
 
@@ -1018,18 +1019,23 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
                   </div>
                 )}
 
-                {/* Download Certificate Button */}
-                <div className="pb-8 mt-auto">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleCertDownload(cert);
-                    }}
-                    className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
-                  >
-                    DOWNLOAD CERTIFICATE
-                  </button>
-                </div>
+                {/* Download Certificate Button — hidden unless the admin has
+                    ticked "Show Download Certificate" for this card (the
+                    bundled fallback cards, which predate the toggle, default
+                    to shown). */}
+                {(cert.showDownload ?? true) && (
+                  <div className="pb-8 mt-auto">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCertDownload(cert);
+                      }}
+                      className="font-michroma text-[11px] sm:text-xs md:text-[13px] tracking-[0.2em] uppercase text-[#666666] hover:text-[#1a1a1a] transition-colors duration-300 flex items-center gap-2 cursor-pointer focus:outline-none"
+                    >
+                      DOWNLOAD CERTIFICATE
+                    </button>
+                  </div>
+                )}
 
                 {/* Logo */}
                 {cert.logoImage && (

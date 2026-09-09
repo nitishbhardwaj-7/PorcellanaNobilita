@@ -583,6 +583,13 @@ model Certification {
   descriptionFont  String?
   descriptionSize  String?
   logoImage        String?
+  // Whether the "Download Certificate" button shows on the public page at
+  // all. Off by default for newly added certifications (see the POST
+  // handler in app/api/certifications/route.ts, which explicitly writes
+  // false) — an admin ticks it on to reveal the PDF-upload control and the
+  // button. The @default(true) here exists only so the migration that adds
+  // this column keeps every pre-existing certification's button visible.
+  showDownload     Boolean  @default(true)
   certFile         String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt

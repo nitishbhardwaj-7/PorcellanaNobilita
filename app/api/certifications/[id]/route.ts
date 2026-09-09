@@ -16,6 +16,7 @@ export async function PUT(
       descriptionFont,
       descriptionSize,
       logoImage,
+      showDownload,
       certFile,
       order,
     } = body;
@@ -30,6 +31,7 @@ export async function PUT(
         ...(descriptionFont !== undefined && { descriptionFont }),
         ...(descriptionSize !== undefined && { descriptionSize }),
         ...(logoImage !== undefined && { logoImage }),
+        ...(showDownload !== undefined && { showDownload }),
         ...(certFile !== undefined && { certFile }),
         ...(order !== undefined && { order }),
       },
