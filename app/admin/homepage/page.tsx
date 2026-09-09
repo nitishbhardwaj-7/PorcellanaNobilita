@@ -12,14 +12,14 @@ const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
-  hero: "Hero",
+  hero: "Explore The Collection",
   "brand-intro": "Brand Intro",
   craftsmanship: "Craftsmanship",
   legacy: "Legacy",
   applications: "Applications",
   dimensions: "Dimensions",
   finishes: "Finishes",
-  "technical-data": "Technical Data",
+  "technical-data": "Slideshow",
 };
 
 export default function HomepagePage() {
