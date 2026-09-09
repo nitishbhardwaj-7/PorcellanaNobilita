@@ -162,10 +162,10 @@ export default function NewsletterPostsAdminPage() {
             Editorial
           </p>
           <h2 className="text-3xl font-light text-[#1a1a1a]" style={fontIvymode}>
-            Newsletter Posts
+            Newsletter
           </h2>
           <p className="mt-2 text-sm text-[#8b8b8b]">
-            Uploaded HTML editions shown at /newsletter — each opens exactly as uploaded. Distinct from the "Newsletter" subscriber list.
+            Uploaded HTML editions shown at /newsletter — each opens exactly as uploaded. Distinct from the "Newsletter Subscriptions" list.
           </p>
         </div>
         <Link
