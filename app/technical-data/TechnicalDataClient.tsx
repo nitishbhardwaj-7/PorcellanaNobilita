@@ -1000,11 +1000,11 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
               <div key={cert.id} className="cert-card flex flex-col h-full">
                 {/* Header */}
                 <div className="space-y-3">
-                  <h3 className="font-ivymode font-light text-[clamp(28px,3.5vw,44px)] text-[#444444] leading-tight">
+                  <h3 className="font-ivymode font-light text-[clamp(20px,2.2vw,34px)] text-[#444444] leading-tight whitespace-normal lg:whitespace-nowrap">
                     {cert.title}
                   </h3>
                   {cert.subtitle && (
-                    <p className="font-ivymode font-normal text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] tracking-[0.12em] uppercase text-[#666666]">
+                    <p className="font-ivymode font-normal text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] tracking-[0.10em] uppercase text-[#666666]">
                       {cert.subtitle}
                     </p>
                   )}
@@ -1043,7 +1043,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
                     <img
                       src={cert.logoImage}
                       alt={cert.title}
-                      className="h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"
+                      className={cert.logoImage.includes("Ceramics") ? "h-24 sm:h-26 md:h-28 lg:h-30 w-auto object-contain object-left -ml-2" : "h-18 sm:h-20 md:h-22 lg:h-24 w-auto object-contain object-left"}
                     />
                   </div>
                 )}
