@@ -93,45 +93,26 @@ model Blog {
   updatedAt      DateTime @updatedAt
 }
 
-// A single product-spotlight newsletter edition, shown at /newsletter (grid
-// of cards) and /newsletter/[slug] (detail page). Distinct from Blog — no
-// free-form article body; a fixed structured layout (hero image, subtitle,
-// and one product spec block) mirroring the launch newsletters seeded in
-// lib/hardcodedNewsletters.ts, which stay in place as permanent fallback
-// content the same way HARDCODED_BLOGS does for Blog — a CMS row always
-// wins over a hardcoded entry with the same slug.
+// A newsletter edition — an admin-uploaded, fully self-contained HTML file
+// (an email-campaign export, e.g. from Liana Mailer) served byte-for-byte at
+// /newsletter/[slug] via a plain Route Handler (see
+// app/newsletter/[slug]/route.ts) instead of a React page, so the file's own
+// <html>/<head>/<body> and styling render exactly as uploaded — no site
+// layout, Navbar, or Footer wrapped around it. No structured content
+// fields; the uploaded file is the entire page.
 model Newsletter {
-  id                   String   @id @default(cuid())
-  slug                 String   @unique
-  title                String
-  subtitle             String?  @db.Text
-  subtitleColor        String?
-  subtitleFont         String?
-  subtitleSize         String?
-  cardImage            String? // thumbnail on the /newsletter listing grid
-  heroImage            String? // full-width banner on the detail page (falls back to cardImage if unset)
-  heroImageAlt         String?
-  author               String   @default("NOBILITA Editorial Team")
-  specProductName      String?
-  specProductNameColor String?
-  specProductNameFont  String?
-  specProductNameSize  String?
-  specSlabImage        String?
-  specDimensions       String[] @default([])
-  specFaces            String[] @default([])
-  specFinishes         String[] @default([])
-  specInspirationLine1 String?
-  specInspirationLine2 String?
-  specInspirationColor String?
-  specInspirationFont  String?
-  specInspirationSize  String?
-  seoTitle             String?
-  seoDescription       String?
-  order                Int      @default(0)
-  status               Status   @default(DRAFT)
-  publishedAt          DateTime @default(now())
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  cardImage      String? // thumbnail on the /newsletter listing grid
+  htmlFile       String? // path to the uploaded standalone HTML file
+  seoTitle       String?
+  seoDescription String?
+  order          Int      @default(0)
+  status         Status   @default(DRAFT)
+  publishedAt    DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Submission {

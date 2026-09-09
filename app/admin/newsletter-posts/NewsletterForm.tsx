@@ -3,10 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, X, ChevronDown } from "lucide-react";
+import { ArrowLeft, Save, ChevronDown, FileText, ExternalLink } from "lucide-react";
 import { MediaPickerField } from "../_components/MediaPicker";
-import { StyleRow } from "../_components/StyleControls";
-import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 function CustomSelect({
   value,
@@ -81,64 +79,99 @@ function slugify(text: string) {
     .replace(/-+/g, "-");
 }
 
-function TagInput({
-  label,
-  values,
+// Upload/replace/preview the newsletter's standalone HTML file. Reuses the
+// same media-library upload endpoint as images (it accepts any file type),
+// just scoped to the "newsletters" folder and an .html file picker.
+function HtmlFileField({
+  value,
   onChange,
-  placeholder,
 }: {
-  label: string;
-  values: string[];
-  onChange: (values: string[]) => void;
-  placeholder: string;
+  value: string;
+  onChange: (url: string) => void;
 }) {
-  const [input, setInput] = useState("");
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if ((e.key === "Enter" || e.key === ",") && input.trim()) {
-      e.preventDefault();
-      if (!values.includes(input.trim())) {
-        onChange([...values, input.trim()]);
-      }
-      setInput("");
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError(null);
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "newsletters");
+      const res = await fetch("/api/media", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed.");
+      onChange(data.data.fileUrl);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
-    if (e.key === "Backspace" && !input && values.length > 0) {
-      onChange(values.slice(0, -1));
-    }
-  };
+  }
 
   return (
-    <div className="space-y-1.5">
-      <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-        {label}
-      </label>
-      <div className="min-h-[44px] flex flex-wrap gap-1.5 items-center border border-[#1a1a1a]/15 bg-white px-3 py-2 focus-within:border-[#1a1a1a]/40 transition-colors">
-        {values.map((v) => (
-          <span
-            key={v}
-            className="flex items-center gap-1 bg-[#f8f5f0] border border-[#1a1a1a]/10 px-2 py-0.5 text-[10px] text-[#1a1a1a]/70"
+    <div className="space-y-4">
+      <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3" style={fontMichroma}>
+        HTML File
+      </p>
+
+      {value && (
+        <div className="flex items-center gap-2 border border-[#1a1a1a]/10 bg-[#f8f5f0] px-3 py-2.5">
+          <FileText size={14} className="text-[#1a1a1a]/40 flex-shrink-0" />
+          <span className="flex-1 truncate text-[11px] font-mono text-[#1a1a1a]/70">{value}</span>
+          <a
+            href={value}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#1a1a1a]/40 hover:text-[#007190] transition-colors flex-shrink-0"
+            title="Preview the raw uploaded file"
           >
-            {v}
-            <button
-              type="button"
-              onClick={() => onChange(values.filter((x) => x !== v))}
-              className="text-[#1a1a1a]/30 hover:text-[#1a1a1a] transition-colors"
-            >
-              <X size={10} />
-            </button>
-          </span>
-        ))}
+            <ExternalLink size={13} />
+          </a>
+        </div>
+      )}
+
+      {error && <p className="text-[11px] text-red-600">{error}</p>}
+
+      <label
+        className={`flex w-full items-center justify-center gap-2 border border-[#007190] px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#007190] hover:bg-[#007190] hover:text-white transition-all cursor-pointer ${
+          uploading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        style={fontMichroma}
+      >
+        {uploading ? "Uploading…" : value ? "Replace HTML File" : "Upload HTML File"}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".html,text/html"
+          className="hidden"
+          disabled={uploading}
+          onChange={handleFile}
+        />
+      </label>
+
+      <div className="space-y-1.5">
+        <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+          or paste a file URL manually
+        </label>
         <input
           type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={values.length === 0 ? placeholder : ""}
-          className="flex-1 min-w-[120px] bg-transparent text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 outline-none"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-[11px] font-mono text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          placeholder="/uploads/newsletters/…"
         />
       </div>
-      <p className="text-[10px] text-[#8b8b8b]">Press Enter or comma to add</p>
+
+      <p className="text-[10px] text-[#8b8b8b]">
+        This file is served exactly as uploaded at /newsletter/[slug] — its own layout, styles, and background, with none of the site's Navbar or Footer.
+      </p>
     </div>
   );
 }
@@ -154,27 +187,8 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
   const [form, setForm] = useState({
     title: "",
     slug: "",
-    subtitle: "",
-    subtitleColor: "default",
-    subtitleFont: "default",
-    subtitleSize: "default",
-    author: "NOBILITA Editorial Team",
     cardImage: "",
-    heroImage: "",
-    heroImageAlt: "",
-    specProductName: "",
-    specProductNameColor: "default",
-    specProductNameFont: "default",
-    specProductNameSize: "default",
-    specSlabImage: "",
-    specDimensions: [] as string[],
-    specFaces: [] as string[],
-    specFinishes: [] as string[],
-    specInspirationLine1: "",
-    specInspirationLine2: "",
-    specInspirationColor: "default",
-    specInspirationFont: "default",
-    specInspirationSize: "default",
+    htmlFile: "",
     seoTitle: "",
     seoDescription: "",
     order: 0,
@@ -200,27 +214,8 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
             setForm({
               title: n.title,
               slug: n.slug,
-              subtitle: n.subtitle || "",
-              subtitleColor: n.subtitleColor || "default",
-              subtitleFont: n.subtitleFont || "default",
-              subtitleSize: n.subtitleSize || "default",
-              author: n.author || "NOBILITA Editorial Team",
               cardImage: n.cardImage || "",
-              heroImage: n.heroImage || "",
-              heroImageAlt: n.heroImageAlt || "",
-              specProductName: n.specProductName || "",
-              specProductNameColor: n.specProductNameColor || "default",
-              specProductNameFont: n.specProductNameFont || "default",
-              specProductNameSize: n.specProductNameSize || "default",
-              specSlabImage: n.specSlabImage || "",
-              specDimensions: n.specDimensions || [],
-              specFaces: n.specFaces || [],
-              specFinishes: n.specFinishes || [],
-              specInspirationLine1: n.specInspirationLine1 || "",
-              specInspirationLine2: n.specInspirationLine2 || "",
-              specInspirationColor: n.specInspirationColor || "default",
-              specInspirationFont: n.specInspirationFont || "default",
-              specInspirationSize: n.specInspirationSize || "default",
+              htmlFile: n.htmlFile || "",
               seoTitle: n.seoTitle || "",
               seoDescription: n.seoDescription || "",
               order: n.order ?? 0,
@@ -246,8 +241,13 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setSaving(true);
 
+    if (!form.htmlFile) {
+      setError("Upload an HTML file before saving — the newsletter has nothing to show without one.");
+      return;
+    }
+
+    setSaving(true);
     try {
       const url = isNew ? "/api/newsletters" : `/api/newsletters/${newsletterId}`;
       const method = isNew ? "POST" : "PUT";
@@ -347,8 +347,9 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   value={form.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                  placeholder="e.g. PAONAZZETTO INIZIO"
+                  placeholder="e.g. MACCHIA VECCHIA MAX"
                 />
+                <p className="text-[10px] text-[#8b8b8b]">Shown on the /newsletter listing card and used as the browser tab title.</p>
               </div>
 
               <div className="space-y-1.5">
@@ -366,151 +367,11 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                 />
                 <p className="text-[10px] text-[#8b8b8b]">URL: /newsletter/{form.slug || "…"}</p>
               </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                  Subtitle
-                </label>
-                <textarea
-                  rows={2}
-                  value={form.subtitle}
-                  onChange={(e) => setForm((p) => ({ ...p, subtitle: e.target.value }))}
-                  placeholder="A collection where timeless Italian elegance meets advanced porcelain technology."
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
-                />
-                <StyleRow
-                  color={form.subtitleColor}
-                  onColorChange={(v) => setForm((p) => ({ ...p, subtitleColor: v }))}
-                  font={form.subtitleFont}
-                  onFontChange={(v) => setForm((p) => ({ ...p, subtitleFont: v }))}
-                  size={form.subtitleSize}
-                  onSizeChange={(v) => setForm((p) => ({ ...p, subtitleSize: v }))}
-                  sizeOptions={PARAGRAPH_SIZE_OPTIONS}
-                  colorDefaultLabel="Black"
-                  fontDefaultLabel="Ivymode"
-                />
-                <p className="text-[10px] text-[#8b8b8b]">Shown in the white banner below the hero on the detail page.</p>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                  Author
-                </label>
-                <input
-                  type="text"
-                  value={form.author}
-                  onChange={(e) => setForm((p) => ({ ...p, author: e.target.value }))}
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                />
-              </div>
             </div>
 
-            {/* Product Spec */}
-            <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
-              <div>
-                <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35 border-b border-[#1a1a1a]/8 pb-3" style={fontMichroma}>
-                  Product Spotlight
-                </p>
-                <p className="text-[10px] text-[#8b8b8b] pt-2">
-                  The featured-product section shown further down the detail page — slab image, title, and specs.
-                </p>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                  Product Name
-                </label>
-                <input
-                  type="text"
-                  value={form.specProductName}
-                  onChange={(e) => setForm((p) => ({ ...p, specProductName: e.target.value }))}
-                  placeholder="e.g. PAONAZZETTO INIZIO"
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                />
-                <StyleRow
-                  color={form.specProductNameColor}
-                  onColorChange={(v) => setForm((p) => ({ ...p, specProductNameColor: v }))}
-                  font={form.specProductNameFont}
-                  onFontChange={(v) => setForm((p) => ({ ...p, specProductNameFont: v }))}
-                  size={form.specProductNameSize}
-                  onSizeChange={(v) => setForm((p) => ({ ...p, specProductNameSize: v }))}
-                  sizeOptions={HEADING_SIZE_OPTIONS}
-                  colorDefaultLabel="Black"
-                  fontDefaultLabel="Ivymode"
-                />
-              </div>
-
-              <MediaPickerField
-                label="Slab Image"
-                value={form.specSlabImage}
-                onChange={(url) => setForm((p) => ({ ...p, specSlabImage: url }))}
-                folder="products"
-                placeholder="/uploads/products/…"
-                aspect="aspect-[3/4]"
-              />
-
-              <TagInput
-                label="Dimensions"
-                values={form.specDimensions}
-                onChange={(values) => setForm((p) => ({ ...p, specDimensions: values }))}
-                placeholder="e.g. 6.5MM x 1600 x 3200 (RECTIFIED)"
-              />
-              <TagInput
-                label="Faces"
-                values={form.specFaces}
-                onChange={(values) => setForm((p) => ({ ...p, specFaces: values }))}
-                placeholder="e.g. 6.5MM – BOOKMATCH OF 1"
-              />
-              <TagInput
-                label="Finishes"
-                values={form.specFinishes}
-                onChange={(values) => setForm((p) => ({ ...p, specFinishes: values }))}
-                placeholder="e.g. 6.5MM – POLISHED & MATTE"
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                    Inspiration Line 1
-                  </label>
-                  <input
-                    type="text"
-                    value={form.specInspirationLine1}
-                    onChange={(e) => setForm((p) => ({ ...p, specInspirationLine1: e.target.value }))}
-                    placeholder="Inspired by Italy's noble heritage and baroque architecture,"
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                    Inspiration Line 2
-                  </label>
-                  <input
-                    type="text"
-                    value={form.specInspirationLine2}
-                    onChange={(e) => setForm((p) => ({ ...p, specInspirationLine2: e.target.value }))}
-                    placeholder="Porcellana NOBILITA is proudly made in Modena, Italy."
-                    className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
-                  />
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                  Inspiration Text Style
-                </label>
-                <StyleRow
-                  color={form.specInspirationColor}
-                  onColorChange={(v) => setForm((p) => ({ ...p, specInspirationColor: v }))}
-                  font={form.specInspirationFont}
-                  onFontChange={(v) => setForm((p) => ({ ...p, specInspirationFont: v }))}
-                  size={form.specInspirationSize}
-                  onSizeChange={(v) => setForm((p) => ({ ...p, specInspirationSize: v }))}
-                  sizeOptions={PARAGRAPH_SIZE_OPTIONS}
-                  colorDefaultLabel="Black"
-                  fontDefaultLabel="Ivymode"
-                />
-                <p className="text-[10px] text-[#8b8b8b]">Applies to both inspiration lines together — they render as one paragraph.</p>
-              </div>
+            {/* HTML File */}
+            <div className="bg-white border border-[#1a1a1a]/8 p-6">
+              <HtmlFileField value={form.htmlFile} onChange={(url) => setForm((p) => ({ ...p, htmlFile: url }))} />
             </div>
 
             {/* SEO */}
@@ -529,6 +390,7 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   placeholder="Defaults to the newsletter title if left blank"
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
                 />
+                <p className="text-[10px] text-[#8b8b8b]">Filled into the uploaded file's &lt;title&gt; tag, which is usually blank in an email export.</p>
               </div>
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
@@ -538,50 +400,26 @@ export default function NewsletterForm({ newsletterId }: NewsletterFormProps) {
                   value={form.seoDescription}
                   onChange={(e) => setForm((p) => ({ ...p, seoDescription: e.target.value }))}
                   rows={3}
-                  placeholder="Defaults to the subtitle if left blank"
+                  placeholder="Optional — added as a meta description tag if the file doesn't already have one"
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
                 />
               </div>
             </div>
           </div>
 
-          {/* Right column — images & publish settings */}
+          {/* Right column — card image & publish settings */}
           <div className="space-y-5">
             {/* Card image */}
-            <div className="bg-white border border-[#1a1a1a]/8 p-5 space-y-4">
+            <div className="bg-white border border-[#1a1a1a]/8 p-5">
               <MediaPickerField
                 label="Listing Card Image"
                 value={form.cardImage}
                 onChange={(url) => setForm((p) => ({ ...p, cardImage: url }))}
-                folder="blogs"
-                placeholder="/uploads/blogs/…"
+                folder="newsletters"
+                placeholder="/uploads/newsletters/…"
                 aspect="aspect-[16/10]"
               />
-              <p className="text-[10px] text-[#8b8b8b]">Shown on the /newsletter grid. Falls back to the hero image below if left blank.</p>
-            </div>
-
-            {/* Hero image */}
-            <div className="bg-white border border-[#1a1a1a]/8 p-5 space-y-4">
-              <MediaPickerField
-                label="Detail Hero Image"
-                value={form.heroImage}
-                onChange={(url) => setForm((p) => ({ ...p, heroImage: url }))}
-                folder="blogs"
-                placeholder="/uploads/blogs/…"
-                aspect="aspect-[16/9]"
-              />
-              <div className="space-y-1.5">
-                <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-                  Hero Image Alt Text
-                </label>
-                <input
-                  type="text"
-                  value={form.heroImageAlt}
-                  onChange={(e) => setForm((p) => ({ ...p, heroImageAlt: e.target.value }))}
-                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-                  placeholder="Describe the image for SEO"
-                />
-              </div>
+              <p className="text-[10px] text-[#8b8b8b] mt-3">Shown on the /newsletter grid — the uploaded HTML file has no separate thumbnail.</p>
             </div>
 
             {/* Publish settings */}

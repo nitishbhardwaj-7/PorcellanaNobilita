@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, ExternalLink } from "lucide-react";
 
 interface NewsletterPost {
   id: string;
@@ -10,7 +10,7 @@ interface NewsletterPost {
   slug: string;
   status: "DRAFT" | "PUBLISHED";
   cardImage: string | null;
-  heroImage: string | null;
+  htmlFile: string | null;
   order: number;
   publishedAt: string;
   createdAt: string;
@@ -99,7 +99,7 @@ export default function NewsletterPostsAdminPage() {
             Newsletter Posts
           </h2>
           <p className="mt-2 text-sm text-[#8b8b8b]">
-            The product-spotlight editions shown at /newsletter. Distinct from the "Newsletter" subscriber list.
+            Uploaded HTML editions shown at /newsletter — each opens exactly as uploaded. Distinct from the "Newsletter" subscriber list.
           </p>
         </div>
         <Link
@@ -121,7 +121,7 @@ export default function NewsletterPostsAdminPage() {
       {posts.length === 0 ? (
         <div className="bg-white border border-[#1a1a1a]/8 p-16 text-center">
           <p className="text-sm text-[#8b8b8b] mb-4">
-            No CMS newsletters yet — the three launch editions below still show on the public page from bundled content.
+            No newsletters yet — add one and upload its HTML file to get started.
           </p>
           <Link
             href="/admin/newsletter-posts/new"
@@ -156,8 +156,8 @@ export default function NewsletterPostsAdminPage() {
             >
               {/* Thumbnail */}
               <div className="w-10 h-10 bg-[#f8f5f0] border border-[#1a1a1a]/10 overflow-hidden flex-shrink-0">
-                {(post.cardImage || post.heroImage) ? (
-                  <img src={post.cardImage || post.heroImage!} alt={post.title} className="w-full h-full object-cover" />
+                {post.cardImage ? (
+                  <img src={post.cardImage} alt={post.title} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-[#1a1a1a]/20">
                     <span className="text-[8px]" style={fontMichroma}>IMG</span>
@@ -190,6 +190,17 @@ export default function NewsletterPostsAdminPage() {
 
               {/* Actions */}
               <div className="flex items-center justify-end gap-1">
+                {post.status === "PUBLISHED" && post.htmlFile && (
+                  <a
+                    href={`/newsletter/${post.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="View live"
+                    className="w-7 h-7 flex items-center justify-center border border-[#1a1a1a]/10 text-[#1a1a1a]/40 hover:text-[#007190] hover:border-[#007190]/30 transition-colors"
+                  >
+                    <ExternalLink size={13} />
+                  </a>
+                )}
                 <button
                   onClick={() => toggleStatus(post)}
                   title={post.status === "PUBLISHED" ? "Unpublish" : "Publish"}

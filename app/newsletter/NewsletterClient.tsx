@@ -38,20 +38,8 @@ export default function NewsletterPage() {
     },
   };
 
-  // Bundled launch editions — permanent fallback content, same pattern as
-  // HARDCODED_BLOGS for /blog. A CMS newsletter with the same slug (fetched
-  // below) always wins over its hardcoded entry here.
-  const hardcodedPosts: NewsletterCard[] = [
-    {
-      id: "macchia-vecchia-max",
-      title: "MACCHIA VECCHIA MAX",
-      image: "/images/Nobilita Newsletter/Links/Macchia Vecchia Max App.jpg",
-      date: "2026-07-28",
-      href: "/newsletter/macchia-vecchia-max",
-    },
-  ];
-
-  const [newsletterPosts, setNewsletterPosts] = useState<NewsletterCard[]>(hardcodedPosts);
+  const [newsletterPosts, setNewsletterPosts] = useState<NewsletterCard[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
@@ -60,30 +48,23 @@ export default function NewsletterPage() {
       .then((data) => {
         if (!active) return;
         const dbPosts: NewsletterCard[] = (data.data || [])
-          .filter((n: any) => n.status === "PUBLISHED")
+          .filter((n: any) => n.status === "PUBLISHED" && n.htmlFile)
           .map((n: any) => ({
             id: n.slug,
             title: n.title,
-            image: n.cardImage || n.heroImage || "/images/Nobilita Newsletter/Links/Macchia Vecchia Max App.jpg",
+            image: n.cardImage || "",
             date: (n.publishedAt || n.createdAt || "").slice(0, 10),
             href: `/newsletter/${n.slug}`,
           }));
-
-        const merged = [...dbPosts];
-        for (const hc of hardcodedPosts) {
-          if (!merged.some((m) => m.id === hc.id)) {
-            merged.push(hc);
-          }
-        }
-        setNewsletterPosts(merged);
+        setNewsletterPosts(dbPosts);
       })
-      .catch(() => {
-        if (active) setNewsletterPosts(hardcodedPosts);
+      .catch(() => {})
+      .finally(() => {
+        if (active) setLoading(false);
       });
     return () => {
       active = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -152,35 +133,47 @@ export default function NewsletterPage() {
           viewport={{ once: true, margin: "-40px" }}
           className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-12 lg:px-20 xl:px-24"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
-            {newsletterPosts.map((post) => (
-              <motion.div key={post.id} variants={cardVariants}>
-                <Link href={post.href}>
-                  <div className="relative w-full aspect-[16/10] overflow-hidden group cursor-pointer shadow-md">
-                    {/* Newsletter Image */}
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-full object-cover object-center transform scale-[1.08] group-hover:scale-100 transition-transform duration-700 ease-out"
-                    />
-                    {/* Centered Newsletter Title */}
-                    <div className="absolute inset-0 flex items-center justify-center p-6 md:p-8 text-center z-10 pointer-events-none">
-                      <h2 className="font-ivymode font-light text-white text-[clamp(22px,2.6vw,44px)] tracking-[0.08em] group-hover:tracking-[0.22em] transition-all duration-500 ease-out leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)] uppercase">
-                        {post.title}
-                      </h2>
-                    </div>
+          {!loading && newsletterPosts.length === 0 ? (
+            <p className="text-center font-ivymode font-light text-[#545759] text-[clamp(16px,1.8vw,22px)] py-12">
+              No newsletters yet — check back soon.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
+              {newsletterPosts.map((post) => (
+                <motion.div key={post.id} variants={cardVariants}>
+                  {/* A plain anchor (not next/link) — the destination is a raw
+                      Route Handler serving an uploaded HTML file byte-for-byte,
+                      not a React page, so this needs a real navigation. Opens
+                      in a new tab since the target has no way back to the site. */}
+                  <a href={post.href} target="_blank" rel="noopener noreferrer">
+                    <div className="relative w-full aspect-[16/10] overflow-hidden group cursor-pointer shadow-md bg-[#e9e6e0]">
+                      {/* Newsletter Image */}
+                      {post.image && (
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="w-full h-full object-cover object-center transform scale-[1.08] group-hover:scale-100 transition-transform duration-700 ease-out"
+                        />
+                      )}
+                      {/* Centered Newsletter Title */}
+                      <div className="absolute inset-0 flex items-center justify-center p-6 md:p-8 text-center z-10 pointer-events-none">
+                        <h2 className="font-ivymode font-light text-white text-[clamp(22px,2.6vw,44px)] tracking-[0.08em] group-hover:tracking-[0.22em] transition-all duration-500 ease-out leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)] uppercase">
+                          {post.title}
+                        </h2>
+                      </div>
 
-                    {/* Bottom Right Date */}
-                    <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-10 pointer-events-none select-none text-right">
-                      <span className="font-ivymode font-light text-[#599eb8] md:text-[#5293ac] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] tracking-[0.20em] drop-shadow-md">
-                        {post.date}
-                      </span>
+                      {/* Bottom Right Date */}
+                      <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-10 pointer-events-none select-none text-right">
+                        <span className="font-ivymode font-light text-[#599eb8] md:text-[#5293ac] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] tracking-[0.20em] drop-shadow-md">
+                          {post.date}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </motion.div>
       </main>
 
