@@ -1,10 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Check } from "lucide-react";
-import { MediaPickerButton } from "../_components/MediaPicker";
+import React, { useState, useEffect, useRef } from "react";
+import { Check, Plus, X, GripVertical, Upload, FileText, ExternalLink } from "lucide-react";
+import { MediaPickerButton, MediaPickerField } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
 import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
+
+interface Certification {
+  id: string;
+  order: number;
+  title: string;
+  subtitle: string | null;
+  description: string | null;
+  descriptionColor: string | null;
+  descriptionFont: string | null;
+  descriptionSize: string | null;
+  logoImage: string | null;
+  certFile: string | null;
+}
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
@@ -25,6 +38,7 @@ const STYLED_FIELDS = [
   "tdThickDesc1",
   "tdThickDesc2",
   "tdSpecsHeading",
+  "tdCertHeading",
 ] as const;
 const HEADING_FIELDS = new Set([
   "tdHeading",
@@ -33,6 +47,7 @@ const HEADING_FIELDS = new Set([
   "tdDimHeading",
   "tdThickHeading",
   "tdSpecsHeading",
+  "tdCertHeading",
 ]);
 // What each field's Color actually renders as when left at "Default" — the
 // page's own hardcoded fallback color — shown in the dropdown as e.g.
@@ -52,6 +67,7 @@ const COLOR_DEFAULTS: Record<(typeof STYLED_FIELDS)[number], string> = {
   tdThickDesc1: "White",
   tdThickDesc2: "White",
   tdSpecsHeading: "Teal",
+  tdCertHeading: "Teal",
 };
 
 interface TdSettings {
@@ -114,6 +130,10 @@ interface TdSettings {
   tdSpecsHeadingColor: string;
   tdSpecsHeadingFont: string;
   tdSpecsHeadingSize: string;
+  tdCertHeading: string;
+  tdCertHeadingColor: string;
+  tdCertHeadingFont: string;
+  tdCertHeadingSize: string;
 }
 
 const CHAR_ROWS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
@@ -137,6 +157,7 @@ function emptySettings(): TdSettings {
     tdDimHeading: "", tdDimDesc1: "", tdDimDesc2: "", tdDimDesc3: "",
     tdThickHeading: "", tdThickDesc1: "", tdThickDesc2: "",
     tdSpecsHeading: "",
+    tdCertHeading: "",
   };
   CHAR_ROWS.forEach((n) => {
     base[`tdChar${n}Title`] = "";
@@ -202,6 +223,61 @@ function ImageField({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
+// Upload/replace/preview a certification's PDF file. Reuses the same
+// generic media-upload endpoint as images, scoped to a "certifications"
+// folder and a PDF-only file picker.
+function CertFileField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "certifications");
+      const res = await fetch("/api/media", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed.");
+      onChange(data.data.fileUrl);
+    } catch {
+      // Surfaced via the parent's shared error banner isn't wired here to
+      // keep this a drop-in field; a failed upload just leaves the value
+      // unchanged, which is visible enough in this compact row context.
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+        Certificate PDF
+      </label>
+      {value && (
+        <div className="flex items-center gap-2 border border-[#1a1a1a]/10 bg-white px-2 py-1.5">
+          <FileText size={12} className="text-[#1a1a1a]/40 flex-shrink-0" />
+          <span className="flex-1 truncate text-[10px] font-mono text-[#1a1a1a]/70">{value}</span>
+          <a href={value} target="_blank" rel="noopener noreferrer" className="text-[#1a1a1a]/40 hover:text-[#007190] transition-colors flex-shrink-0">
+            <ExternalLink size={12} />
+          </a>
+        </div>
+      )}
+      <label
+        className={`flex items-center justify-center gap-1.5 w-full border border-[#1a1a1a]/15 bg-white px-2 py-1.5 text-[10px] text-[#1a1a1a]/60 hover:text-[#1a1a1a] hover:border-[#1a1a1a]/40 transition-colors cursor-pointer ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+      >
+        <Upload size={11} />
+        {uploading ? "Uploading…" : value ? "Replace PDF" : "Upload PDF"}
+        <input ref={fileInputRef} type="file" accept="application/pdf,.pdf" className="hidden" disabled={uploading} onChange={handleFile} />
+      </label>
+      <p className="text-[9px] text-[#8b8b8b]">Optional — without one, "Download Certificate" opens the standard datasheet-request form instead.</p>
+    </div>
+  );
+}
+
 export default function TechnicalDataAdminPage() {
   const [settings, setSettings] = useState<TdSettings>(emptySettings());
   const [loading, setLoading] = useState(true);
@@ -209,12 +285,18 @@ export default function TechnicalDataAdminPage() {
   const [savingSection, setSavingSection] = useState<string | null>(null);
   const [savedSection, setSavedSection] = useState<string | null>(null);
 
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [draggedCertIdx, setDraggedCertIdx] = useState<number | null>(null);
+  const [dragOverCertIdx, setDragOverCertIdx] = useState<number | null>(null);
+
   useEffect(() => {
-    fetch("/api/settings")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data?.data) {
-          const s = data.data;
+    Promise.all([
+      fetch("/api/settings").then((r) => r.json()),
+      fetch("/api/certifications").then((r) => r.json()),
+    ])
+      .then(([settingsRes, certsRes]) => {
+        if (settingsRes?.data) {
+          const s = settingsRes.data;
           const next = emptySettings();
           const styleKeys = new Set(
             STYLED_FIELDS.flatMap((field) => STYLE_SUFFIXES.map((suffix) => `${field}${suffix}`))
@@ -224,10 +306,79 @@ export default function TechnicalDataAdminPage() {
           });
           setSettings(next);
         }
+        if (certsRes?.data) setCertifications(certsRes.data);
       })
       .catch((err) => setError(err.message || "Failed to load."))
       .finally(() => setLoading(false));
   }, []);
+
+  async function handleAddCertification() {
+    setError(null);
+    try {
+      const res = await fetch("/api/certifications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: "NEW CERTIFICATION", subtitle: "", description: "" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to add certification.");
+      setCertifications((prev) => [...prev, data.data]);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function updateCertification(id: string, patch: Partial<Certification>) {
+    setCertifications((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)));
+    try {
+      await fetch(`/api/certifications/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+    } catch {
+      setError("Failed to save certification changes.");
+    }
+  }
+
+  async function handleDeleteCertification(id: string) {
+    if (!confirm("Delete this certification? This cannot be undone.")) return;
+    setError(null);
+    try {
+      const res = await fetch(`/api/certifications/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete.");
+      setCertifications((prev) => prev.filter((c) => c.id !== id));
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function moveCertification(from: number, to: number) {
+    if (from === to) return;
+    const reordered = [...certifications];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+    setCertifications(reordered);
+
+    setError(null);
+    try {
+      await Promise.all(
+        reordered.map((cert, i) =>
+          cert.order === i
+            ? Promise.resolve()
+            : fetch(`/api/certifications/${cert.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order: i }),
+              })
+        )
+      );
+      setCertifications((prev) => prev.map((c, i) => ({ ...c, order: i })));
+    } catch {
+      setError("Failed to save the new certification order.");
+    }
+  }
 
   function set(key: keyof TdSettings, value: string) {
     setSettings((p) => ({ ...p, [key]: value }));

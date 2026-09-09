@@ -437,6 +437,14 @@ model Settings {
   tdSpecsHeadingFont  String?
   tdSpecsHeadingSize  String?
 
+  // Technical Data page — Certifications section heading. The individual
+  // certification cards below it are a fully dynamic add/remove/reorder
+  // list — see the Certification model.
+  tdCertHeading      String? // default "CERTIFICATIONS"
+  tdCertHeadingColor String?
+  tdCertHeadingFont  String?
+  tdCertHeadingSize  String?
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -508,6 +516,26 @@ model HomeFinishTile {
   lightWash   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// One certification card in the Technical Data page's Certifications
+// section. Add/remove/reorder freely — no fixed count. `certFile` is an
+// optional uploaded PDF; when set, "Download Certificate" downloads it
+// directly, otherwise it falls back to opening the site's generic datasheet
+// request form (the original behavior, before any certificate PDF exists).
+model Certification {
+  id               String   @id @default(cuid())
+  order            Int      @default(0)
+  title            String
+  subtitle         String?
+  description      String?  @db.Text
+  descriptionColor String?
+  descriptionFont  String?
+  descriptionSize  String?
+  logoImage        String?
+  certFile         String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 // Master data — the set of Color/Finish options offered in the product form

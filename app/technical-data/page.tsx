@@ -15,7 +15,10 @@ export async function generateMetadata() {
 export default async function TechnicalDataPage() {
   let cmsData: any = null;
   try {
-    const s = await prisma.settings.findUnique({ where: { id: "global" } });
+    const [s, certifications] = await Promise.all([
+      prisma.settings.findUnique({ where: { id: "global" } }),
+      prisma.certification.findMany({ orderBy: { order: "asc" } }),
+    ]);
     cmsData = {
       tdHeading: s?.tdHeading,
       tdHeadingColor: s?.tdHeadingColor,
@@ -82,6 +85,11 @@ export default async function TechnicalDataPage() {
       tdSpecsHeadingColor: s?.tdSpecsHeadingColor,
       tdSpecsHeadingFont: s?.tdSpecsHeadingFont,
       tdSpecsHeadingSize: s?.tdSpecsHeadingSize,
+      tdCertHeading: s?.tdCertHeading,
+      tdCertHeadingColor: s?.tdCertHeadingColor,
+      tdCertHeadingFont: s?.tdCertHeadingFont,
+      tdCertHeadingSize: s?.tdCertHeadingSize,
+      certifications: certifications.length > 0 ? certifications : undefined,
     };
   } catch (e) {
     cmsData = null;
