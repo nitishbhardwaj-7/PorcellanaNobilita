@@ -251,9 +251,10 @@ model Settings {
 
   // Our Story page — editable from Admin > Our Story. Layout, GSAP/Framer
   // animations, and section order stay fixed; only text, images, and each
-  // "view product" button's label + target product are editable. A few
-  // paragraphs that carry an inline colored highlight phrase stay hardcoded
-  // (out of plain-text scope) — noted per field below.
+  // "view product" button's label + target product are editable. Paragraphs
+  // that carry an inline colored highlight phrase use the "quoted text"
+  // convention (see splitHighlighted() in lib/textStyle.ts) — noted per
+  // field below.
   storyHeroTitle String? // default "OUR STORY"
   storyHeroTitleColor String?
   storyHeroTitleFont  String?
@@ -266,7 +267,12 @@ model Settings {
   storyHeroPara2Color String?
   storyHeroPara2Font  String?
   storyHeroPara2Size  String?
-  // (hero paragraph 3 has an inline highlighted phrase — stays hardcoded)
+  // Hero paragraph 3 supports the inline-highlight convention: wrap a
+  // phrase in "double quotes" to render it as the brand-teal highlight.
+  storyHeroPara3      String? @db.Text
+  storyHeroPara3Color String?
+  storyHeroPara3Font  String?
+  storyHeroPara3Size  String?
   storySec2Heading String? // default "PIANO NOBILE, REIMAGINED"
   storySec2HeadingColor String?
   storySec2HeadingFont  String?
@@ -275,7 +281,11 @@ model Settings {
   storySec2Line1Color String?
   storySec2Line1Font  String?
   storySec2Line1Size  String?
-  // (sec2 line 2 has an inline highlighted word "extraordinary" — stays hardcoded)
+  // Sec2 line 2 supports the inline-highlight convention (see storyHeroPara3).
+  storySec2Line2      String? @db.Text
+  storySec2Line2Color String?
+  storySec2Line2Font  String?
+  storySec2Line2Size  String?
   storySec2Line3      String? @db.Text
   storySec2Line3Color String?
   storySec2Line3Font  String?
@@ -302,7 +312,11 @@ model Settings {
   storySec4Line2Color String?
   storySec4Line2Font  String?
   storySec4Line2Size  String?
-  // (sec4 line 3 has an inline highlighted phrase "beauty that endures." — stays hardcoded)
+  // Sec4 line 3 supports the inline-highlight convention (see storyHeroPara3).
+  storySec4Line3      String? @db.Text
+  storySec4Line3Color String?
+  storySec4Line3Font  String?
+  storySec4Line3Size  String?
   storySec4BgImage     String? // Fior Di Melo background
   storySec4Image       String? // Ferro Industriale application photo
   storySec4BtnText     String? // default "FERRO INDUSTRIALE"
@@ -310,8 +324,9 @@ model Settings {
 
   // Made in Italy page — editable from Admin > Made in Italy. Layout,
   // GSAP/Framer animations, and section order stay fixed; only text and
-  // images are editable. The Duomo video, the Colosseum tag graphic, and a
-  // paragraph carrying an inline colored highlight phrase stay hardcoded.
+  // images are editable. The Duomo video and the Colosseum tag graphic stay
+  // hardcoded. Paragraphs carrying an inline colored highlight phrase use
+  // the "quoted text" convention (see splitHighlighted() in lib/textStyle.ts).
   miHeading             String? // default "MADE IN ITALY"
   miHeadingColor        String?
   miHeadingFont         String?
@@ -321,14 +336,22 @@ model Settings {
   miSec2Para1Color      String?
   miSec2Para1Font       String?
   miSec2Para1Size       String?
-  // (sec2 paragraph 2 has an inline highlighted phrase — stays hardcoded)
+  // Sec2 paragraph 2 supports the inline-highlight convention (see storyHeroPara3 above).
+  miSec2Para2           String? @db.Text
+  miSec2Para2Color      String?
+  miSec2Para2Font       String?
+  miSec2Para2Size       String?
   miSec2Image           String? // Palazzo della Civiltà Italiana photo
   miSec2ImageLabel      String? // default "PALAZZO DELLA CIVILTÀ ITALIANA"
   miSec3Line1           String? @db.Text
   miSec3Line1Color      String?
   miSec3Line1Font       String?
   miSec3Line1Size       String?
-  // (sec3 line 2 has an inline highlighted phrase — stays hardcoded)
+  // Sec3 line 2 supports the inline-highlight convention (see storyHeroPara3 above).
+  miSec3Line2           String? @db.Text
+  miSec3Line2Color      String?
+  miSec3Line2Font       String?
+  miSec3Line2Size       String?
   miSec3LeftImage       String? // factory photo
   miSec3RightImage      String? // large-format slab processing unit photo
   miSec3RightImageLabel String? // default "LARGE FORMAT SLABS PROCESSING UNIT"

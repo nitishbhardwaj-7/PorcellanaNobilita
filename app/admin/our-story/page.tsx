@@ -14,13 +14,16 @@ const STYLED_FIELDS = [
   "storyHeroTitle",
   "storyHeroPara1",
   "storyHeroPara2",
+  "storyHeroPara3",
   "storySec2Heading",
   "storySec2Line1",
+  "storySec2Line2",
   "storySec2Line3",
   "storySec3Para",
   "storySec4Heading",
   "storySec4Line1",
   "storySec4Line2",
+  "storySec4Line3",
 ] as const;
 
 interface StorySettings {
@@ -36,6 +39,10 @@ interface StorySettings {
   storyHeroPara2Color: string;
   storyHeroPara2Font: string;
   storyHeroPara2Size: string;
+  storyHeroPara3: string;
+  storyHeroPara3Color: string;
+  storyHeroPara3Font: string;
+  storyHeroPara3Size: string;
   storySec2Heading: string;
   storySec2HeadingColor: string;
   storySec2HeadingFont: string;
@@ -44,6 +51,10 @@ interface StorySettings {
   storySec2Line1Color: string;
   storySec2Line1Font: string;
   storySec2Line1Size: string;
+  storySec2Line2: string;
+  storySec2Line2Color: string;
+  storySec2Line2Font: string;
+  storySec2Line2Size: string;
   storySec2Line3: string;
   storySec2Line3Color: string;
   storySec2Line3Font: string;
@@ -70,6 +81,10 @@ interface StorySettings {
   storySec4Line2Color: string;
   storySec4Line2Font: string;
   storySec4Line2Size: string;
+  storySec4Line3: string;
+  storySec4Line3Color: string;
+  storySec4Line3Font: string;
+  storySec4Line3Size: string;
   storySec4BgImage: string;
   storySec4Image: string;
   storySec4BtnText: string;
@@ -89,6 +104,10 @@ const EMPTY: StorySettings = {
   storyHeroPara2Color: "default",
   storyHeroPara2Font: "default",
   storyHeroPara2Size: "default",
+  storyHeroPara3: "",
+  storyHeroPara3Color: "default",
+  storyHeroPara3Font: "default",
+  storyHeroPara3Size: "default",
   storySec2Heading: "",
   storySec2HeadingColor: "default",
   storySec2HeadingFont: "default",
@@ -97,6 +116,10 @@ const EMPTY: StorySettings = {
   storySec2Line1Color: "default",
   storySec2Line1Font: "default",
   storySec2Line1Size: "default",
+  storySec2Line2: "",
+  storySec2Line2Color: "default",
+  storySec2Line2Font: "default",
+  storySec2Line2Size: "default",
   storySec2Line3: "",
   storySec2Line3Color: "default",
   storySec2Line3Font: "default",
@@ -123,6 +146,10 @@ const EMPTY: StorySettings = {
   storySec4Line2Color: "default",
   storySec4Line2Font: "default",
   storySec4Line2Size: "default",
+  storySec4Line3: "",
+  storySec4Line3Color: "default",
+  storySec4Line3Font: "default",
+  storySec4Line3Size: "default",
   storySec4BgImage: "",
   storySec4Image: "",
   storySec4BtnText: "",
@@ -231,8 +258,10 @@ export default function OurStoryAdminPage() {
           storyHeroTitle: s.storyHeroTitle || "",
           storyHeroPara1: s.storyHeroPara1 || "",
           storyHeroPara2: s.storyHeroPara2 || "",
+          storyHeroPara3: s.storyHeroPara3 || "",
           storySec2Heading: s.storySec2Heading || "",
           storySec2Line1: s.storySec2Line1 || "",
+          storySec2Line2: s.storySec2Line2 || "",
           storySec2Line3: s.storySec2Line3 || "",
           storySec2BgImage: s.storySec2BgImage || "",
           storySec2Image: s.storySec2Image || "",
@@ -244,6 +273,7 @@ export default function OurStoryAdminPage() {
           storySec4Heading: s.storySec4Heading || "",
           storySec4Line1: s.storySec4Line1 || "",
           storySec4Line2: s.storySec4Line2 || "",
+          storySec4Line3: s.storySec4Line3 || "",
           storySec4BgImage: s.storySec4BgImage || "",
           storySec4Image: s.storySec4Image || "",
           storySec4BtnText: s.storySec4BtnText || "",
@@ -380,14 +410,22 @@ export default function OurStoryAdminPage() {
           />
           <FieldStyleRow field="storyHeroPara2" settings={settings} set={set} />
         </div>
-        <p className="text-[10px] text-[#8b8b8b]">
-          A third paragraph ("Among their defining features was the Piano Nobile…") has an inline highlighted phrase and isn't editable here.
-        </p>
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 3</label>
+          <textarea
+            value={settings.storyHeroPara3}
+            onChange={(e) => set("storyHeroPara3", e.target.value)}
+            rows={3}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+          <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "Piano Nobile — the noble floor."</p>
+          <FieldStyleRow field="storyHeroPara3" settings={settings} set={set} />
+        </div>
 
         <SaveButton
           section="hero"
           label="Save Hero"
-          fields={["storyHeroTitle", "storyHeroPara1", "storyHeroPara2", ...styleFields("storyHeroTitle"), ...styleFields("storyHeroPara1"), ...styleFields("storyHeroPara2")]}
+          fields={["storyHeroTitle", "storyHeroPara1", "storyHeroPara2", "storyHeroPara3", ...styleFields("storyHeroTitle"), ...styleFields("storyHeroPara1"), ...styleFields("storyHeroPara2"), ...styleFields("storyHeroPara3")]}
         />
       </div>
 
@@ -420,6 +458,17 @@ export default function OurStoryAdminPage() {
           <FieldStyleRow field="storySec2Line1" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Line 2</label>
+          <textarea
+            value={settings.storySec2Line2}
+            onChange={(e) => set("storySec2Line2", e.target.value)}
+            rows={3}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+          <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "extraordinary."</p>
+          <FieldStyleRow field="storySec2Line2" settings={settings} set={set} />
+        </div>
+        <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Line 3</label>
           <textarea
             value={settings.storySec2Line3}
@@ -429,9 +478,6 @@ export default function OurStoryAdminPage() {
           />
           <FieldStyleRow field="storySec2Line3" settings={settings} set={set} />
         </div>
-        <p className="text-[10px] text-[#8b8b8b]">
-          "Line 2" ("…something extraordinary.") has an inline highlighted word and isn't editable here.
-        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <ImageField label="Background Image" value={settings.storySec2BgImage} onChange={(v) => set("storySec2BgImage", v)} />
@@ -455,8 +501,8 @@ export default function OurStoryAdminPage() {
           section="sec2"
           label="Save Section"
           fields={[
-            "storySec2Heading", "storySec2Line1", "storySec2Line3", "storySec2BgImage", "storySec2Image", "storySec2BtnText", "storySec2ProductName",
-            ...styleFields("storySec2Heading"), ...styleFields("storySec2Line1"), ...styleFields("storySec2Line3"),
+            "storySec2Heading", "storySec2Line1", "storySec2Line2", "storySec2Line3", "storySec2BgImage", "storySec2Image", "storySec2BtnText", "storySec2ProductName",
+            ...styleFields("storySec2Heading"), ...styleFields("storySec2Line1"), ...styleFields("storySec2Line2"), ...styleFields("storySec2Line3"),
           ]}
         />
       </div>
@@ -540,9 +586,17 @@ export default function OurStoryAdminPage() {
           />
           <FieldStyleRow field="storySec4Line2" settings={settings} set={set} />
         </div>
-        <p className="text-[10px] text-[#8b8b8b]">
-          "Line 3" ("It is defined by beauty that endures.") has an inline highlighted phrase and isn't editable here.
-        </p>
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Line 3</label>
+          <textarea
+            value={settings.storySec4Line3}
+            onChange={(e) => set("storySec4Line3", e.target.value)}
+            rows={2}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+          <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "beauty that endures."</p>
+          <FieldStyleRow field="storySec4Line3" settings={settings} set={set} />
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <ImageField label="Background Image" value={settings.storySec4BgImage} onChange={(v) => set("storySec4BgImage", v)} />
@@ -566,8 +620,8 @@ export default function OurStoryAdminPage() {
           section="sec4"
           label="Save Section"
           fields={[
-            "storySec4Heading", "storySec4Line1", "storySec4Line2", "storySec4BgImage", "storySec4Image", "storySec4BtnText", "storySec4ProductName",
-            ...styleFields("storySec4Heading"), ...styleFields("storySec4Line1"), ...styleFields("storySec4Line2"),
+            "storySec4Heading", "storySec4Line1", "storySec4Line2", "storySec4Line3", "storySec4BgImage", "storySec4Image", "storySec4BtnText", "storySec4ProductName",
+            ...styleFields("storySec4Heading"), ...styleFields("storySec4Line1"), ...styleFields("storySec4Line2"), ...styleFields("storySec4Line3"),
           ]}
         />
       </div>

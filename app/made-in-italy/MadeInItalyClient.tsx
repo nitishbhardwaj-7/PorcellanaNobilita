@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass, splitHighlighted, HIGHLIGHT_CLASS } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,12 +36,20 @@ interface MadeInItalyCmsData {
   miSec2Para1Color?: string | null;
   miSec2Para1Font?: string | null;
   miSec2Para1Size?: string | null;
+  miSec2Para2?: string | null;
+  miSec2Para2Color?: string | null;
+  miSec2Para2Font?: string | null;
+  miSec2Para2Size?: string | null;
   miSec2Image?: string | null;
   miSec2ImageLabel?: string | null;
   miSec3Line1?: string | null;
   miSec3Line1Color?: string | null;
   miSec3Line1Font?: string | null;
   miSec3Line1Size?: string | null;
+  miSec3Line2?: string | null;
+  miSec3Line2Color?: string | null;
+  miSec3Line2Font?: string | null;
+  miSec3Line2Size?: string | null;
   miSec3LeftImage?: string | null;
   miSec3RightImage?: string | null;
   miSec3RightImageLabel?: string | null;
@@ -235,11 +243,10 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec2-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
-                  The same spirit defines its porcelain industry. Here, innovation and heritage exist side by side, transforming raw materials into surfaces of{" "}
-                  <span className="sec2-highlight inline text-[#007190] font-normal">
-                    exceptional quality and enduring beauty.
-                  </span>
+                <p className={`sec2-line whitespace-pre-line ${fontClass(d.miSec2Para2Font, "font-ivymode")} font-light ${colorClass(d.miSec2Para2Color, "text-[#545759]")} ${paragraphSizeClass(d.miSec2Para2Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
+                  {splitHighlighted(d.miSec2Para2 || 'The same spirit defines its porcelain industry. Here, innovation and heritage exist side by side, transforming raw materials into surfaces of "exceptional quality and enduring beauty."').map((part, i) =>
+                    i % 2 === 1 ? <span key={i} className={`sec2-highlight inline ${HIGHLIGHT_CLASS}`}>{part}</span> : part
+                  )}
                 </p>
               </div>
             </div>
@@ -281,11 +288,10 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
               </p>
             </div>
             <div className="overflow-hidden py-0.5">
-              <p className="sec3-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
-                More than a surface, it is a{" "}
-                <span className="sec3-highlight inline text-[#007190] font-normal">
-                  legacy of craftsmanship made for generations to come.
-                </span>
+              <p className={`sec3-line whitespace-pre-line ${fontClass(d.miSec3Line2Font, "font-ivymode")} font-light ${colorClass(d.miSec3Line2Color, "text-[#545759]")} ${paragraphSizeClass(d.miSec3Line2Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
+                {splitHighlighted(d.miSec3Line2 || 'More than a surface, it is a "legacy of craftsmanship made for generations to come."').map((part, i) =>
+                  i % 2 === 1 ? <span key={i} className={`sec3-highlight inline ${HIGHLIGHT_CLASS}`}>{part}</span> : part
+                )}
               </p>
             </div>
           </div>

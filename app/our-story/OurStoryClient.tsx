@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import NobilitaHouseSVG from "@/components/NobilitaHouseSVG";
 import dynamic from "next/dynamic";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass, splitHighlighted, HIGHLIGHT_CLASS } from "@/lib/textStyle";
 
 const FeaturedProduct = dynamic(() => import("@/components/FeaturedProduct"), { ssr: false });
 
@@ -57,6 +57,10 @@ interface StoryCmsData {
   storyHeroPara2Color?: string | null;
   storyHeroPara2Font?: string | null;
   storyHeroPara2Size?: string | null;
+  storyHeroPara3?: string | null;
+  storyHeroPara3Color?: string | null;
+  storyHeroPara3Font?: string | null;
+  storyHeroPara3Size?: string | null;
   storySec2Heading?: string | null;
   storySec2HeadingColor?: string | null;
   storySec2HeadingFont?: string | null;
@@ -65,6 +69,10 @@ interface StoryCmsData {
   storySec2Line1Color?: string | null;
   storySec2Line1Font?: string | null;
   storySec2Line1Size?: string | null;
+  storySec2Line2?: string | null;
+  storySec2Line2Color?: string | null;
+  storySec2Line2Font?: string | null;
+  storySec2Line2Size?: string | null;
   storySec2Line3?: string | null;
   storySec2Line3Color?: string | null;
   storySec2Line3Font?: string | null;
@@ -91,6 +99,10 @@ interface StoryCmsData {
   storySec4Line2Color?: string | null;
   storySec4Line2Font?: string | null;
   storySec4Line2Size?: string | null;
+  storySec4Line3?: string | null;
+  storySec4Line3Color?: string | null;
+  storySec4Line3Font?: string | null;
+  storySec4Line3Size?: string | null;
   storySec4BgImage?: string | null;
   storySec4Image?: string | null;
   storySec4BtnText?: string | null;
@@ -326,10 +338,12 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
                 {d.storyHeroPara2 || "The world's greatest cities were shaped by spaces that celebrated proportion, artistry, and material excellence."}
               </motion.p>
               <motion.p
-                className="font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]"
+                className={`whitespace-pre-line ${fontClass(d.storyHeroPara3Font, "font-ivymode")} font-light ${colorClass(d.storyHeroPara3Color, "text-[#545759]")} ${paragraphSizeClass(d.storyHeroPara3Size, "text-[clamp(14px,1.35vw,20px)]")}`}
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } } }}
               >
-                Among their defining features was the <span className="text-[#007190] font-normal">Piano Nobile – the noble floor. <br /> </span> Elevated above the bustle of the streets, it was the heart of the home, where marble, light, and masterful detailing came together to create spaces of remarkable elegance.
+                {splitHighlighted(d.storyHeroPara3 || 'Among their defining features was the "Piano Nobile – the noble floor.\n" Elevated above the bustle of the streets, it was the heart of the home, where marble, light, and masterful detailing came together to create spaces of remarkable elegance.').map((part, i) =>
+                  i % 2 === 1 ? <span key={i} className={HIGHLIGHT_CLASS}>{part}</span> : part
+                )}
               </motion.p>
             </motion.div>
           </div>
@@ -374,14 +388,10 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec2-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
-                  NOBILITA represents a philosophy rather than a status. It is a
-                  belief that exceptional materials, thoughtful design, and skilled
-                  craftsmanship have the power to elevate everyday spaces into
-                  something{" "}
-                  <span className="sec2-highlight inline-block text-[#007190] font-normal">
-                    extraordinary.
-                  </span>
+                <p className={`sec2-line whitespace-pre-line ${fontClass(d.storySec2Line2Font, "font-ivymode")} font-light ${colorClass(d.storySec2Line2Color, "text-[#545759]")} ${paragraphSizeClass(d.storySec2Line2Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
+                  {splitHighlighted(d.storySec2Line2 || 'NOBILITA represents a philosophy rather than a status. It is a belief that exceptional materials, thoughtful design, and skilled craftsmanship have the power to elevate everyday spaces into something "extraordinary."').map((part, i) =>
+                    i % 2 === 1 ? <span key={i} className={`sec2-highlight inline-block ${HIGHLIGHT_CLASS}`}>{part}</span> : part
+                  )}
                 </p>
               </div>
 
@@ -548,11 +558,10 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
               </div>
 
               <div className="overflow-hidden py-0.5">
-                <p className="sec4-line font-ivymode font-light text-[#545759] text-[clamp(14px,1.35vw,20px)]">
-                  It is defined by{" "}
-                  <span className="sec4-highlight inline-block text-[#007190] font-normal">
-                    beauty that endures.
-                  </span>
+                <p className={`sec4-line whitespace-pre-line ${fontClass(d.storySec4Line3Font, "font-ivymode")} font-light ${colorClass(d.storySec4Line3Color, "text-[#545759]")} ${paragraphSizeClass(d.storySec4Line3Size, "text-[clamp(14px,1.35vw,20px)]")}`}>
+                  {splitHighlighted(d.storySec4Line3 || 'It is defined by "beauty that endures."').map((part, i) =>
+                    i % 2 === 1 ? <span key={i} className={`sec4-highlight inline-block ${HIGHLIGHT_CLASS}`}>{part}</span> : part
+                  )}
                 </p>
               </div>
             </div>

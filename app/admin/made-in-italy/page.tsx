@@ -10,7 +10,7 @@ const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
 const STYLE_SUFFIXES = ["Color", "Font", "Size"] as const;
-const STYLED_FIELDS = ["miHeading", "miSec2Para1", "miSec3Line1", "miSec3BottomPara"] as const;
+const STYLED_FIELDS = ["miHeading", "miSec2Para1", "miSec2Para2", "miSec3Line1", "miSec3Line2", "miSec3BottomPara"] as const;
 const HEADING_FIELDS = new Set(["miHeading"]);
 
 interface MiSettings {
@@ -23,12 +23,20 @@ interface MiSettings {
   miSec2Para1Color: string;
   miSec2Para1Font: string;
   miSec2Para1Size: string;
+  miSec2Para2: string;
+  miSec2Para2Color: string;
+  miSec2Para2Font: string;
+  miSec2Para2Size: string;
   miSec2Image: string;
   miSec2ImageLabel: string;
   miSec3Line1: string;
   miSec3Line1Color: string;
   miSec3Line1Font: string;
   miSec3Line1Size: string;
+  miSec3Line2: string;
+  miSec3Line2Color: string;
+  miSec3Line2Font: string;
+  miSec3Line2Size: string;
   miSec3LeftImage: string;
   miSec3RightImage: string;
   miSec3RightImageLabel: string;
@@ -51,12 +59,20 @@ const EMPTY: MiSettings = {
   miSec2Para1Color: "default",
   miSec2Para1Font: "default",
   miSec2Para1Size: "default",
+  miSec2Para2: "",
+  miSec2Para2Color: "default",
+  miSec2Para2Font: "default",
+  miSec2Para2Size: "default",
   miSec2Image: "",
   miSec2ImageLabel: "",
   miSec3Line1: "",
   miSec3Line1Color: "default",
   miSec3Line1Font: "default",
   miSec3Line1Size: "default",
+  miSec3Line2: "",
+  miSec3Line2Color: "default",
+  miSec3Line2Font: "default",
+  miSec3Line2Size: "default",
   miSec3LeftImage: "",
   miSec3RightImage: "",
   miSec3RightImageLabel: "",
@@ -140,9 +156,11 @@ export default function MadeInItalyAdminPage() {
             miHeading: s.miHeading || "",
             miSec1Label: s.miSec1Label || "",
             miSec2Para1: s.miSec2Para1 || "",
+            miSec2Para2: s.miSec2Para2 || "",
             miSec2Image: s.miSec2Image || "",
             miSec2ImageLabel: s.miSec2ImageLabel || "",
             miSec3Line1: s.miSec3Line1 || "",
+            miSec3Line2: s.miSec3Line2 || "",
             miSec3LeftImage: s.miSec3LeftImage || "",
             miSec3RightImage: s.miSec3RightImage || "",
             miSec3RightImageLabel: s.miSec3RightImageLabel || "",
@@ -291,9 +309,17 @@ export default function MadeInItalyAdminPage() {
           />
           <FieldStyleRow field="miSec2Para1" settings={settings} set={set} />
         </div>
-        <p className="text-[10px] text-[#8b8b8b]">
-          A second paragraph ("...transforming raw materials into surfaces of exceptional quality...") has an inline highlighted phrase and isn't editable here.
-        </p>
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 2</label>
+          <textarea
+            value={settings.miSec2Para2}
+            onChange={(e) => set("miSec2Para2", e.target.value)}
+            rows={3}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+          <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "exceptional quality and enduring beauty."</p>
+          <FieldStyleRow field="miSec2Para2" settings={settings} set={set} />
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <ImageField label="Image" value={settings.miSec2Image} onChange={(v) => set("miSec2Image", v)} />
@@ -309,7 +335,7 @@ export default function MadeInItalyAdminPage() {
           </div>
         </div>
 
-        <SaveButton section="sec2" label="Save Section" fields={["miSec2Para1", "miSec2Image", "miSec2ImageLabel", ...styleFields("miSec2Para1")]} />
+        <SaveButton section="sec2" label="Save Section" fields={["miSec2Para1", "miSec2Para2", "miSec2Image", "miSec2ImageLabel", ...styleFields("miSec2Para1"), ...styleFields("miSec2Para2")]} />
       </div>
 
       {/* Section 3: Large Format Slabs */}
@@ -329,9 +355,17 @@ export default function MadeInItalyAdminPage() {
           />
           <FieldStyleRow field="miSec3Line1" settings={settings} set={set} />
         </div>
-        <p className="text-[10px] text-[#8b8b8b]">
-          "Line 2" ("...a legacy of craftsmanship made for generations to come.") has an inline highlighted phrase and isn't editable here.
-        </p>
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Top Text — Line 2</label>
+          <textarea
+            value={settings.miSec3Line2}
+            onChange={(e) => set("miSec3Line2", e.target.value)}
+            rows={2}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none"
+          />
+          <p className="text-[9px] text-[#8b8b8b]">Wrap a phrase in "double quotes" to highlight it in brand teal, e.g. "legacy of craftsmanship made for generations to come."</p>
+          <FieldStyleRow field="miSec3Line2" settings={settings} set={set} />
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <ImageField label="Left Image (Factory)" value={settings.miSec3LeftImage} onChange={(v) => set("miSec3LeftImage", v)} />
@@ -362,8 +396,8 @@ export default function MadeInItalyAdminPage() {
           section="sec3"
           label="Save Section"
           fields={[
-            "miSec3Line1", "miSec3LeftImage", "miSec3RightImage", "miSec3RightImageLabel", "miSec3BottomPara",
-            ...styleFields("miSec3Line1"), ...styleFields("miSec3BottomPara"),
+            "miSec3Line1", "miSec3Line2", "miSec3LeftImage", "miSec3RightImage", "miSec3RightImageLabel", "miSec3BottomPara",
+            ...styleFields("miSec3Line1"), ...styleFields("miSec3Line2"), ...styleFields("miSec3BottomPara"),
           ]}
         />
       </div>

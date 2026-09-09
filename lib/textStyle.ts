@@ -126,3 +126,22 @@ export function paragraphSizeClass(value: string | null | undefined, fallback: s
   if (!value || value === "default") return fallback;
   return PARAGRAPH_SIZE_CLASSES[value] || fallback;
 }
+
+// Inline-highlight convention: any text wrapped in "double quotes" inside a
+// CMS paragraph renders as the brand-teal highlighted phrase (matching the
+// look these pages already used for hardcoded highlighted words/phrases,
+// e.g. "Piano Nobile" or "extraordinary."). Admins write the quotes right
+// in the textarea — no separate field needed. A literal line break typed
+// inside the quotes (Shift+Enter) still works, since the paragraph itself
+// renders with `whitespace-pre-line`.
+//
+// splitHighlighted() is plain TS (no JSX) so it can live in a .ts file —
+// callers map the result to JSX themselves: odd indices (1st, 3rd, ...)
+// were inside quotes and should render with the highlight style; even
+// indices are plain text.
+export function splitHighlighted(text: string): string[] {
+  return text.split(/"([^"]*)"/g);
+}
+
+/** Shared className for an inline-highlighted phrase, matching the brand style used across Our Story / Made in Italy. */
+export const HIGHLIGHT_CLASS = "text-[#007190] font-normal";
