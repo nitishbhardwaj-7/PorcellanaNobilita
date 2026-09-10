@@ -12,6 +12,7 @@ interface SitemapCmsData {
   sitemapHeroTitleColor?: string | null;
   sitemapHeroTitleFont?: string | null;
   sitemapHeroTitleSize?: string | null;
+  sitemapHeroImage?: string | null;
 }
 
 interface SitemapProduct {
@@ -96,7 +97,7 @@ export default function SitemapPage({ cmsData, products }: { cmsData?: SitemapCm
             initial={{ scale: 1.05, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-            src="/images/verde-alpi-full-sitemap-copy.jpg"
+            src={d.sitemapHeroImage || "/images/verde-alpi-full-sitemap-copy.jpg"}
             alt="Sitemap Background"
             className="w-full h-full object-cover object-center block"
           />

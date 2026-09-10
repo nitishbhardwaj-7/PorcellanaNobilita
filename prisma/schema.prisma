@@ -539,6 +539,7 @@ model Settings {
   privacyHeroTitleColor String?
   privacyHeroTitleFont  String?
   privacyHeroTitleSize  String?
+  privacyHeroImage      String? // default "/images/basaltina pool.png"
   privacyBody           String? @db.Text
 
   // Sitemap page (/sitemap) — editable from Admin > Homepage > Sitemap.
@@ -548,6 +549,7 @@ model Settings {
   sitemapHeroTitleColor String?
   sitemapHeroTitleFont  String?
   sitemapHeroTitleSize  String?
+  sitemapHeroImage      String? // default "/images/verde-alpi-full-sitemap-copy.jpg"
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

@@ -21,6 +21,7 @@ export default async function PrivacyPolicyPage() {
       privacyHeroTitleColor: s?.privacyHeroTitleColor,
       privacyHeroTitleFont: s?.privacyHeroTitleFont,
       privacyHeroTitleSize: s?.privacyHeroTitleSize,
+      privacyHeroImage: s?.privacyHeroImage,
       privacyBody: s?.privacyBody,
     };
   } catch (e) {

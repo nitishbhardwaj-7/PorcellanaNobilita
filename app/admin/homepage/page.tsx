@@ -5,6 +5,7 @@ import { Plus, X, GripVertical, Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
 import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
+import { DEFAULT_PRIVACY_BODY } from "@/lib/privacyPolicyDefault";
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
@@ -2763,6 +2764,7 @@ interface PrivacyPolicySettings {
   privacyHeroTitleColor: string;
   privacyHeroTitleFont: string;
   privacyHeroTitleSize: string;
+  privacyHeroImage: string;
   privacyBody: string;
 }
 
@@ -2772,6 +2774,7 @@ function PrivacyPolicyTab() {
     privacyHeroTitleColor: "default",
     privacyHeroTitleFont: "default",
     privacyHeroTitleSize: "default",
+    privacyHeroImage: "",
     privacyBody: "",
   });
   const [loading, setLoading] = useState(true);
@@ -2790,7 +2793,12 @@ function PrivacyPolicyTab() {
             privacyHeroTitleColor: s.privacyHeroTitleColor || "default",
             privacyHeroTitleFont: s.privacyHeroTitleFont || "default",
             privacyHeroTitleSize: s.privacyHeroTitleSize || "default",
-            privacyBody: s.privacyBody || "",
+            privacyHeroImage: s.privacyHeroImage || "",
+            // Pre-fill with the real live policy text (not just a
+            // placeholder) so this large document field never looks
+            // empty — an admin editing it needs the actual existing
+            // content to work from, not an empty box.
+            privacyBody: s.privacyBody || DEFAULT_PRIVACY_BODY,
           });
         }
       })
@@ -2871,16 +2879,39 @@ function PrivacyPolicyTab() {
 
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Background Image
+          </label>
+          {settings.privacyHeroImage ? (
+            <img src={settings.privacyHeroImage} alt="" className="w-full max-h-56 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+          ) : (
+            <div className="relative">
+              <img src="/images/basaltina pool.png" alt="" className="w-full max-h-56 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+              <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+            </div>
+          )}
+          <div className="flex gap-1">
+            <input
+              type="text"
+              value={settings.privacyHeroImage}
+              onChange={(e) => setSettings((p) => ({ ...p, privacyHeroImage: e.target.value }))}
+              placeholder="/images/basaltina pool.png"
+              className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, privacyHeroImage: url }))} />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
             Body Content
           </label>
           <p className="text-[10px] text-[#8b8b8b]">
-            Basic HTML is supported: {"<h3>"} and {"<h4>"} for section headings, {"<p>"} for paragraphs, {"<ul><li>"} for bulleted lists. Leave blank to keep the original policy text.
+            This is the actual live policy text — edit it directly. Basic HTML is supported: {"<h3>"} and {"<h4>"} for section headings, {"<p>"} for paragraphs, {"<ul><li>"} for bulleted lists.
           </p>
           <textarea
             value={settings.privacyBody}
             onChange={(e) => setSettings((p) => ({ ...p, privacyBody: e.target.value }))}
             rows={16}
-            placeholder={`<p>At NOBILITA, we value your privacy...</p>\n\n<h3>What Personal Data Do We Collect?</h3>\n<p>...</p>`}
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-xs font-mono text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-y"
           />
         </div>
@@ -2907,6 +2938,7 @@ interface SitemapSettings {
   sitemapHeroTitleColor: string;
   sitemapHeroTitleFont: string;
   sitemapHeroTitleSize: string;
+  sitemapHeroImage: string;
 }
 
 function SitemapTab() {
@@ -2915,6 +2947,7 @@ function SitemapTab() {
     sitemapHeroTitleColor: "default",
     sitemapHeroTitleFont: "default",
     sitemapHeroTitleSize: "default",
+    sitemapHeroImage: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -2932,6 +2965,7 @@ function SitemapTab() {
             sitemapHeroTitleColor: s.sitemapHeroTitleColor || "default",
             sitemapHeroTitleFont: s.sitemapHeroTitleFont || "default",
             sitemapHeroTitleSize: s.sitemapHeroTitleSize || "default",
+            sitemapHeroImage: s.sitemapHeroImage || "",
           });
         }
       })
@@ -3012,6 +3046,30 @@ function SitemapTab() {
             colorDefaultLabel="White"
             fontDefaultLabel="Ivymode"
           />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Background Image
+          </label>
+          {settings.sitemapHeroImage ? (
+            <img src={settings.sitemapHeroImage} alt="" className="w-full max-h-56 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+          ) : (
+            <div className="relative">
+              <img src="/images/verde-alpi-full-sitemap-copy.jpg" alt="" className="w-full max-h-56 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
+              <span className="absolute top-1.5 left-1.5 bg-[#1a1a1a]/70 text-white text-[8px] tracking-[0.15em] uppercase px-1.5 py-0.5">Currently Live (Default)</span>
+            </div>
+          )}
+          <div className="flex gap-1">
+            <input
+              type="text"
+              value={settings.sitemapHeroImage}
+              onChange={(e) => setSettings((p) => ({ ...p, sitemapHeroImage: e.target.value }))}
+              placeholder="/images/verde-alpi-full-sitemap-copy.jpg"
+              className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, sitemapHeroImage: url }))} />
+          </div>
         </div>
 
         <button

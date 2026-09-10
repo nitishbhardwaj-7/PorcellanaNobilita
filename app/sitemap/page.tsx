@@ -29,6 +29,7 @@ export default async function SitemapPage() {
       sitemapHeroTitleColor: s?.sitemapHeroTitleColor,
       sitemapHeroTitleFont: s?.sitemapHeroTitleFont,
       sitemapHeroTitleSize: s?.sitemapHeroTitleSize,
+      sitemapHeroImage: s?.sitemapHeroImage,
     };
     products = publishedProducts;
   } catch (e) {
