@@ -21,6 +21,7 @@ export default async function OurStoryPage() {
       storyHeroTitleColor: settings?.storyHeroTitleColor,
       storyHeroTitleFont: settings?.storyHeroTitleFont,
       storyHeroTitleSize: settings?.storyHeroTitleSize,
+      storyHeroLogo: settings?.storyHeroLogo,
       storyHeroPara1: settings?.storyHeroPara1,
       storyHeroPara1Color: settings?.storyHeroPara1Color,
       storyHeroPara1Font: settings?.storyHeroPara1Font,

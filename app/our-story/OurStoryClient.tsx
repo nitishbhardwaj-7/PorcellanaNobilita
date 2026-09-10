@@ -49,6 +49,7 @@ interface StoryCmsData {
   storyHeroTitleColor?: string | null;
   storyHeroTitleFont?: string | null;
   storyHeroTitleSize?: string | null;
+  storyHeroLogo?: string | null;
   storyHeroPara1?: string | null;
   storyHeroPara1Color?: string | null;
   storyHeroPara1Font?: string | null;
@@ -292,7 +293,7 @@ function OurStoryContent({ cmsData }: { cmsData?: StoryCmsData | null }) {
             {/* Logo Block */}
             <div className="hero-logo w-[clamp(100px,13vw,190px)]">
               <img
-                src="/images/Links/NOBILITA Logo BLACK.png"
+                src={d.storyHeroLogo || "/images/Links/NOBILITA Logo BLACK.png"}
                 alt="Porcellana Nobilita"
                 className="w-full h-auto object-contain"
               />

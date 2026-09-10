@@ -31,6 +31,7 @@ interface StorySettings {
   storyHeroTitleColor: string;
   storyHeroTitleFont: string;
   storyHeroTitleSize: string;
+  storyHeroLogo: string;
   storyHeroPara1: string;
   storyHeroPara1Color: string;
   storyHeroPara1Font: string;
@@ -98,6 +99,7 @@ const EMPTY: StorySettings = {
   storyHeroTitleColor: "default",
   storyHeroTitleFont: "default",
   storyHeroTitleSize: "default",
+  storyHeroLogo: "",
   storyHeroPara1: "",
   storyHeroPara1Color: "default",
   storyHeroPara1Font: "default",
@@ -299,6 +301,7 @@ export default function OurStoryAdminPage() {
         const next: StorySettings = {
           ...EMPTY,
           storyHeroTitle: s.storyHeroTitle || "",
+          storyHeroLogo: s.storyHeroLogo || "",
           storyHeroPara1: s.storyHeroPara1 || "",
           storyHeroPara2: s.storyHeroPara2 || "",
           storyHeroPara3: s.storyHeroPara3 || "",
@@ -435,6 +438,18 @@ export default function OurStoryAdminPage() {
           />
           <FieldStyleRow field="storyHeroTitle" settings={settings} set={set} />
         </div>
+
+        <ImageField
+          label="Logo (below house sketch)"
+          value={settings.storyHeroLogo}
+          onChange={(v) => set("storyHeroLogo", v)}
+          defaultSrc="/images/Links/NOBILITA Logo BLACK.png"
+        />
+        <p className="text-[9px] text-[#8b8b8b] -mt-3">
+          Note: the animated house sketch above the logo is hand-coded SVG (not an image) and can't be swapped here —
+          changing it requires a developer, since the layout and its draw-on animation are built around that exact artwork.
+        </p>
+
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Paragraph 1</label>
           <textarea
@@ -473,7 +488,7 @@ export default function OurStoryAdminPage() {
         <SaveButton
           section="hero"
           label="Save Hero"
-          fields={["storyHeroTitle", "storyHeroPara1", "storyHeroPara2", "storyHeroPara3", ...styleFields("storyHeroTitle"), ...styleFields("storyHeroPara1"), ...styleFields("storyHeroPara2"), ...styleFields("storyHeroPara3")]}
+          fields={["storyHeroTitle", "storyHeroLogo", "storyHeroPara1", "storyHeroPara2", "storyHeroPara3", ...styleFields("storyHeroTitle"), ...styleFields("storyHeroPara1"), ...styleFields("storyHeroPara2"), ...styleFields("storyHeroPara3")]}
         />
       </div>
 

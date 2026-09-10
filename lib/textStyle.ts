@@ -13,7 +13,7 @@ export const COLOR_OPTIONS = [
   { value: "default", label: "Default" },
   { value: "black", label: "Black" },
   { value: "teal", label: "Teal (#007190)" },
-  { value: "grey", label: "Grey" },
+  { value: "grey", label: "Grey (#8b8b8b)" },
   { value: "white", label: "White" },
 ];
 

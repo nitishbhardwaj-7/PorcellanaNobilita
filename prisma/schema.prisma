@@ -276,6 +276,12 @@ model Settings {
   storyHeroTitleColor String?
   storyHeroTitleFont  String?
   storyHeroTitleSize  String?
+  // Logo image under the animated house sketch. The house sketch itself is a
+  // hand-coded, GSAP-animated SVG component (NobilitaHouseSVG) and is NOT
+  // CMS-editable — swapping it would lose the draw-on animation and can
+  // break the hero column's alignment, since the layout is sized to that
+  // specific artwork.
+  storyHeroLogo String? // default "/images/Links/NOBILITA Logo BLACK.png"
   storyHeroPara1 String? @db.Text
   storyHeroPara1Color String?
   storyHeroPara1Font  String?
