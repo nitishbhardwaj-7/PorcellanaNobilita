@@ -5,7 +5,6 @@ import { Plus, X, GripVertical, Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
 import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
-import { DEFAULT_PRIVACY_BODY } from "@/lib/privacyPolicyDefault";
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
@@ -2765,22 +2764,68 @@ interface PrivacyPolicySettings {
   privacyHeroTitleFont: string;
   privacyHeroTitleSize: string;
   privacyHeroImage: string;
-  privacyBody: string;
+  privacyIntro: string;
+  privacySec1Heading: string;
+  privacySec1Item1Heading: string;
+  privacySec1Item1Text: string;
+  privacySec1Item2Heading: string;
+  privacySec1Item2Text: string;
+  privacySec1Item3Heading: string;
+  privacySec1Item3Text: string;
+  privacySec2Heading: string;
+  privacySec2Intro: string;
+  privacySec2Item1: string;
+  privacySec2Item2: string;
+  privacySec2Item3: string;
+  privacySec2Item4: string;
+  privacySec2Item5: string;
+  privacySec3Heading: string;
+  privacySec3Text: string;
+  privacySec4Heading: string;
+  privacySec4Text: string;
+  privacySec5Heading: string;
+  privacySec5Text: string;
+  privacySec6Heading: string;
+  privacySec6Text: string;
 }
 
+const EMPTY_PRIVACY: PrivacyPolicySettings = {
+  privacyHeroTitle: "",
+  privacyHeroTitleColor: "default",
+  privacyHeroTitleFont: "default",
+  privacyHeroTitleSize: "default",
+  privacyHeroImage: "",
+  privacyIntro: "",
+  privacySec1Heading: "",
+  privacySec1Item1Heading: "",
+  privacySec1Item1Text: "",
+  privacySec1Item2Heading: "",
+  privacySec1Item2Text: "",
+  privacySec1Item3Heading: "",
+  privacySec1Item3Text: "",
+  privacySec2Heading: "",
+  privacySec2Intro: "",
+  privacySec2Item1: "",
+  privacySec2Item2: "",
+  privacySec2Item3: "",
+  privacySec2Item4: "",
+  privacySec2Item5: "",
+  privacySec3Heading: "",
+  privacySec3Text: "",
+  privacySec4Heading: "",
+  privacySec4Text: "",
+  privacySec5Heading: "",
+  privacySec5Text: "",
+  privacySec6Heading: "",
+  privacySec6Text: "",
+};
+
 function PrivacyPolicyTab() {
-  const [settings, setSettings] = useState<PrivacyPolicySettings>({
-    privacyHeroTitle: "",
-    privacyHeroTitleColor: "default",
-    privacyHeroTitleFont: "default",
-    privacyHeroTitleSize: "default",
-    privacyHeroImage: "",
-    privacyBody: "",
-  });
+  const [settings, setSettings] = useState<PrivacyPolicySettings>(EMPTY_PRIVACY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [savingSection, setSavingSection] = useState<string | null>(null);
+  const [savedSection, setSavedSection] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -2788,51 +2833,57 @@ function PrivacyPolicyTab() {
       .then((data) => {
         if (data?.data) {
           const s = data.data;
-          setSettings({
-            privacyHeroTitle: s.privacyHeroTitle || "",
-            privacyHeroTitleColor: s.privacyHeroTitleColor || "default",
-            privacyHeroTitleFont: s.privacyHeroTitleFont || "default",
-            privacyHeroTitleSize: s.privacyHeroTitleSize || "default",
-            privacyHeroImage: s.privacyHeroImage || "",
-            // Pre-fill with the real live policy text (not just a
-            // placeholder) so this large document field never looks
-            // empty — an admin editing it needs the actual existing
-            // content to work from, not an empty box.
-            privacyBody: s.privacyBody || DEFAULT_PRIVACY_BODY,
+          const next = { ...EMPTY_PRIVACY };
+          (Object.keys(next) as (keyof PrivacyPolicySettings)[]).forEach((k) => {
+            const isStyleField = k.endsWith("Color") || k.endsWith("Font") || k.endsWith("Size");
+            (next as any)[k] = s[k] || (isStyleField ? "default" : "");
           });
+          setSettings(next);
         }
       })
       .catch((err) => setError(err.message || "Failed to load."))
       .finally(() => setLoading(false));
   }, []);
 
-  async function handleSave() {
-    setSaving(true);
+  function set<K extends keyof PrivacyPolicySettings>(key: K, value: string) {
+    setSettings((p) => ({ ...p, [key]: value }));
+  }
+
+  async function handleSave(section: string, fields: (keyof PrivacyPolicySettings)[]) {
+    setSavingSection(section);
     setError(null);
     try {
+      const patch: Record<string, string> = {};
+      fields.forEach((f) => { patch[f] = settings[f]; });
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settings),
+        body: JSON.stringify(patch),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save.");
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      setSavedSection(section);
+      setTimeout(() => setSavedSection(null), 2000);
     } catch (err: any) {
       setError(err.message);
     } finally {
-      setSaving(false);
+      setSavingSection(null);
     }
   }
 
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="h-64 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        {[1, 2].map((n) => (
+          <div key={n} className="h-40 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+        ))}
       </div>
     );
   }
+
+  const inputCls = "block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none";
+  const taCls = "block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-none";
+  const labelCls = "block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40";
 
   return (
     <div className="space-y-6">
@@ -2840,37 +2891,25 @@ function PrivacyPolicyTab() {
         <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
       )}
 
+      {/* Hero */}
       <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
         <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
-          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
-            Privacy Policy
-          </p>
-          {saved && (
-            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
-              <Check size={11} /> Saved
-            </span>
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Privacy Policy — Hero</p>
+          {savedSection === "hero" && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}><Check size={11} /> Saved</span>
           )}
         </div>
-        <p className="text-[10px] text-[#8b8b8b] -mt-2">The /privacy-policy page's hero banner and body content.</p>
 
         <div className="space-y-1.5">
-          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-            Title
-          </label>
-          <input
-            type="text"
-            value={settings.privacyHeroTitle}
-            onChange={(e) => setSettings((p) => ({ ...p, privacyHeroTitle: e.target.value }))}
-            placeholder="Privacy Policy"
-            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-          />
+          <label className={labelCls} style={fontMichroma}>Title</label>
+          <input type="text" value={settings.privacyHeroTitle} onChange={(e) => set("privacyHeroTitle", e.target.value)} placeholder="Privacy Policy" className={inputCls} />
           <StyleRow
             color={settings.privacyHeroTitleColor}
-            onColorChange={(v) => setSettings((p) => ({ ...p, privacyHeroTitleColor: v }))}
+            onColorChange={(v) => set("privacyHeroTitleColor", v)}
             font={settings.privacyHeroTitleFont}
-            onFontChange={(v) => setSettings((p) => ({ ...p, privacyHeroTitleFont: v }))}
+            onFontChange={(v) => set("privacyHeroTitleFont", v)}
             size={settings.privacyHeroTitleSize}
-            onSizeChange={(v) => setSettings((p) => ({ ...p, privacyHeroTitleSize: v }))}
+            onSizeChange={(v) => set("privacyHeroTitleSize", v)}
             sizeOptions={HEADING_SIZE_OPTIONS}
             colorDefaultLabel="White"
             fontDefaultLabel="Ivymode"
@@ -2878,9 +2917,7 @@ function PrivacyPolicyTab() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-            Background Image
-          </label>
+          <label className={labelCls} style={fontMichroma}>Background Image</label>
           {settings.privacyHeroImage ? (
             <img src={settings.privacyHeroImage} alt="" className="w-full max-h-56 object-contain border border-[#1a1a1a]/10 bg-[#f0ede6]" />
           ) : (
@@ -2890,39 +2927,118 @@ function PrivacyPolicyTab() {
             </div>
           )}
           <div className="flex gap-1">
-            <input
-              type="text"
-              value={settings.privacyHeroImage}
-              onChange={(e) => setSettings((p) => ({ ...p, privacyHeroImage: e.target.value }))}
-              placeholder="/images/basaltina pool.png"
-              className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
-            <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, privacyHeroImage: url }))} />
+            <input type="text" value={settings.privacyHeroImage} onChange={(e) => set("privacyHeroImage", e.target.value)} placeholder="/images/basaltina pool.png" className="w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2 text-xs text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none" />
+            <MediaPickerButton folder="products" onSelect={(url) => set("privacyHeroImage", url)} />
           </div>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-            Body Content
-          </label>
-          <p className="text-[10px] text-[#8b8b8b]">
-            This is the actual live policy text — edit it directly. Basic HTML is supported: {"<h3>"} and {"<h4>"} for section headings, {"<p>"} for paragraphs, {"<ul><li>"} for bulleted lists.
-          </p>
-          <textarea
-            value={settings.privacyBody}
-            onChange={(e) => setSettings((p) => ({ ...p, privacyBody: e.target.value }))}
-            rows={16}
-            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-xs font-mono text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-y"
-          />
-        </div>
-
         <button
-          onClick={handleSave}
-          disabled={saving}
+          onClick={() => handleSave("hero", ["privacyHeroTitle", "privacyHeroTitleColor", "privacyHeroTitleFont", "privacyHeroTitleSize", "privacyHeroImage"])}
+          disabled={savingSection === "hero"}
           className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
           style={fontMichroma}
         >
-          {saving ? "Saving…" : "Save Privacy Policy"}
+          {savingSection === "hero" ? "Saving…" : "Save Hero"}
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>Privacy Policy — Content</p>
+          {savedSection === "content" && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}><Check size={11} /> Saved</span>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <label className={labelCls} style={fontMichroma}>Intro Paragraph</label>
+          <textarea value={settings.privacyIntro} onChange={(e) => set("privacyIntro", e.target.value)} rows={2} placeholder="At NOBILITA, we value your privacy. This Privacy Policy explains how we collect, use, disclose, and process your personal data when you use our website or otherwise interact with us." className={taCls} />
+        </div>
+
+        <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
+          <label className={labelCls} style={fontMichroma}>Section 1 Heading</label>
+          <input type="text" value={settings.privacySec1Heading} onChange={(e) => set("privacySec1Heading", e.target.value)} placeholder="What Personal Data Do We Collect?" className={inputCls} />
+
+          <label className={labelCls} style={fontMichroma}>Item 1 Heading</label>
+          <input type="text" value={settings.privacySec1Item1Heading} onChange={(e) => set("privacySec1Item1Heading", e.target.value)} placeholder="Contact Information:" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Item 1 Text</label>
+          <textarea value={settings.privacySec1Item1Text} onChange={(e) => set("privacySec1Item1Text", e.target.value)} rows={2} placeholder="Your name, email address, phone number, and mailing address." className={taCls} />
+
+          <label className={labelCls} style={fontMichroma}>Item 2 Heading</label>
+          <input type="text" value={settings.privacySec1Item2Heading} onChange={(e) => set("privacySec1Item2Heading", e.target.value)} placeholder="Inquiry Information:" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Item 2 Text</label>
+          <textarea value={settings.privacySec1Item2Text} onChange={(e) => set("privacySec1Item2Text", e.target.value)} rows={2} placeholder="Information you provide when you contact us with a question or request, such as the nature of your inquiry and any other information you choose to share." className={taCls} />
+
+          <label className={labelCls} style={fontMichroma}>Item 3 Heading</label>
+          <input type="text" value={settings.privacySec1Item3Heading} onChange={(e) => set("privacySec1Item3Heading", e.target.value)} placeholder="Website Usage Data:" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Item 3 Text</label>
+          <textarea value={settings.privacySec1Item3Text} onChange={(e) => set("privacySec1Item3Text", e.target.value)} rows={2} placeholder="We may collect information about your use of our website, such as the pages you visit, the links you click, and the searches you perform." className={taCls} />
+        </div>
+
+        <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
+          <label className={labelCls} style={fontMichroma}>Section 2 Heading</label>
+          <input type="text" value={settings.privacySec2Heading} onChange={(e) => set("privacySec2Heading", e.target.value)} placeholder="How Do We Use Your Personal Data?" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Section 2 Intro</label>
+          <textarea value={settings.privacySec2Intro} onChange={(e) => set("privacySec2Intro", e.target.value)} rows={2} placeholder="We use your personal data for the following purposes:" className={taCls} />
+          <label className={labelCls} style={fontMichroma}>Bullet 1</label>
+          <textarea value={settings.privacySec2Item1} onChange={(e) => set("privacySec2Item1", e.target.value)} rows={1} placeholder="To respond to your inquiries and requests." className={taCls} />
+          <label className={labelCls} style={fontMichroma}>Bullet 2</label>
+          <textarea value={settings.privacySec2Item2} onChange={(e) => set("privacySec2Item2", e.target.value)} rows={1} placeholder="To process your orders and provide you with the services you request." className={taCls} />
+          <label className={labelCls} style={fontMichroma}>Bullet 3</label>
+          <textarea value={settings.privacySec2Item3} onChange={(e) => set("privacySec2Item3", e.target.value)} rows={1} placeholder="To send you marketing communications (with your consent)." className={taCls} />
+          <label className={labelCls} style={fontMichroma}>Bullet 4</label>
+          <textarea value={settings.privacySec2Item4} onChange={(e) => set("privacySec2Item4", e.target.value)} rows={1} placeholder="To analyze your use of our website and social media." className={taCls} />
+          <label className={labelCls} style={fontMichroma}>Bullet 5</label>
+          <textarea value={settings.privacySec2Item5} onChange={(e) => set("privacySec2Item5", e.target.value)} rows={1} placeholder="To comply with legal and regulatory obligations." className={taCls} />
+        </div>
+
+        <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
+          <label className={labelCls} style={fontMichroma}>Section 3 Heading</label>
+          <input type="text" value={settings.privacySec3Heading} onChange={(e) => set("privacySec3Heading", e.target.value)} placeholder="Disclosure of Your Personal Data" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Section 3 Text</label>
+          <textarea value={settings.privacySec3Text} onChange={(e) => set("privacySec3Text", e.target.value)} rows={2} placeholder="We may disclose your personal data to law enforcement agencies or other government officials if required by law." className={taCls} />
+        </div>
+
+        <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
+          <label className={labelCls} style={fontMichroma}>Section 4 Heading</label>
+          <input type="text" value={settings.privacySec4Heading} onChange={(e) => set("privacySec4Heading", e.target.value)} placeholder="Data Retention" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Section 4 Text</label>
+          <textarea value={settings.privacySec4Text} onChange={(e) => set("privacySec4Text", e.target.value)} rows={2} placeholder="We will retain your personal data for as long as necessary to fulfill the purposes for which it was collected, or as required by law." className={taCls} />
+        </div>
+
+        <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
+          <label className={labelCls} style={fontMichroma}>Section 5 Heading</label>
+          <input type="text" value={settings.privacySec5Heading} onChange={(e) => set("privacySec5Heading", e.target.value)} placeholder="Security" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Section 5 Text</label>
+          <textarea value={settings.privacySec5Text} onChange={(e) => set("privacySec5Text", e.target.value)} rows={2} placeholder="We take steps to protect your personal data from unauthorized access, disclosure, alteration, or destruction. However, no website or internet transmission is completely secure." className={taCls} />
+        </div>
+
+        <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
+          <label className={labelCls} style={fontMichroma}>Section 6 Heading</label>
+          <input type="text" value={settings.privacySec6Heading} onChange={(e) => set("privacySec6Heading", e.target.value)} placeholder="Changes to this Privacy Policy" className={inputCls} />
+          <label className={labelCls} style={fontMichroma}>Section 6 Text</label>
+          <textarea value={settings.privacySec6Text} onChange={(e) => set("privacySec6Text", e.target.value)} rows={2} placeholder="We may update this Privacy Policy from time to time. We will post the updated Privacy Policy on our website." className={taCls} />
+        </div>
+
+        <button
+          onClick={() => handleSave("content", [
+            "privacyIntro",
+            "privacySec1Heading", "privacySec1Item1Heading", "privacySec1Item1Text",
+            "privacySec1Item2Heading", "privacySec1Item2Text",
+            "privacySec1Item3Heading", "privacySec1Item3Text",
+            "privacySec2Heading", "privacySec2Intro",
+            "privacySec2Item1", "privacySec2Item2", "privacySec2Item3", "privacySec2Item4", "privacySec2Item5",
+            "privacySec3Heading", "privacySec3Text",
+            "privacySec4Heading", "privacySec4Text",
+            "privacySec5Heading", "privacySec5Text",
+            "privacySec6Heading", "privacySec6Text",
+          ])}
+          disabled={savingSection === "content"}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {savingSection === "content" ? "Saving…" : "Save Content"}
         </button>
       </div>
     </div>

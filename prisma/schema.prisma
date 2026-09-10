@@ -531,16 +531,36 @@ model Settings {
   newsletterHeroTitleSize  String?
 
   // Privacy Policy page (/privacy-policy) — editable from
-  // Admin > Homepage > Privacy Policy. `privacyBody` is raw HTML (the
-  // admin is a trusted, authenticated user only — same trust level as
-  // the Newsletter's uploaded-HTML system) rendered via
-  // dangerouslySetInnerHTML; default is the original hardcoded sections.
+  // Admin > Homepage > Privacy Policy. One plain field per section,
+  // matching the per-field pattern used on every other page.
   privacyHeroTitle      String? // default "Privacy Policy"
   privacyHeroTitleColor String?
   privacyHeroTitleFont  String?
   privacyHeroTitleSize  String?
   privacyHeroImage      String? // default "/images/basaltina pool.png"
-  privacyBody           String? @db.Text
+  privacyIntro          String? @db.Text
+  privacySec1Heading      String? // default "What Personal Data Do We Collect?"
+  privacySec1Item1Heading String? // default "Contact Information:"
+  privacySec1Item1Text    String? @db.Text
+  privacySec1Item2Heading String? // default "Inquiry Information:"
+  privacySec1Item2Text    String? @db.Text
+  privacySec1Item3Heading String? // default "Website Usage Data:"
+  privacySec1Item3Text    String? @db.Text
+  privacySec2Heading String? // default "How Do We Use Your Personal Data?"
+  privacySec2Intro   String? @db.Text
+  privacySec2Item1   String? @db.Text
+  privacySec2Item2   String? @db.Text
+  privacySec2Item3   String? @db.Text
+  privacySec2Item4   String? @db.Text
+  privacySec2Item5   String? @db.Text
+  privacySec3Heading String? // default "Disclosure of Your Personal Data"
+  privacySec3Text    String? @db.Text
+  privacySec4Heading String? // default "Data Retention"
+  privacySec4Text    String? @db.Text
+  privacySec5Heading String? // default "Security"
+  privacySec5Text    String? @db.Text
+  privacySec6Heading String? // default "Changes to this Privacy Policy"
+  privacySec6Text    String? @db.Text
 
   // Sitemap page (/sitemap) — editable from Admin > Homepage > Sitemap.
   // The Products branch is always generated live from the Product model
