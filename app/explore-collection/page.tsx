@@ -1,5 +1,8 @@
 import { getStaticPageMetadata } from "@/lib/staticPageMeta";
 import ExploreCollectionClient from "./ExploreCollectionClient";
+import prisma from "@/lib/prisma";
+
+export const revalidate = 0;
 
 export async function generateMetadata() {
   return getStaticPageMetadata(
@@ -9,6 +12,19 @@ export async function generateMetadata() {
   );
 }
 
-export default function ExploreCollectionPage() {
-  return <ExploreCollectionClient />;
+export default async function ExploreCollectionPage() {
+  let cmsData: any = null;
+  try {
+    const s = await prisma.settings.findUnique({ where: { id: "global" } });
+    cmsData = {
+      exploreHeroTitle: s?.exploreHeroTitle,
+      exploreHeroTitleColor: s?.exploreHeroTitleColor,
+      exploreHeroTitleFont: s?.exploreHeroTitleFont,
+      exploreHeroTitleSize: s?.exploreHeroTitleSize,
+      exploreHeroLogo: s?.exploreHeroLogo,
+    };
+  } catch (e) {
+    cmsData = null;
+  }
+  return <ExploreCollectionClient cmsData={cmsData} />;
 }

@@ -9,6 +9,15 @@ import Footer from "@/components/Footer";
 import dynamic from "next/dynamic";
 import NavigationOverlay from "@/components/NavigationOverlay";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
+
+interface ExploreCollectionCmsData {
+  exploreHeroTitle?: string | null;
+  exploreHeroTitleColor?: string | null;
+  exploreHeroTitleFont?: string | null;
+  exploreHeroTitleSize?: string | null;
+  exploreHeroLogo?: string | null;
+}
 
 const FeaturedProduct = dynamic(() => import("@/components/FeaturedProduct"), {
   ssr: false,
@@ -149,7 +158,8 @@ const useIsomorphicLayoutEffect = typeof window !== "undefined" ? React.useLayou
 const DEFAULT_COLORS = ["White", "Beige", "Grey", "Green", "Brown"];
 const DEFAULT_FINISHES = ["Polished", "Matte", "Honed", "Structured Matte", "3D-5D Matte"];
 
-function ExploreCollectionContent() {
+function ExploreCollectionContent({ cmsData }: { cmsData?: ExploreCollectionCmsData | null }) {
+  const d = cmsData || {};
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -423,12 +433,12 @@ function ExploreCollectionContent() {
           </svg>
         </Link>
 
-        <h1 className="font-ivymode text-white text-[clamp(17px,4.8vw,66px)] md:text-[clamp(28px,4.5vw,66px)] tracking-[0.04em] md:tracking-[0.10em] uppercase leading-tight py-1 mb-8 md:mb-12 whitespace-nowrap">
-          EXPLORE THE COLLECTION
+        <h1 className={`${fontClass(d.exploreHeroTitleFont, "font-ivymode")} ${colorClass(d.exploreHeroTitleColor, "text-white")} ${headingSizeClass(d.exploreHeroTitleSize, "text-[clamp(17px,4.8vw,66px)] md:text-[clamp(28px,4.5vw,66px)]")} tracking-[0.04em] md:tracking-[0.10em] uppercase leading-tight py-1 mb-8 md:mb-12 whitespace-nowrap`}>
+          {d.exploreHeroTitle || "EXPLORE THE COLLECTION"}
         </h1>
 
         <img
-          src="/images/NOBILITA_white.png"
+          src={d.exploreHeroLogo || "/images/NOBILITA_white.png"}
           alt="Porcellana Nobilita"
           className="h-10 md:h-36 w-auto object-contain"
         />
@@ -758,14 +768,14 @@ function ExploreCollectionContent() {
   );
 }
 
-export default function ExploreCollection() {
+export default function ExploreCollection({ cmsData }: { cmsData?: ExploreCollectionCmsData | null }) {
   return (
     <Suspense fallback={
       <div className="w-full min-h-screen bg-[#007190] flex items-center justify-center font-michroma text-[9px] md:text-xs text-white/50 tracking-[0.2em] uppercase">
         Loading Collection...
       </div>
     }>
-      <ExploreCollectionContent />
+      <ExploreCollectionContent cmsData={cmsData} />
     </Suspense>
   );
 }

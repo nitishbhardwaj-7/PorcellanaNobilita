@@ -198,6 +198,15 @@ model Settings {
   socialFacebook  String? // default "https://facebook.com"
   socialLinkedin  String? // default "https://linkedin.com"
 
+  // Explore The Collection page (/explore-collection) — the top hero
+  // banner (title + logo). Editable from Admin > Explore The Collection >
+  // Page Header.
+  exploreHeroTitle      String? // default "EXPLORE THE COLLECTION"
+  exploreHeroTitleColor String?
+  exploreHeroTitleFont  String?
+  exploreHeroTitleSize  String?
+  exploreHeroLogo       String? // default "/images/NOBILITA_white.png"
+
   // Homepage Craftsmanship section — editable from Admin > Homepage.
   craftHeading        String?
   craftHeadingColor   String?
