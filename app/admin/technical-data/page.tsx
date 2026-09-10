@@ -896,7 +896,7 @@ export default function TechnicalDataAdminPage() {
             value={settings.tdCertHeading}
             onChange={(e) => set("tdCertHeading", e.target.value)}
             placeholder="CERTIFICATIONS"
-            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-lg text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
           <FieldStyleRow field="tdCertHeading" settings={settings} set={set} />
         </div>

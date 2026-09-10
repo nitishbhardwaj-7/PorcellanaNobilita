@@ -990,7 +990,7 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
       <section className="relative w-full pt-16 pb-12 md:pb-16 px-6 md:px-12 lg:px-20 xl:px-24 bg-white text-brand-dark">
         <div className="max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col items-start w-full space-y-16">
           <div className="text-center w-full">
-            <h2 className={`cert-title ${fontClass(d.tdCertHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdCertHeadingColor, "text-[#007190]")} uppercase tracking-[0.15em] ${headingSizeClass(d.tdCertHeadingSize, "text-[clamp(28px,4.5vw,42px)]")} leading-tight`}>
+            <h2 className={`cert-title ${fontClass(d.tdCertHeadingFont, "font-ivymode")} font-light ${colorClass(d.tdCertHeadingColor, "text-[#007190]")} uppercase tracking-[0.15em] ${headingSizeClass(d.tdCertHeadingSize, "text-[clamp(28px,6.5vw,52px)] md:text-[clamp(28px,4.5vw,52px)]")} leading-tight`}>
               {d.tdCertHeading || "CERTIFICATIONS"}
             </h2>
           </div>
