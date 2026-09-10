@@ -5,8 +5,54 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
 
-export default function PrivacyPolicyPage() {
+// Original hardcoded content, reproduced as HTML so the page renders
+// identically until an admin edits it in Admin > Homepage > Privacy Policy.
+const DEFAULT_PRIVACY_BODY = `
+<p>At NOBILITA, we value your privacy. This Privacy Policy explains how we collect, use, disclose, and process your personal data when you use our website or otherwise interact with us.</p>
+
+<h3>What Personal Data Do We Collect?</h3>
+<h4>Contact Information:</h4>
+<p>Your name, email address, phone number, and mailing address.</p>
+<h4>Inquiry Information:</h4>
+<p>Information you provide when you contact us with a question or request, such as the nature of your inquiry and any other information you choose to share.</p>
+<h4>Website Usage Data:</h4>
+<p>We may collect information about your use of our website, such as the pages you visit, the links you click, and the searches you perform.</p>
+
+<h3>How Do We Use Your Personal Data?</h3>
+<p>We use your personal data for the following purposes:</p>
+<ul>
+<li>To respond to your inquiries and requests.</li>
+<li>To process your orders and provide you with the services you request.</li>
+<li>To send you marketing communications (with your consent).</li>
+<li>To analyze your use of our website and social media.</li>
+<li>To comply with legal and regulatory obligations.</li>
+</ul>
+
+<h3>Disclosure of Your Personal Data</h3>
+<p>We may disclose your personal data to law enforcement agencies or other government officials if required by law.</p>
+
+<h3>Data Retention</h3>
+<p>We will retain your personal data for as long as necessary to fulfill the purposes for which it was collected, or as required by law.</p>
+
+<h3>Security</h3>
+<p>We take steps to protect your personal data from unauthorized access, disclosure, alteration, or destruction. However, no website or internet transmission is completely secure.</p>
+
+<h3>Changes to this Privacy Policy</h3>
+<p>We may update this Privacy Policy from time to time. We will post the updated Privacy Policy on our website.</p>
+`.trim();
+
+interface PrivacyCmsData {
+  privacyHeroTitle?: string | null;
+  privacyHeroTitleColor?: string | null;
+  privacyHeroTitleFont?: string | null;
+  privacyHeroTitleSize?: string | null;
+  privacyBody?: string | null;
+}
+
+export default function PrivacyPolicyPage({ cmsData }: { cmsData?: PrivacyCmsData | null }) {
+  const d = cmsData || {};
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -14,18 +60,6 @@ export default function PrivacyPolicyPage() {
       transition: {
         staggerChildren: 0.12,
         delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.25, 1, 0.5, 1],
       },
     },
   };
@@ -79,123 +113,89 @@ export default function PrivacyPolicyPage() {
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-              className="font-ivymode font-light text-white uppercase tracking-[0.10em] text-[clamp(36px,6.5vw,80px)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+              className={`${fontClass(d.privacyHeroTitleFont, "font-ivymode")} font-light ${colorClass(d.privacyHeroTitleColor, "text-white")} uppercase tracking-[0.10em] ${headingSizeClass(d.privacyHeroTitleSize, "text-[clamp(36px,6.5vw,80px)]")} drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]`}
             >
-              Privacy Policy
+              {d.privacyHeroTitle || "Privacy Policy"}
             </motion.h1>
           </div>
         </div>
       </section>
 
-      {/* Main Privacy Policy Content */}
+      {/* Main Privacy Policy Content — admin-editable HTML body (Admin >
+          Homepage > Privacy Policy), defaults to the original hardcoded
+          sections above so nothing changes until an admin edits it. */}
       <main className="w-full flex-1 bg-white py-12 md:py-16">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-40px" }}
-          className="w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-12 lg:px-20 xl:px-24 font-ivymode text-[#545759] space-y-8"
-        >
-          {/* Main Title & Intro */}
-          <motion.div variants={itemVariants}>
-            <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-              At NOBILITA, we value your privacy. This Privacy Policy explains how we collect, use, disclose, and process your personal data when you use our website or otherwise interact with us.
-            </p>
-          </motion.div>
-
-          {/* Section: What Personal Data Do We Collect */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-ivymode font-light text-[#007190] text-[20px] md:text-[24px] tracking-[0.02em] mt-8 mb-3">
-              What Personal Data Do We Collect?
-            </h3>
-            <div className="space-y-5">
-              <div>
-                <h4 className="font-ivymode font-light text-[#007190] text-[18px] md:text-[21px] tracking-[0.02em] mb-1.5">
-                  Contact Information:
-                </h4>
-                <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-                  Your name, email address, phone number, and mailing address.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-ivymode font-light text-[#007190] text-[18px] md:text-[21px] tracking-[0.02em] mb-1.5">
-                  Inquiry Information:
-                </h4>
-                <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-                  Information you provide when you contact us with a question or request, such as the nature of your inquiry and any other information you choose to share.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-ivymode font-light text-[#007190] text-[18px] md:text-[21px] tracking-[0.02em] mb-1.5">
-                  Website Usage Data:
-                </h4>
-                <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-                  We may collect information about your use of our website, such as the pages you visit, the links you click, and the searches you perform.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Section: How Do We Use Your Personal Data */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-ivymode font-light text-[#007190] text-[20px] md:text-[24px] tracking-[0.02em] mt-8 mb-3">
-              How Do We Use Your Personal Data?
-            </h3>
-            <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light mb-3">
-              We use your personal data for the following purposes:
-            </p>
-            <ul className="list-disc pl-6 space-y-2 text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-              <li>To respond to your inquiries and requests.</li>
-              <li>To process your orders and provide you with the services you request.</li>
-              <li>To send you marketing communications (with your consent).</li>
-              <li>To analyze your use of our website and social media.</li>
-              <li>To comply with legal and regulatory obligations.</li>
-            </ul>
-          </motion.div>
-
-          {/* Section: Disclosure of Your Personal Data */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-ivymode font-light text-[#007190] text-[20px] md:text-[24px] tracking-[0.02em] mt-8 mb-3">
-              Disclosure of Your Personal Data
-            </h3>
-            <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-              We may disclose your personal data to law enforcement agencies or other government officials if required by law.
-            </p>
-          </motion.div>
-
-          {/* Section: Data Retention */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-ivymode font-light text-[#007190] text-[20px] md:text-[24px] tracking-[0.02em] mt-8 mb-3">
-              Data Retention
-            </h3>
-            <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-              We will retain your personal data for as long as necessary to fulfill the purposes for which it was collected, or as required by law.
-            </p>
-          </motion.div>
-
-          {/* Section: Security */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-ivymode font-light text-[#007190] text-[20px] md:text-[24px] tracking-[0.02em] mt-8 mb-3">
-              Security
-            </h3>
-            <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-              We take steps to protect your personal data from unauthorized access, disclosure, alteration, or destruction. However, no website or internet transmission is completely secure.
-            </p>
-          </motion.div>
-
-          {/* Section: Changes to this Privacy Policy */}
-          <motion.div variants={itemVariants}>
-            <h3 className="font-ivymode font-light text-[#007190] text-[20px] md:text-[24px] tracking-[0.02em] mt-8 mb-3">
-              Changes to this Privacy Policy
-            </h3>
-            <p className="text-[15px] sm:text-[16px] md:text-[18px] 2xl:text-[20px] tracking-widest leading-[1.8] font-light">
-              We may update this Privacy Policy from time to time. We will post the updated Privacy Policy on our website.
-            </p>
-          </motion.div>
-        </motion.div>
+          className="privacy-content w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6 md:px-12 lg:px-20 xl:px-24 font-ivymode text-[#545759]"
+          dangerouslySetInnerHTML={{ __html: d.privacyBody || DEFAULT_PRIVACY_BODY }}
+        />
       </main>
+
+      <style jsx global>{`
+        .privacy-content > * + * {
+          margin-top: 1.25rem;
+        }
+        .privacy-content p,
+        .privacy-content li {
+          font-family: var(--font-ivymode), serif;
+          font-weight: 300;
+          letter-spacing: 0.05em;
+          line-height: 1.8;
+          font-size: 15px;
+        }
+        .privacy-content h3 {
+          font-family: var(--font-ivymode), serif;
+          font-weight: 300;
+          color: #007190;
+          letter-spacing: 0.02em;
+          font-size: 20px;
+          margin-top: 2rem;
+          margin-bottom: 0.75rem;
+        }
+        .privacy-content h4 {
+          font-family: var(--font-ivymode), serif;
+          font-weight: 300;
+          color: #007190;
+          letter-spacing: 0.02em;
+          font-size: 18px;
+          margin-bottom: 0.375rem;
+        }
+        .privacy-content ul {
+          list-style: disc;
+          padding-left: 1.5rem;
+        }
+        .privacy-content li {
+          margin-bottom: 0.5rem;
+        }
+        @media (min-width: 640px) {
+          .privacy-content p,
+          .privacy-content li {
+            font-size: 16px;
+          }
+        }
+        @media (min-width: 768px) {
+          .privacy-content p,
+          .privacy-content li {
+            font-size: 18px;
+          }
+          .privacy-content h3 {
+            font-size: 24px;
+          }
+          .privacy-content h4 {
+            font-size: 21px;
+          }
+        }
+        @media (min-width: 1536px) {
+          .privacy-content p,
+          .privacy-content li {
+            font-size: 20px;
+          }
+        }
+      `}</style>
 
       <Footer />
     </div>

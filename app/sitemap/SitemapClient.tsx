@@ -5,8 +5,36 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
 
-export default function SitemapPage() {
+interface SitemapCmsData {
+  sitemapHeroTitle?: string | null;
+  sitemapHeroTitleColor?: string | null;
+  sitemapHeroTitleFont?: string | null;
+  sitemapHeroTitleSize?: string | null;
+}
+
+interface SitemapProduct {
+  id: string;
+  name: string;
+}
+
+// Used only if the live product list is empty (DB briefly unreachable, etc.)
+// so the page never renders a blank Products branch.
+const DEFAULT_PRODUCTS: SitemapProduct[] = [
+  { id: "1", name: "Arabescato Vagli" },
+  { id: "2", name: "Macchia Vecchia Max" },
+  { id: "3", name: "Calacatta Oyster" },
+  { id: "4", name: "Travertino Romano Classico Cross Cut" },
+  { id: "5", name: "Travertino Romano Classico Vein Cut" },
+  { id: "6", name: "Verde Profondo" },
+  { id: "7", name: "Fior Di Melo" },
+  { id: "8", name: "Ferro Industriale" },
+];
+
+export default function SitemapPage({ cmsData, products }: { cmsData?: SitemapCmsData | null; products?: SitemapProduct[] }) {
+  const d = cmsData || {};
+  const productList = products && products.length > 0 ? products : DEFAULT_PRODUCTS;
   const listContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -81,9 +109,9 @@ export default function SitemapPage() {
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-              className="font-ivymode font-light text-white uppercase tracking-[0.10em] text-[clamp(36px,6.5vw,80px)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+              className={`${fontClass(d.sitemapHeroTitleFont, "font-ivymode")} font-light ${colorClass(d.sitemapHeroTitleColor, "text-white")} uppercase tracking-[0.10em] ${headingSizeClass(d.sitemapHeroTitleSize, "text-[clamp(36px,6.5vw,80px)]")} drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]`}
             >
-              Sitemap
+              {d.sitemapHeroTitle || "Sitemap"}
             </motion.h1>
           </div>
         </div>
@@ -117,54 +145,14 @@ export default function SitemapPage() {
                 </Link>
               </div>
               <ul className="pl-8 md:pl-10 space-y-3.5 text-sm md:text-base lg:text-lg">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Arabescato Vagli
-                  </Link>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Macchia Vecchia Max
-                  </Link>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Calacatta Oyster
-                  </Link>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Travertino Romano Classico Cross Cut
-                  </Link>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Travertino Romano Classico Vein Cut
-                  </Link>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Verde Profondo
-                  </Link>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Fior Di Melo
-                  </Link>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
-                  <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
-                    Ferro Industriale
-                  </Link>
-                </li>
+                {productList.map((product) => (
+                  <li key={product.id} className="flex items-center gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full border border-[#545759] shrink-0"></span>
+                    <Link href="/explore-collection" className="hover:text-[#007190] transition-colors">
+                      {product.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </motion.li>
 

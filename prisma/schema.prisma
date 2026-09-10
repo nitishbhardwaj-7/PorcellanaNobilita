@@ -530,6 +530,25 @@ model Settings {
   newsletterHeroTitleFont  String?
   newsletterHeroTitleSize  String?
 
+  // Privacy Policy page (/privacy-policy) — editable from
+  // Admin > Homepage > Privacy Policy. `privacyBody` is raw HTML (the
+  // admin is a trusted, authenticated user only — same trust level as
+  // the Newsletter's uploaded-HTML system) rendered via
+  // dangerouslySetInnerHTML; default is the original hardcoded sections.
+  privacyHeroTitle      String? // default "Privacy Policy"
+  privacyHeroTitleColor String?
+  privacyHeroTitleFont  String?
+  privacyHeroTitleSize  String?
+  privacyBody           String? @db.Text
+
+  // Sitemap page (/sitemap) — editable from Admin > Homepage > Sitemap.
+  // The Products branch is always generated live from the Product model
+  // (see app/sitemap/page.tsx), not stored here.
+  sitemapHeroTitle      String? // default "Sitemap"
+  sitemapHeroTitleColor String?
+  sitemapHeroTitleFont  String?
+  sitemapHeroTitleSize  String?
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

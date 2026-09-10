@@ -9,7 +9,7 @@ import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data", "locations"] as const;
+const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data", "locations", "privacy-policy", "sitemap"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
   hero: "Explore The Collection",
@@ -21,6 +21,8 @@ const TAB_LABELS: Record<Tab, string> = {
   finishes: "Finishes",
   "technical-data": "Slideshow",
   locations: "Locations",
+  "privacy-policy": "Privacy Policy",
+  sitemap: "Sitemap",
 };
 
 export default function HomepagePage() {
@@ -70,6 +72,8 @@ export default function HomepagePage() {
       {activeTab === "finishes" && <FinishesTab />}
       {activeTab === "technical-data" && <TechnicalDataTab />}
       {activeTab === "locations" && <LocationsTab />}
+      {activeTab === "privacy-policy" && <PrivacyPolicyTab />}
+      {activeTab === "sitemap" && <SitemapTab />}
     </div>
   );
 }
@@ -2743,6 +2747,280 @@ function LocationsTab() {
         >
           <Plus size={13} />
           Add Location
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+// ============================================================================
+// Privacy Policy tab
+// ============================================================================
+
+interface PrivacyPolicySettings {
+  privacyHeroTitle: string;
+  privacyHeroTitleColor: string;
+  privacyHeroTitleFont: string;
+  privacyHeroTitleSize: string;
+  privacyBody: string;
+}
+
+function PrivacyPolicyTab() {
+  const [settings, setSettings] = useState<PrivacyPolicySettings>({
+    privacyHeroTitle: "",
+    privacyHeroTitleColor: "default",
+    privacyHeroTitleFont: "default",
+    privacyHeroTitleSize: "default",
+    privacyBody: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.data) {
+          const s = data.data;
+          setSettings({
+            privacyHeroTitle: s.privacyHeroTitle || "",
+            privacyHeroTitleColor: s.privacyHeroTitleColor || "default",
+            privacyHeroTitleFont: s.privacyHeroTitleFont || "default",
+            privacyHeroTitleSize: s.privacyHeroTitleSize || "default",
+            privacyBody: s.privacyBody || "",
+          });
+        }
+      })
+      .catch((err) => setError(err.message || "Failed to load."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-64 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
+            Privacy Policy
+          </p>
+          {saved && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+        <p className="text-[10px] text-[#8b8b8b] -mt-2">The /privacy-policy page's hero banner and body content.</p>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Title
+          </label>
+          <input
+            type="text"
+            value={settings.privacyHeroTitle}
+            onChange={(e) => setSettings((p) => ({ ...p, privacyHeroTitle: e.target.value }))}
+            placeholder="Privacy Policy"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={settings.privacyHeroTitleColor}
+            onColorChange={(v) => setSettings((p) => ({ ...p, privacyHeroTitleColor: v }))}
+            font={settings.privacyHeroTitleFont}
+            onFontChange={(v) => setSettings((p) => ({ ...p, privacyHeroTitleFont: v }))}
+            size={settings.privacyHeroTitleSize}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, privacyHeroTitleSize: v }))}
+            sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Body Content
+          </label>
+          <p className="text-[10px] text-[#8b8b8b]">
+            Basic HTML is supported: {"<h3>"} and {"<h4>"} for section headings, {"<p>"} for paragraphs, {"<ul><li>"} for bulleted lists. Leave blank to keep the original policy text.
+          </p>
+          <textarea
+            value={settings.privacyBody}
+            onChange={(e) => setSettings((p) => ({ ...p, privacyBody: e.target.value }))}
+            rows={16}
+            placeholder={`<p>At NOBILITA, we value your privacy...</p>\n\n<h3>What Personal Data Do We Collect?</h3>\n<p>...</p>`}
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-xs font-mono text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none resize-y"
+          />
+        </div>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {saving ? "Saving…" : "Save Privacy Policy"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Sitemap tab
+// ============================================================================
+
+interface SitemapSettings {
+  sitemapHeroTitle: string;
+  sitemapHeroTitleColor: string;
+  sitemapHeroTitleFont: string;
+  sitemapHeroTitleSize: string;
+}
+
+function SitemapTab() {
+  const [settings, setSettings] = useState<SitemapSettings>({
+    sitemapHeroTitle: "",
+    sitemapHeroTitleColor: "default",
+    sitemapHeroTitleFont: "default",
+    sitemapHeroTitleSize: "default",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.data) {
+          const s = data.data;
+          setSettings({
+            sitemapHeroTitle: s.sitemapHeroTitle || "",
+            sitemapHeroTitleColor: s.sitemapHeroTitleColor || "default",
+            sitemapHeroTitleFont: s.sitemapHeroTitleFont || "default",
+            sitemapHeroTitleSize: s.sitemapHeroTitleSize || "default",
+          });
+        }
+      })
+      .catch((err) => setError(err.message || "Failed to load."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save.");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-40 bg-white border border-[#1a1a1a]/8 animate-pulse" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && (
+        <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
+      )}
+
+      <div className="bg-white border border-[#1a1a1a]/8 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-[#1a1a1a]/8 pb-3">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/35" style={fontMichroma}>
+            Sitemap
+          </p>
+          {saved && (
+            <span className="flex items-center gap-1 text-[10px] text-green-600" style={fontMichroma}>
+              <Check size={11} /> Saved
+            </span>
+          )}
+        </div>
+        <p className="text-[10px] text-[#8b8b8b] -mt-2">
+          The /sitemap page's hero banner. Its Products list is generated automatically from your published
+          products (Admin &gt; Explore The Collection) — add or remove a product there and it updates here too,
+          nothing to edit in this tab.
+        </p>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Title
+          </label>
+          <input
+            type="text"
+            value={settings.sitemapHeroTitle}
+            onChange={(e) => setSettings((p) => ({ ...p, sitemapHeroTitle: e.target.value }))}
+            placeholder="Sitemap"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={settings.sitemapHeroTitleColor}
+            onColorChange={(v) => setSettings((p) => ({ ...p, sitemapHeroTitleColor: v }))}
+            font={settings.sitemapHeroTitleFont}
+            onFontChange={(v) => setSettings((p) => ({ ...p, sitemapHeroTitleFont: v }))}
+            size={settings.sitemapHeroTitleSize}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, sitemapHeroTitleSize: v }))}
+            sizeOptions={HEADING_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
+        </div>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
+          style={fontMichroma}
+        >
+          {saving ? "Saving…" : "Save Sitemap"}
         </button>
       </div>
     </div>
