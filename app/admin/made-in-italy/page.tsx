@@ -10,8 +10,35 @@ const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
 const STYLE_SUFFIXES = ["Color", "Font", "Size"] as const;
-const STYLED_FIELDS = ["miHeading", "miSec2Para1", "miSec2Para2", "miSec3Line1", "miSec3Line2", "miSec3BottomPara"] as const;
+const STYLED_FIELDS = [
+  "miHeading",
+  "miSec1Label",
+  "miSec2Para1",
+  "miSec2Para2",
+  "miSec2ImageLabel",
+  "miSec3Line1",
+  "miSec3Line2",
+  "miSec3RightImageLabel",
+  "miSec3BottomPara",
+  "miSec4Label",
+] as const;
 const HEADING_FIELDS = new Set(["miHeading"]);
+// What each field's Color actually renders as when left at "Default" — the
+// page's own hardcoded fallback color — shown in the dropdown as e.g.
+// "White (Default)" instead of a bare "Default". The four image/video
+// overlay captions default to white text; the rest default to grey.
+const COLOR_DEFAULTS: Record<(typeof STYLED_FIELDS)[number], string> = {
+  miHeading: "Grey",
+  miSec1Label: "White",
+  miSec2Para1: "Grey",
+  miSec2Para2: "Grey",
+  miSec2ImageLabel: "White",
+  miSec3Line1: "Grey",
+  miSec3Line2: "Grey",
+  miSec3RightImageLabel: "White",
+  miSec3BottomPara: "Grey",
+  miSec4Label: "White",
+};
 
 interface MiSettings {
   miHeading: string;
@@ -20,6 +47,9 @@ interface MiSettings {
   miHeadingSize: string;
   miSec1Video: string;
   miSec1Label: string;
+  miSec1LabelColor: string;
+  miSec1LabelFont: string;
+  miSec1LabelSize: string;
   miSec2Para1: string;
   miSec2Para1Color: string;
   miSec2Para1Font: string;
@@ -30,6 +60,9 @@ interface MiSettings {
   miSec2Para2Size: string;
   miSec2Image: string;
   miSec2ImageLabel: string;
+  miSec2ImageLabelColor: string;
+  miSec2ImageLabelFont: string;
+  miSec2ImageLabelSize: string;
   miSec3Line1: string;
   miSec3Line1Color: string;
   miSec3Line1Font: string;
@@ -41,6 +74,9 @@ interface MiSettings {
   miSec3LeftImage: string;
   miSec3RightImage: string;
   miSec3RightImageLabel: string;
+  miSec3RightImageLabelColor: string;
+  miSec3RightImageLabelFont: string;
+  miSec3RightImageLabelSize: string;
   miSec3BottomPara: string;
   miSec3BottomParaColor: string;
   miSec3BottomParaFont: string;
@@ -49,6 +85,9 @@ interface MiSettings {
   miSec4BgImageMobile: string;
   miSec4TagImage: string;
   miSec4Label: string;
+  miSec4LabelColor: string;
+  miSec4LabelFont: string;
+  miSec4LabelSize: string;
 }
 
 const EMPTY: MiSettings = {
@@ -58,6 +97,9 @@ const EMPTY: MiSettings = {
   miHeadingSize: "default",
   miSec1Video: "",
   miSec1Label: "",
+  miSec1LabelColor: "default",
+  miSec1LabelFont: "default",
+  miSec1LabelSize: "default",
   miSec2Para1: "",
   miSec2Para1Color: "default",
   miSec2Para1Font: "default",
@@ -68,6 +110,9 @@ const EMPTY: MiSettings = {
   miSec2Para2Size: "default",
   miSec2Image: "",
   miSec2ImageLabel: "",
+  miSec2ImageLabelColor: "default",
+  miSec2ImageLabelFont: "default",
+  miSec2ImageLabelSize: "default",
   miSec3Line1: "",
   miSec3Line1Color: "default",
   miSec3Line1Font: "default",
@@ -79,6 +124,9 @@ const EMPTY: MiSettings = {
   miSec3LeftImage: "",
   miSec3RightImage: "",
   miSec3RightImageLabel: "",
+  miSec3RightImageLabelColor: "default",
+  miSec3RightImageLabelFont: "default",
+  miSec3RightImageLabelSize: "default",
   miSec3BottomPara: "",
   miSec3BottomParaColor: "default",
   miSec3BottomParaFont: "default",
@@ -87,6 +135,9 @@ const EMPTY: MiSettings = {
   miSec4BgImageMobile: "",
   miSec4TagImage: "",
   miSec4Label: "",
+  miSec4LabelColor: "default",
+  miSec4LabelFont: "default",
+  miSec4LabelSize: "default",
 };
 
 // A <StyleRow> for one of the STYLED_FIELDS, using its own Color/Font/Size
@@ -112,7 +163,7 @@ function FieldStyleRow({
       size={settings[sizeKey]}
       onSizeChange={(v) => set(sizeKey, v)}
       sizeOptions={HEADING_FIELDS.has(field) ? HEADING_SIZE_OPTIONS : PARAGRAPH_SIZE_OPTIONS}
-      colorDefaultLabel="Grey"
+      colorDefaultLabel={COLOR_DEFAULTS[field]}
       fontDefaultLabel="Ivymode"
     />
   );
@@ -330,9 +381,10 @@ export default function MadeInItalyAdminPage() {
             placeholder="DUOMO DI MILANO"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="miSec1Label" settings={settings} set={set} />
         </div>
 
-        <SaveButton section="sec1" label="Save Section" fields={["miSec1Video", "miHeading", "miSec1Label", ...styleFields("miHeading")]} />
+        <SaveButton section="sec1" label="Save Section" fields={["miSec1Video", "miHeading", "miSec1Label", ...styleFields("miHeading"), ...styleFields("miSec1Label")]} />
       </div>
 
       {/* Section 2: Intro */}
@@ -377,10 +429,11 @@ export default function MadeInItalyAdminPage() {
               placeholder="PALAZZO DELLA CIVILTÀ ITALIANA"
               className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
             />
+            <FieldStyleRow field="miSec2ImageLabel" settings={settings} set={set} />
           </div>
         </div>
 
-        <SaveButton section="sec2" label="Save Section" fields={["miSec2Para1", "miSec2Para2", "miSec2Image", "miSec2ImageLabel", ...styleFields("miSec2Para1"), ...styleFields("miSec2Para2")]} />
+        <SaveButton section="sec2" label="Save Section" fields={["miSec2Para1", "miSec2Para2", "miSec2Image", "miSec2ImageLabel", ...styleFields("miSec2Para1"), ...styleFields("miSec2Para2"), ...styleFields("miSec2ImageLabel")]} />
       </div>
 
       {/* Section 3: Large Format Slabs */}
@@ -427,6 +480,7 @@ export default function MadeInItalyAdminPage() {
             placeholder="LARGE FORMAT SLABS PROCESSING UNIT"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="miSec3RightImageLabel" settings={settings} set={set} />
         </div>
         <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Bottom Paragraph</label>
@@ -445,7 +499,7 @@ export default function MadeInItalyAdminPage() {
           label="Save Section"
           fields={[
             "miSec3Line1", "miSec3Line2", "miSec3LeftImage", "miSec3RightImage", "miSec3RightImageLabel", "miSec3BottomPara",
-            ...styleFields("miSec3Line1"), ...styleFields("miSec3Line2"), ...styleFields("miSec3BottomPara"),
+            ...styleFields("miSec3Line1"), ...styleFields("miSec3Line2"), ...styleFields("miSec3RightImageLabel"), ...styleFields("miSec3BottomPara"),
           ]}
         />
       </div>
@@ -470,9 +524,10 @@ export default function MadeInItalyAdminPage() {
             placeholder="COLOSSEUM"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <FieldStyleRow field="miSec4Label" settings={settings} set={set} />
         </div>
 
-        <SaveButton section="sec4" label="Save Section" fields={["miSec4BgImage", "miSec4BgImageMobile", "miSec4TagImage", "miSec4Label"]} />
+        <SaveButton section="sec4" label="Save Section" fields={["miSec4BgImage", "miSec4BgImageMobile", "miSec4TagImage", "miSec4Label", ...styleFields("miSec4Label")]} />
       </div>
     </div>
   );

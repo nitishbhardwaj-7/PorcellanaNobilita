@@ -33,6 +33,9 @@ interface MadeInItalyCmsData {
   miHeadingSize?: string | null;
   miSec1Video?: string | null;
   miSec1Label?: string | null;
+  miSec1LabelColor?: string | null;
+  miSec1LabelFont?: string | null;
+  miSec1LabelSize?: string | null;
   miSec2Para1?: string | null;
   miSec2Para1Color?: string | null;
   miSec2Para1Font?: string | null;
@@ -43,6 +46,9 @@ interface MadeInItalyCmsData {
   miSec2Para2Size?: string | null;
   miSec2Image?: string | null;
   miSec2ImageLabel?: string | null;
+  miSec2ImageLabelColor?: string | null;
+  miSec2ImageLabelFont?: string | null;
+  miSec2ImageLabelSize?: string | null;
   miSec3Line1?: string | null;
   miSec3Line1Color?: string | null;
   miSec3Line1Font?: string | null;
@@ -54,6 +60,9 @@ interface MadeInItalyCmsData {
   miSec3LeftImage?: string | null;
   miSec3RightImage?: string | null;
   miSec3RightImageLabel?: string | null;
+  miSec3RightImageLabelColor?: string | null;
+  miSec3RightImageLabelFont?: string | null;
+  miSec3RightImageLabelSize?: string | null;
   miSec3BottomPara?: string | null;
   miSec3BottomParaColor?: string | null;
   miSec3BottomParaFont?: string | null;
@@ -62,6 +71,9 @@ interface MadeInItalyCmsData {
   miSec4BgImageMobile?: string | null;
   miSec4TagImage?: string | null;
   miSec4Label?: string | null;
+  miSec4LabelColor?: string | null;
+  miSec4LabelFont?: string | null;
+  miSec4LabelSize?: string | null;
 }
 
 export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsData | null }) {
@@ -222,7 +234,7 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
 
             {/* Overlay Text */}
             <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-30 flex flex-col items-end">
-              <span className="sec1-label-text font-ivymode font-light text-white uppercase tracking-[0.15em] text-[clamp(11px,1.2vw,16px)] inline-block drop-shadow-md">
+              <span className={`sec1-label-text ${fontClass(d.miSec1LabelFont, "font-ivymode")} font-light ${colorClass(d.miSec1LabelColor, "text-white")} uppercase tracking-[0.15em] ${paragraphSizeClass(d.miSec1LabelSize, "text-[clamp(11px,1.2vw,16px)]")} inline-block drop-shadow-md`}>
                 {d.miSec1Label || "DUOMO DI MILANO"}
               </span>
             </div>
@@ -269,7 +281,7 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
                 />
                 {/* Overlay Text */}
                 <div className="absolute bottom-2 right-2 md:bottom-2 md:right-3 z-10">
-                  <span className="font-ivymode font-light text-white uppercase tracking-[0.15em] text-[clamp(11px,1.4vw,16px)] 2xl:text-[20px] drop-shadow-md">
+                  <span className={`${fontClass(d.miSec2ImageLabelFont, "font-ivymode")} font-light ${colorClass(d.miSec2ImageLabelColor, "text-white")} uppercase tracking-[0.15em] ${paragraphSizeClass(d.miSec2ImageLabelSize, "text-[clamp(11px,1.4vw,16px)] 2xl:text-[20px]")} drop-shadow-md`}>
                     {d.miSec2ImageLabel || "PALAZZO DELLA CIVILTÀ ITALIANA"}
                   </span>
                 </div>
@@ -329,7 +341,7 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
               />
               {/* Overlay Text */}
               <div className="absolute bottom-2 right-2 md:bottom-2 md:right-3 z-10">
-                <span className="font-ivymode font-light text-white uppercase tracking-[0.15em] text-[clamp(10px,1.2vw,16px)] 2xl:text-[20px] drop-shadow-md">
+                <span className={`${fontClass(d.miSec3RightImageLabelFont, "font-ivymode")} font-light ${colorClass(d.miSec3RightImageLabelColor, "text-white")} uppercase tracking-[0.15em] ${paragraphSizeClass(d.miSec3RightImageLabelSize, "text-[clamp(10px,1.2vw,16px)] 2xl:text-[20px]")} drop-shadow-md`}>
                   {d.miSec3RightImageLabel || "LARGE FORMAT SLABS PROCESSING UNIT"}
                 </span>
               </div>
@@ -380,7 +392,7 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
 
           {/* Overlay Text */}
           <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 lg:right-3 z-30">
-            <span className="sec4-label-text font-ivymode font-light text-white uppercase text-[clamp(11px,1.4vw,16px)] drop-shadow-md inline-block">
+            <span className={`sec4-label-text ${fontClass(d.miSec4LabelFont, "font-ivymode")} font-light ${colorClass(d.miSec4LabelColor, "text-white")} uppercase ${paragraphSizeClass(d.miSec4LabelSize, "text-[clamp(11px,1.4vw,16px)]")} drop-shadow-md inline-block`}>
               {d.miSec4Label || "COLOSSEUM"}
             </span>
           </div>
