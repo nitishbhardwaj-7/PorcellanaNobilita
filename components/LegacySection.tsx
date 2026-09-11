@@ -3,27 +3,40 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { colorClass, fontClass, paragraphSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   leftImage?: string;
   leftLabel?: string;
+  leftLabelColor?: string | null;
+  leftLabelFont?: string | null;
+  leftLabelSize?: string | null;
   sketchImage?: string;
   logoImage?: string;
   taglineImage?: string;
   rightImage?: string;
   rightLabel?: string;
+  rightLabelColor?: string | null;
+  rightLabelFont?: string | null;
+  rightLabelSize?: string | null;
 }
 
 export default function LegacySection({
   leftImage,
   leftLabel,
+  leftLabelColor,
+  leftLabelFont,
+  leftLabelSize,
   sketchImage,
   logoImage,
   taglineImage,
   rightImage,
   rightLabel,
+  rightLabelColor,
+  rightLabelFont,
+  rightLabelSize,
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const panelLeftRef = useRef<HTMLDivElement>(null);
@@ -177,7 +190,7 @@ export default function LegacySection({
         <div className="absolute bottom-8 left-0 right-0 text-center z-10">
           <p
             ref={labelTreviRef}
-            className="label-trevi font-ivymode tracking-[0.20em] text-[clamp(11px,1.2vw,16px)] text-white uppercase inline-block"
+            className={`label-trevi ${fontClass(leftLabelFont, "font-ivymode")} tracking-[0.20em] ${paragraphSizeClass(leftLabelSize, "text-[clamp(11px,1.2vw,16px)]")} ${colorClass(leftLabelColor, "text-white")} uppercase inline-block`}
           >
             {leftLabel || "TREVI FOUNTAIN"}
           </p>
@@ -236,7 +249,7 @@ export default function LegacySection({
         <div className="absolute bottom-8 left-0 right-0 text-center z-10">
           <p
             ref={labelPalazzoRef}
-            className="label-palazzo font-ivymode tracking-[0.15em] text-[clamp(11px,1.2vw,16px)] text-white uppercase inline-block"
+            className={`label-palazzo ${fontClass(rightLabelFont, "font-ivymode")} tracking-[0.15em] ${paragraphSizeClass(rightLabelSize, "text-[clamp(11px,1.2vw,16px)]")} ${colorClass(rightLabelColor, "text-white")} uppercase inline-block`}
           >
             {rightLabel || "PALAZZO DELLA CIVILTÀ ITALIANA"}
           </p>

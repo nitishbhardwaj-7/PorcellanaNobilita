@@ -10,6 +10,8 @@ interface HeroSlide {
   image: string;
   label: string;
   textColor: string;
+  labelFont?: string | null;
+  labelSize?: string | null;
 }
 
 interface Props {
@@ -167,7 +169,7 @@ export default function HeroSection({
   // CMS-managed slides (Admin > Homepage) win when present; otherwise fall
   // back to the bundled default slideshow so the section never renders empty.
   const slideshowImages = slides && slides.length > 0
-    ? slides.map((s) => ({ src: s.image, name: s.label, textColor: s.textColor }))
+    ? slides.map((s) => ({ src: s.image, name: s.label, textColor: s.textColor, labelFont: s.labelFont, labelSize: s.labelSize }))
     : defaultSlideshowImages;
 
   const [{ current, prev }, setImageIndices] = useState({ current: 0, prev: null as number | null });
@@ -231,8 +233,7 @@ export default function HeroSection({
             {/* Name label lives inside the layer — fades with the image automatically */}
             <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-20 pointer-events-none select-none text-right">
               <span
-                className="font-ivymode tracking-[0.20em] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] uppercase font-light"
-                style={{ color: slideshowImages[current].textColor === "white" ? "#ffffff" : "#000000" }}
+                className={`${fontClass((slideshowImages[current] as any).labelFont, "font-ivymode")} tracking-[0.20em] ${paragraphSizeClass((slideshowImages[current] as any).labelSize, "text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)]")} uppercase font-light ${colorClass(slideshowImages[current].textColor, "text-white")}`}
               >
                 {slideshowImages[current].name}
               </span>

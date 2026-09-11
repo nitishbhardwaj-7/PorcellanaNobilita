@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { colorClass, fontClass, paragraphSizeClass } from "@/lib/textStyle";
 
 interface TechDataSlide {
   image: string;
   label: string;
   textColor: string;
+  labelFont?: string | null;
+  labelSize?: string | null;
 }
 
 interface Props {
@@ -30,7 +33,7 @@ export default function TechnicalDataSection({ slides }: Props) {
   // CMS-managed slides (Admin > Homepage) win when present; otherwise fall
   // back to the bundled default slideshow so the section never renders empty.
   const technicalImages = slides && slides.length > 0
-    ? slides.map((s) => ({ src: s.image, name: s.label, textColor: s.textColor }))
+    ? slides.map((s) => ({ src: s.image, name: s.label, textColor: s.textColor, labelFont: s.labelFont, labelSize: s.labelSize }))
     : defaultImages;
 
   const [{ current, prev }, setImageIndices] = useState({ current: 0, prev: null as number | null });
@@ -72,8 +75,7 @@ export default function TechnicalDataSection({ slides }: Props) {
             />
             <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-20 pointer-events-none select-none text-right">
               <span
-                className="font-ivymode tracking-[0.20em] text-[clamp(11px,1.2vw,16px)] uppercase font-light"
-                style={{ color: slide.textColor === "white" ? "#ffffff" : "#000000" }}
+                className={`${fontClass((slide as any).labelFont, "font-ivymode")} tracking-[0.20em] ${paragraphSizeClass((slide as any).labelSize, "text-[clamp(11px,1.2vw,16px)]")} uppercase font-light ${colorClass(slide.textColor, "text-black")}`}
               >
                 {slide.name}
               </span>

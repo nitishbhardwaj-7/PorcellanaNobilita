@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,6 +33,9 @@ interface AppTile {
   productName: string;
   row: number;
   darkLabel: boolean;
+  labelColor?: string | null;
+  labelFont?: string | null;
+  labelSize?: string | null;
 }
 
 interface ApplicationsSectionProps {
@@ -206,9 +209,8 @@ export default function ApplicationsSection({ onTileClick, heading, headingColor
         {/* ── Label */}
         <div className="absolute inset-0 flex items-center justify-center p-4 text-center pointer-events-none">
           <span
-            className={`tile-label font-didot font-medium text-[clamp(16px,4vw,28px)] uppercase relative z-10 ${app.darkLabel ? "text-brand-dark" : "text-white"
-              }`}
-            style={{ fontFamily: "var(--font-didot), Georgia, serif", letterSpacing: "0.1em", opacity: 0 }}
+            className={`tile-label ${fontClass(app.labelFont, "font-didot")} font-medium ${paragraphSizeClass(app.labelSize, "text-[clamp(16px,4vw,28px)]")} uppercase relative z-10 ${colorClass(app.labelColor, app.darkLabel ? "text-brand-dark" : "text-white")}`}
+            style={{ letterSpacing: "0.1em", opacity: 0 }}
           >
             {app.name}
           </span>

@@ -4,7 +4,73 @@ import React, { useState, useEffect } from "react";
 import { Plus, X, GripVertical, Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
-import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS, COLOR_OPTIONS, FONT_OPTIONS } from "@/lib/textStyle";
+
+// A required (never "default") Color / Font / Size row for one item inside a
+// dynamic list (Slideshow slides, Application tiles) — same three mini
+// dropdowns as StyleRow, but Color always resolves to a concrete choice
+// since these list-item color fields have no separate "page default" to
+// fall back to (unlike a Settings text field, each item's color IS its own
+// stored value). Font/Size keep the normal "Default" (= unset/inherit).
+function ItemStyleRow({
+  color,
+  onColorChange,
+  font,
+  onFontChange,
+  size,
+  onSizeChange,
+  sizeOptions,
+}: {
+  color: string;
+  onColorChange: (v: string) => void;
+  font: string;
+  onFontChange: (v: string) => void;
+  size: string;
+  onSizeChange: (v: string) => void;
+  sizeOptions: { value: string; label: string }[];
+}) {
+  const colorChoices = COLOR_OPTIONS.filter((o) => o.value !== "default");
+  return (
+    <div className="grid grid-cols-3 gap-1">
+      <div>
+        <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+        <select
+          value={color}
+          onChange={(e) => onColorChange(e.target.value)}
+          className="w-full border border-[#1a1a1a]/10 bg-white px-1.5 py-1 text-[10px] outline-none"
+        >
+          {colorChoices.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+        <select
+          value={font || "default"}
+          onChange={(e) => onFontChange(e.target.value)}
+          className="w-full border border-[#1a1a1a]/10 bg-white px-1.5 py-1 text-[10px] outline-none"
+        >
+          {FONT_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+        <select
+          value={size || "default"}
+          onChange={(e) => onSizeChange(e.target.value)}
+          className="w-full border border-[#1a1a1a]/10 bg-white px-1.5 py-1 text-[10px] outline-none"
+        >
+          {sizeOptions.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
@@ -87,6 +153,8 @@ interface HeroSlide {
   image: string;
   label: string;
   textColor: string;
+  labelFont: string | null;
+  labelSize: string | null;
   order: number;
 }
 
@@ -429,25 +497,6 @@ function HeroTab() {
                     />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Color</label>
-                  <div className="flex gap-1">
-                    {(["white", "black"] as const).map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        onClick={() => updateSlide(slide.id, { textColor: c })}
-                        className={`flex-1 px-2 py-1 text-[10px] uppercase border transition-colors ${
-                          slide.textColor === c
-                            ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
-                            : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15"
-                        }`}
-                      >
-                        {c}
-                      </button>
-                    ))}
-                  </div>
-                </div>
                 <div className="sm:col-span-3">
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Text</label>
                   <input
@@ -456,6 +505,17 @@ function HeroTab() {
                     onChange={(e) => updateSlide(slide.id, { label: e.target.value })}
                     className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
                   />
+                  <div className="mt-1">
+                    <ItemStyleRow
+                      color={slide.textColor}
+                      onColorChange={(v) => updateSlide(slide.id, { textColor: v })}
+                      font={slide.labelFont || "default"}
+                      onFontChange={(v) => updateSlide(slide.id, { labelFont: v })}
+                      size={slide.labelSize || "default"}
+                      onSizeChange={(v) => updateSlide(slide.id, { labelSize: v })}
+                      sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -491,6 +551,9 @@ function HeroTab() {
 interface BrandSettings {
   brandTagImage: string | null;
   brandTagSubtext: string | null;
+  brandTagSubtextColor: string | null;
+  brandTagSubtextFont: string | null;
+  brandTagSubtextSize: string | null;
   brandImg: string | null;
   brandSubtitle: string | null;
   brandSubtitleColor: string | null;
@@ -508,6 +571,9 @@ function BrandIntroTab() {
   const [settings, setSettings] = useState<BrandSettings>({
     brandTagImage: "",
     brandTagSubtext: "",
+    brandTagSubtextColor: "default",
+    brandTagSubtextFont: "default",
+    brandTagSubtextSize: "default",
     brandImg: "",
     brandSubtitle: "",
     brandSubtitleColor: "default",
@@ -533,6 +599,9 @@ function BrandIntroTab() {
           setSettings({
             brandTagImage: data.data.brandTagImage || "",
             brandTagSubtext: data.data.brandTagSubtext || "",
+            brandTagSubtextColor: data.data.brandTagSubtextColor || "default",
+            brandTagSubtextFont: data.data.brandTagSubtextFont || "default",
+            brandTagSubtextSize: data.data.brandTagSubtextSize || "default",
             brandImg: data.data.brandImg || "",
             brandSubtitle: data.data.brandSubtitle || "",
             brandSubtitleColor: data.data.brandSubtitleColor || "default",
@@ -661,6 +730,17 @@ function BrandIntroTab() {
             onChange={(e) => setSettings((p) => ({ ...p, brandTagSubtext: e.target.value }))}
             placeholder="The Imperial Stone of Italy"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={settings.brandTagSubtextColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, brandTagSubtextColor: v }))}
+            font={settings.brandTagSubtextFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, brandTagSubtextFont: v }))}
+            size={settings.brandTagSubtextSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, brandTagSubtextSize: v }))}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Michroma"
           />
         </div>
 
@@ -797,6 +877,9 @@ interface CraftSettings {
   craftBadgeText: string | null;
   craftBadgeLink: string | null;
   craftCasaLabel: string | null;
+  craftCasaLabelColor: string | null;
+  craftCasaLabelFont: string | null;
+  craftCasaLabelSize: string | null;
 }
 
 function CraftsmanshipTab() {
@@ -814,6 +897,9 @@ function CraftsmanshipTab() {
     craftBadgeText: "",
     craftBadgeLink: "",
     craftCasaLabel: "",
+    craftCasaLabelColor: "default",
+    craftCasaLabelFont: "default",
+    craftCasaLabelSize: "default",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -839,6 +925,9 @@ function CraftsmanshipTab() {
             craftBadgeText: data.data.craftBadgeText || "",
             craftBadgeLink: data.data.craftBadgeLink || "",
             craftCasaLabel: data.data.craftCasaLabel || "",
+            craftCasaLabelColor: data.data.craftCasaLabelColor || "default",
+            craftCasaLabelFont: data.data.craftCasaLabelFont || "default",
+            craftCasaLabelSize: data.data.craftCasaLabelSize || "default",
           });
         }
       })
@@ -1031,6 +1120,17 @@ function CraftsmanshipTab() {
             placeholder="CASA NOBILE"
             className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
           />
+          <StyleRow
+            color={settings.craftCasaLabelColor || "default"}
+            onColorChange={(v) => setSettings((p) => ({ ...p, craftCasaLabelColor: v }))}
+            font={settings.craftCasaLabelFont || "default"}
+            onFontChange={(v) => setSettings((p) => ({ ...p, craftCasaLabelFont: v }))}
+            size={settings.craftCasaLabelSize || "default"}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, craftCasaLabelSize: v }))}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
         </div>
 
         <button
@@ -1053,11 +1153,17 @@ function CraftsmanshipTab() {
 interface LegacySettings {
   legacyLeftImage: string | null;
   legacyLeftLabel: string | null;
+  legacyLeftLabelColor: string | null;
+  legacyLeftLabelFont: string | null;
+  legacyLeftLabelSize: string | null;
   legacySketchImage: string | null;
   legacyLogoImage: string | null;
   legacyTaglineImage: string | null;
   legacyRightImage: string | null;
   legacyRightLabel: string | null;
+  legacyRightLabelColor: string | null;
+  legacyRightLabelFont: string | null;
+  legacyRightLabelSize: string | null;
 }
 
 // `defaultSrc` is the hardcoded fallback the public page actually renders
@@ -1105,11 +1211,17 @@ function LegacyTab() {
   const [settings, setSettings] = useState<LegacySettings>({
     legacyLeftImage: "",
     legacyLeftLabel: "",
+    legacyLeftLabelColor: "default",
+    legacyLeftLabelFont: "default",
+    legacyLeftLabelSize: "default",
     legacySketchImage: "",
     legacyLogoImage: "",
     legacyTaglineImage: "",
     legacyRightImage: "",
     legacyRightLabel: "",
+    legacyRightLabelColor: "default",
+    legacyRightLabelFont: "default",
+    legacyRightLabelSize: "default",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -1124,11 +1236,17 @@ function LegacyTab() {
           setSettings({
             legacyLeftImage: data.data.legacyLeftImage || "",
             legacyLeftLabel: data.data.legacyLeftLabel || "",
+            legacyLeftLabelColor: data.data.legacyLeftLabelColor || "default",
+            legacyLeftLabelFont: data.data.legacyLeftLabelFont || "default",
+            legacyLeftLabelSize: data.data.legacyLeftLabelSize || "default",
             legacySketchImage: data.data.legacySketchImage || "",
             legacyLogoImage: data.data.legacyLogoImage || "",
             legacyTaglineImage: data.data.legacyTaglineImage || "",
             legacyRightImage: data.data.legacyRightImage || "",
             legacyRightLabel: data.data.legacyRightLabel || "",
+            legacyRightLabelColor: data.data.legacyRightLabelColor || "default",
+            legacyRightLabelFont: data.data.legacyRightLabelFont || "default",
+            legacyRightLabelSize: data.data.legacyRightLabelSize || "default",
           });
         }
       })
@@ -1205,6 +1323,17 @@ function LegacyTab() {
               placeholder="TREVI FOUNTAIN"
               className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
             />
+            <StyleRow
+              color={settings.legacyLeftLabelColor || "default"}
+              onColorChange={(v) => setSettings((p) => ({ ...p, legacyLeftLabelColor: v }))}
+              font={settings.legacyLeftLabelFont || "default"}
+              onFontChange={(v) => setSettings((p) => ({ ...p, legacyLeftLabelFont: v }))}
+              size={settings.legacyLeftLabelSize || "default"}
+              onSizeChange={(v) => setSettings((p) => ({ ...p, legacyLeftLabelSize: v }))}
+              sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+              colorDefaultLabel="White"
+              fontDefaultLabel="Ivymode"
+            />
           </div>
         </div>
 
@@ -1225,6 +1354,17 @@ function LegacyTab() {
               onChange={(e) => setSettings((p) => ({ ...p, legacyRightLabel: e.target.value }))}
               placeholder="PALAZZO DELLA CIVILTÀ ITALIANA"
               className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+            />
+            <StyleRow
+              color={settings.legacyRightLabelColor || "default"}
+              onColorChange={(v) => setSettings((p) => ({ ...p, legacyRightLabelColor: v }))}
+              font={settings.legacyRightLabelFont || "default"}
+              onFontChange={(v) => setSettings((p) => ({ ...p, legacyRightLabelFont: v }))}
+              size={settings.legacyRightLabelSize || "default"}
+              onSizeChange={(v) => setSettings((p) => ({ ...p, legacyRightLabelSize: v }))}
+              sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+              colorDefaultLabel="White"
+              fontDefaultLabel="Ivymode"
             />
           </div>
         </div>
@@ -1274,6 +1414,9 @@ interface AppTileData {
   productName: string;
   row: number;
   darkLabel: boolean;
+  labelColor: string | null;
+  labelFont: string | null;
+  labelSize: string | null;
 }
 
 function ApplicationsTab() {
@@ -1449,6 +1592,17 @@ function ApplicationsTab() {
                     onChange={(e) => updateTile(tile.id, { name: e.target.value })}
                     className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
                   />
+                  <div className="mt-1">
+                    <ItemStyleRow
+                      color={tile.labelColor || (tile.darkLabel ? "black" : "white")}
+                      onColorChange={(v) => updateTile(tile.id, { labelColor: v })}
+                      font={tile.labelFont || "default"}
+                      onFontChange={(v) => updateTile(tile.id, { labelFont: v })}
+                      size={tile.labelSize || "default"}
+                      onSizeChange={(v) => updateTile(tile.id, { labelSize: v })}
+                      sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                    />
+                  </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Image</label>
@@ -1478,25 +1632,6 @@ function ApplicationsTab() {
                     ))}
                   </select>
                 </div>
-                <div className="sm:col-span-4">
-                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Color</label>
-                  <div className="flex gap-1 w-32">
-                    {([false, true] as const).map((dark) => (
-                      <button
-                        key={String(dark)}
-                        type="button"
-                        onClick={() => updateTile(tile.id, { darkLabel: dark })}
-                        className={`flex-1 px-2 py-1 text-[10px] uppercase border transition-colors ${
-                          tile.darkLabel === dark
-                            ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
-                            : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15"
-                        }`}
-                      >
-                        {dark ? "Dark" : "White"}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               {savingTileId === tile.id && (
@@ -1520,14 +1655,41 @@ interface DimensionsSettings {
   dimHeadingFont: string | null;
   dimHeadingSize: string | null;
   dimCol1Header: string | null;
+  dimCol1HeaderColor: string | null;
+  dimCol1HeaderFont: string | null;
+  dimCol1HeaderSize: string | null;
   dimCol1Item1: string | null;
+  dimCol1Item1Color: string | null;
+  dimCol1Item1Font: string | null;
+  dimCol1Item1Size: string | null;
   dimCol1Item2: string | null;
+  dimCol1Item2Color: string | null;
+  dimCol1Item2Font: string | null;
+  dimCol1Item2Size: string | null;
   dimCol2Header: string | null;
+  dimCol2HeaderColor: string | null;
+  dimCol2HeaderFont: string | null;
+  dimCol2HeaderSize: string | null;
   dimCol2Item1: string | null;
+  dimCol2Item1Color: string | null;
+  dimCol2Item1Font: string | null;
+  dimCol2Item1Size: string | null;
   dimCol2Item2: string | null;
+  dimCol2Item2Color: string | null;
+  dimCol2Item2Font: string | null;
+  dimCol2Item2Size: string | null;
   dimCol3Header: string | null;
+  dimCol3HeaderColor: string | null;
+  dimCol3HeaderFont: string | null;
+  dimCol3HeaderSize: string | null;
   dimCol3Item1: string | null;
+  dimCol3Item1Color: string | null;
+  dimCol3Item1Font: string | null;
+  dimCol3Item1Size: string | null;
   dimCol3Item2: string | null;
+  dimCol3Item2Color: string | null;
+  dimCol3Item2Font: string | null;
+  dimCol3Item2Size: string | null;
   dimImage: string | null;
   dimBtnText: string | null;
   dimBtnLink: string | null;
@@ -1540,14 +1702,41 @@ function DimensionsTab() {
     dimHeadingFont: "default",
     dimHeadingSize: "default",
     dimCol1Header: "",
+    dimCol1HeaderColor: "default",
+    dimCol1HeaderFont: "default",
+    dimCol1HeaderSize: "default",
     dimCol1Item1: "",
+    dimCol1Item1Color: "default",
+    dimCol1Item1Font: "default",
+    dimCol1Item1Size: "default",
     dimCol1Item2: "",
+    dimCol1Item2Color: "default",
+    dimCol1Item2Font: "default",
+    dimCol1Item2Size: "default",
     dimCol2Header: "",
+    dimCol2HeaderColor: "default",
+    dimCol2HeaderFont: "default",
+    dimCol2HeaderSize: "default",
     dimCol2Item1: "",
+    dimCol2Item1Color: "default",
+    dimCol2Item1Font: "default",
+    dimCol2Item1Size: "default",
     dimCol2Item2: "",
+    dimCol2Item2Color: "default",
+    dimCol2Item2Font: "default",
+    dimCol2Item2Size: "default",
     dimCol3Header: "",
+    dimCol3HeaderColor: "default",
+    dimCol3HeaderFont: "default",
+    dimCol3HeaderSize: "default",
     dimCol3Item1: "",
+    dimCol3Item1Color: "default",
+    dimCol3Item1Font: "default",
+    dimCol3Item1Size: "default",
     dimCol3Item2: "",
+    dimCol3Item2Color: "default",
+    dimCol3Item2Font: "default",
+    dimCol3Item2Size: "default",
     dimImage: "",
     dimBtnText: "",
     dimBtnLink: "",
@@ -1568,14 +1757,41 @@ function DimensionsTab() {
             dimHeadingFont: data.data.dimHeadingFont || "default",
             dimHeadingSize: data.data.dimHeadingSize || "default",
             dimCol1Header: data.data.dimCol1Header || "",
+            dimCol1HeaderColor: data.data.dimCol1HeaderColor || "default",
+            dimCol1HeaderFont: data.data.dimCol1HeaderFont || "default",
+            dimCol1HeaderSize: data.data.dimCol1HeaderSize || "default",
             dimCol1Item1: data.data.dimCol1Item1 || "",
+            dimCol1Item1Color: data.data.dimCol1Item1Color || "default",
+            dimCol1Item1Font: data.data.dimCol1Item1Font || "default",
+            dimCol1Item1Size: data.data.dimCol1Item1Size || "default",
             dimCol1Item2: data.data.dimCol1Item2 || "",
+            dimCol1Item2Color: data.data.dimCol1Item2Color || "default",
+            dimCol1Item2Font: data.data.dimCol1Item2Font || "default",
+            dimCol1Item2Size: data.data.dimCol1Item2Size || "default",
             dimCol2Header: data.data.dimCol2Header || "",
+            dimCol2HeaderColor: data.data.dimCol2HeaderColor || "default",
+            dimCol2HeaderFont: data.data.dimCol2HeaderFont || "default",
+            dimCol2HeaderSize: data.data.dimCol2HeaderSize || "default",
             dimCol2Item1: data.data.dimCol2Item1 || "",
+            dimCol2Item1Color: data.data.dimCol2Item1Color || "default",
+            dimCol2Item1Font: data.data.dimCol2Item1Font || "default",
+            dimCol2Item1Size: data.data.dimCol2Item1Size || "default",
             dimCol2Item2: data.data.dimCol2Item2 || "",
+            dimCol2Item2Color: data.data.dimCol2Item2Color || "default",
+            dimCol2Item2Font: data.data.dimCol2Item2Font || "default",
+            dimCol2Item2Size: data.data.dimCol2Item2Size || "default",
             dimCol3Header: data.data.dimCol3Header || "",
+            dimCol3HeaderColor: data.data.dimCol3HeaderColor || "default",
+            dimCol3HeaderFont: data.data.dimCol3HeaderFont || "default",
+            dimCol3HeaderSize: data.data.dimCol3HeaderSize || "default",
             dimCol3Item1: data.data.dimCol3Item1 || "",
+            dimCol3Item1Color: data.data.dimCol3Item1Color || "default",
+            dimCol3Item1Font: data.data.dimCol3Item1Font || "default",
+            dimCol3Item1Size: data.data.dimCol3Item1Size || "default",
             dimCol3Item2: data.data.dimCol3Item2 || "",
+            dimCol3Item2Color: data.data.dimCol3Item2Color || "default",
+            dimCol3Item2Font: data.data.dimCol3Item2Font || "default",
+            dimCol3Item2Size: data.data.dimCol3Item2Size || "default",
             dimImage: data.data.dimImage || "",
             dimBtnText: data.data.dimBtnText || "",
             dimBtnLink: data.data.dimBtnLink || "",
@@ -1662,85 +1878,220 @@ function DimensionsTab() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          <div className="space-y-1.5">
-            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-              Column 1 Header
-            </label>
-            <input
-              type="text"
-              value={settings.dimCol1Header || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol1Header: e.target.value }))}
-              placeholder="THICKNESS"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
-            <input
-              type="text"
-              value={settings.dimCol1Item1 || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol1Item1: e.target.value }))}
-              placeholder="6.5 MM"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
-            <input
-              type="text"
-              value={settings.dimCol1Item2 || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol1Item2: e.target.value }))}
-              placeholder="12 MM"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Column 1 Header
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol1Header || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol1Header: e.target.value }))}
+                placeholder="THICKNESS"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol1HeaderColor || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol1HeaderColor: v }))}
+                font={settings.dimCol1HeaderFont || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol1HeaderFont: v }))}
+                size={settings.dimCol1HeaderSize || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol1HeaderSize: v }))}
+                sizeOptions={HEADING_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Didot"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Item 1
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol1Item1 || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol1Item1: e.target.value }))}
+                placeholder="6.5 MM"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol1Item1Color || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol1Item1Color: v }))}
+                font={settings.dimCol1Item1Font || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol1Item1Font: v }))}
+                size={settings.dimCol1Item1Size || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol1Item1Size: v }))}
+                sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Michroma"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Item 2
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol1Item2 || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol1Item2: e.target.value }))}
+                placeholder="12 MM"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol1Item2Color || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol1Item2Color: v }))}
+                font={settings.dimCol1Item2Font || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol1Item2Font: v }))}
+                size={settings.dimCol1Item2Size || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol1Item2Size: v }))}
+                sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Michroma"
+              />
+            </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-              Column 2 Header
-            </label>
-            <input
-              type="text"
-              value={settings.dimCol2Header || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol2Header: e.target.value }))}
-              placeholder="DIMENSIONS"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
-            <input
-              type="text"
-              value={settings.dimCol2Item1 || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol2Item1: e.target.value }))}
-              placeholder="1600 X 3200 MM"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
-            <input
-              type="text"
-              value={settings.dimCol2Item2 || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol2Item2: e.target.value }))}
-              placeholder="1620 X 3240 MM"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Column 2 Header
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol2Header || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol2Header: e.target.value }))}
+                placeholder="DIMENSIONS"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol2HeaderColor || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol2HeaderColor: v }))}
+                font={settings.dimCol2HeaderFont || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol2HeaderFont: v }))}
+                size={settings.dimCol2HeaderSize || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol2HeaderSize: v }))}
+                sizeOptions={HEADING_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Didot"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Item 1
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol2Item1 || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol2Item1: e.target.value }))}
+                placeholder="1600 X 3200 MM"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol2Item1Color || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol2Item1Color: v }))}
+                font={settings.dimCol2Item1Font || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol2Item1Font: v }))}
+                size={settings.dimCol2Item1Size || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol2Item1Size: v }))}
+                sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Michroma"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Item 2
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol2Item2 || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol2Item2: e.target.value }))}
+                placeholder="1620 X 3240 MM"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol2Item2Color || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol2Item2Color: v }))}
+                font={settings.dimCol2Item2Font || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol2Item2Font: v }))}
+                size={settings.dimCol2Item2Size || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol2Item2Size: v }))}
+                sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Michroma"
+              />
+            </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
-              Column 3 Header
-            </label>
-            <input
-              type="text"
-              value={settings.dimCol3Header || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol3Header: e.target.value }))}
-              placeholder="FORMAT"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
-            <input
-              type="text"
-              value={settings.dimCol3Item1 || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol3Item1: e.target.value }))}
-              placeholder="RECTIFIED"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
-            <input
-              type="text"
-              value={settings.dimCol3Item2 || ""}
-              onChange={(e) => setSettings((p) => ({ ...p, dimCol3Item2: e.target.value }))}
-              placeholder="GROSS"
-              className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
-            />
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Column 3 Header
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol3Header || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol3Header: e.target.value }))}
+                placeholder="FORMAT"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol3HeaderColor || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol3HeaderColor: v }))}
+                font={settings.dimCol3HeaderFont || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol3HeaderFont: v }))}
+                size={settings.dimCol3HeaderSize || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol3HeaderSize: v }))}
+                sizeOptions={HEADING_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Didot"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Item 1
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol3Item1 || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol3Item1: e.target.value }))}
+                placeholder="RECTIFIED"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol3Item1Color || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol3Item1Color: v }))}
+                font={settings.dimCol3Item1Font || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol3Item1Font: v }))}
+                size={settings.dimCol3Item1Size || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol3Item1Size: v }))}
+                sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Michroma"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+                Item 2
+              </label>
+              <input
+                type="text"
+                value={settings.dimCol3Item2 || ""}
+                onChange={(e) => setSettings((p) => ({ ...p, dimCol3Item2: e.target.value }))}
+                placeholder="GROSS"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <StyleRow
+                color={settings.dimCol3Item2Color || "default"}
+                onColorChange={(v) => setSettings((p) => ({ ...p, dimCol3Item2Color: v }))}
+                font={settings.dimCol3Item2Font || "default"}
+                onFontChange={(v) => setSettings((p) => ({ ...p, dimCol3Item2Font: v }))}
+                size={settings.dimCol3Item2Size || "default"}
+                onSizeChange={(v) => setSettings((p) => ({ ...p, dimCol3Item2Size: v }))}
+                sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                colorDefaultLabel="Grey"
+                fontDefaultLabel="Michroma"
+              />
+            </div>
           </div>
         </div>
 
@@ -1807,6 +2158,8 @@ interface FinishTile {
   id: string;
   order: number;
   name: string;
+  nameFont: string | null;
+  nameSize: string | null;
   filterName: string;
   image: string;
   desc: string;
@@ -2079,6 +2432,33 @@ function FinishesTab() {
                       onChange={(e) => updateTile(tile.id, { name: e.target.value })}
                       className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
                     />
+                    <p className="text-[8px] text-[#8b8b8b] mt-0.5">Color follows Text Style below (dark/light) — Font/Size only here.</p>
+                    <div className="grid grid-cols-2 gap-1 mt-1">
+                      <div>
+                        <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                        <select
+                          value={tile.nameFont || "default"}
+                          onChange={(e) => updateTile(tile.id, { nameFont: e.target.value })}
+                          className="w-full border border-[#1a1a1a]/10 bg-white px-1.5 py-1 text-[10px] outline-none"
+                        >
+                          {FONT_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>{o.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                        <select
+                          value={tile.nameSize || "default"}
+                          onChange={(e) => updateTile(tile.id, { nameSize: e.target.value })}
+                          className="w-full border border-[#1a1a1a]/10 bg-white px-1.5 py-1 text-[10px] outline-none"
+                        >
+                          {PARAGRAPH_SIZE_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>{o.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Filter Value</label>
@@ -2203,6 +2583,8 @@ interface TechDataSlide {
   image: string;
   label: string;
   textColor: string;
+  labelFont: string | null;
+  labelSize: string | null;
   order: number;
 }
 
@@ -2382,25 +2764,6 @@ function TechnicalDataTab() {
                     />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Color</label>
-                  <div className="flex gap-1">
-                    {(["white", "black"] as const).map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        onClick={() => updateSlide(slide.id, { textColor: c })}
-                        className={`flex-1 px-2 py-1 text-[10px] uppercase border transition-colors ${
-                          slide.textColor === c
-                            ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
-                            : "bg-white text-[#1a1a1a]/50 border-[#1a1a1a]/15"
-                        }`}
-                      >
-                        {c}
-                      </button>
-                    ))}
-                  </div>
-                </div>
                 <div className="sm:col-span-3">
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Label Text</label>
                   <input
@@ -2409,6 +2772,17 @@ function TechnicalDataTab() {
                     onChange={(e) => updateSlide(slide.id, { label: e.target.value })}
                     className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
                   />
+                  <div className="mt-1">
+                    <ItemStyleRow
+                      color={slide.textColor}
+                      onColorChange={(v) => updateSlide(slide.id, { textColor: v })}
+                      font={slide.labelFont || "default"}
+                      onFontChange={(v) => updateSlide(slide.id, { labelFont: v })}
+                      size={slide.labelSize || "default"}
+                      onSizeChange={(v) => updateSlide(slide.id, { labelSize: v })}
+                      sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                    />
+                  </div>
                 </div>
               </div>
 

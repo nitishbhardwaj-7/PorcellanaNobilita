@@ -9,7 +9,7 @@ export async function PUT(
   try {
     const body = await request.json();
     const {
-      name, filterName, image, desc, descColor, descFont, descSize,
+      name, nameFont, nameSize, filterName, image, desc, descColor, descFont, descSize,
       textStyle, lightWash, order,
     } = body;
 
@@ -17,6 +17,8 @@ export async function PUT(
       where: { id: params.id },
       data: {
         ...(name !== undefined && { name }),
+        ...(nameFont !== undefined && { nameFont }),
+        ...(nameSize !== undefined && { nameSize }),
         ...(filterName !== undefined && { filterName }),
         ...(image !== undefined && { image }),
         ...(desc !== undefined && { desc }),

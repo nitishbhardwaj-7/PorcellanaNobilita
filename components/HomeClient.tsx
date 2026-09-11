@@ -101,6 +101,9 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
       <BrandIntro
         tagImage={d.brandTagImage}
         tagSubtext={d.brandTagSubtext}
+        tagSubtextColor={d.brandTagSubtextColor}
+        tagSubtextFont={d.brandTagSubtextFont}
+        tagSubtextSize={d.brandTagSubtextSize}
         subtitle={d.brandSubtitle}
         subtitleColor={d.brandSubtitleColor}
         subtitleFont={d.brandSubtitleFont}
@@ -128,15 +131,24 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         badgeText={d.craftBadgeText}
         badgeLink={d.craftBadgeLink}
         casaLabel={d.craftCasaLabel}
+        casaLabelColor={d.craftCasaLabelColor}
+        casaLabelFont={d.craftCasaLabelFont}
+        casaLabelSize={d.craftCasaLabelSize}
       />
       <LegacySection
         leftImage={d.legacyLeftImage}
         leftLabel={d.legacyLeftLabel}
+        leftLabelColor={d.legacyLeftLabelColor}
+        leftLabelFont={d.legacyLeftLabelFont}
+        leftLabelSize={d.legacyLeftLabelSize}
         sketchImage={d.legacySketchImage}
         logoImage={d.legacyLogoImage}
         taglineImage={d.legacyTaglineImage}
         rightImage={d.legacyRightImage}
         rightLabel={d.legacyRightLabel}
+        rightLabelColor={d.legacyRightLabelColor}
+        rightLabelFont={d.legacyRightLabelFont}
+        rightLabelSize={d.legacyRightLabelSize}
       />
       <ApplicationsSection
         onTileClick={(prodName) => handleProductSelect(prodName)}
@@ -152,14 +164,41 @@ export default function HomeClient({ cmsData }: { cmsData: any }) {
         headingFont={d.dimHeadingFont}
         headingSize={d.dimHeadingSize}
         col1Header={d.dimCol1Header}
+        col1HeaderColor={d.dimCol1HeaderColor}
+        col1HeaderFont={d.dimCol1HeaderFont}
+        col1HeaderSize={d.dimCol1HeaderSize}
         col1Item1={d.dimCol1Item1}
+        col1Item1Color={d.dimCol1Item1Color}
+        col1Item1Font={d.dimCol1Item1Font}
+        col1Item1Size={d.dimCol1Item1Size}
         col1Item2={d.dimCol1Item2}
+        col1Item2Color={d.dimCol1Item2Color}
+        col1Item2Font={d.dimCol1Item2Font}
+        col1Item2Size={d.dimCol1Item2Size}
         col2Header={d.dimCol2Header}
+        col2HeaderColor={d.dimCol2HeaderColor}
+        col2HeaderFont={d.dimCol2HeaderFont}
+        col2HeaderSize={d.dimCol2HeaderSize}
         col2Item1={d.dimCol2Item1}
+        col2Item1Color={d.dimCol2Item1Color}
+        col2Item1Font={d.dimCol2Item1Font}
+        col2Item1Size={d.dimCol2Item1Size}
         col2Item2={d.dimCol2Item2}
+        col2Item2Color={d.dimCol2Item2Color}
+        col2Item2Font={d.dimCol2Item2Font}
+        col2Item2Size={d.dimCol2Item2Size}
         col3Header={d.dimCol3Header}
+        col3HeaderColor={d.dimCol3HeaderColor}
+        col3HeaderFont={d.dimCol3HeaderFont}
+        col3HeaderSize={d.dimCol3HeaderSize}
         col3Item1={d.dimCol3Item1}
+        col3Item1Color={d.dimCol3Item1Color}
+        col3Item1Font={d.dimCol3Item1Font}
+        col3Item1Size={d.dimCol3Item1Size}
         col3Item2={d.dimCol3Item2}
+        col3Item2Color={d.dimCol3Item2Color}
+        col3Item2Font={d.dimCol3Item2Font}
+        col3Item2Size={d.dimCol3Item2Size}
         image={d.dimImage}
         btnText={d.dimBtnText}
         btnLink={d.dimBtnLink}

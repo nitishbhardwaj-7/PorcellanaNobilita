@@ -17,6 +17,7 @@ const DEFAULT_LABEL_TO_VALUE: Record<string, string> = {
   White: "white",
   Ivymode: "ivymode",
   Michroma: "michroma",
+  Didot: "didot",
 };
 
 // Replaces the "Default" option's label with "<actual value> (Default)" so

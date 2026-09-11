@@ -23,6 +23,9 @@ interface Props {
   badgeText?: string;
   badgeLink?: string;
   casaLabel?: string;
+  casaLabelColor?: string | null;
+  casaLabelFont?: string | null;
+  casaLabelSize?: string | null;
 }
 
 export default function CraftsmanshipSection({
@@ -39,6 +42,9 @@ export default function CraftsmanshipSection({
   badgeText,
   badgeLink,
   casaLabel,
+  casaLabelColor,
+  casaLabelFont,
+  casaLabelSize,
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -255,7 +261,7 @@ export default function CraftsmanshipSection({
       <div className="absolute bottom-4 right-4 md:bottom-2 md:right-3 z-10">
         <span
           ref={casaRef}
-          className="casa-nobile-label font-ivymode text-white/90 text-[16px] tracking-[0.2em] uppercase"
+          className={`casa-nobile-label ${fontClass(casaLabelFont, "font-ivymode")} ${colorClass(casaLabelColor, "text-white/90")} ${paragraphSizeClass(casaLabelSize, "text-[16px]")} tracking-[0.2em] uppercase`}
           style={{ opacity: 0, letterSpacing: "0.1em" }}
         >
           {casaLabel || "CASA NOBILE"}

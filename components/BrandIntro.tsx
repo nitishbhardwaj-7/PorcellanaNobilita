@@ -12,6 +12,9 @@ gsap.registerPlugin(ScrollTrigger);
 interface Props {
   tagImage?: string;
   tagSubtext?: string;
+  tagSubtextColor?: string | null;
+  tagSubtextFont?: string | null;
+  tagSubtextSize?: string | null;
   subtitle?: string;
   subtitleColor?: string;
   subtitleFont?: string;
@@ -26,7 +29,7 @@ interface Props {
   socialLinkedin?: string | null;
 }
 
-export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleColor, subtitleFont, subtitleSize, buttonText, buttonLink, image, isLoaderActive = false, socialWhatsapp, socialInstagram, socialFacebook, socialLinkedin }: Props) {
+export default function BrandIntro({ tagImage, tagSubtext, tagSubtextColor, tagSubtextFont, tagSubtextSize, subtitle, subtitleColor, subtitleFont, subtitleSize, buttonText, buttonLink, image, isLoaderActive = false, socialWhatsapp, socialInstagram, socialFacebook, socialLinkedin }: Props) {
   const defaultSubtitle = "Inspired by Italy's noble heritage and Baroque architecture, NOBILITA porcelain is crafted in Modena, Italy, home to Ferrari, Acetaia Giusti, and Brioni. A collection where timeless Italian elegance meets advanced porcelain technology.";
   const sectionRef = useRef<HTMLElement>(null);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -226,7 +229,7 @@ export default function BrandIntro({ tagImage, tagSubtext, subtitle, subtitleCol
             loading="lazy"
             className="w-full h-auto object-contain"
           />
-          <span className="brand-tag-subtext font-michroma text-white/50 text-[clamp(12px,1.5vw,20px)] lg:text-[clamp(15px,1.5vw,24px)] tracking-[0.2em] block opacity-0 mt-1 md:mt-2">
+          <span className={`brand-tag-subtext ${fontClass(tagSubtextFont, "font-michroma")} ${colorClass(tagSubtextColor, "text-white/50")} ${paragraphSizeClass(tagSubtextSize, "text-[clamp(12px,1.5vw,20px)] lg:text-[clamp(15px,1.5vw,24px)]")} tracking-[0.2em] block opacity-0 mt-1 md:mt-2`}>
             {tagSubtext || "The Imperial Stone of Italy"}
           </span>
         </div>

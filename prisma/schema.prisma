@@ -180,8 +180,11 @@ model Settings {
   heroButtonLink String?
 
   // Homepage Brand Intro section — editable from Admin > Homepage.
-  brandTagImage   String? // top "Il Gres Imperiale d'Italia" tag graphic
-  brandTagSubtext String? // small caption under the tag graphic
+  brandTagImage        String? // top "Il Gres Imperiale d'Italia" tag graphic
+  brandTagSubtext      String? // small caption under the tag graphic
+  brandTagSubtextColor String?
+  brandTagSubtextFont  String?
+  brandTagSubtextSize  String?
   brandImg        String? // middle NOBILITA logo image
   brandSubtitle   String? @db.Text // description paragraph
   brandSubtitleColor String?
@@ -221,15 +224,24 @@ model Settings {
   craftBadgeText      String?
   craftBadgeLink      String?
   craftCasaLabel      String? // small "CASA NOBILE" label, bottom corner
+  craftCasaLabelColor String?
+  craftCasaLabelFont  String?
+  craftCasaLabelSize  String?
 
   // Homepage Legacy section (triptych) — editable from Admin > Homepage.
-  legacyLeftImage    String? // left panel photo
-  legacyLeftLabel    String? // left panel caption
-  legacySketchImage  String? // center architectural sketch
-  legacyLogoImage    String? // center NOBILITA logo
-  legacyTaglineImage String? // center tagline graphic
-  legacyRightImage   String? // right panel photo
-  legacyRightLabel   String? // right panel caption
+  legacyLeftImage       String? // left panel photo
+  legacyLeftLabel       String? // left panel caption
+  legacyLeftLabelColor  String?
+  legacyLeftLabelFont   String?
+  legacyLeftLabelSize   String?
+  legacySketchImage     String? // center architectural sketch
+  legacyLogoImage       String? // center NOBILITA logo
+  legacyTaglineImage    String? // center tagline graphic
+  legacyRightImage      String? // right panel photo
+  legacyRightLabel      String? // right panel caption
+  legacyRightLabelColor String?
+  legacyRightLabelFont  String?
+  legacyRightLabelSize  String?
 
   // Homepage Applications section — editable from Admin > Homepage. The six
   // tiles themselves live in the ApplicationTile model below.
@@ -244,15 +256,42 @@ model Settings {
   dimHeadingColor String?
   dimHeadingFont  String?
   dimHeadingSize  String?
-  dimCol1Header String? // THICKNESS
-  dimCol1Item1  String?
-  dimCol1Item2  String?
-  dimCol2Header String? // DIMENSIONS
-  dimCol2Item1  String?
-  dimCol2Item2  String?
-  dimCol3Header String? // FORMAT
-  dimCol3Item1  String?
-  dimCol3Item2  String?
+  dimCol1Header      String? // THICKNESS
+  dimCol1HeaderColor String?
+  dimCol1HeaderFont  String?
+  dimCol1HeaderSize  String?
+  dimCol1Item1       String?
+  dimCol1Item1Color  String?
+  dimCol1Item1Font   String?
+  dimCol1Item1Size   String?
+  dimCol1Item2       String?
+  dimCol1Item2Color  String?
+  dimCol1Item2Font   String?
+  dimCol1Item2Size   String?
+  dimCol2Header      String? // DIMENSIONS
+  dimCol2HeaderColor String?
+  dimCol2HeaderFont  String?
+  dimCol2HeaderSize  String?
+  dimCol2Item1       String?
+  dimCol2Item1Color  String?
+  dimCol2Item1Font   String?
+  dimCol2Item1Size   String?
+  dimCol2Item2       String?
+  dimCol2Item2Color  String?
+  dimCol2Item2Font   String?
+  dimCol2Item2Size   String?
+  dimCol3Header      String? // FORMAT
+  dimCol3HeaderColor String?
+  dimCol3HeaderFont  String?
+  dimCol3HeaderSize  String?
+  dimCol3Item1       String?
+  dimCol3Item1Color  String?
+  dimCol3Item1Font   String?
+  dimCol3Item1Size   String?
+  dimCol3Item2       String?
+  dimCol3Item2Color  String?
+  dimCol3Item2Font   String?
+  dimCol3Item2Size   String?
   dimImage      String?
   dimBtnText    String?
   dimBtnLink    String?
@@ -599,7 +638,9 @@ model HeroSlide {
   id        String   @id @default(cuid())
   image     String
   label     String
-  textColor String   @default("white") // "white" | "black" — label contrast against the image
+  textColor String   @default("white") // "black" | "teal" | "grey" | "white" — same palette as colorClass()
+  labelFont String? // colorClass()-style Font token; null = default (Ivymode)
+  labelSize String? // colorClass()-style Size token; null = default (responsive)
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -612,7 +653,9 @@ model TechDataSlide {
   id        String   @id @default(cuid())
   image     String
   label     String
-  textColor String   @default("black") // "white" | "black" — label contrast against the image
+  textColor String   @default("black") // "black" | "teal" | "grey" | "white" — same palette as colorClass()
+  labelFont String? // colorClass()-style Font token; null = default (Ivymode)
+  labelSize String? // colorClass()-style Size token; null = default (responsive)
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -628,7 +671,12 @@ model ApplicationTile {
   productName String // which product opens when the tile is clicked
   row         Int // 1 or 2
   order       Int      @default(0) // position within its row
-  darkLabel   Boolean  @default(false) // true = dark label text, false = white
+  darkLabel   Boolean  @default(false) // true = dark label text, false = white — kept as the
+    // fallback/"Default" color labelColor resolves to when unset, so existing
+    // tiles render unchanged; labelColor (below) is the full-palette override.
+  labelColor  String? // colorClass()-style Color token; null = falls back to darkLabel above
+  labelFont   String? // colorClass()-style Font token; null = default (Didot)
+  labelSize   String? // colorClass()-style Size token; null = default (responsive)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -650,6 +698,9 @@ model HomeFinishTile {
   id          String   @id @default(cuid())
   order       Int      @default(0)
   name        String
+  nameFont    String? // colorClass()-style Font token; null = default (Didot Bold). Color
+    // stays tied to `textStyle` below (dark/light also drives the overlay wash).
+  nameSize    String? // colorClass()-style Size token; null = default (responsive)
   filterName  String
   image       String?
   desc        String?  @db.Text

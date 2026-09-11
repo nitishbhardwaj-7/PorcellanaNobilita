@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
-import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,14 +14,41 @@ interface Props {
   headingFont?: string;
   headingSize?: string;
   col1Header?: string;
+  col1HeaderColor?: string | null;
+  col1HeaderFont?: string | null;
+  col1HeaderSize?: string | null;
   col1Item1?: string;
+  col1Item1Color?: string | null;
+  col1Item1Font?: string | null;
+  col1Item1Size?: string | null;
   col1Item2?: string;
+  col1Item2Color?: string | null;
+  col1Item2Font?: string | null;
+  col1Item2Size?: string | null;
   col2Header?: string;
+  col2HeaderColor?: string | null;
+  col2HeaderFont?: string | null;
+  col2HeaderSize?: string | null;
   col2Item1?: string;
+  col2Item1Color?: string | null;
+  col2Item1Font?: string | null;
+  col2Item1Size?: string | null;
   col2Item2?: string;
+  col2Item2Color?: string | null;
+  col2Item2Font?: string | null;
+  col2Item2Size?: string | null;
   col3Header?: string;
+  col3HeaderColor?: string | null;
+  col3HeaderFont?: string | null;
+  col3HeaderSize?: string | null;
   col3Item1?: string;
+  col3Item1Color?: string | null;
+  col3Item1Font?: string | null;
+  col3Item1Size?: string | null;
   col3Item2?: string;
+  col3Item2Color?: string | null;
+  col3Item2Font?: string | null;
+  col3Item2Size?: string | null;
   image?: string;
   btnText?: string;
   btnLink?: string;
@@ -33,14 +60,41 @@ export default function DimensionsSection({
   headingFont,
   headingSize,
   col1Header,
+  col1HeaderColor,
+  col1HeaderFont,
+  col1HeaderSize,
   col1Item1,
+  col1Item1Color,
+  col1Item1Font,
+  col1Item1Size,
   col1Item2,
+  col1Item2Color,
+  col1Item2Font,
+  col1Item2Size,
   col2Header,
+  col2HeaderColor,
+  col2HeaderFont,
+  col2HeaderSize,
   col2Item1,
+  col2Item1Color,
+  col2Item1Font,
+  col2Item1Size,
   col2Item2,
+  col2Item2Color,
+  col2Item2Font,
+  col2Item2Size,
   col3Header,
+  col3HeaderColor,
+  col3HeaderFont,
+  col3HeaderSize,
   col3Item1,
+  col3Item1Color,
+  col3Item1Font,
+  col3Item1Size,
   col3Item2,
+  col3Item2Color,
+  col3Item2Font,
+  col3Item2Size,
   image,
   btnText,
   btnLink,
@@ -170,42 +224,39 @@ export default function DimensionsSection({
         {/* Column 1: THICKNESS */}
         <div className="dimensions-col flex flex-col items-center text-center space-y-[15px] md:space-y-[15px]">
           <h3
-            className="dimensions-col-header font-didotbold tracking-[0.15em] text-[#545759] uppercase text-[clamp(20px,2.5vw,28px)] opacity-0"
-            style={{ fontFamily: "var(--font-didotbold), Georgia, serif" }}
+            className={`dimensions-col-header ${fontClass(col1HeaderFont, "font-didotbold")} tracking-[0.15em] ${colorClass(col1HeaderColor, "text-[#545759]")} uppercase ${headingSizeClass(col1HeaderSize, "text-[clamp(20px,2.5vw,28px)]")} opacity-0`}
           >
             {col1Header || "THICKNESS"}
           </h3>
-          <div className="font-michroma font-light text-[#545759] space-y-[15px] md:space-y-[15px] uppercase tracking-wider text-[clamp(16px,2vw,22px)]">
-            <p className="dimensions-col-item opacity-0">{col1Item1 || "6.5 MM"}</p>
-            <p className="dimensions-col-item opacity-0">{col1Item2 || "12 MM"}</p>
+          <div className="space-y-[15px] md:space-y-[15px] uppercase tracking-wider">
+            <p className={`dimensions-col-item opacity-0 ${fontClass(col1Item1Font, "font-michroma")} font-light ${colorClass(col1Item1Color, "text-[#545759]")} ${paragraphSizeClass(col1Item1Size, "text-[clamp(16px,2vw,22px)]")}`}>{col1Item1 || "6.5 MM"}</p>
+            <p className={`dimensions-col-item opacity-0 ${fontClass(col1Item2Font, "font-michroma")} font-light ${colorClass(col1Item2Color, "text-[#545759]")} ${paragraphSizeClass(col1Item2Size, "text-[clamp(16px,2vw,22px)]")}`}>{col1Item2 || "12 MM"}</p>
           </div>
         </div>
 
         {/* Column 2: DIMENSIONS */}
         <div className="dimensions-col flex flex-col items-center text-center space-y-[15px] md:space-y-[15px]">
           <h3
-            className="dimensions-col-header font-didotbold tracking-[0.15em] text-[#545759] uppercase text-[clamp(20px,2.5vw,28px)] opacity-0"
-            style={{ fontFamily: "var(--font-didotbold), Georgia, serif" }}
+            className={`dimensions-col-header ${fontClass(col2HeaderFont, "font-didotbold")} tracking-[0.15em] ${colorClass(col2HeaderColor, "text-[#545759]")} uppercase ${headingSizeClass(col2HeaderSize, "text-[clamp(20px,2.5vw,28px)]")} opacity-0`}
           >
             {col2Header || "DIMENSIONS"}
           </h3>
-          <div className="font-michroma font-light text-[#545759] space-y-[15px] md:space-y-[15px] uppercase tracking-wider text-[clamp(16px,2vw,22px)]">
-            <p className="dimensions-col-item opacity-0">{col2Item1 || "1600 X 3200 MM"}</p>
-            <p className="dimensions-col-item opacity-0">{col2Item2 || "1620 X 3240 MM"}</p>
+          <div className="space-y-[15px] md:space-y-[15px] uppercase tracking-wider">
+            <p className={`dimensions-col-item opacity-0 ${fontClass(col2Item1Font, "font-michroma")} font-light ${colorClass(col2Item1Color, "text-[#545759]")} ${paragraphSizeClass(col2Item1Size, "text-[clamp(16px,2vw,22px)]")}`}>{col2Item1 || "1600 X 3200 MM"}</p>
+            <p className={`dimensions-col-item opacity-0 ${fontClass(col2Item2Font, "font-michroma")} font-light ${colorClass(col2Item2Color, "text-[#545759]")} ${paragraphSizeClass(col2Item2Size, "text-[clamp(16px,2vw,22px)]")}`}>{col2Item2 || "1620 X 3240 MM"}</p>
           </div>
         </div>
 
         {/* Column 3: FORMAT */}
         <div className="dimensions-col flex flex-col items-center text-center space-y-[15px] md:space-y-[15px]">
           <h3
-            className="dimensions-col-header font-didotbold tracking-[0.15em] text-[#545759] uppercase text-[clamp(20px,2.5vw,28px)] opacity-0"
-            style={{ fontFamily: "var(--font-didotbold)" }}
+            className={`dimensions-col-header ${fontClass(col3HeaderFont, "font-didotbold")} tracking-[0.15em] ${colorClass(col3HeaderColor, "text-[#545759]")} uppercase ${headingSizeClass(col3HeaderSize, "text-[clamp(20px,2.5vw,28px)]")} opacity-0`}
           >
             {col3Header || "FORMAT"}
           </h3>
-          <div className="font-michroma font-light text-[#545759] space-y-[15px] md:space-y-[15px] uppercase tracking-wider text-[clamp(16px,2vw,22px)]">
-            <p className="dimensions-col-item opacity-0">{col3Item1 || "RECTIFIED"}</p>
-            <p className="dimensions-col-item opacity-0">{col3Item2 || "GROSS"}</p>
+          <div className="space-y-[15px] md:space-y-[15px] uppercase tracking-wider">
+            <p className={`dimensions-col-item opacity-0 ${fontClass(col3Item1Font, "font-michroma")} font-light ${colorClass(col3Item1Color, "text-[#545759]")} ${paragraphSizeClass(col3Item1Size, "text-[clamp(16px,2vw,22px)]")}`}>{col3Item1 || "RECTIFIED"}</p>
+            <p className={`dimensions-col-item opacity-0 ${fontClass(col3Item2Font, "font-michroma")} font-light ${colorClass(col3Item2Color, "text-[#545759]")} ${paragraphSizeClass(col3Item2Size, "text-[clamp(16px,2vw,22px)]")}`}>{col3Item2 || "GROSS"}</p>
           </div>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/l
 
 export interface HomeFinishTile {
   name: string;
+  nameFont?: string | null;
+  nameSize?: string | null;
   filterName: string;
   image: string;
   desc: string;
@@ -165,9 +167,8 @@ export default function FinishesSection({
                     <motion.h3
                       animate={{ letterSpacing: isHovered ? "0.28em" : "0.2em" }}
                       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                      className={`font-didotbold font-medium uppercase text-[clamp(14px,2.2vw,28px)] ${finish.darkText ? 'text-[#545759]' : 'text-white'
+                      className={`${fontClass(finish.nameFont, "font-didotbold")} font-medium uppercase ${paragraphSizeClass(finish.nameSize, "text-[clamp(14px,2.2vw,28px)]")} ${finish.darkText ? 'text-[#545759]' : 'text-white'
                         }`}
-                      style={{ fontFamily: "var(--font-didotbold)" }}
                     >
                       {finish.name}
                     </motion.h3>
