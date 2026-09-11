@@ -22,14 +22,18 @@ const DEFAULT_LABEL_TO_VALUE: Record<string, string> = {
 // Replaces the "Default" option's label with "<actual value> (Default)" so
 // admins can see what "Default" resolves to for THIS field without having
 // to check the live page — e.g. "Ivymode (Default)" instead of a bare
-// "Default". Also drops the plain option that would otherwise duplicate it
-// (e.g. a separate "Ivymode" sitting right below "Ivymode (Default)") — the
-// relabeled Default option already covers that choice. The duplicate is
-// kept, unrelabeled, if it's the field's *current* stored value — e.g. a
-// field explicitly saved as "ivymode" before this field had a default
-// label keeps its own distinct "Ivymode" option so the dropdown still shows
-// a real selection instead of silently falling back to none. Leaves every
-// other option (and the whole list, when no label is given) untouched.
+// "Default". When the matched option's own label carries a color code (e.g.
+// COLOR_OPTIONS' "Grey (#545759)"), that code is pulled in too — "Grey
+// (#545759) (Default)" — read straight from COLOR_OPTIONS so it can never
+// drift out of sync if the code ever changes there. Also drops the plain
+// option that would otherwise duplicate it (e.g. a separate "Ivymode"
+// sitting right below "Ivymode (Default)") — the relabeled Default option
+// already covers that choice. The duplicate is kept, unrelabeled, if it's
+// the field's *current* stored value — e.g. a field explicitly saved as
+// "ivymode" before this field had a default label keeps its own distinct
+// "Ivymode" option so the dropdown still shows a real selection instead of
+// silently falling back to none. Leaves every other option (and the whole
+// list, when no label is given) untouched.
 function withDefaultLabel(
   options: { value: string; label: string }[],
   actualLabel: string | undefined,
@@ -37,9 +41,12 @@ function withDefaultLabel(
 ): { value: string; label: string }[] {
   if (!actualLabel) return options;
   const duplicateValue = DEFAULT_LABEL_TO_VALUE[actualLabel];
+  const matchedOption = options.find((o) => o.value === duplicateValue);
+  const codeMatch = matchedOption?.label.match(/\(#[0-9a-fA-F]{3,6}\)/);
+  const defaultLabel = codeMatch ? `${actualLabel} ${codeMatch[0]}` : actualLabel;
   return options
     .filter((o) => o.value !== duplicateValue || o.value === currentValue)
-    .map((o) => (o.value === "default" ? { ...o, label: `${actualLabel} (Default)` } : o));
+    .map((o) => (o.value === "default" ? { ...o, label: `${defaultLabel} (Default)` } : o));
 }
 
 function MiniSelect({
