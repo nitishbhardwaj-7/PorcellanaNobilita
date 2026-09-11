@@ -13,7 +13,7 @@ export const COLOR_OPTIONS = [
   { value: "default", label: "Default" },
   { value: "black", label: "Black" },
   { value: "teal", label: "Teal (#007190)" },
-  { value: "grey", label: "Grey (#8b8b8b)" },
+  { value: "grey", label: "Grey (#545759)" },
   { value: "white", label: "White" },
 ];
 
@@ -65,7 +65,7 @@ export const PARAGRAPH_SIZE_OPTIONS = [
 const COLOR_CLASSES: Record<string, string> = {
   black: "text-black",
   teal: "text-[#007190]",
-  grey: "text-[#8b8b8b]",
+  grey: "text-[#545759]",
   white: "text-white",
 };
 
