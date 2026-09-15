@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Mail, MailOpen, Trash2, Phone } from "lucide-react";
+import { classifyEmail } from "@/lib/emailClassifier";
 
 interface Submission {
   id: string;
@@ -24,9 +25,10 @@ interface SubmissionsListProps {
   noun?: string; // e.g. "Downloads" instead of "Submissions", for catalog/datasheet
   showLanguage?: boolean; // whether to show the requested language under the contact name — off for catalog, which only has one file
   splitByProduct?: boolean; // show separate "Contact Us" vs "Product Enquiry" counters — for Queries, which mixes both under one type
+  showEmailType?: boolean; // show Personal/Professional counts + a per-row tag, based on the email's domain — for Queries
 }
 
-export default function SubmissionsList({ type, label, eyebrow, showMessage = true, noun = "Submissions", showLanguage = true, splitByProduct = false }: SubmissionsListProps) {
+export default function SubmissionsList({ type, label, eyebrow, showMessage = true, noun = "Submissions", showLanguage = true, splitByProduct = false, showEmailType = false }: SubmissionsListProps) {
   const [items, setItems] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -93,6 +95,8 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
   const unreadCount = items.filter((i) => !i.isRead).length;
   const contactUsCount = items.filter((i) => !i.product).length;
   const productEnquiryCount = items.filter((i) => i.product).length;
+  const personalCount = items.filter((i) => classifyEmail(i.email) === "Personal").length;
+  const professionalCount = items.filter((i) => classifyEmail(i.email) === "Professional").length;
 
   if (loading) {
     return (
@@ -117,6 +121,24 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
           </h2>
         </div>
         <div className="flex items-center gap-2">
+          {showEmailType && (
+            <>
+              <span
+                className="px-3 py-1 text-[10px] tracking-[0.2em] uppercase border border-[#1a1a1a]/15 text-[#1a1a1a]/50"
+                style={fontMichroma}
+                title="Company/work email domains"
+              >
+                {professionalCount} Professional
+              </span>
+              <span
+                className="px-3 py-1 text-[10px] tracking-[0.2em] uppercase border border-[#1a1a1a]/15 text-[#1a1a1a]/50"
+                style={fontMichroma}
+                title="Gmail, Yahoo, Outlook, iCloud, etc."
+              >
+                {personalCount} Personal
+              </span>
+            </>
+          )}
           {splitByProduct && (
             <>
               <span
@@ -199,9 +221,22 @@ export default function SubmissionsList({ type, label, eyebrow, showMessage = tr
 
               {/* Email / Phone */}
               <div className="space-y-0.5">
-                <a href={`mailto:${item.email}`} className="block text-[12px] text-[#1a7a96] hover:underline truncate">
-                  {item.email}
-                </a>
+                <div className="flex items-center gap-1.5">
+                  <a href={`mailto:${item.email}`} className="text-[12px] text-[#1a7a96] hover:underline truncate">
+                    {item.email}
+                  </a>
+                  {showEmailType && (
+                    <span
+                      className={`shrink-0 px-1.5 py-0.5 text-[8px] tracking-[0.1em] uppercase border ${
+                        classifyEmail(item.email) === "Personal"
+                          ? "border-[#8b8b8b]/30 text-[#8b8b8b]"
+                          : "border-[#1a7a96]/30 text-[#1a7a96]"
+                      }`}
+                    >
+                      {classifyEmail(item.email)}
+                    </span>
+                  )}
+                </div>
                 {item.phone && (
                   <a
                     href={`tel:${item.phone}`}
