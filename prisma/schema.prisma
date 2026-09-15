@@ -432,6 +432,14 @@ model Settings {
   miSec3Line2Font       String?
   miSec3Line2Size       String?
   miSec3LeftImage       String? // factory photo
+  // Left image caption is off by default — no caption ever shown for this
+  // image until an admin ticks miSec3LeftImageLabelShow on (Admin > Made in
+  // Italy), unlike the right image's caption, which is always shown.
+  miSec3LeftImageLabel      String?
+  miSec3LeftImageLabelColor String?
+  miSec3LeftImageLabelFont  String?
+  miSec3LeftImageLabelSize  String?
+  miSec3LeftImageLabelShow  Boolean @default(false)
   miSec3RightImage      String? // large-format slab processing unit photo
   miSec3RightImageLabel String? // default "LARGE FORMAT SLABS PROCESSING UNIT"
   miSec3RightImageLabelColor String?

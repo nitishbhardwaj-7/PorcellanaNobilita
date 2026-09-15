@@ -18,6 +18,7 @@ const STYLED_FIELDS = [
   "miSec2ImageLabel",
   "miSec3Line1",
   "miSec3Line2",
+  "miSec3LeftImageLabel",
   "miSec3RightImageLabel",
   "miSec3BottomPara",
   "miSec4Label",
@@ -35,6 +36,7 @@ const COLOR_DEFAULTS: Record<(typeof STYLED_FIELDS)[number], string> = {
   miSec2ImageLabel: "White",
   miSec3Line1: "Grey",
   miSec3Line2: "Grey",
+  miSec3LeftImageLabel: "White",
   miSec3RightImageLabel: "White",
   miSec3BottomPara: "Grey",
   miSec4Label: "White",
@@ -72,6 +74,11 @@ interface MiSettings {
   miSec3Line2Font: string;
   miSec3Line2Size: string;
   miSec3LeftImage: string;
+  miSec3LeftImageLabel: string;
+  miSec3LeftImageLabelColor: string;
+  miSec3LeftImageLabelFont: string;
+  miSec3LeftImageLabelSize: string;
+  miSec3LeftImageLabelShow: boolean;
   miSec3RightImage: string;
   miSec3RightImageLabel: string;
   miSec3RightImageLabelColor: string;
@@ -122,6 +129,11 @@ const EMPTY: MiSettings = {
   miSec3Line2Font: "default",
   miSec3Line2Size: "default",
   miSec3LeftImage: "",
+  miSec3LeftImageLabel: "",
+  miSec3LeftImageLabelColor: "default",
+  miSec3LeftImageLabelFont: "default",
+  miSec3LeftImageLabelSize: "default",
+  miSec3LeftImageLabelShow: false,
   miSec3RightImage: "",
   miSec3RightImageLabel: "",
   miSec3RightImageLabelColor: "default",
@@ -156,11 +168,11 @@ function FieldStyleRow({
   const sizeKey = `${field}Size` as keyof MiSettings;
   return (
     <StyleRow
-      color={settings[colorKey]}
+      color={settings[colorKey] as string}
       onColorChange={(v) => set(colorKey, v)}
-      font={settings[fontKey]}
+      font={settings[fontKey] as string}
       onFontChange={(v) => set(fontKey, v)}
-      size={settings[sizeKey]}
+      size={settings[sizeKey] as string}
       onSizeChange={(v) => set(sizeKey, v)}
       sizeOptions={HEADING_FIELDS.has(field) ? HEADING_SIZE_OPTIONS : PARAGRAPH_SIZE_OPTIONS}
       colorDefaultLabel={COLOR_DEFAULTS[field]}
@@ -257,6 +269,8 @@ export default function MadeInItalyAdminPage() {
             miSec3Line1: s.miSec3Line1 || "",
             miSec3Line2: s.miSec3Line2 || "",
             miSec3LeftImage: s.miSec3LeftImage || "",
+            miSec3LeftImageLabel: s.miSec3LeftImageLabel || "",
+            miSec3LeftImageLabelShow: !!s.miSec3LeftImageLabelShow,
             miSec3RightImage: s.miSec3RightImage || "",
             miSec3RightImageLabel: s.miSec3RightImageLabel || "",
             miSec3BottomPara: s.miSec3BottomPara || "",
@@ -286,7 +300,7 @@ export default function MadeInItalyAdminPage() {
     setSavingSection(section);
     setError(null);
     try {
-      const patch: Record<string, string> = {};
+      const patch: Record<string, string | boolean> = {};
       fields.forEach((f) => { patch[f] = settings[f]; });
       const res = await fetch("/api/settings", {
         method: "PATCH",
@@ -472,6 +486,29 @@ export default function MadeInItalyAdminPage() {
           <ImageField label="Right Image (Processing Unit)" value={settings.miSec3RightImage} onChange={(v) => set("miSec3RightImage", v)} defaultSrc="/images/made-in-italy/continua-impianto-hd-2.jpg" />
         </div>
         <div className="space-y-1.5">
+          <label className="flex items-center gap-2 text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40 cursor-pointer select-none" style={fontMichroma}>
+            <input
+              type="checkbox"
+              checked={settings.miSec3LeftImageLabelShow}
+              onChange={(e) => setSettings((p) => ({ ...p, miSec3LeftImageLabelShow: e.target.checked }))}
+              className="accent-[#007190]"
+            />
+            Show Left Image Caption
+          </label>
+          {settings.miSec3LeftImageLabelShow && (
+            <>
+              <input
+                type="text"
+                value={settings.miSec3LeftImageLabel}
+                onChange={(e) => set("miSec3LeftImageLabel", e.target.value)}
+                placeholder="FACTORY"
+                className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+              />
+              <FieldStyleRow field="miSec3LeftImageLabel" settings={settings} set={set} />
+            </>
+          )}
+        </div>
+        <div className="space-y-1.5">
           <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Right Image Caption</label>
           <input
             type="text"
@@ -498,8 +535,8 @@ export default function MadeInItalyAdminPage() {
           section="sec3"
           label="Save Section"
           fields={[
-            "miSec3Line1", "miSec3Line2", "miSec3LeftImage", "miSec3RightImage", "miSec3RightImageLabel", "miSec3BottomPara",
-            ...styleFields("miSec3Line1"), ...styleFields("miSec3Line2"), ...styleFields("miSec3RightImageLabel"), ...styleFields("miSec3BottomPara"),
+            "miSec3Line1", "miSec3Line2", "miSec3LeftImage", "miSec3LeftImageLabel", "miSec3LeftImageLabelShow", "miSec3RightImage", "miSec3RightImageLabel", "miSec3BottomPara",
+            ...styleFields("miSec3Line1"), ...styleFields("miSec3Line2"), ...styleFields("miSec3LeftImageLabel"), ...styleFields("miSec3RightImageLabel"), ...styleFields("miSec3BottomPara"),
           ]}
         />
       </div>

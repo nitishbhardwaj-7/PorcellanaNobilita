@@ -58,6 +58,11 @@ interface MadeInItalyCmsData {
   miSec3Line2Font?: string | null;
   miSec3Line2Size?: string | null;
   miSec3LeftImage?: string | null;
+  miSec3LeftImageLabel?: string | null;
+  miSec3LeftImageLabelColor?: string | null;
+  miSec3LeftImageLabelFont?: string | null;
+  miSec3LeftImageLabelSize?: string | null;
+  miSec3LeftImageLabelShow?: boolean | null;
   miSec3RightImage?: string | null;
   miSec3RightImageLabel?: string | null;
   miSec3RightImageLabelColor?: string | null;
@@ -325,6 +330,14 @@ export default function MadeInItalyPage({ cmsData }: { cmsData?: MadeInItalyCmsD
                 className="sec3-img-inner-left w-full h-full object-cover block transform-gpu scale-[1.18]"
                 loading="lazy"
               />
+              {/* Overlay Text — hidden unless explicitly turned on in the admin */}
+              {d.miSec3LeftImageLabelShow && (
+                <div className="absolute bottom-2 right-2 md:bottom-2 md:right-3 z-10">
+                  <span className={`${fontClass(d.miSec3LeftImageLabelFont, "font-ivymode")} font-light ${colorClass(d.miSec3LeftImageLabelColor, "text-white")} uppercase tracking-[0.15em] ${paragraphSizeClass(d.miSec3LeftImageLabelSize, "text-[clamp(10px,1.2vw,16px)] 2xl:text-[20px]")} drop-shadow-md`}>
+                    {d.miSec3LeftImageLabel || "FACTORY"}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Right Image */}
