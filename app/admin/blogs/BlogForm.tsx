@@ -158,6 +158,9 @@ type ContentBlock = {
   textColor?: "default" | "black" | "teal";
   textFont?: "ivymode" | "michroma";
   textSize?: string;
+  // paragraph, heading, point: text alignment within the article column.
+  // "left" (the original default) when unset.
+  align?: "left" | "center" | "right";
 };
 
 // For heading lines only — there's no natural "inherited" color for a
@@ -176,6 +179,11 @@ const COLOR_OPTIONS_WITH_DEFAULT = [
 const FONT_OPTIONS = [
   { value: "ivymode", label: "Ivymode" },
   { value: "michroma", label: "Michroma" },
+];
+const ALIGN_OPTIONS = [
+  { value: "left", label: "Left (Default)" },
+  { value: "center", label: "Center" },
+  { value: "right", label: "Right" },
 ];
 // Each size dropdown shows its actual pixel value so the size difference
 // between options is concrete rather than a vague "Small/Large" guess.
@@ -345,7 +353,7 @@ function ContentBlockEditor({
                 placeholder="Paragraph text…"
                 className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
               />
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
                   <MiniSelect value={block.color || "default"} onChange={(v) => updateBlock(idx, { color: v as ContentBlock["color"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
@@ -357,6 +365,10 @@ function ContentBlockEditor({
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
                   <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={PARAGRAPH_SIZE_OPTIONS} />
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Align</label>
+                  <MiniSelect value={block.align || "left"} onChange={(v) => updateBlock(idx, { align: v as ContentBlock["align"] })} options={ALIGN_OPTIONS} />
                 </div>
               </div>
             </div>
@@ -387,6 +399,10 @@ function ContentBlockEditor({
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
                   <MiniSelect value={block.size || "standard"} onChange={(v) => updateBlock(idx, { size: v as ContentBlock["size"] })} options={HEADING_SIZE_OPTIONS} />
+                </div>
+                <div>
+                  <label className="block text-[8px] text-[#8b8b8b] uppercase">Align</label>
+                  <MiniSelect value={block.align || "left"} onChange={(v) => updateBlock(idx, { align: v as ContentBlock["align"] })} options={ALIGN_OPTIONS} />
                 </div>
               </div>
               <p className="text-[10px] text-[#8b8b8b]">A new line in the text above becomes the "2nd line" — each line's color is independent, so you can put teal first, black second, or the other way around.</p>
@@ -429,7 +445,7 @@ function ContentBlockEditor({
                   className="block w-full border border-[#1a1a1a]/15 bg-white px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed mt-2"
                 />
                 <p className="text-[8px] text-[#8b8b8b] uppercase tracking-wider">Description style</p>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
                     <MiniSelect value={block.textColor || "default"} onChange={(v) => updateBlock(idx, { textColor: v as ContentBlock["textColor"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
@@ -441,6 +457,10 @@ function ContentBlockEditor({
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
                     <MiniSelect value={block.textSize || "standard"} onChange={(v) => updateBlock(idx, { textSize: v as ContentBlock["textSize"] })} options={PARAGRAPH_SIZE_OPTIONS} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Align</label>
+                    <MiniSelect value={block.align || "left"} onChange={(v) => updateBlock(idx, { align: v as ContentBlock["align"] })} options={ALIGN_OPTIONS} />
                   </div>
                 </div>
               </div>

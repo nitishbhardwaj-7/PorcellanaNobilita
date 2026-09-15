@@ -101,7 +101,16 @@ interface ContentBlock {
   textColor?: "default" | "black" | "teal";
   textFont?: "ivymode" | "michroma";
   textSize?: string;
+  // paragraph, heading, point: text alignment within the article column.
+  // "left" (the original default) when unset.
+  align?: "left" | "center" | "right";
 }
+
+const ALIGN_CLASSES: Record<string, string> = {
+  left: "text-left",
+  center: "text-center",
+  right: "text-right",
+};
 
 export interface BlogPost {
   slug: string;
@@ -210,7 +219,7 @@ export default function BlogDetailView({
                 return (
                   <p
                     key={idx}
-                    className={`font-light text-left ${BLOCK_COLOR_CLASSES[block.color || "default"]} ${
+                    className={`font-light ${ALIGN_CLASSES[block.align || "left"]} ${BLOCK_COLOR_CLASSES[block.color || "default"]} ${
                       block.font ? BLOCK_FONT_CLASSES[block.font] : ""
                     } ${PARAGRAPH_SIZE_CLASSES[block.size || "standard"] || PARAGRAPH_SIZE_CLASSES.standard}`}
                   >
@@ -226,7 +235,7 @@ export default function BlogDetailView({
                     key={idx}
                     className={`${block.font ? BLOCK_FONT_CLASSES[block.font] : "font-ivymode"} font-medium ${
                       HEADING_SIZE_CLASSES[block.size || "standard"] || HEADING_SIZE_CLASSES.standard
-                    } tracking-[0.05em] uppercase leading-tight pt-6 pb-2`}
+                    } tracking-[0.05em] uppercase leading-tight pt-6 pb-2 ${ALIGN_CLASSES[block.align || "left"]}`}
                   >
                     {headingLines.map((lineText, lineIdx) => (
                       <span
@@ -241,7 +250,7 @@ export default function BlogDetailView({
               }
               case "point":
                 return (
-                  <p key={idx} className="font-light text-left">
+                  <p key={idx} className={`font-light ${ALIGN_CLASSES[block.align || "left"]}`}>
                     <strong
                       className={`font-medium mr-2 tracking-widest ${BLOCK_COLOR_CLASSES[block.labelColor || "teal"]} ${
                         BLOCK_FONT_CLASSES[block.labelFont || "ivymode"]
