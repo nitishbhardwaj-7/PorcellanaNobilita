@@ -10,7 +10,13 @@ export async function PUT(
     const body = await request.json();
     const {
       title,
+      titleColor,
+      titleFont,
+      titleSize,
       subtitle,
+      subtitleColor,
+      subtitleFont,
+      subtitleSize,
       description,
       descriptionColor,
       descriptionFont,
@@ -25,7 +31,13 @@ export async function PUT(
       where: { id: params.id },
       data: {
         ...(title !== undefined && { title }),
+        ...(titleColor !== undefined && { titleColor }),
+        ...(titleFont !== undefined && { titleFont }),
+        ...(titleSize !== undefined && { titleSize }),
         ...(subtitle !== undefined && { subtitle }),
+        ...(subtitleColor !== undefined && { subtitleColor }),
+        ...(subtitleFont !== undefined && { subtitleFont }),
+        ...(subtitleSize !== undefined && { subtitleSize }),
         ...(description !== undefined && { description }),
         ...(descriptionColor !== undefined && { descriptionColor }),
         ...(descriptionFont !== undefined && { descriptionFont }),

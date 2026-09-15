@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, X, ChevronDown, GripVertical } from "lucide-react";
 import { MediaPickerField, MediaPickerButton } from "../_components/MediaPicker";
+import { StyleRow } from "../_components/StyleControls";
+import { HEADING_SIZE_OPTIONS } from "@/lib/textStyle";
 
 function CustomSelect({
   value,
@@ -170,6 +172,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
 
   const [form, setForm] = useState({
     name: "",
+    nameColor: "default",
+    nameFont: "default",
+    nameSize: "default",
     slug: "",
     description: "",
     color: "White",
@@ -240,6 +245,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
             const p = data.data;
             setForm({
               name: p.name,
+              nameColor: p.nameColor || "default",
+              nameFont: p.nameFont || "default",
+              nameSize: p.nameSize || "default",
               slug: p.slug,
               description: p.description || "",
               color: p.color || "White",
@@ -387,6 +395,21 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   onChange={(e) => handleNameChange(e.target.value)}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
                   placeholder="e.g. Statuario Ultimo"
+                />
+                <p className="text-[9px] text-[#8b8b8b]">
+                  Color/Font/Size below apply only to the large title shown when a visitor opens this product's popup —
+                  not the name shown on the Explore Collection grid tile, which stays consistent across every product.
+                </p>
+                <StyleRow
+                  color={form.nameColor}
+                  onColorChange={(v) => setForm((p) => ({ ...p, nameColor: v }))}
+                  font={form.nameFont}
+                  onFontChange={(v) => setForm((p) => ({ ...p, nameFont: v }))}
+                  size={form.nameSize}
+                  onSizeChange={(v) => setForm((p) => ({ ...p, nameSize: v }))}
+                  sizeOptions={HEADING_SIZE_OPTIONS}
+                  colorDefaultLabel={form.isDark ? "White" : "Black"}
+                  fontDefaultLabel="Ivymode"
                 />
               </div>
 

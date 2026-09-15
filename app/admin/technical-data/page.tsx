@@ -10,7 +10,13 @@ interface Certification {
   id: string;
   order: number;
   title: string;
+  titleColor: string | null;
+  titleFont: string | null;
+  titleSize: string | null;
   subtitle: string | null;
+  subtitleColor: string | null;
+  subtitleFont: string | null;
+  subtitleSize: string | null;
   description: string | null;
   descriptionColor: string | null;
   descriptionFont: string | null;
@@ -952,6 +958,19 @@ export default function TechnicalDataAdminPage() {
                       onChange={(e) => updateCertification(cert.id, { title: e.target.value })}
                       className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
                     />
+                    <div className="mt-1">
+                      <StyleRow
+                        color={cert.titleColor || "default"}
+                        onColorChange={(v) => updateCertification(cert.id, { titleColor: v })}
+                        font={cert.titleFont || "default"}
+                        onFontChange={(v) => updateCertification(cert.id, { titleFont: v })}
+                        size={cert.titleSize || "default"}
+                        onSizeChange={(v) => updateCertification(cert.id, { titleSize: v })}
+                        sizeOptions={HEADING_SIZE_OPTIONS}
+                        colorDefaultLabel="Grey"
+                        fontDefaultLabel="Ivymode"
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Subtitle</label>
@@ -962,6 +981,19 @@ export default function TechnicalDataAdminPage() {
                       placeholder="e.g. CERTIFIED ITALIAN CERAMIC PRODUCTION"
                       className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
                     />
+                    <div className="mt-1">
+                      <StyleRow
+                        color={cert.subtitleColor || "default"}
+                        onColorChange={(v) => updateCertification(cert.id, { subtitleColor: v })}
+                        font={cert.subtitleFont || "default"}
+                        onFontChange={(v) => updateCertification(cert.id, { subtitleFont: v })}
+                        size={cert.subtitleSize || "default"}
+                        onSizeChange={(v) => updateCertification(cert.id, { subtitleSize: v })}
+                        sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                        colorDefaultLabel="Grey"
+                        fontDefaultLabel="Ivymode"
+                      />
+                    </div>
                   </div>
                 </div>
 

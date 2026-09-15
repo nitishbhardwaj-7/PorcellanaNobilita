@@ -69,7 +69,13 @@ interface TdCmsData {
 interface CertificationItem {
   id: string;
   title: string;
+  titleColor?: string | null;
+  titleFont?: string | null;
+  titleSize?: string | null;
   subtitle?: string | null;
+  subtitleColor?: string | null;
+  subtitleFont?: string | null;
+  subtitleSize?: string | null;
   description?: string | null;
   descriptionColor?: string | null;
   descriptionFont?: string | null;
@@ -1000,11 +1006,11 @@ export default function TechnicalDataPage({ cmsData }: { cmsData?: TdCmsData | n
               <div key={cert.id} className="cert-card flex flex-col h-full">
                 {/* Header */}
                 <div className="space-y-0">
-                  <h3 className="font-ivymode font-light text-[clamp(20px,2.2vw,34px)] text-[#444444] leading-tight whitespace-normal lg:whitespace-nowrap">
+                  <h3 className={`${fontClass(cert.titleFont, "font-ivymode")} font-light ${headingSizeClass(cert.titleSize, "text-[clamp(20px,2.2vw,34px)]")} ${colorClass(cert.titleColor, "text-[#444444]")} leading-tight whitespace-normal lg:whitespace-nowrap`}>
                     {cert.title}
                   </h3>
                   {cert.subtitle && (
-                    <p className="font-ivymode font-normal text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] tracking-[0.10em] uppercase text-[#666666]">
+                    <p className={`${fontClass(cert.subtitleFont, "font-ivymode")} font-normal ${paragraphSizeClass(cert.subtitleSize, "text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px]")} tracking-[0.10em] uppercase ${colorClass(cert.subtitleColor, "text-[#666666]")}`}>
                       {cert.subtitle}
                     </p>
                   )}

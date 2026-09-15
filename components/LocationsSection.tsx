@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -16,8 +17,14 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), {
 
 interface LocationDetail {
   name: string;
+  nameColor?: string | null;
+  nameFont?: string | null;
+  nameSize?: string | null;
   mapEmbedUrl: string;
   address: string;
+  addressColor?: string | null;
+  addressFont?: string | null;
+  addressSize?: string | null;
   phone: string;
   email: string;
   googleMapsUrl: string;
@@ -32,9 +39,15 @@ interface LocationDetail {
 interface LocationCms {
   id: string;
   name: string;
+  nameColor?: string | null;
+  nameFont?: string | null;
+  nameSize?: string | null;
   line1?: string | null;
   line2?: string | null;
   address?: string | null;
+  addressColor?: string | null;
+  addressFont?: string | null;
+  addressSize?: string | null;
   phone?: string | null;
   email?: string | null;
   mapEmbedUrl?: string | null;
@@ -136,9 +149,15 @@ export default function LocationsSection({ locations: cmsLocations }: { location
     cmsLocations && cmsLocations.length > 0
       ? cmsLocations.map((l) => ({
           name: l.name,
+          nameColor: l.nameColor,
+          nameFont: l.nameFont,
+          nameSize: l.nameSize,
           line1: l.line1 || "",
           line2: l.line2 || "",
           address: l.address || "",
+          addressColor: l.addressColor,
+          addressFont: l.addressFont,
+          addressSize: l.addressSize,
           phone: l.phone || "",
           email: l.email || "",
           mapEmbedUrl: l.mapEmbedUrl || "",
@@ -224,7 +243,7 @@ export default function LocationsSection({ locations: cmsLocations }: { location
               >
                 {/* Location Tab Header */}
                 <div className="flex justify-center">
-                  <h3 className="font-ivymode text-[clamp(22px,2.2vw,28px)] text-[#3d3d3d] tracking-[0.1em] font-light text-center">
+                  <h3 className={`${fontClass(loc.nameFont, "font-ivymode")} ${headingSizeClass(loc.nameSize, "text-[clamp(22px,2.2vw,28px)]")} ${colorClass(loc.nameColor, "text-[#3d3d3d]")} tracking-[0.1em] font-light text-center`}>
                     {loc.name}
                   </h3>
                 </div>
@@ -248,7 +267,7 @@ export default function LocationsSection({ locations: cmsLocations }: { location
                     {/* Address */}
                     <div className="flex items-start gap-3">
                       <MapPinIcon />
-                      <span className="font-montserrat text-[13px] leading-relaxed text-[#545759]">
+                      <span className={`${fontClass(loc.addressFont, "font-montserrat")} ${paragraphSizeClass(loc.addressSize, "text-[13px]")} leading-relaxed ${colorClass(loc.addressColor, "text-[#545759]")}`}>
                         {loc.address}
                       </span>
                     </div>

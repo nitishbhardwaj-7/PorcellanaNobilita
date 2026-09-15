@@ -38,6 +38,14 @@ model User {
 model Product {
   id               String   @id @default(cuid())
   name             String
+  // Color/Font/Size for how the product's name renders as the big heading
+  // in the Featured Product modal only — NOT the Explore Collection grid
+  // tile, which stays uniform typography across every product for a clean
+  // catalog grid. Default color there is a dynamic black/white choice
+  // (config.isDark), preserved as the fallback when these are unset.
+  nameColor        String?
+  nameFont         String?
+  nameSize         String?
   slug             String   @unique
   description      String?  @db.Text
   color            String   @default("White")
@@ -810,9 +818,15 @@ model Location {
   id            String   @id @default(cuid())
   order         Int      @default(0)
   name          String
+  nameColor     String?
+  nameFont      String?
+  nameSize      String?
   line1         String? // map-pin label, line 1 — e.g. "Glaze Granite & Marble,"
   line2         String? // map-pin label, line 2 — e.g. "EIC Sharjah, UAE"
   address       String?  @db.Text
+  addressColor  String?
+  addressFont   String?
+  addressSize   String?
   phone         String?
   email         String?
   mapEmbedUrl   String?  @db.Text
@@ -832,7 +846,13 @@ model Certification {
   id               String   @id @default(cuid())
   order            Int      @default(0)
   title            String
+  titleColor       String?
+  titleFont        String?
+  titleSize        String?
   subtitle         String?
+  subtitleColor    String?
+  subtitleFont     String?
+  subtitleSize     String?
   description      String?  @db.Text
   descriptionColor String?
   descriptionFont  String?

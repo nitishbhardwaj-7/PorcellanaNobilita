@@ -5,6 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
 
 // Lazy-loaded video component using IntersectionObserver to prevent loading/playing lag
 function LazyVideo({ src, poster, className, controls = false, isParentReady = true }: { src: string; poster?: string; className?: string; controls?: boolean; isParentReady?: boolean }) {
@@ -101,6 +102,9 @@ interface SlabConfig {
   availableFaces?: string[];
   isHorizontalFace?: boolean;
   isDark?: boolean;
+  nameColor?: string | null;
+  nameFont?: string | null;
+  nameSize?: string | null;
 }
 
 const PRODUCT_CONFIGS: Record<string, SlabConfig> = {
@@ -516,6 +520,9 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
       bookmatchImg,
       isHorizontalFace,
       isDark,
+      nameColor: dbProduct?.nameColor,
+      nameFont: dbProduct?.nameFont,
+      nameSize: dbProduct?.nameSize,
     };
   }, [dbProducts, activeProduct]);
 
@@ -875,9 +882,7 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
             style={{ opacity: 0, transform: "translateY(30px)" }}
           >
             <h2
-              className={`font-ivymode text-[clamp(28px,4.5vw,66px)] tracking-[0.05em] uppercase font-light ${
-                config.isDark ? "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]" : "text-black"
-              }`}
+              className={`${fontClass(config.nameFont, "font-ivymode")} ${headingSizeClass(config.nameSize, "text-[clamp(28px,4.5vw,66px)]")} tracking-[0.05em] uppercase font-light ${colorClass(config.nameColor, config.isDark ? "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]" : "text-black")}`}
             >
               {activeProduct}
             </h2>

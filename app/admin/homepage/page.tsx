@@ -2820,9 +2820,15 @@ interface Location {
   id: string;
   order: number;
   name: string;
+  nameColor: string | null;
+  nameFont: string | null;
+  nameSize: string | null;
   line1: string | null;
   line2: string | null;
   address: string | null;
+  addressColor: string | null;
+  addressFont: string | null;
+  addressSize: string | null;
   phone: string | null;
   email: string | null;
   mapEmbedUrl: string | null;
@@ -2998,6 +3004,19 @@ function LocationsTab() {
                       placeholder="e.g. Sharjah"
                       className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none"
                     />
+                    <div className="mt-1">
+                      <StyleRow
+                        color={loc.nameColor || "default"}
+                        onColorChange={(v) => updateLocation(loc.id, { nameColor: v })}
+                        font={loc.nameFont || "default"}
+                        onFontChange={(v) => updateLocation(loc.id, { nameFont: v })}
+                        size={loc.nameSize || "default"}
+                        onSizeChange={(v) => updateLocation(loc.id, { nameSize: v })}
+                        sizeOptions={HEADING_SIZE_OPTIONS}
+                        colorDefaultLabel="Grey"
+                        fontDefaultLabel="Ivymode"
+                      />
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
@@ -3029,6 +3048,18 @@ function LocationsTab() {
                     rows={2}
                     className="w-full border border-[#1a1a1a]/10 bg-white px-2 py-1 text-xs outline-none resize-none"
                   />
+                  <div className="mt-1">
+                    <StyleRow
+                      color={loc.addressColor || "default"}
+                      onColorChange={(v) => updateLocation(loc.id, { addressColor: v })}
+                      font={loc.addressFont || "default"}
+                      onFontChange={(v) => updateLocation(loc.id, { addressFont: v })}
+                      size={loc.addressSize || "default"}
+                      onSizeChange={(v) => updateLocation(loc.id, { addressSize: v })}
+                      sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                      colorDefaultLabel="Grey"
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
