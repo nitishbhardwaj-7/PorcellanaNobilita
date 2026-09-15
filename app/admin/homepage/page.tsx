@@ -75,7 +75,7 @@ function ItemStyleRow({
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
 
-const TABS = ["hero", "brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "technical-data", "locations", "privacy-policy", "sitemap"] as const;
+const TABS = ["brand-intro", "craftsmanship", "legacy", "applications", "dimensions", "finishes", "hero", "technical-data", "locations", "privacy-policy", "sitemap"] as const;
 type Tab = (typeof TABS)[number];
 const TAB_LABELS: Record<Tab, string> = {
   hero: "Explore The Collection",
