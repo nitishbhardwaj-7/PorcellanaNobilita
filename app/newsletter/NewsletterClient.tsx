@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 interface NewsletterCard {
   id: string;
@@ -21,6 +21,10 @@ interface NewsletterListCmsData {
   newsletterHeroTitleColor?: string | null;
   newsletterHeroTitleFont?: string | null;
   newsletterHeroTitleSize?: string | null;
+  newsletterHeroLabel?: string | null;
+  newsletterHeroLabelColor?: string | null;
+  newsletterHeroLabelFont?: string | null;
+  newsletterHeroLabelSize?: string | null;
 }
 
 export default function NewsletterPage({ cmsData }: { cmsData?: NewsletterListCmsData | null }) {
@@ -131,6 +135,15 @@ export default function NewsletterPage({ cmsData }: { cmsData?: NewsletterListCm
               {d.newsletterHeroTitle || "NEWSLETTER"}
             </motion.h1>
           </div>
+        </div>
+
+        {/* Material label - bottom-right corner */}
+        <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-20 pointer-events-none">
+          <span
+            className={`${fontClass(d.newsletterHeroLabelFont, "font-ivymode")} font-light ${colorClass(d.newsletterHeroLabelColor, "text-white")} uppercase tracking-[0.15em] ${paragraphSizeClass(d.newsletterHeroLabelSize, "text-[clamp(11px,1.2vw,16px)]")} inline-block drop-shadow-md`}
+          >
+            {d.newsletterHeroLabel || "FIOR DI MELO"}
+          </span>
         </div>
       </section>
 

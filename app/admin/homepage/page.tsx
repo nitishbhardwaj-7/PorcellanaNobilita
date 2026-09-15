@@ -3138,29 +3138,102 @@ interface PrivacyPolicySettings {
   privacyHeroTitleFont: string;
   privacyHeroTitleSize: string;
   privacyHeroImage: string;
+  privacyHeroLabel: string;
+  privacyHeroLabelColor: string;
+  privacyHeroLabelFont: string;
+  privacyHeroLabelSize: string;
   privacyIntro: string;
+  privacyIntroColor: string;
+  privacyIntroFont: string;
+  privacyIntroSize: string;
   privacySec1Heading: string;
+  privacySec1HeadingColor: string;
+  privacySec1HeadingFont: string;
+  privacySec1HeadingSize: string;
   privacySec1Item1Heading: string;
+  privacySec1Item1HeadingColor: string;
+  privacySec1Item1HeadingFont: string;
+  privacySec1Item1HeadingSize: string;
   privacySec1Item1Text: string;
+  privacySec1Item1TextColor: string;
+  privacySec1Item1TextFont: string;
+  privacySec1Item1TextSize: string;
   privacySec1Item2Heading: string;
+  privacySec1Item2HeadingColor: string;
+  privacySec1Item2HeadingFont: string;
+  privacySec1Item2HeadingSize: string;
   privacySec1Item2Text: string;
+  privacySec1Item2TextColor: string;
+  privacySec1Item2TextFont: string;
+  privacySec1Item2TextSize: string;
   privacySec1Item3Heading: string;
+  privacySec1Item3HeadingColor: string;
+  privacySec1Item3HeadingFont: string;
+  privacySec1Item3HeadingSize: string;
   privacySec1Item3Text: string;
+  privacySec1Item3TextColor: string;
+  privacySec1Item3TextFont: string;
+  privacySec1Item3TextSize: string;
   privacySec2Heading: string;
+  privacySec2HeadingColor: string;
+  privacySec2HeadingFont: string;
+  privacySec2HeadingSize: string;
   privacySec2Intro: string;
+  privacySec2IntroColor: string;
+  privacySec2IntroFont: string;
+  privacySec2IntroSize: string;
   privacySec2Item1: string;
+  privacySec2Item1Color: string;
+  privacySec2Item1Font: string;
+  privacySec2Item1Size: string;
   privacySec2Item2: string;
+  privacySec2Item2Color: string;
+  privacySec2Item2Font: string;
+  privacySec2Item2Size: string;
   privacySec2Item3: string;
+  privacySec2Item3Color: string;
+  privacySec2Item3Font: string;
+  privacySec2Item3Size: string;
   privacySec2Item4: string;
+  privacySec2Item4Color: string;
+  privacySec2Item4Font: string;
+  privacySec2Item4Size: string;
   privacySec2Item5: string;
+  privacySec2Item5Color: string;
+  privacySec2Item5Font: string;
+  privacySec2Item5Size: string;
   privacySec3Heading: string;
+  privacySec3HeadingColor: string;
+  privacySec3HeadingFont: string;
+  privacySec3HeadingSize: string;
   privacySec3Text: string;
+  privacySec3TextColor: string;
+  privacySec3TextFont: string;
+  privacySec3TextSize: string;
   privacySec4Heading: string;
+  privacySec4HeadingColor: string;
+  privacySec4HeadingFont: string;
+  privacySec4HeadingSize: string;
   privacySec4Text: string;
+  privacySec4TextColor: string;
+  privacySec4TextFont: string;
+  privacySec4TextSize: string;
   privacySec5Heading: string;
+  privacySec5HeadingColor: string;
+  privacySec5HeadingFont: string;
+  privacySec5HeadingSize: string;
   privacySec5Text: string;
+  privacySec5TextColor: string;
+  privacySec5TextFont: string;
+  privacySec5TextSize: string;
   privacySec6Heading: string;
+  privacySec6HeadingColor: string;
+  privacySec6HeadingFont: string;
+  privacySec6HeadingSize: string;
   privacySec6Text: string;
+  privacySec6TextColor: string;
+  privacySec6TextFont: string;
+  privacySec6TextSize: string;
 }
 
 const EMPTY_PRIVACY: PrivacyPolicySettings = {
@@ -3169,29 +3242,102 @@ const EMPTY_PRIVACY: PrivacyPolicySettings = {
   privacyHeroTitleFont: "default",
   privacyHeroTitleSize: "default",
   privacyHeroImage: "",
+  privacyHeroLabel: "",
+  privacyHeroLabelColor: "default",
+  privacyHeroLabelFont: "default",
+  privacyHeroLabelSize: "default",
   privacyIntro: "",
+  privacyIntroColor: "default",
+  privacyIntroFont: "default",
+  privacyIntroSize: "default",
   privacySec1Heading: "",
+  privacySec1HeadingColor: "default",
+  privacySec1HeadingFont: "default",
+  privacySec1HeadingSize: "default",
   privacySec1Item1Heading: "",
+  privacySec1Item1HeadingColor: "default",
+  privacySec1Item1HeadingFont: "default",
+  privacySec1Item1HeadingSize: "default",
   privacySec1Item1Text: "",
+  privacySec1Item1TextColor: "default",
+  privacySec1Item1TextFont: "default",
+  privacySec1Item1TextSize: "default",
   privacySec1Item2Heading: "",
+  privacySec1Item2HeadingColor: "default",
+  privacySec1Item2HeadingFont: "default",
+  privacySec1Item2HeadingSize: "default",
   privacySec1Item2Text: "",
+  privacySec1Item2TextColor: "default",
+  privacySec1Item2TextFont: "default",
+  privacySec1Item2TextSize: "default",
   privacySec1Item3Heading: "",
+  privacySec1Item3HeadingColor: "default",
+  privacySec1Item3HeadingFont: "default",
+  privacySec1Item3HeadingSize: "default",
   privacySec1Item3Text: "",
+  privacySec1Item3TextColor: "default",
+  privacySec1Item3TextFont: "default",
+  privacySec1Item3TextSize: "default",
   privacySec2Heading: "",
+  privacySec2HeadingColor: "default",
+  privacySec2HeadingFont: "default",
+  privacySec2HeadingSize: "default",
   privacySec2Intro: "",
+  privacySec2IntroColor: "default",
+  privacySec2IntroFont: "default",
+  privacySec2IntroSize: "default",
   privacySec2Item1: "",
+  privacySec2Item1Color: "default",
+  privacySec2Item1Font: "default",
+  privacySec2Item1Size: "default",
   privacySec2Item2: "",
+  privacySec2Item2Color: "default",
+  privacySec2Item2Font: "default",
+  privacySec2Item2Size: "default",
   privacySec2Item3: "",
+  privacySec2Item3Color: "default",
+  privacySec2Item3Font: "default",
+  privacySec2Item3Size: "default",
   privacySec2Item4: "",
+  privacySec2Item4Color: "default",
+  privacySec2Item4Font: "default",
+  privacySec2Item4Size: "default",
   privacySec2Item5: "",
+  privacySec2Item5Color: "default",
+  privacySec2Item5Font: "default",
+  privacySec2Item5Size: "default",
   privacySec3Heading: "",
+  privacySec3HeadingColor: "default",
+  privacySec3HeadingFont: "default",
+  privacySec3HeadingSize: "default",
   privacySec3Text: "",
+  privacySec3TextColor: "default",
+  privacySec3TextFont: "default",
+  privacySec3TextSize: "default",
   privacySec4Heading: "",
+  privacySec4HeadingColor: "default",
+  privacySec4HeadingFont: "default",
+  privacySec4HeadingSize: "default",
   privacySec4Text: "",
+  privacySec4TextColor: "default",
+  privacySec4TextFont: "default",
+  privacySec4TextSize: "default",
   privacySec5Heading: "",
+  privacySec5HeadingColor: "default",
+  privacySec5HeadingFont: "default",
+  privacySec5HeadingSize: "default",
   privacySec5Text: "",
+  privacySec5TextColor: "default",
+  privacySec5TextFont: "default",
+  privacySec5TextSize: "default",
   privacySec6Heading: "",
+  privacySec6HeadingColor: "default",
+  privacySec6HeadingFont: "default",
+  privacySec6HeadingSize: "default",
   privacySec6Text: "",
+  privacySec6TextColor: "default",
+  privacySec6TextFont: "default",
+  privacySec6TextSize: "default",
 };
 
 function PrivacyPolicyTab() {
@@ -3306,8 +3452,31 @@ function PrivacyPolicyTab() {
           </div>
         </div>
 
+        <div className="space-y-1.5">
+          <label className={labelCls} style={fontMichroma}>Material Label</label>
+          <p className="text-[10px] text-[#8b8b8b]">Small caption in the bottom-right corner naming the material shown in the photo.</p>
+          <input
+            type="text"
+            value={settings.privacyHeroLabel}
+            onChange={(e) => set("privacyHeroLabel", e.target.value)}
+            placeholder="BASALTINA"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={settings.privacyHeroLabelColor}
+            onColorChange={(v) => set("privacyHeroLabelColor", v)}
+            font={settings.privacyHeroLabelFont}
+            onFontChange={(v) => set("privacyHeroLabelFont", v)}
+            size={settings.privacyHeroLabelSize}
+            onSizeChange={(v) => set("privacyHeroLabelSize", v)}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
+        </div>
+
         <button
-          onClick={() => handleSave("hero", ["privacyHeroTitle", "privacyHeroTitleColor", "privacyHeroTitleFont", "privacyHeroTitleSize", "privacyHeroImage"])}
+          onClick={() => handleSave("hero", ["privacyHeroTitle", "privacyHeroTitleColor", "privacyHeroTitleFont", "privacyHeroTitleSize", "privacyHeroImage", "privacyHeroLabel", "privacyHeroLabelColor", "privacyHeroLabelFont", "privacyHeroLabelSize"])}
           disabled={savingSection === "hero"}
           className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
           style={fontMichroma}
@@ -3328,85 +3497,121 @@ function PrivacyPolicyTab() {
         <div className="space-y-1.5">
           <label className={labelCls} style={fontMichroma}>Intro Paragraph</label>
           <textarea value={settings.privacyIntro} onChange={(e) => set("privacyIntro", e.target.value)} rows={2} placeholder="At NOBILITA, we value your privacy. This Privacy Policy explains how we collect, use, disclose, and process your personal data when you use our website or otherwise interact with us." className={taCls} />
+          <StyleRow color={settings.privacyIntroColor} onColorChange={(v) => set("privacyIntroColor", v)} font={settings.privacyIntroFont} onFontChange={(v) => set("privacyIntroFont", v)} size={settings.privacyIntroSize} onSizeChange={(v) => set("privacyIntroSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
         </div>
 
         <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
           <label className={labelCls} style={fontMichroma}>Section 1 Heading</label>
           <input type="text" value={settings.privacySec1Heading} onChange={(e) => set("privacySec1Heading", e.target.value)} placeholder="What Personal Data Do We Collect?" className={inputCls} />
+          <StyleRow color={settings.privacySec1HeadingColor} onColorChange={(v) => set("privacySec1HeadingColor", v)} font={settings.privacySec1HeadingFont} onFontChange={(v) => set("privacySec1HeadingFont", v)} size={settings.privacySec1HeadingSize} onSizeChange={(v) => set("privacySec1HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
 
           <label className={labelCls} style={fontMichroma}>Item 1 Heading</label>
           <input type="text" value={settings.privacySec1Item1Heading} onChange={(e) => set("privacySec1Item1Heading", e.target.value)} placeholder="Contact Information:" className={inputCls} />
+          <StyleRow color={settings.privacySec1Item1HeadingColor} onColorChange={(v) => set("privacySec1Item1HeadingColor", v)} font={settings.privacySec1Item1HeadingFont} onFontChange={(v) => set("privacySec1Item1HeadingFont", v)} size={settings.privacySec1Item1HeadingSize} onSizeChange={(v) => set("privacySec1Item1HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Item 1 Text</label>
           <textarea value={settings.privacySec1Item1Text} onChange={(e) => set("privacySec1Item1Text", e.target.value)} rows={2} placeholder="Your name, email address, phone number, and mailing address." className={taCls} />
+          <StyleRow color={settings.privacySec1Item1TextColor} onColorChange={(v) => set("privacySec1Item1TextColor", v)} font={settings.privacySec1Item1TextFont} onFontChange={(v) => set("privacySec1Item1TextFont", v)} size={settings.privacySec1Item1TextSize} onSizeChange={(v) => set("privacySec1Item1TextSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
 
           <label className={labelCls} style={fontMichroma}>Item 2 Heading</label>
           <input type="text" value={settings.privacySec1Item2Heading} onChange={(e) => set("privacySec1Item2Heading", e.target.value)} placeholder="Inquiry Information:" className={inputCls} />
+          <StyleRow color={settings.privacySec1Item2HeadingColor} onColorChange={(v) => set("privacySec1Item2HeadingColor", v)} font={settings.privacySec1Item2HeadingFont} onFontChange={(v) => set("privacySec1Item2HeadingFont", v)} size={settings.privacySec1Item2HeadingSize} onSizeChange={(v) => set("privacySec1Item2HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Item 2 Text</label>
           <textarea value={settings.privacySec1Item2Text} onChange={(e) => set("privacySec1Item2Text", e.target.value)} rows={2} placeholder="Information you provide when you contact us with a question or request, such as the nature of your inquiry and any other information you choose to share." className={taCls} />
+          <StyleRow color={settings.privacySec1Item2TextColor} onColorChange={(v) => set("privacySec1Item2TextColor", v)} font={settings.privacySec1Item2TextFont} onFontChange={(v) => set("privacySec1Item2TextFont", v)} size={settings.privacySec1Item2TextSize} onSizeChange={(v) => set("privacySec1Item2TextSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
 
           <label className={labelCls} style={fontMichroma}>Item 3 Heading</label>
           <input type="text" value={settings.privacySec1Item3Heading} onChange={(e) => set("privacySec1Item3Heading", e.target.value)} placeholder="Website Usage Data:" className={inputCls} />
+          <StyleRow color={settings.privacySec1Item3HeadingColor} onColorChange={(v) => set("privacySec1Item3HeadingColor", v)} font={settings.privacySec1Item3HeadingFont} onFontChange={(v) => set("privacySec1Item3HeadingFont", v)} size={settings.privacySec1Item3HeadingSize} onSizeChange={(v) => set("privacySec1Item3HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Item 3 Text</label>
           <textarea value={settings.privacySec1Item3Text} onChange={(e) => set("privacySec1Item3Text", e.target.value)} rows={2} placeholder="We may collect information about your use of our website, such as the pages you visit, the links you click, and the searches you perform." className={taCls} />
+          <StyleRow color={settings.privacySec1Item3TextColor} onColorChange={(v) => set("privacySec1Item3TextColor", v)} font={settings.privacySec1Item3TextFont} onFontChange={(v) => set("privacySec1Item3TextFont", v)} size={settings.privacySec1Item3TextSize} onSizeChange={(v) => set("privacySec1Item3TextSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
         </div>
 
         <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
           <label className={labelCls} style={fontMichroma}>Section 2 Heading</label>
           <input type="text" value={settings.privacySec2Heading} onChange={(e) => set("privacySec2Heading", e.target.value)} placeholder="How Do We Use Your Personal Data?" className={inputCls} />
+          <StyleRow color={settings.privacySec2HeadingColor} onColorChange={(v) => set("privacySec2HeadingColor", v)} font={settings.privacySec2HeadingFont} onFontChange={(v) => set("privacySec2HeadingFont", v)} size={settings.privacySec2HeadingSize} onSizeChange={(v) => set("privacySec2HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Section 2 Intro</label>
           <textarea value={settings.privacySec2Intro} onChange={(e) => set("privacySec2Intro", e.target.value)} rows={2} placeholder="We use your personal data for the following purposes:" className={taCls} />
+          <StyleRow color={settings.privacySec2IntroColor} onColorChange={(v) => set("privacySec2IntroColor", v)} font={settings.privacySec2IntroFont} onFontChange={(v) => set("privacySec2IntroFont", v)} size={settings.privacySec2IntroSize} onSizeChange={(v) => set("privacySec2IntroSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Bullet 1</label>
           <textarea value={settings.privacySec2Item1} onChange={(e) => set("privacySec2Item1", e.target.value)} rows={1} placeholder="To respond to your inquiries and requests." className={taCls} />
+          <StyleRow color={settings.privacySec2Item1Color} onColorChange={(v) => set("privacySec2Item1Color", v)} font={settings.privacySec2Item1Font} onFontChange={(v) => set("privacySec2Item1Font", v)} size={settings.privacySec2Item1Size} onSizeChange={(v) => set("privacySec2Item1Size", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Bullet 2</label>
           <textarea value={settings.privacySec2Item2} onChange={(e) => set("privacySec2Item2", e.target.value)} rows={1} placeholder="To process your orders and provide you with the services you request." className={taCls} />
+          <StyleRow color={settings.privacySec2Item2Color} onColorChange={(v) => set("privacySec2Item2Color", v)} font={settings.privacySec2Item2Font} onFontChange={(v) => set("privacySec2Item2Font", v)} size={settings.privacySec2Item2Size} onSizeChange={(v) => set("privacySec2Item2Size", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Bullet 3</label>
           <textarea value={settings.privacySec2Item3} onChange={(e) => set("privacySec2Item3", e.target.value)} rows={1} placeholder="To send you marketing communications (with your consent)." className={taCls} />
+          <StyleRow color={settings.privacySec2Item3Color} onColorChange={(v) => set("privacySec2Item3Color", v)} font={settings.privacySec2Item3Font} onFontChange={(v) => set("privacySec2Item3Font", v)} size={settings.privacySec2Item3Size} onSizeChange={(v) => set("privacySec2Item3Size", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Bullet 4</label>
           <textarea value={settings.privacySec2Item4} onChange={(e) => set("privacySec2Item4", e.target.value)} rows={1} placeholder="To analyze your use of our website and social media." className={taCls} />
+          <StyleRow color={settings.privacySec2Item4Color} onColorChange={(v) => set("privacySec2Item4Color", v)} font={settings.privacySec2Item4Font} onFontChange={(v) => set("privacySec2Item4Font", v)} size={settings.privacySec2Item4Size} onSizeChange={(v) => set("privacySec2Item4Size", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Bullet 5</label>
           <textarea value={settings.privacySec2Item5} onChange={(e) => set("privacySec2Item5", e.target.value)} rows={1} placeholder="To comply with legal and regulatory obligations." className={taCls} />
+          <StyleRow color={settings.privacySec2Item5Color} onColorChange={(v) => set("privacySec2Item5Color", v)} font={settings.privacySec2Item5Font} onFontChange={(v) => set("privacySec2Item5Font", v)} size={settings.privacySec2Item5Size} onSizeChange={(v) => set("privacySec2Item5Size", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
         </div>
 
         <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
           <label className={labelCls} style={fontMichroma}>Section 3 Heading</label>
           <input type="text" value={settings.privacySec3Heading} onChange={(e) => set("privacySec3Heading", e.target.value)} placeholder="Disclosure of Your Personal Data" className={inputCls} />
+          <StyleRow color={settings.privacySec3HeadingColor} onColorChange={(v) => set("privacySec3HeadingColor", v)} font={settings.privacySec3HeadingFont} onFontChange={(v) => set("privacySec3HeadingFont", v)} size={settings.privacySec3HeadingSize} onSizeChange={(v) => set("privacySec3HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Section 3 Text</label>
           <textarea value={settings.privacySec3Text} onChange={(e) => set("privacySec3Text", e.target.value)} rows={2} placeholder="We may disclose your personal data to law enforcement agencies or other government officials if required by law." className={taCls} />
+          <StyleRow color={settings.privacySec3TextColor} onColorChange={(v) => set("privacySec3TextColor", v)} font={settings.privacySec3TextFont} onFontChange={(v) => set("privacySec3TextFont", v)} size={settings.privacySec3TextSize} onSizeChange={(v) => set("privacySec3TextSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
         </div>
 
         <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
           <label className={labelCls} style={fontMichroma}>Section 4 Heading</label>
           <input type="text" value={settings.privacySec4Heading} onChange={(e) => set("privacySec4Heading", e.target.value)} placeholder="Data Retention" className={inputCls} />
+          <StyleRow color={settings.privacySec4HeadingColor} onColorChange={(v) => set("privacySec4HeadingColor", v)} font={settings.privacySec4HeadingFont} onFontChange={(v) => set("privacySec4HeadingFont", v)} size={settings.privacySec4HeadingSize} onSizeChange={(v) => set("privacySec4HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Section 4 Text</label>
           <textarea value={settings.privacySec4Text} onChange={(e) => set("privacySec4Text", e.target.value)} rows={2} placeholder="We will retain your personal data for as long as necessary to fulfill the purposes for which it was collected, or as required by law." className={taCls} />
+          <StyleRow color={settings.privacySec4TextColor} onColorChange={(v) => set("privacySec4TextColor", v)} font={settings.privacySec4TextFont} onFontChange={(v) => set("privacySec4TextFont", v)} size={settings.privacySec4TextSize} onSizeChange={(v) => set("privacySec4TextSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
         </div>
 
         <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
           <label className={labelCls} style={fontMichroma}>Section 5 Heading</label>
           <input type="text" value={settings.privacySec5Heading} onChange={(e) => set("privacySec5Heading", e.target.value)} placeholder="Security" className={inputCls} />
+          <StyleRow color={settings.privacySec5HeadingColor} onColorChange={(v) => set("privacySec5HeadingColor", v)} font={settings.privacySec5HeadingFont} onFontChange={(v) => set("privacySec5HeadingFont", v)} size={settings.privacySec5HeadingSize} onSizeChange={(v) => set("privacySec5HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Section 5 Text</label>
           <textarea value={settings.privacySec5Text} onChange={(e) => set("privacySec5Text", e.target.value)} rows={2} placeholder="We take steps to protect your personal data from unauthorized access, disclosure, alteration, or destruction. However, no website or internet transmission is completely secure." className={taCls} />
+          <StyleRow color={settings.privacySec5TextColor} onColorChange={(v) => set("privacySec5TextColor", v)} font={settings.privacySec5TextFont} onFontChange={(v) => set("privacySec5TextFont", v)} size={settings.privacySec5TextSize} onSizeChange={(v) => set("privacySec5TextSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
         </div>
 
         <div className="border-t border-[#1a1a1a]/8 pt-4 space-y-3">
           <label className={labelCls} style={fontMichroma}>Section 6 Heading</label>
           <input type="text" value={settings.privacySec6Heading} onChange={(e) => set("privacySec6Heading", e.target.value)} placeholder="Changes to this Privacy Policy" className={inputCls} />
+          <StyleRow color={settings.privacySec6HeadingColor} onColorChange={(v) => set("privacySec6HeadingColor", v)} font={settings.privacySec6HeadingFont} onFontChange={(v) => set("privacySec6HeadingFont", v)} size={settings.privacySec6HeadingSize} onSizeChange={(v) => set("privacySec6HeadingSize", v)} sizeOptions={HEADING_SIZE_OPTIONS} colorDefaultLabel="Teal" fontDefaultLabel="Ivymode" />
           <label className={labelCls} style={fontMichroma}>Section 6 Text</label>
           <textarea value={settings.privacySec6Text} onChange={(e) => set("privacySec6Text", e.target.value)} rows={2} placeholder="We may update this Privacy Policy from time to time. We will post the updated Privacy Policy on our website." className={taCls} />
+          <StyleRow color={settings.privacySec6TextColor} onColorChange={(v) => set("privacySec6TextColor", v)} font={settings.privacySec6TextFont} onFontChange={(v) => set("privacySec6TextFont", v)} size={settings.privacySec6TextSize} onSizeChange={(v) => set("privacySec6TextSize", v)} sizeOptions={PARAGRAPH_SIZE_OPTIONS} colorDefaultLabel="Grey" fontDefaultLabel="Ivymode" />
         </div>
 
         <button
           onClick={() => handleSave("content", [
-            "privacyIntro",
-            "privacySec1Heading", "privacySec1Item1Heading", "privacySec1Item1Text",
-            "privacySec1Item2Heading", "privacySec1Item2Text",
-            "privacySec1Item3Heading", "privacySec1Item3Text",
-            "privacySec2Heading", "privacySec2Intro",
-            "privacySec2Item1", "privacySec2Item2", "privacySec2Item3", "privacySec2Item4", "privacySec2Item5",
-            "privacySec3Heading", "privacySec3Text",
-            "privacySec4Heading", "privacySec4Text",
-            "privacySec5Heading", "privacySec5Text",
-            "privacySec6Heading", "privacySec6Text",
+            "privacyIntro", "privacyIntroColor", "privacyIntroFont", "privacyIntroSize",
+            "privacySec1Heading", "privacySec1HeadingColor", "privacySec1HeadingFont", "privacySec1HeadingSize",
+            "privacySec1Item1Heading", "privacySec1Item1HeadingColor", "privacySec1Item1HeadingFont", "privacySec1Item1HeadingSize",
+            "privacySec1Item1Text", "privacySec1Item1TextColor", "privacySec1Item1TextFont", "privacySec1Item1TextSize",
+            "privacySec1Item2Heading", "privacySec1Item2HeadingColor", "privacySec1Item2HeadingFont", "privacySec1Item2HeadingSize",
+            "privacySec1Item2Text", "privacySec1Item2TextColor", "privacySec1Item2TextFont", "privacySec1Item2TextSize",
+            "privacySec1Item3Heading", "privacySec1Item3HeadingColor", "privacySec1Item3HeadingFont", "privacySec1Item3HeadingSize",
+            "privacySec1Item3Text", "privacySec1Item3TextColor", "privacySec1Item3TextFont", "privacySec1Item3TextSize",
+            "privacySec2Heading", "privacySec2HeadingColor", "privacySec2HeadingFont", "privacySec2HeadingSize",
+            "privacySec2Intro", "privacySec2IntroColor", "privacySec2IntroFont", "privacySec2IntroSize",
+            "privacySec2Item1", "privacySec2Item1Color", "privacySec2Item1Font", "privacySec2Item1Size",
+            "privacySec2Item2", "privacySec2Item2Color", "privacySec2Item2Font", "privacySec2Item2Size",
+            "privacySec2Item3", "privacySec2Item3Color", "privacySec2Item3Font", "privacySec2Item3Size",
+            "privacySec2Item4", "privacySec2Item4Color", "privacySec2Item4Font", "privacySec2Item4Size",
+            "privacySec2Item5", "privacySec2Item5Color", "privacySec2Item5Font", "privacySec2Item5Size",
+            "privacySec3Heading", "privacySec3HeadingColor", "privacySec3HeadingFont", "privacySec3HeadingSize",
+            "privacySec3Text", "privacySec3TextColor", "privacySec3TextFont", "privacySec3TextSize",
+            "privacySec4Heading", "privacySec4HeadingColor", "privacySec4HeadingFont", "privacySec4HeadingSize",
+            "privacySec4Text", "privacySec4TextColor", "privacySec4TextFont", "privacySec4TextSize",
+            "privacySec5Heading", "privacySec5HeadingColor", "privacySec5HeadingFont", "privacySec5HeadingSize",
+            "privacySec5Text", "privacySec5TextColor", "privacySec5TextFont", "privacySec5TextSize",
+            "privacySec6Heading", "privacySec6HeadingColor", "privacySec6HeadingFont", "privacySec6HeadingSize",
+            "privacySec6Text", "privacySec6TextColor", "privacySec6TextFont", "privacySec6TextSize",
           ])}
           disabled={savingSection === "content"}
           className="border border-[#007190]/25 bg-white px-5 py-2 text-[10px] tracking-[0.15em] uppercase text-[#007190]/70 hover:bg-[#007190] hover:text-white hover:border-[#007190] disabled:opacity-40 transition-all"
@@ -3429,6 +3634,10 @@ interface SitemapSettings {
   sitemapHeroTitleFont: string;
   sitemapHeroTitleSize: string;
   sitemapHeroImage: string;
+  sitemapHeroLabel: string;
+  sitemapHeroLabelColor: string;
+  sitemapHeroLabelFont: string;
+  sitemapHeroLabelSize: string;
 }
 
 function SitemapTab() {
@@ -3438,6 +3647,10 @@ function SitemapTab() {
     sitemapHeroTitleFont: "default",
     sitemapHeroTitleSize: "default",
     sitemapHeroImage: "",
+    sitemapHeroLabel: "",
+    sitemapHeroLabelColor: "default",
+    sitemapHeroLabelFont: "default",
+    sitemapHeroLabelSize: "default",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -3456,6 +3669,10 @@ function SitemapTab() {
             sitemapHeroTitleFont: s.sitemapHeroTitleFont || "default",
             sitemapHeroTitleSize: s.sitemapHeroTitleSize || "default",
             sitemapHeroImage: s.sitemapHeroImage || "",
+            sitemapHeroLabel: s.sitemapHeroLabel || "",
+            sitemapHeroLabelColor: s.sitemapHeroLabelColor || "default",
+            sitemapHeroLabelFont: s.sitemapHeroLabelFont || "default",
+            sitemapHeroLabelSize: s.sitemapHeroLabelSize || "default",
           });
         }
       })
@@ -3560,6 +3777,31 @@ function SitemapTab() {
             />
             <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, sitemapHeroImage: url }))} />
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            Material Label
+          </label>
+          <p className="text-[10px] text-[#8b8b8b]">Small caption in the bottom-right corner naming the material shown in the photo.</p>
+          <input
+            type="text"
+            value={settings.sitemapHeroLabel}
+            onChange={(e) => setSettings((p) => ({ ...p, sitemapHeroLabel: e.target.value }))}
+            placeholder="VERDE ALPI"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={settings.sitemapHeroLabelColor}
+            onColorChange={(v) => setSettings((p) => ({ ...p, sitemapHeroLabelColor: v }))}
+            font={settings.sitemapHeroLabelFont}
+            onFontChange={(v) => setSettings((p) => ({ ...p, sitemapHeroLabelFont: v }))}
+            size={settings.sitemapHeroLabelSize}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, sitemapHeroLabelSize: v }))}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
         </div>
 
         <button

@@ -22,6 +22,10 @@ export default async function NewsletterPage() {
       newsletterHeroTitleColor: s?.newsletterHeroTitleColor,
       newsletterHeroTitleFont: s?.newsletterHeroTitleFont,
       newsletterHeroTitleSize: s?.newsletterHeroTitleSize,
+      newsletterHeroLabel: s?.newsletterHeroLabel,
+      newsletterHeroLabelColor: s?.newsletterHeroLabelColor,
+      newsletterHeroLabelFont: s?.newsletterHeroLabelFont,
+      newsletterHeroLabelSize: s?.newsletterHeroLabelSize,
     };
   } catch (e) {
     cmsData = null;

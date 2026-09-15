@@ -22,6 +22,10 @@ export default async function BlogPage() {
       blogHeroTitleColor: s?.blogHeroTitleColor,
       blogHeroTitleFont: s?.blogHeroTitleFont,
       blogHeroTitleSize: s?.blogHeroTitleSize,
+      blogHeroLabel: s?.blogHeroLabel,
+      blogHeroLabelColor: s?.blogHeroLabelColor,
+      blogHeroLabelFont: s?.blogHeroLabelFont,
+      blogHeroLabelSize: s?.blogHeroLabelSize,
     };
   } catch (e) {
     cmsData = null;

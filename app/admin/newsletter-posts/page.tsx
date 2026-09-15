@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Plus, Pencil, Trash2, Eye, EyeOff, ExternalLink, Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
-import { HEADING_SIZE_OPTIONS } from "@/lib/textStyle";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 interface NewsletterPost {
   id: string;
@@ -26,6 +26,10 @@ interface HeroSettings {
   newsletterHeroTitleColor: string;
   newsletterHeroTitleFont: string;
   newsletterHeroTitleSize: string;
+  newsletterHeroLabel: string;
+  newsletterHeroLabelColor: string;
+  newsletterHeroLabelFont: string;
+  newsletterHeroLabelSize: string;
 }
 
 const EMPTY_HERO: HeroSettings = {
@@ -34,6 +38,10 @@ const EMPTY_HERO: HeroSettings = {
   newsletterHeroTitleColor: "default",
   newsletterHeroTitleFont: "default",
   newsletterHeroTitleSize: "default",
+  newsletterHeroLabel: "",
+  newsletterHeroLabelColor: "default",
+  newsletterHeroLabelFont: "default",
+  newsletterHeroLabelSize: "default",
 };
 
 export default function NewsletterPostsAdminPage() {
@@ -64,6 +72,10 @@ export default function NewsletterPostsAdminPage() {
           newsletterHeroTitleColor: s.newsletterHeroTitleColor || "default",
           newsletterHeroTitleFont: s.newsletterHeroTitleFont || "default",
           newsletterHeroTitleSize: s.newsletterHeroTitleSize || "default",
+          newsletterHeroLabel: s.newsletterHeroLabel || "",
+          newsletterHeroLabelColor: s.newsletterHeroLabelColor || "default",
+          newsletterHeroLabelFont: s.newsletterHeroLabelFont || "default",
+          newsletterHeroLabelSize: s.newsletterHeroLabelSize || "default",
         });
       }
     } catch {
@@ -240,6 +252,29 @@ export default function NewsletterPostsAdminPage() {
             />
             <MediaPickerButton folder="newsletters" onSelect={(url) => setHeroField("newsletterHeroImage", url)} />
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Material Label</label>
+          <p className="text-[10px] text-[#8b8b8b]">Small caption in the bottom-right corner naming the material shown in the photo.</p>
+          <input
+            type="text"
+            value={hero.newsletterHeroLabel}
+            onChange={(e) => setHeroField("newsletterHeroLabel", e.target.value)}
+            placeholder="FIOR DI MELO"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={hero.newsletterHeroLabelColor}
+            onColorChange={(v) => setHeroField("newsletterHeroLabelColor", v)}
+            font={hero.newsletterHeroLabelFont}
+            onFontChange={(v) => setHeroField("newsletterHeroLabelFont", v)}
+            size={hero.newsletterHeroLabelSize}
+            onSizeChange={(v) => setHeroField("newsletterHeroLabelSize", v)}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
         </div>
 
         <button

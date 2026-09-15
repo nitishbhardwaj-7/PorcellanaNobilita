@@ -30,6 +30,10 @@ export default async function SitemapPage() {
       sitemapHeroTitleFont: s?.sitemapHeroTitleFont,
       sitemapHeroTitleSize: s?.sitemapHeroTitleSize,
       sitemapHeroImage: s?.sitemapHeroImage,
+      sitemapHeroLabel: s?.sitemapHeroLabel,
+      sitemapHeroLabelColor: s?.sitemapHeroLabelColor,
+      sitemapHeroLabelFont: s?.sitemapHeroLabelFont,
+      sitemapHeroLabelSize: s?.sitemapHeroLabelSize,
     };
     products = publishedProducts;
   } catch (e) {

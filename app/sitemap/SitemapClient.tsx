@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 interface SitemapCmsData {
   sitemapHeroTitle?: string | null;
@@ -13,6 +13,10 @@ interface SitemapCmsData {
   sitemapHeroTitleFont?: string | null;
   sitemapHeroTitleSize?: string | null;
   sitemapHeroImage?: string | null;
+  sitemapHeroLabel?: string | null;
+  sitemapHeroLabelColor?: string | null;
+  sitemapHeroLabelFont?: string | null;
+  sitemapHeroLabelSize?: string | null;
 }
 
 interface SitemapProduct {
@@ -115,6 +119,15 @@ export default function SitemapPage({ cmsData, products }: { cmsData?: SitemapCm
               {d.sitemapHeroTitle || "Sitemap"}
             </motion.h1>
           </div>
+        </div>
+
+        {/* Material label - bottom-right corner */}
+        <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-20 pointer-events-none">
+          <span
+            className={`${fontClass(d.sitemapHeroLabelFont, "font-ivymode")} font-light ${colorClass(d.sitemapHeroLabelColor, "text-white")} uppercase tracking-[0.15em] ${paragraphSizeClass(d.sitemapHeroLabelSize, "text-[clamp(11px,1.2vw,16px)]")} inline-block drop-shadow-md`}
+          >
+            {d.sitemapHeroLabel || "VERDE ALPI"}
+          </span>
         </div>
       </section>
 

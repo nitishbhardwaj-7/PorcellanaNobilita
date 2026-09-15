@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Check } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
-import { HEADING_SIZE_OPTIONS } from "@/lib/textStyle";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 interface Blog {
   id: string;
@@ -26,6 +26,10 @@ interface HeroSettings {
   blogHeroTitleColor: string;
   blogHeroTitleFont: string;
   blogHeroTitleSize: string;
+  blogHeroLabel: string;
+  blogHeroLabelColor: string;
+  blogHeroLabelFont: string;
+  blogHeroLabelSize: string;
 }
 
 const EMPTY_HERO: HeroSettings = {
@@ -34,6 +38,10 @@ const EMPTY_HERO: HeroSettings = {
   blogHeroTitleColor: "default",
   blogHeroTitleFont: "default",
   blogHeroTitleSize: "default",
+  blogHeroLabel: "",
+  blogHeroLabelColor: "default",
+  blogHeroLabelFont: "default",
+  blogHeroLabelSize: "default",
 };
 
 export default function BlogsAdminPage() {
@@ -64,6 +72,10 @@ export default function BlogsAdminPage() {
           blogHeroTitleColor: s.blogHeroTitleColor || "default",
           blogHeroTitleFont: s.blogHeroTitleFont || "default",
           blogHeroTitleSize: s.blogHeroTitleSize || "default",
+          blogHeroLabel: s.blogHeroLabel || "",
+          blogHeroLabelColor: s.blogHeroLabelColor || "default",
+          blogHeroLabelFont: s.blogHeroLabelFont || "default",
+          blogHeroLabelSize: s.blogHeroLabelSize || "default",
         });
       }
     } catch {
@@ -236,6 +248,29 @@ export default function BlogsAdminPage() {
             />
             <MediaPickerButton folder="blogs" onSelect={(url) => setHeroField("blogHeroImage", url)} />
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>Material Label</label>
+          <p className="text-[10px] text-[#8b8b8b]">Small caption in the bottom-right corner naming the material shown in the photo.</p>
+          <input
+            type="text"
+            value={hero.blogHeroLabel}
+            onChange={(e) => setHeroField("blogHeroLabel", e.target.value)}
+            placeholder="FERRO INDUSTRIALE"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={hero.blogHeroLabelColor}
+            onColorChange={(v) => setHeroField("blogHeroLabelColor", v)}
+            font={hero.blogHeroLabelFont}
+            onFontChange={(v) => setHeroField("blogHeroLabelFont", v)}
+            size={hero.blogHeroLabelSize}
+            onSizeChange={(v) => setHeroField("blogHeroLabelSize", v)}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Ivymode"
+          />
         </div>
 
         <button

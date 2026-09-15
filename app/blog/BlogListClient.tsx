@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 import { HARDCODED_BLOGS } from "@/lib/hardcodedBlogs";
 
@@ -30,6 +30,10 @@ interface BlogListCmsData {
   blogHeroTitleColor?: string | null;
   blogHeroTitleFont?: string | null;
   blogHeroTitleSize?: string | null;
+  blogHeroLabel?: string | null;
+  blogHeroLabelColor?: string | null;
+  blogHeroLabelFont?: string | null;
+  blogHeroLabelSize?: string | null;
 }
 
 export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null }) {
@@ -230,6 +234,15 @@ export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null
               {d.blogHeroTitle || "BLOG"}
             </motion.h1>
           </div>
+        </div>
+
+        {/* Material label - bottom-right corner */}
+        <div className="absolute bottom-2 right-3 md:bottom-2 md:right-3 z-20 pointer-events-none">
+          <span
+            className={`${fontClass(d.blogHeroLabelFont, "font-ivymode")} font-light ${colorClass(d.blogHeroLabelColor, "text-white")} uppercase tracking-[0.15em] ${paragraphSizeClass(d.blogHeroLabelSize, "text-[clamp(11px,1.2vw,16px)]")} inline-block drop-shadow-md`}
+          >
+            {d.blogHeroLabel || "FERRO INDUSTRIALE"}
+          </span>
         </div>
       </section>
 
