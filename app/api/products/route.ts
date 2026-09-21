@@ -32,8 +32,15 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       name,
+      nameColor,
+      nameFont,
+      nameSize,
       slug,
       description,
+      showDescription,
+      descriptionColor,
+      descriptionFont,
+      descriptionSize,
       color,
       finish,
       finishCategories,
@@ -76,8 +83,15 @@ export async function POST(request: Request) {
     const product = await prisma.product.create({
       data: {
         name,
+        nameColor: nameColor || null,
+        nameFont: nameFont || null,
+        nameSize: nameSize || null,
         slug: finalSlug,
         description: description || null,
+        showDescription: !!showDescription,
+        descriptionColor: descriptionColor || null,
+        descriptionFont: descriptionFont || null,
+        descriptionSize: descriptionSize || null,
         color: color || "White",
         finish: finish || null,
         finishCategories: finishCategories || [],

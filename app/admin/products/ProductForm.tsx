@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Save, X, ChevronDown, GripVertical } from "lucide-react";
 import { MediaPickerField, MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
-import { HEADING_SIZE_OPTIONS } from "@/lib/textStyle";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 function CustomSelect({
   value,
@@ -177,6 +177,10 @@ export default function ProductForm({ productId }: ProductFormProps) {
     nameSize: "default",
     slug: "",
     description: "",
+    showDescription: false,
+    descriptionColor: "default",
+    descriptionFont: "default",
+    descriptionSize: "default",
     color: "White",
     finish: "",
     finishCategories: [] as string[],
@@ -250,6 +254,10 @@ export default function ProductForm({ productId }: ProductFormProps) {
               nameSize: p.nameSize || "default",
               slug: p.slug,
               description: p.description || "",
+              showDescription: !!p.showDescription,
+              descriptionColor: p.descriptionColor || "default",
+              descriptionFont: p.descriptionFont || "default",
+              descriptionSize: p.descriptionSize || "default",
               color: p.color || "White",
               finish: p.finish || "",
               // Fall back to the legacy single `finish` value for products saved
@@ -411,6 +419,46 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   colorDefaultLabel={form.isDark ? "White" : "Black"}
                   fontDefaultLabel="Ivymode"
                 />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50 cursor-pointer select-none" style={fontMichroma}>
+                  <input
+                    type="checkbox"
+                    checked={form.showDescription}
+                    onChange={(e) => setForm((p) => ({ ...p, showDescription: e.target.checked }))}
+                    className="accent-[#007190]"
+                  />
+                  Show Product Description
+                </label>
+                <p className="text-[9px] text-[#8b8b8b]">
+                  Hidden by default. When ticked, an editorial paragraph appears below the slab face images in this product's popup.
+                </p>
+                {form.showDescription && (
+                  <>
+                    <textarea
+                      rows={4}
+                      value={form.description}
+                      onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+                      className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none"
+                      placeholder="Editorial paragraph shown below the slab face images…"
+                    />
+                    <p className="text-[9px] text-[#8b8b8b]">
+                      Leave a blank line between paragraphs to split them. If left empty, the site's signature editorial paragraph is shown instead.
+                    </p>
+                    <StyleRow
+                      color={form.descriptionColor}
+                      onColorChange={(v) => setForm((p) => ({ ...p, descriptionColor: v }))}
+                      font={form.descriptionFont}
+                      onFontChange={(v) => setForm((p) => ({ ...p, descriptionFont: v }))}
+                      size={form.descriptionSize}
+                      onSizeChange={(v) => setForm((p) => ({ ...p, descriptionSize: v }))}
+                      sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+                      colorDefaultLabel="Grey"
+                      fontDefaultLabel="Ivymode"
+                    />
+                  </>
+                )}
               </div>
 
             </div>

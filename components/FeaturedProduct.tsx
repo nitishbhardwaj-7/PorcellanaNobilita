@@ -5,7 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { colorClass, fontClass, headingSizeClass } from "@/lib/textStyle";
+import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
 
 // Lazy-loaded video component using IntersectionObserver to prevent loading/playing lag
 function LazyVideo({ src, poster, className, controls = false, isParentReady = true }: { src: string; poster?: string; className?: string; controls?: boolean; isParentReady?: boolean }) {
@@ -105,6 +105,12 @@ interface SlabConfig {
   nameColor?: string | null;
   nameFont?: string | null;
   nameSize?: string | null;
+  description?: string | null;
+  // Hidden unless the product's showDescription flag is ticked in the CMS.
+  showDescription?: boolean | null;
+  descriptionColor?: string | null;
+  descriptionFont?: string | null;
+  descriptionSize?: string | null;
 }
 
 const PRODUCT_CONFIGS: Record<string, SlabConfig> = {
@@ -523,6 +529,11 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
       nameColor: dbProduct?.nameColor,
       nameFont: dbProduct?.nameFont,
       nameSize: dbProduct?.nameSize,
+      description: dbProduct?.description || staticConfig?.description || null,
+      showDescription: dbProduct?.showDescription ?? false,
+      descriptionColor: dbProduct?.descriptionColor,
+      descriptionFont: dbProduct?.descriptionFont,
+      descriptionSize: dbProduct?.descriptionSize,
     };
   }, [dbProducts, activeProduct]);
 
@@ -1257,6 +1268,29 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
               )}
             </div>
           </>
+        )}
+
+        {/* Editorial Description Paragraph — hidden for every product unless
+            its "Show Description" box is ticked in Admin > Explore The
+            Collection. Shown-but-blank falls back to the signature text. */}
+        {config.showDescription && (
+          <div
+            className={`w-full ${(config.availableFaces || []).length > 2 && !showBookmatch ? "max-w-[1250px]" : "max-w-[1100px]"} mt-8 md:mt-12 space-y-6`}
+          >
+            {(
+              config.description ||
+              "Across Dubai’s Emirates Hills, Palm Jumeirah, Abu Dhabi’s Saadiyat Island, high-end residential properties are shifting toward ultra-engineered large format porcelain slabs. This is less about replacing natural stone, and more about moving into a new material category altogether. These are not the older generation of porcelain with repetitive patterns or artificial-looking surfaces, but advanced surfaces manufactured with the same attention to detail as marble and quartzite blocks, cut and finished in large slabs to achieve a more natural, continuous visual language."
+            )
+              .split(/\n\s*\n/)
+              .map((para, pIdx) => (
+                <p
+                  key={pIdx}
+                  className={`${fontClass(config.descriptionFont, "font-ivymode")} font-light ${colorClass(config.descriptionColor, "text-[#545759]")} ${paragraphSizeClass(config.descriptionSize, "text-[clamp(14px,1.35vw,20px)]")} tracking-widest leading-[1.75] text-left`}
+                >
+                  {para.trim()}
+                </p>
+              ))}
+          </div>
         )}
       </section>
       <Footer />
