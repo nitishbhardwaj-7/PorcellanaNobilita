@@ -1275,7 +1275,7 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
             Collection. Shown-but-blank falls back to the signature text. */}
         {config.showDescription && (
           <div
-            className={`w-full ${(config.availableFaces || []).length > 2 && !showBookmatch ? "max-w-[1250px]" : "max-w-[1100px]"} mt-8 md:mt-12 space-y-6`}
+            className={`w-full min-w-0 ${(config.availableFaces || []).length > 2 && !showBookmatch ? "max-w-[1250px]" : "max-w-[1100px]"} mt-8 md:mt-12 space-y-6`}
           >
             {(
               config.description ||
@@ -1285,7 +1285,7 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
               .map((para, pIdx) => (
                 <p
                   key={pIdx}
-                  className={`${fontClass(config.descriptionFont, "font-ivymode")} font-light ${colorClass(config.descriptionColor, "text-[#545759]")} ${paragraphSizeClass(config.descriptionSize, "text-[clamp(14px,1.35vw,20px)]")} tracking-widest leading-[1.75] text-left`}
+                  className={`${fontClass(config.descriptionFont, "font-ivymode")} font-light ${colorClass(config.descriptionColor, "text-[#545759]")} ${paragraphSizeClass(config.descriptionSize, "text-[clamp(14px,1.35vw,20px)]")} tracking-widest leading-[1.75] text-left break-words [overflow-wrap:anywhere]`}
                 >
                   {para.trim()}
                 </p>
