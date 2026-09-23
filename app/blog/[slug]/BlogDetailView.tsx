@@ -250,7 +250,7 @@ export default function BlogDetailView({
       {/* Main Column */}
       <main className="w-full max-w-[720px] mx-auto px-6 pt-20 sm:pt-12 pb-12 mt-[64px] md:mt-[80px]">
         {/* Editorial Masthead Header */}
-        <header className="mb-1 sm:mb-1.5 text-left">
+        <header className="mb-6 sm:mb-7 text-left">
           {/* Title */}
           <h1
             className={`${post.titleFont ? BLOCK_FONT_CLASSES[post.titleFont] || "font-ivymode" : "font-ivymode"} ${
@@ -272,7 +272,7 @@ export default function BlogDetailView({
                 post.subtitleFont && post.subtitleFont !== "default" ? BLOCK_FONT_CLASSES[post.subtitleFont] || "font-montserrat" : "font-montserrat"
               } font-light ${BLOCK_COLOR_CLASSES[post.subtitleColor || "grey"] || "text-[#545759]"} ${
                 SUBTITLE_SIZE_CLASSES[post.subtitleSize || "standard"] || SUBTITLE_SIZE_CLASSES.standard
-              } tracking-[0.05em] uppercase leading-[1.3] ${ALIGN_CLASSES[post.subtitleAlign || "left"]} mt-1 sm:mt-1.5`}
+              } tracking-[0.05em] uppercase leading-[1.3] ${ALIGN_CLASSES[post.subtitleAlign || "left"]} mt-6 sm:mt-7`}
             >
               {post.subtitle}
             </h2>
@@ -280,7 +280,7 @@ export default function BlogDetailView({
 
           {/* Intro Paragraph */}
           {post.excerpt && (
-            <p className="font-ivymode font-light text-[#545759] text-[clamp(15px,1.35vw,19px)] leading-[1.75] tracking-wide text-left mt-1 sm:mt-1.5">
+            <p className="font-ivymode font-light text-[#545759] text-[clamp(15px,1.35vw,19px)] leading-[1.75] tracking-wide text-left mt-6 sm:mt-7">
               {post.excerpt}
             </p>
           )}
@@ -292,7 +292,7 @@ export default function BlogDetailView({
                 post.authorFont && post.authorFont !== "default" ? BLOCK_FONT_CLASSES[post.authorFont] || "font-ivymode" : "font-ivymode"
               } font-light ${AUTHOR_SIZE_CLASSES[post.authorSize || "standard"] || AUTHOR_SIZE_CLASSES.standard} ${
                 BLOCK_COLOR_CLASSES[post.authorColor || "teal"] || "text-[#007190]"
-              } tracking-wide ${ALIGN_CLASSES[post.authorAlign || "left"]} mt-1 sm:mt-1.5`}
+              } tracking-wide ${ALIGN_CLASSES[post.authorAlign || "left"]} mt-6 sm:mt-7`}
             >
               {post.author.toLowerCase().startsWith("by ") ? post.author : `by ${post.author}`}
             </p>
@@ -305,7 +305,7 @@ export default function BlogDetailView({
                 post.dateFont && post.dateFont !== "default" ? BLOCK_FONT_CLASSES[post.dateFont] || "font-ivymode" : "font-ivymode"
               } font-light ${DATE_SIZE_CLASSES[post.dateSize || "standard"] || DATE_SIZE_CLASSES.standard} ${
                 BLOCK_COLOR_CLASSES[post.dateColor || "teal"] || "text-[#007190]"
-              } tracking-[0.2em] uppercase ${ALIGN_CLASSES[post.dateAlign || "left"]} mt-1 sm:mt-1.5`}
+              } tracking-[0.2em] uppercase ${ALIGN_CLASSES[post.dateAlign || "left"]} mt-6 sm:mt-7`}
             >
               {formatHeaderDate(post.date)}
             </p>
