@@ -36,7 +36,7 @@ const TITLE_SIZE_CLASSES: Record<string, string> = {
 // article's base grey (#545759) rather than being forced to pure black —
 // this is what plain, never-customized paragraphs/point-text looked like
 // before this feature existed, and must stay the true default.
-const BLOCK_COLOR_CLASSES: Record<string, string> = {
+export const BLOCK_COLOR_CLASSES: Record<string, string> = {
   default: "",
   black: "text-black",
   teal: "text-[#007190]",
@@ -128,7 +128,7 @@ const SUBTITLE_SIZE_CLASSES: Record<string, string> = {
   "36": "text-[clamp(23px,2.6vw,36px)]",
   "40": "text-[clamp(25px,2.9vw,40px)]",
 };
-const AUTHOR_SIZE_CLASSES: Record<string, string> = {
+export const AUTHOR_SIZE_CLASSES: Record<string, string> = {
   "10": "text-[clamp(9px,0.8vw,10px)]",
   "11": "text-[clamp(10px,0.85vw,11px)]",
   "12": "text-[clamp(11px,0.9vw,12px)]",
@@ -139,7 +139,7 @@ const AUTHOR_SIZE_CLASSES: Record<string, string> = {
   "20": "text-[clamp(16px,1.5vw,20px)]",
   "24": "text-[clamp(18px,1.8vw,24px)]",
 };
-const DATE_SIZE_CLASSES: Record<string, string> = {
+export const DATE_SIZE_CLASSES: Record<string, string> = {
   "9": "text-[clamp(8px,0.7vw,9px)]",
   "10": "text-[clamp(9px,0.8vw,10px)]",
   standard: "text-[clamp(11px,0.95vw,13px)]",

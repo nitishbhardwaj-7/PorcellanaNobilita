@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
+import { BLOCK_COLOR_CLASSES, AUTHOR_SIZE_CLASSES, DATE_SIZE_CLASSES } from "./[slug]/BlogDetailView";
 
 import { HARDCODED_BLOGS } from "@/lib/hardcodedBlogs";
 
@@ -19,6 +20,12 @@ interface BlogListItem {
   image: string;
   date: string;
   author: string;
+  authorColor: string;
+  authorFont: string;
+  authorSize: string;
+  dateColor: string;
+  dateFont: string;
+  dateSize: string;
   showDate: boolean;
   showAuthor: boolean;
   href: string;
@@ -36,6 +43,16 @@ interface BlogListCmsData {
   blogHeroLabelSize?: string | null;
 }
 
+// Resolves a stored blog authorSize/dateSize value to a size class, falling back to
+// `fallback` (this card's own original clamp()) both when unset and when it's the
+// "standard" sentinel — "standard" maps to the *article page's* size in
+// AUTHOR_SIZE_CLASSES/DATE_SIZE_CLASSES, which is a different (larger) clamp than
+// this card was always shown at, so it must not be applied here by default too.
+function cardSizeClass(value: string | undefined, map: Record<string, string>, fallback: string): string {
+  if (!value || value === "standard") return fallback;
+  return map[value] || fallback;
+}
+
 export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null }) {
   const d = cmsData || {};
   const blogTileRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -50,6 +67,12 @@ export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null
       image: b.heroImage || "/images/blogs page images/ferro-industriale-blog-hero.webp",
       date: b.publishedAt.slice(0, 10),
       author: b.author || "",
+      authorColor: "default",
+      authorFont: "default",
+      authorSize: "standard",
+      dateColor: "default",
+      dateFont: "default",
+      dateSize: "standard",
       showDate: true,
       showAuthor: true,
       href: `/blog/${b.slug}`,
@@ -67,6 +90,12 @@ export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null
             image: b.heroImage || "/images/blogs page images/ferro-industriale-blog-hero.webp",
             date: (b.publishedAt || b.createdAt || "").slice(0, 10),
             author: b.author || "",
+            authorColor: b.authorColor || "default",
+            authorFont: b.authorFont || "default",
+            authorSize: b.authorSize || "standard",
+            dateColor: b.dateColor || "default",
+            dateFont: b.dateFont || "default",
+            dateSize: b.dateSize || "standard",
             showDate: b.showDateOnCard ?? true,
             showAuthor: b.showAuthorOnCard ?? true,
             href: `/blog/${b.slug}`,
@@ -280,7 +309,15 @@ export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null
                     {/* Bottom Left Author */}
                     {post.showAuthor && post.author && (
                       <div className="absolute bottom-2 left-3 md:bottom-3 md:left-4 z-10 pointer-events-none select-none text-left">
-                        <span className="blog-card-author font-ivymode font-light text-[#007190] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] tracking-[0.20em] drop-shadow-md block">
+                        <span
+                          className={`blog-card-author font-light ${
+                            post.authorFont === "michroma" ? "font-michroma" : "font-ivymode"
+                          } ${BLOCK_COLOR_CLASSES[post.authorColor] || "text-[#007190]"} ${cardSizeClass(
+                            post.authorSize,
+                            AUTHOR_SIZE_CLASSES,
+                            "text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)]"
+                          )} tracking-[0.20em] drop-shadow-md block`}
+                        >
                           {post.author}
                         </span>
                       </div>
@@ -289,7 +326,15 @@ export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null
                     {/* Bottom Right Date */}
                     {post.showDate && (
                       <div className="absolute bottom-2 right-3 md:bottom-3 md:right-4 z-10 pointer-events-none select-none text-right">
-                        <span className="blog-card-date font-ivymode font-light text-[#007190] text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)] tracking-[0.20em] drop-shadow-md block">
+                        <span
+                          className={`blog-card-date font-light ${
+                            post.dateFont === "michroma" ? "font-michroma" : "font-ivymode"
+                          } ${BLOCK_COLOR_CLASSES[post.dateColor] || "text-[#007190]"} ${cardSizeClass(
+                            post.dateSize,
+                            DATE_SIZE_CLASSES,
+                            "text-[clamp(11px,1.1vw,15px)] lg:text-[clamp(13px,1.2vw,18px)]"
+                          )} tracking-[0.20em] drop-shadow-md block`}
+                        >
                           {post.date}
                         </span>
                       </div>

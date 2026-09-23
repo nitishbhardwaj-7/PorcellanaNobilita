@@ -891,7 +891,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, author: e.target.value }))}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                 />
-                <p className="text-[10px] text-[#8b8b8b]">Rendered as "by {form.author || "…"}" under the subtitle/excerpt in the article masthead.</p>
+                <p className="text-[10px] text-[#8b8b8b]">Rendered as "by {form.author || "…"}" under the subtitle/excerpt in the article masthead, and in the bottom-left corner of this post's tile on the blogs listing page. Color/Font/Size below apply to both.</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
@@ -1029,7 +1029,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, publishedAt: e.target.value }))}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                 />
-                <p className="text-[10px] text-[#8b8b8b]">Style of the date as shown in the article masthead (below title/subtitle/author).</p>
+                <p className="text-[10px] text-[#8b8b8b]">Color/Font/Size apply to the date both in the article masthead (below title/subtitle/author) and in the bottom-right corner of this post's tile on the blogs listing page. Align applies to the masthead only — the tile's date position is fixed.</p>
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
