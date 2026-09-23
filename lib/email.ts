@@ -16,6 +16,12 @@ import nodemailer from "nodemailer";
  */
 
 const BRAND_BLUE = "#007190";
+// Matches the site's brand fonts (self-hosted Michroma.ttf / IvyMode-Regular.ttf, see app/layout.tsx).
+// Most webmail clients (Gmail, Outlook) can't load custom fonts in an email at all, so these are
+// declared with the same fallback stacks used in tailwind.config.ts (Michroma -> sans-serif,
+// Ivymode -> serif) and degrade gracefully rather than relying on the font actually loading.
+const FONT_MICHROMA = "'Michroma', Arial, sans-serif";
+const FONT_IVYMODE = "'IvyMode', Georgia, serif";
 
 let cachedTransporter: ReturnType<typeof nodemailer.createTransport> | null = null;
 
@@ -143,12 +149,12 @@ function renderEmailHtml(
     .map(
       (r, i) => `
         <tr>
-          <td style="padding: 16px 32px; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #1a1a1a; width: 150px; vertical-align: top; ${
+          <td style="padding: 16px 32px; font-family: ${FONT_IVYMODE}; font-size: 14px; font-weight: bold; color: #1a1a1a; width: 150px; vertical-align: top; ${
             i < rows.length - 1 ? "border-bottom: 1px solid #eeeeee;" : ""
           }">
             ${escapeHtml(r.label)}
           </td>
-          <td style="padding: 16px 32px 16px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a1a1a; ${
+          <td style="padding: 16px 32px 16px 0; font-family: ${FONT_IVYMODE}; font-size: 14px; color: #1a1a1a; ${
             i < rows.length - 1 ? "border-bottom: 1px solid #eeeeee;" : ""
           }">
             ${
@@ -175,7 +181,7 @@ function renderEmailHtml(
         <!-- Title banner -->
         <tr>
           <td style="background-color: ${BRAND_BLUE}; padding: 14px 32px;">
-            <span style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 18px; font-weight: bold; letter-spacing: 0.5px;">
+            <span style="font-family: ${FONT_MICHROMA}; color: #ffffff; font-size: 18px; font-weight: bold; letter-spacing: 0.5px;">
               ${escapeHtml(bannerTitle)}
             </span>
           </td>
@@ -191,7 +197,7 @@ function renderEmailHtml(
         <!-- Footer -->
         <tr>
           <td style="background-color: ${BRAND_BLUE}; padding: 14px 32px; text-align: center;">
-            <span style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 13px; font-weight: bold; letter-spacing: 2px;">
+            <span style="font-family: ${FONT_MICHROMA}; color: #ffffff; font-size: 13px; font-weight: bold; letter-spacing: 2px;">
               PORCELLANA NOBILITA
             </span>
           </td>
