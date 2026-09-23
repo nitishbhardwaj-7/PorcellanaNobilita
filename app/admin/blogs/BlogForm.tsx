@@ -163,17 +163,17 @@ type ContentBlock = {
   align?: "left" | "center" | "right";
 };
 
-// For heading lines only — there's no natural "inherited" color for a
-// standalone uppercase heading line, so just the two real choices.
+// Every color field on this page offers exactly these 4 real colors — no
+// separate "Default" pseudo-option, since on some fields "Default" rendered
+// identically to one of these anyway (e.g. Author/Date's old "Default" was
+// already teal on the blogs listing tile), which was confusing. Each
+// field's initial value below is whichever of these 4 colors matches what
+// that field always looked like before this option existed, so nothing
+// changes in appearance until an admin actively picks a different one.
 const COLOR_OPTIONS = [
   { value: "black", label: "Black" },
-  { value: "teal", label: "Teal (#007190)" },
-];
-// For paragraph text and point labels/text — "Default" means no explicit
-// color override, i.e. inherit the article's normal grey body color.
-const COLOR_OPTIONS_WITH_DEFAULT = [
-  { value: "default", label: "Default" },
-  { value: "black", label: "Black" },
+  { value: "white", label: "White" },
+  { value: "grey", label: "Grey (#545759)" },
   { value: "teal", label: "Teal (#007190)" },
 ];
 const FONT_OPTIONS = [
@@ -232,10 +232,9 @@ const PARAGRAPH_SIZE_OPTIONS = [
   { value: "32", label: "32px" },
   { value: "36", label: "36px" },
 ];
-// "Default" here means the original, never-customized look each field always had
-// before these style options existed (font: Montserrat for subtitle, Ivymode for
-// author/date; color: the article's normal grey #545759) — matches the
-// COLOR_OPTIONS_WITH_DEFAULT convention above.
+// "Default" here means the original, never-customized font each field always had
+// before this option existed (Montserrat for subtitle, Ivymode for author/date).
+// Color has no such "Default" — see COLOR_OPTIONS above.
 const FONT_OPTIONS_WITH_DEFAULT = [
   { value: "default", label: "Default" },
   { value: "ivymode", label: "Ivymode" },
@@ -400,7 +399,7 @@ function ContentBlockEditor({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-                  <MiniSelect value={block.color || "default"} onChange={(v) => updateBlock(idx, { color: v as ContentBlock["color"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                  <MiniSelect value={block.color || "grey"} onChange={(v) => updateBlock(idx, { color: v as ContentBlock["color"] })} options={COLOR_OPTIONS} />
                 </div>
                 <div>
                   <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
@@ -467,7 +466,7 @@ function ContentBlockEditor({
                 <div className="grid grid-cols-3 gap-2">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-                    <MiniSelect value={block.labelColor || "teal"} onChange={(v) => updateBlock(idx, { labelColor: v as ContentBlock["labelColor"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                    <MiniSelect value={block.labelColor || "teal"} onChange={(v) => updateBlock(idx, { labelColor: v as ContentBlock["labelColor"] })} options={COLOR_OPTIONS} />
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
@@ -492,7 +491,7 @@ function ContentBlockEditor({
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-                    <MiniSelect value={block.textColor || "default"} onChange={(v) => updateBlock(idx, { textColor: v as ContentBlock["textColor"] })} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                    <MiniSelect value={block.textColor || "grey"} onChange={(v) => updateBlock(idx, { textColor: v as ContentBlock["textColor"] })} options={COLOR_OPTIONS} />
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
@@ -568,23 +567,23 @@ export default function BlogForm({ blogId }: BlogFormProps) {
 
   const [form, setForm] = useState({
     title: "",
-    titleColor: "black" as "black" | "teal",
+    titleColor: "black" as "black" | "white" | "grey" | "teal",
     titleFont: "ivymode" as "ivymode" | "michroma",
     titleFontSize: "standard" as string,
     titleAlign: "left" as "left" | "center" | "right",
     subtitle: "",
-    subtitleColor: "default" as "default" | "black" | "teal",
+    subtitleColor: "grey" as "black" | "white" | "grey" | "teal",
     subtitleFont: "default" as "default" | "ivymode" | "michroma",
     subtitleSize: "standard" as string,
     subtitleAlign: "left" as "left" | "center" | "right",
     slug: "",
     excerpt: "",
     author: "NOBILITA Editorial Team",
-    authorColor: "default" as "default" | "black" | "teal",
+    authorColor: "teal" as "black" | "white" | "grey" | "teal",
     authorFont: "default" as "default" | "ivymode" | "michroma",
     authorSize: "standard" as string,
     authorAlign: "left" as "left" | "center" | "right",
-    dateColor: "default" as "default" | "black" | "teal",
+    dateColor: "teal" as "black" | "white" | "grey" | "teal",
     dateFont: "default" as "default" | "ivymode" | "michroma",
     dateSize: "standard" as string,
     dateAlign: "left" as "left" | "center" | "right",
@@ -621,23 +620,23 @@ export default function BlogForm({ blogId }: BlogFormProps) {
             const b = data.data;
             setForm({
               title: b.title,
-              titleColor: b.titleColor === "teal" ? "teal" : "black",
+              titleColor: ["white", "grey", "teal"].includes(b.titleColor) ? b.titleColor : "black",
               titleFont: b.titleFont === "michroma" ? "michroma" : "ivymode",
               titleFontSize: TITLE_SIZE_OPTIONS.some((o) => o.value === b.titleFontSize) ? b.titleFontSize : "standard",
               titleAlign: b.titleAlign === "center" || b.titleAlign === "right" ? b.titleAlign : "left",
               subtitle: b.subtitle || "",
-              subtitleColor: b.subtitleColor === "black" || b.subtitleColor === "teal" ? b.subtitleColor : "default",
+              subtitleColor: ["black", "white", "teal"].includes(b.subtitleColor) ? b.subtitleColor : "grey",
               subtitleFont: b.subtitleFont === "ivymode" || b.subtitleFont === "michroma" ? b.subtitleFont : "default",
               subtitleSize: SUBTITLE_SIZE_OPTIONS.some((o) => o.value === b.subtitleSize) ? b.subtitleSize : "standard",
               subtitleAlign: b.subtitleAlign === "center" || b.subtitleAlign === "right" ? b.subtitleAlign : "left",
               slug: b.slug,
               excerpt: b.excerpt || "",
               author: b.author || "NOBILITA Editorial Team",
-              authorColor: b.authorColor === "black" || b.authorColor === "teal" ? b.authorColor : "default",
+              authorColor: ["black", "white", "grey"].includes(b.authorColor) ? b.authorColor : "teal",
               authorFont: b.authorFont === "ivymode" || b.authorFont === "michroma" ? b.authorFont : "default",
               authorSize: AUTHOR_SIZE_OPTIONS.some((o) => o.value === b.authorSize) ? b.authorSize : "standard",
               authorAlign: b.authorAlign === "center" || b.authorAlign === "right" ? b.authorAlign : "left",
-              dateColor: b.dateColor === "black" || b.dateColor === "teal" ? b.dateColor : "default",
+              dateColor: ["black", "white", "grey"].includes(b.dateColor) ? b.dateColor : "teal",
               dateFont: b.dateFont === "ivymode" || b.dateFont === "michroma" ? b.dateFont : "default",
               dateSize: DATE_SIZE_OPTIONS.some((o) => o.value === b.dateSize) ? b.dateSize : "standard",
               dateAlign: b.dateAlign === "center" || b.dateAlign === "right" ? b.dateAlign : "left",
@@ -788,7 +787,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   </label>
                   <MiniSelect
                     value={form.titleColor}
-                    onChange={(val) => setForm((p) => ({ ...p, titleColor: val as "black" | "teal" }))}
+                    onChange={(val) => setForm((p) => ({ ...p, titleColor: val as "black" | "white" | "grey" | "teal" }))}
                     options={COLOR_OPTIONS}
                   />
                 </div>
@@ -842,7 +841,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-                    <MiniSelect value={form.subtitleColor} onChange={(v) => setForm((p) => ({ ...p, subtitleColor: v as typeof p.subtitleColor }))} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                    <MiniSelect value={form.subtitleColor} onChange={(v) => setForm((p) => ({ ...p, subtitleColor: v as typeof p.subtitleColor }))} options={COLOR_OPTIONS} />
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
@@ -907,7 +906,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-                    <MiniSelect value={form.authorColor} onChange={(v) => setForm((p) => ({ ...p, authorColor: v as typeof p.authorColor }))} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                    <MiniSelect value={form.authorColor} onChange={(v) => setForm((p) => ({ ...p, authorColor: v as typeof p.authorColor }))} options={COLOR_OPTIONS} />
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
@@ -1045,7 +1044,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
-                    <MiniSelect value={form.dateColor} onChange={(v) => setForm((p) => ({ ...p, dateColor: v as typeof p.dateColor }))} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                    <MiniSelect value={form.dateColor} onChange={(v) => setForm((p) => ({ ...p, dateColor: v as typeof p.dateColor }))} options={COLOR_OPTIONS} />
                   </div>
                   <div>
                     <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>

@@ -37,8 +37,14 @@ const TITLE_SIZE_CLASSES: Record<string, string> = {
 // this is what plain, never-customized paragraphs/point-text looked like
 // before this feature existed, and must stay the true default.
 export const BLOCK_COLOR_CLASSES: Record<string, string> = {
+  // "default" is kept only so any content saved before the 4-color palette
+  // existed (color left unset, meaning "inherit the article's grey") still
+  // renders exactly as before — it's no longer offered as a choice in the
+  // admin, which now always persists one of the 4 real colors below.
   default: "",
   black: "text-black",
+  white: "text-white",
+  grey: "text-[#545759]",
   teal: "text-[#007190]",
 };
 
@@ -89,16 +95,16 @@ interface ContentBlock {
   alt?: string;
   // paragraph: applies to the whole block. heading: font/size apply to the
   // whole heading, but color is chosen per-line via firstLineColor/secondLineColor.
-  color?: "default" | "black" | "teal";
+  color?: "default" | "black" | "white" | "grey" | "teal";
   font?: "ivymode" | "michroma";
   size?: string; // key into PARAGRAPH_SIZE_CLASSES or HEADING_SIZE_CLASSES — "standard" or a px value
-  firstLineColor?: "black" | "teal";
-  secondLineColor?: "black" | "teal";
+  firstLineColor?: "black" | "white" | "grey" | "teal";
+  secondLineColor?: "black" | "white" | "grey" | "teal";
   // point: the bold label and its body text are styled independently.
-  labelColor?: "default" | "black" | "teal";
+  labelColor?: "default" | "black" | "white" | "grey" | "teal";
   labelFont?: "ivymode" | "michroma";
   labelSize?: string;
-  textColor?: "default" | "black" | "teal";
+  textColor?: "default" | "black" | "white" | "grey" | "teal";
   textFont?: "ivymode" | "michroma";
   textSize?: string;
   // paragraph, heading, point: text alignment within the article column.
@@ -152,23 +158,23 @@ export const DATE_SIZE_CLASSES: Record<string, string> = {
 export interface BlogPost {
   slug: string;
   title: string;
-  titleColor?: "black" | "teal";
+  titleColor?: "black" | "white" | "grey" | "teal";
   titleFont?: "ivymode" | "michroma";
   titleFontSize?: string;
   titleAlign?: "left" | "center" | "right";
   subtitle?: string;
-  subtitleColor?: "default" | "black" | "teal";
+  subtitleColor?: "black" | "white" | "grey" | "teal";
   subtitleFont?: "default" | "ivymode" | "michroma";
   subtitleSize?: string;
   subtitleAlign?: "left" | "center" | "right";
   author: string;
-  authorColor?: "default" | "black" | "teal";
+  authorColor?: "black" | "white" | "grey" | "teal";
   authorFont?: "default" | "ivymode" | "michroma";
   authorSize?: string;
   authorAlign?: "left" | "center" | "right";
   authorImage: string;
   date: string;
-  dateColor?: "default" | "black" | "teal";
+  dateColor?: "black" | "white" | "grey" | "teal";
   dateFont?: "default" | "ivymode" | "michroma";
   dateSize?: string;
   dateAlign?: "left" | "center" | "right";
@@ -245,7 +251,10 @@ export default function BlogDetailView({
           {/* Title */}
           <h1
             className={`${post.titleFont === "michroma" ? "font-michroma" : "font-ivymode"} ${
-              post.titleColor === "teal" ? "text-[#007190]" : "text-neutral-900"
+              // "black" keeps the article's original text-neutral-900 shade (not pure
+              // text-black) so every existing post's title looks pixel-identical unless
+              // an admin explicitly picks a different color.
+              post.titleColor === "white" ? "text-white" : post.titleColor === "grey" ? "text-[#545759]" : post.titleColor === "teal" ? "text-[#007190]" : "text-neutral-900"
             } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"] || TITLE_SIZE_CLASSES.standard} font-normal leading-[1.12] tracking-[0.04em] uppercase ${
               ALIGN_CLASSES[post.titleAlign || "left"]
             } whitespace-pre-line`}
@@ -258,7 +267,7 @@ export default function BlogDetailView({
             <h2
               className={`${
                 post.subtitleFont === "michroma" ? "font-michroma" : post.subtitleFont === "ivymode" ? "font-ivymode" : "font-montserrat"
-              } font-light ${BLOCK_COLOR_CLASSES[post.subtitleColor || "default"] || "text-[#545759]"} ${
+              } font-light ${BLOCK_COLOR_CLASSES[post.subtitleColor || "grey"] || "text-[#545759]"} ${
                 SUBTITLE_SIZE_CLASSES[post.subtitleSize || "standard"] || SUBTITLE_SIZE_CLASSES.standard
               } tracking-[0.05em] uppercase leading-[1.3] ${ALIGN_CLASSES[post.subtitleAlign || "left"]} mt-6 sm:mt-7`}
             >
@@ -279,7 +288,7 @@ export default function BlogDetailView({
               className={`${
                 post.authorFont === "michroma" ? "font-michroma" : "font-ivymode"
               } font-light ${AUTHOR_SIZE_CLASSES[post.authorSize || "standard"] || AUTHOR_SIZE_CLASSES.standard} ${
-                BLOCK_COLOR_CLASSES[post.authorColor || "default"] || "text-[#545759]"
+                BLOCK_COLOR_CLASSES[post.authorColor || "teal"] || "text-[#007190]"
               } tracking-wide ${ALIGN_CLASSES[post.authorAlign || "left"]} mt-7 sm:mt-8`}
             >
               {post.author.toLowerCase().startsWith("by ") ? post.author : `by ${post.author}`}
@@ -292,7 +301,7 @@ export default function BlogDetailView({
               className={`${
                 post.dateFont === "michroma" ? "font-michroma" : "font-ivymode"
               } font-light ${DATE_SIZE_CLASSES[post.dateSize || "standard"] || DATE_SIZE_CLASSES.standard} ${
-                BLOCK_COLOR_CLASSES[post.dateColor || "default"] || "text-[#545759]"
+                BLOCK_COLOR_CLASSES[post.dateColor || "teal"] || "text-[#007190]"
               } tracking-[0.2em] uppercase ${ALIGN_CLASSES[post.dateAlign || "left"]} mt-4 sm:mt-5`}
             >
               {formatHeaderDate(post.date)}
