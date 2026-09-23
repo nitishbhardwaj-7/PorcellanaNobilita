@@ -232,6 +232,50 @@ const PARAGRAPH_SIZE_OPTIONS = [
   { value: "32", label: "32px" },
   { value: "36", label: "36px" },
 ];
+// "Default" here means the original, never-customized look each field always had
+// before these style options existed (font: Montserrat for subtitle, Ivymode for
+// author/date; color: the article's normal grey #545759) — matches the
+// COLOR_OPTIONS_WITH_DEFAULT convention above.
+const FONT_OPTIONS_WITH_DEFAULT = [
+  { value: "default", label: "Default" },
+  { value: "ivymode", label: "Ivymode" },
+  { value: "michroma", label: "Michroma" },
+];
+// Masthead subtitle/author/date size scales. Must stay in sync with
+// SUBTITLE_SIZE_CLASSES / AUTHOR_SIZE_CLASSES / DATE_SIZE_CLASSES in
+// app/blog/[slug]/BlogDetailView.tsx.
+const SUBTITLE_SIZE_OPTIONS = [
+  { value: "16", label: "16px" },
+  { value: "18", label: "18px" },
+  { value: "20", label: "20px" },
+  { value: "22", label: "22px" },
+  { value: "24", label: "24px" },
+  { value: "26", label: "26px" },
+  { value: "standard", label: "Standard (28px)" },
+  { value: "32", label: "32px" },
+  { value: "36", label: "36px" },
+  { value: "40", label: "40px" },
+];
+const AUTHOR_SIZE_OPTIONS = [
+  { value: "10", label: "10px" },
+  { value: "11", label: "11px" },
+  { value: "12", label: "12px" },
+  { value: "13", label: "13px" },
+  { value: "standard", label: "Standard (15px)" },
+  { value: "16", label: "16px" },
+  { value: "18", label: "18px" },
+  { value: "20", label: "20px" },
+  { value: "24", label: "24px" },
+];
+const DATE_SIZE_OPTIONS = [
+  { value: "9", label: "9px" },
+  { value: "10", label: "10px" },
+  { value: "standard", label: "Standard (13px)" },
+  { value: "14", label: "14px" },
+  { value: "16", label: "16px" },
+  { value: "18", label: "18px" },
+  { value: "20", label: "20px" },
+];
 
 function MiniSelect({
   value,
@@ -527,9 +571,22 @@ export default function BlogForm({ blogId }: BlogFormProps) {
     titleColor: "black" as "black" | "teal",
     titleFont: "ivymode" as "ivymode" | "michroma",
     titleFontSize: "standard" as string,
+    subtitle: "",
+    subtitleColor: "default" as "default" | "black" | "teal",
+    subtitleFont: "default" as "default" | "ivymode" | "michroma",
+    subtitleSize: "standard" as string,
+    subtitleAlign: "left" as "left" | "center" | "right",
     slug: "",
     excerpt: "",
     author: "NOBILITA Editorial Team",
+    authorColor: "default" as "default" | "black" | "teal",
+    authorFont: "default" as "default" | "ivymode" | "michroma",
+    authorSize: "standard" as string,
+    authorAlign: "left" as "left" | "center" | "right",
+    dateColor: "default" as "default" | "black" | "teal",
+    dateFont: "default" as "default" | "ivymode" | "michroma",
+    dateSize: "standard" as string,
+    dateAlign: "left" as "left" | "center" | "right",
     authorImage: "",
     heroImage: "",
     heroImageAlt: "",
@@ -566,9 +623,22 @@ export default function BlogForm({ blogId }: BlogFormProps) {
               titleColor: b.titleColor === "teal" ? "teal" : "black",
               titleFont: b.titleFont === "michroma" ? "michroma" : "ivymode",
               titleFontSize: TITLE_SIZE_OPTIONS.some((o) => o.value === b.titleFontSize) ? b.titleFontSize : "standard",
+              subtitle: b.subtitle || "",
+              subtitleColor: b.subtitleColor === "black" || b.subtitleColor === "teal" ? b.subtitleColor : "default",
+              subtitleFont: b.subtitleFont === "ivymode" || b.subtitleFont === "michroma" ? b.subtitleFont : "default",
+              subtitleSize: SUBTITLE_SIZE_OPTIONS.some((o) => o.value === b.subtitleSize) ? b.subtitleSize : "standard",
+              subtitleAlign: b.subtitleAlign === "center" || b.subtitleAlign === "right" ? b.subtitleAlign : "left",
               slug: b.slug,
               excerpt: b.excerpt || "",
               author: b.author || "NOBILITA Editorial Team",
+              authorColor: b.authorColor === "black" || b.authorColor === "teal" ? b.authorColor : "default",
+              authorFont: b.authorFont === "ivymode" || b.authorFont === "michroma" ? b.authorFont : "default",
+              authorSize: AUTHOR_SIZE_OPTIONS.some((o) => o.value === b.authorSize) ? b.authorSize : "standard",
+              authorAlign: b.authorAlign === "center" || b.authorAlign === "right" ? b.authorAlign : "left",
+              dateColor: b.dateColor === "black" || b.dateColor === "teal" ? b.dateColor : "default",
+              dateFont: b.dateFont === "ivymode" || b.dateFont === "michroma" ? b.dateFont : "default",
+              dateSize: DATE_SIZE_OPTIONS.some((o) => o.value === b.dateSize) ? b.dateSize : "standard",
+              dateAlign: b.dateAlign === "center" || b.dateAlign === "right" ? b.dateAlign : "left",
               authorImage: b.authorImage || "",
               heroImage: b.heroImage || "",
               heroImageAlt: b.heroImageAlt || "",
@@ -747,6 +817,38 @@ export default function BlogForm({ blogId }: BlogFormProps) {
 
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
+                  Subtitle
+                </label>
+                <textarea
+                  rows={2}
+                  value={form.subtitle}
+                  onChange={(e) => setForm((p) => ({ ...p, subtitle: e.target.value }))}
+                  className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none uppercase"
+                  placeholder="e.g. A GUIDE TO GRANITE, QUARTZITE, BASALT & SINTERED STONE"
+                />
+                <p className="text-[10px] text-[#8b8b8b]">Rendered in uppercase under the blog title in the article masthead.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+                    <MiniSelect value={form.subtitleColor} onChange={(v) => setForm((p) => ({ ...p, subtitleColor: v as typeof p.subtitleColor }))} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                    <MiniSelect value={form.subtitleFont} onChange={(v) => setForm((p) => ({ ...p, subtitleFont: v as typeof p.subtitleFont }))} options={FONT_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                    <MiniSelect value={form.subtitleSize} onChange={(v) => setForm((p) => ({ ...p, subtitleSize: v }))} options={SUBTITLE_SIZE_OPTIONS} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Align</label>
+                    <MiniSelect value={form.subtitleAlign} onChange={(v) => setForm((p) => ({ ...p, subtitleAlign: v as typeof p.subtitleAlign }))} options={ALIGN_OPTIONS} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
                   URL Slug *
                 </label>
                 <input
@@ -765,17 +867,17 @@ export default function BlogForm({ blogId }: BlogFormProps) {
 
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
-                  Excerpt
+                  Introduction Paragraph / Excerpt
                 </label>
                 <textarea
                   value={form.excerpt}
                   onChange={(e) => setForm((p) => ({ ...p, excerpt: e.target.value }))}
                   rows={3}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:border-[#1a1a1a]/40 focus:outline-none resize-none leading-relaxed"
-                  placeholder="A short summary…"
+                  placeholder="Where water meets stone, material choice becomes an essential part of the architecture…"
                 />
                 <p className="text-[10px] text-[#8b8b8b]">
-                  Shown as the preview text in the "Recent Blogs" carousel on other posts, and used as the SEO meta description if that field below is left blank.
+                  Shown directly below the subtitle on the blog post page, in the "Recent Blogs" carousel on other posts, and used as the SEO meta description if left blank below.
                 </p>
               </div>
 
@@ -789,6 +891,25 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, author: e.target.value }))}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-3 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                 />
+                <p className="text-[10px] text-[#8b8b8b]">Rendered as "by {form.author || "…"}" under the subtitle/excerpt in the article masthead.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+                    <MiniSelect value={form.authorColor} onChange={(v) => setForm((p) => ({ ...p, authorColor: v as typeof p.authorColor }))} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                    <MiniSelect value={form.authorFont} onChange={(v) => setForm((p) => ({ ...p, authorFont: v as typeof p.authorFont }))} options={FONT_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                    <MiniSelect value={form.authorSize} onChange={(v) => setForm((p) => ({ ...p, authorSize: v }))} options={AUTHOR_SIZE_OPTIONS} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Align</label>
+                    <MiniSelect value={form.authorAlign} onChange={(v) => setForm((p) => ({ ...p, authorAlign: v as typeof p.authorAlign }))} options={ALIGN_OPTIONS} />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -908,6 +1029,25 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   onChange={(e) => setForm((p) => ({ ...p, publishedAt: e.target.value }))}
                   className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-3 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
                 />
+                <p className="text-[10px] text-[#8b8b8b]">Style of the date as shown in the article masthead (below title/subtitle/author).</p>
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Color</label>
+                    <MiniSelect value={form.dateColor} onChange={(v) => setForm((p) => ({ ...p, dateColor: v as typeof p.dateColor }))} options={COLOR_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Font</label>
+                    <MiniSelect value={form.dateFont} onChange={(v) => setForm((p) => ({ ...p, dateFont: v as typeof p.dateFont }))} options={FONT_OPTIONS_WITH_DEFAULT} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Size</label>
+                    <MiniSelect value={form.dateSize} onChange={(v) => setForm((p) => ({ ...p, dateSize: v }))} options={DATE_SIZE_OPTIONS} />
+                  </div>
+                  <div>
+                    <label className="block text-[8px] text-[#8b8b8b] uppercase">Align</label>
+                    <MiniSelect value={form.dateAlign} onChange={(v) => setForm((p) => ({ ...p, dateAlign: v as typeof p.dateAlign }))} options={ALIGN_OPTIONS} />
+                  </div>
+                </div>
               </div>
               <div className="space-y-1.5">
                 <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>

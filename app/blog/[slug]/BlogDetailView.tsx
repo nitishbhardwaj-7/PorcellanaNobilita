@@ -112,15 +112,65 @@ const ALIGN_CLASSES: Record<string, string> = {
   right: "text-right",
 };
 
+// Masthead subtitle/author/date size scales — "standard" is kept pixel-exact to each
+// field's original hardcoded clamp() so existing posts render identically until an
+// admin explicitly picks a different size. Must stay in sync with the *_SIZE_OPTIONS
+// arrays in app/admin/blogs/BlogForm.tsx.
+const SUBTITLE_SIZE_CLASSES: Record<string, string> = {
+  "16": "text-[clamp(14px,1.2vw,16px)]",
+  "18": "text-[clamp(15px,1.3vw,18px)]",
+  "20": "text-[clamp(16px,1.5vw,20px)]",
+  "22": "text-[clamp(17px,1.7vw,22px)]",
+  "24": "text-[clamp(18px,1.9vw,24px)]",
+  "26": "text-[clamp(18px,2vw,26px)]",
+  standard: "text-[clamp(19px,2.1vw,28px)]",
+  "32": "text-[clamp(21px,2.4vw,32px)]",
+  "36": "text-[clamp(23px,2.6vw,36px)]",
+  "40": "text-[clamp(25px,2.9vw,40px)]",
+};
+const AUTHOR_SIZE_CLASSES: Record<string, string> = {
+  "10": "text-[clamp(9px,0.8vw,10px)]",
+  "11": "text-[clamp(10px,0.85vw,11px)]",
+  "12": "text-[clamp(11px,0.9vw,12px)]",
+  "13": "text-[clamp(12px,1vw,13px)]",
+  standard: "text-[clamp(13px,1.1vw,15px)]",
+  "16": "text-[clamp(14px,1.2vw,16px)]",
+  "18": "text-[clamp(15px,1.3vw,18px)]",
+  "20": "text-[clamp(16px,1.5vw,20px)]",
+  "24": "text-[clamp(18px,1.8vw,24px)]",
+};
+const DATE_SIZE_CLASSES: Record<string, string> = {
+  "9": "text-[clamp(8px,0.7vw,9px)]",
+  "10": "text-[clamp(9px,0.8vw,10px)]",
+  standard: "text-[clamp(11px,0.95vw,13px)]",
+  "14": "text-[clamp(12px,1.05vw,14px)]",
+  "16": "text-[clamp(13px,1.15vw,16px)]",
+  "18": "text-[clamp(14px,1.25vw,18px)]",
+  "20": "text-[clamp(15px,1.4vw,20px)]",
+};
+
 export interface BlogPost {
   slug: string;
   title: string;
   titleColor?: "black" | "teal";
   titleFont?: "ivymode" | "michroma";
   titleFontSize?: string;
+  subtitle?: string;
+  subtitleColor?: "default" | "black" | "teal";
+  subtitleFont?: "default" | "ivymode" | "michroma";
+  subtitleSize?: string;
+  subtitleAlign?: "left" | "center" | "right";
   author: string;
+  authorColor?: "default" | "black" | "teal";
+  authorFont?: "default" | "ivymode" | "michroma";
+  authorSize?: string;
+  authorAlign?: "left" | "center" | "right";
   authorImage: string;
   date: string;
+  dateColor?: "default" | "black" | "teal";
+  dateFont?: "default" | "ivymode" | "michroma";
+  dateSize?: string;
+  dateAlign?: "left" | "center" | "right";
   readTime: string;
   heroImage: string;
   heroImageAlt: string;
@@ -156,6 +206,13 @@ export default function BlogDetailView({
     return `${day}/${month}/${year}`;
   };
 
+  const formatHeaderDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr.toUpperCase();
+    return date.toLocaleDateString("en-US", { month: "long", year: "numeric" }).toUpperCase();
+  };
+
   return (
     <div className="min-h-screen bg-white text-neutral-900 flex flex-col justify-between overflow-x-hidden relative">
       <Navbar />
@@ -182,16 +239,63 @@ export default function BlogDetailView({
 
       {/* Main Column */}
       <main className="w-full max-w-[720px] mx-auto px-6 pt-20 sm:pt-12 pb-12 mt-[64px] md:mt-[80px]">
-        {/* Title */}
-        <div className="relative mb-8">
+        {/* Editorial Masthead Header */}
+        <header className="mb-12 sm:mb-16 text-left">
+          {/* Title */}
           <h1
             className={`${post.titleFont === "michroma" ? "font-michroma" : "font-ivymode"} ${
               post.titleColor === "teal" ? "text-[#007190]" : "text-neutral-900"
-            } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"] || TITLE_SIZE_CLASSES.standard} font-normal leading-[1.12] tracking-[0.05em] uppercase text-center`}
+            } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"] || TITLE_SIZE_CLASSES.standard} font-normal leading-[1.12] tracking-[0.04em] uppercase text-left whitespace-pre-line`}
           >
             {post.title}
           </h1>
-        </div>
+
+          {/* Subtitle */}
+          {post.subtitle && (
+            <h2
+              className={`${
+                post.subtitleFont === "michroma" ? "font-michroma" : post.subtitleFont === "ivymode" ? "font-ivymode" : "font-montserrat"
+              } font-light ${BLOCK_COLOR_CLASSES[post.subtitleColor || "default"] || "text-[#545759]"} ${
+                SUBTITLE_SIZE_CLASSES[post.subtitleSize || "standard"] || SUBTITLE_SIZE_CLASSES.standard
+              } tracking-[0.05em] uppercase leading-[1.3] ${ALIGN_CLASSES[post.subtitleAlign || "left"]} mt-6 sm:mt-7`}
+            >
+              {post.subtitle}
+            </h2>
+          )}
+
+          {/* Intro Paragraph */}
+          {post.excerpt && (
+            <p className="font-ivymode font-light text-[#545759] text-[clamp(15px,1.35vw,19px)] leading-[1.75] tracking-wide text-left mt-6 sm:mt-8">
+              {post.excerpt}
+            </p>
+          )}
+
+          {/* Author */}
+          {post.author && (
+            <p
+              className={`${
+                post.authorFont === "michroma" ? "font-michroma" : "font-ivymode"
+              } font-light ${AUTHOR_SIZE_CLASSES[post.authorSize || "standard"] || AUTHOR_SIZE_CLASSES.standard} ${
+                BLOCK_COLOR_CLASSES[post.authorColor || "default"] || "text-[#545759]"
+              } tracking-wide ${ALIGN_CLASSES[post.authorAlign || "left"]} mt-7 sm:mt-8`}
+            >
+              {post.author.toLowerCase().startsWith("by ") ? post.author : `by ${post.author}`}
+            </p>
+          )}
+
+          {/* Date */}
+          {post.date && (
+            <p
+              className={`${
+                post.dateFont === "michroma" ? "font-michroma" : "font-ivymode"
+              } font-light ${DATE_SIZE_CLASSES[post.dateSize || "standard"] || DATE_SIZE_CLASSES.standard} ${
+                BLOCK_COLOR_CLASSES[post.dateColor || "default"] || "text-[#545759]"
+              } tracking-[0.2em] uppercase ${ALIGN_CLASSES[post.dateAlign || "left"]} mt-4 sm:mt-5`}
+            >
+              {formatHeaderDate(post.date)}
+            </p>
+          )}
+        </header>
 
         {/* Hero image */}
         {post.heroImage && (
