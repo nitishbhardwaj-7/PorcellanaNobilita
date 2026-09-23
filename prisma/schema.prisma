@@ -90,6 +90,7 @@ model Blog {
   titleColor     String   @default("black") // "black" | "teal" (#007190) — rendered color of the blog title
   titleFont      String   @default("ivymode") // "ivymode" | "michroma" — rendered font of the blog title
   titleFontSize  String   @default("standard") // "small" | "standard" | "large" | "xlarge" — rendered size of the blog title
+  titleAlign     String   @default("left") // "left" | "center" | "right" — article masthead only; the listing-card title stays centered by design
   subtitle       String?  @db.Text // rendered directly under the blog title in the article masthead
   subtitleColor  String   @default("default") // "default" (#545759) | "black" | "teal" (#007190)
   subtitleFont   String   @default("default") // "default" (Montserrat, original look) | "ivymode" | "michroma"

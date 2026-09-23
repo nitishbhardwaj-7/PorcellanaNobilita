@@ -155,6 +155,7 @@ export interface BlogPost {
   titleColor?: "black" | "teal";
   titleFont?: "ivymode" | "michroma";
   titleFontSize?: string;
+  titleAlign?: "left" | "center" | "right";
   subtitle?: string;
   subtitleColor?: "default" | "black" | "teal";
   subtitleFont?: "default" | "ivymode" | "michroma";
@@ -245,7 +246,9 @@ export default function BlogDetailView({
           <h1
             className={`${post.titleFont === "michroma" ? "font-michroma" : "font-ivymode"} ${
               post.titleColor === "teal" ? "text-[#007190]" : "text-neutral-900"
-            } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"] || TITLE_SIZE_CLASSES.standard} font-normal leading-[1.12] tracking-[0.04em] uppercase text-left whitespace-pre-line`}
+            } ${TITLE_SIZE_CLASSES[post.titleFontSize || "standard"] || TITLE_SIZE_CLASSES.standard} font-normal leading-[1.12] tracking-[0.04em] uppercase ${
+              ALIGN_CLASSES[post.titleAlign || "left"]
+            } whitespace-pre-line`}
           >
             {post.title}
           </h1>

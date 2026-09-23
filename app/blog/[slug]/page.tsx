@@ -14,6 +14,7 @@ function toBlogPost(b: any): BlogPost {
     titleColor: b.titleColor || "black",
     titleFont: b.titleFont || "ivymode",
     titleFontSize: b.titleFontSize || "standard",
+    titleAlign: b.titleAlign || "left",
     subtitle: b.subtitle || undefined,
     subtitleColor: b.subtitleColor || "default",
     subtitleFont: b.subtitleFont || "default",
