@@ -147,16 +147,16 @@ type ContentBlock = {
   title?: string;
   src?: string;
   alt?: string;
-  color?: "default" | "black" | "teal";
-  font?: "ivymode" | "michroma";
+  color?: "default" | "black" | "white" | "grey" | "teal";
+  font?: "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo";
   size?: string;
-  firstLineColor?: "black" | "teal";
-  secondLineColor?: "black" | "teal";
-  labelColor?: "default" | "black" | "teal";
-  labelFont?: "ivymode" | "michroma";
+  firstLineColor?: "black" | "white" | "grey" | "teal";
+  secondLineColor?: "black" | "white" | "grey" | "teal";
+  labelColor?: "default" | "black" | "white" | "grey" | "teal";
+  labelFont?: "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo";
   labelSize?: string;
-  textColor?: "default" | "black" | "teal";
-  textFont?: "ivymode" | "michroma";
+  textColor?: "default" | "black" | "white" | "grey" | "teal";
+  textFont?: "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo";
   textSize?: string;
   // paragraph, heading, point: text alignment within the article column.
   // "left" (the original default) when unset.
@@ -179,6 +179,9 @@ const COLOR_OPTIONS = [
 const FONT_OPTIONS = [
   { value: "ivymode", label: "Ivymode" },
   { value: "michroma", label: "Michroma" },
+  { value: "didot", label: "Didot" },
+  { value: "metropolis", label: "Metropolis" },
+  { value: "gruppo", label: "Gruppo" },
 ];
 const ALIGN_OPTIONS = [
   { value: "left", label: "Left (Default)" },
@@ -239,6 +242,9 @@ const FONT_OPTIONS_WITH_DEFAULT = [
   { value: "default", label: "Default" },
   { value: "ivymode", label: "Ivymode" },
   { value: "michroma", label: "Michroma" },
+  { value: "didot", label: "Didot" },
+  { value: "metropolis", label: "Metropolis" },
+  { value: "gruppo", label: "Gruppo" },
 ];
 // Masthead subtitle/author/date size scales. Must stay in sync with
 // SUBTITLE_SIZE_CLASSES / AUTHOR_SIZE_CLASSES / DATE_SIZE_CLASSES in
@@ -568,23 +574,23 @@ export default function BlogForm({ blogId }: BlogFormProps) {
   const [form, setForm] = useState({
     title: "",
     titleColor: "black" as "black" | "white" | "grey" | "teal",
-    titleFont: "ivymode" as "ivymode" | "michroma",
+    titleFont: "ivymode" as "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo",
     titleFontSize: "standard" as string,
     titleAlign: "left" as "left" | "center" | "right",
     subtitle: "",
     subtitleColor: "grey" as "black" | "white" | "grey" | "teal",
-    subtitleFont: "default" as "default" | "ivymode" | "michroma",
+    subtitleFont: "default" as "default" | "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo",
     subtitleSize: "standard" as string,
     subtitleAlign: "left" as "left" | "center" | "right",
     slug: "",
     excerpt: "",
     author: "NOBILITA Editorial Team",
     authorColor: "teal" as "black" | "white" | "grey" | "teal",
-    authorFont: "default" as "default" | "ivymode" | "michroma",
+    authorFont: "default" as "default" | "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo",
     authorSize: "standard" as string,
     authorAlign: "left" as "left" | "center" | "right",
     dateColor: "teal" as "black" | "white" | "grey" | "teal",
-    dateFont: "default" as "default" | "ivymode" | "michroma",
+    dateFont: "default" as "default" | "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo",
     dateSize: "standard" as string,
     dateAlign: "left" as "left" | "center" | "right",
     authorImage: "",
@@ -621,23 +627,23 @@ export default function BlogForm({ blogId }: BlogFormProps) {
             setForm({
               title: b.title,
               titleColor: ["white", "grey", "teal"].includes(b.titleColor) ? b.titleColor : "black",
-              titleFont: b.titleFont === "michroma" ? "michroma" : "ivymode",
+              titleFont: ["michroma", "didot", "metropolis", "gruppo"].includes(b.titleFont) ? b.titleFont : "ivymode",
               titleFontSize: TITLE_SIZE_OPTIONS.some((o) => o.value === b.titleFontSize) ? b.titleFontSize : "standard",
               titleAlign: b.titleAlign === "center" || b.titleAlign === "right" ? b.titleAlign : "left",
               subtitle: b.subtitle || "",
               subtitleColor: ["black", "white", "teal"].includes(b.subtitleColor) ? b.subtitleColor : "grey",
-              subtitleFont: b.subtitleFont === "ivymode" || b.subtitleFont === "michroma" ? b.subtitleFont : "default",
+              subtitleFont: ["ivymode", "michroma", "didot", "metropolis", "gruppo"].includes(b.subtitleFont) ? b.subtitleFont : "default",
               subtitleSize: SUBTITLE_SIZE_OPTIONS.some((o) => o.value === b.subtitleSize) ? b.subtitleSize : "standard",
               subtitleAlign: b.subtitleAlign === "center" || b.subtitleAlign === "right" ? b.subtitleAlign : "left",
               slug: b.slug,
               excerpt: b.excerpt || "",
               author: b.author || "NOBILITA Editorial Team",
               authorColor: ["black", "white", "grey"].includes(b.authorColor) ? b.authorColor : "teal",
-              authorFont: b.authorFont === "ivymode" || b.authorFont === "michroma" ? b.authorFont : "default",
+              authorFont: ["ivymode", "michroma", "didot", "metropolis", "gruppo"].includes(b.authorFont) ? b.authorFont : "default",
               authorSize: AUTHOR_SIZE_OPTIONS.some((o) => o.value === b.authorSize) ? b.authorSize : "standard",
               authorAlign: b.authorAlign === "center" || b.authorAlign === "right" ? b.authorAlign : "left",
               dateColor: ["black", "white", "grey"].includes(b.dateColor) ? b.dateColor : "teal",
-              dateFont: b.dateFont === "ivymode" || b.dateFont === "michroma" ? b.dateFont : "default",
+              dateFont: ["ivymode", "michroma", "didot", "metropolis", "gruppo"].includes(b.dateFont) ? b.dateFont : "default",
               dateSize: DATE_SIZE_OPTIONS.some((o) => o.value === b.dateSize) ? b.dateSize : "standard",
               dateAlign: b.dateAlign === "center" || b.dateAlign === "right" ? b.dateAlign : "left",
               authorImage: b.authorImage || "",
@@ -797,7 +803,7 @@ export default function BlogForm({ blogId }: BlogFormProps) {
                   </label>
                   <MiniSelect
                     value={form.titleFont}
-                    onChange={(val) => setForm((p) => ({ ...p, titleFont: val as "ivymode" | "michroma" }))}
+                    onChange={(val) => setForm((p) => ({ ...p, titleFont: val as "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo" }))}
                     options={FONT_OPTIONS}
                   />
                 </div>

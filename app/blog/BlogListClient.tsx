@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { colorClass, fontClass, headingSizeClass, paragraphSizeClass } from "@/lib/textStyle";
-import { BLOCK_COLOR_CLASSES, AUTHOR_SIZE_CLASSES, DATE_SIZE_CLASSES } from "./[slug]/BlogDetailView";
+import { BLOCK_COLOR_CLASSES, BLOCK_FONT_CLASSES, AUTHOR_SIZE_CLASSES, DATE_SIZE_CLASSES } from "./[slug]/BlogDetailView";
 
 import { HARDCODED_BLOGS } from "@/lib/hardcodedBlogs";
 
@@ -311,7 +311,7 @@ export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null
                       <div className="absolute bottom-2 left-3 md:bottom-3 md:left-4 z-10 pointer-events-none select-none text-left">
                         <span
                           className={`blog-card-author font-light ${
-                            post.authorFont === "michroma" ? "font-michroma" : "font-ivymode"
+                            post.authorFont && post.authorFont !== "default" ? BLOCK_FONT_CLASSES[post.authorFont] || "font-ivymode" : "font-ivymode"
                           } ${BLOCK_COLOR_CLASSES[post.authorColor] || "text-[#007190]"} ${cardSizeClass(
                             post.authorSize,
                             AUTHOR_SIZE_CLASSES,
@@ -328,7 +328,7 @@ export default function BlogPage({ cmsData }: { cmsData?: BlogListCmsData | null
                       <div className="absolute bottom-2 right-3 md:bottom-3 md:right-4 z-10 pointer-events-none select-none text-right">
                         <span
                           className={`blog-card-date font-light ${
-                            post.dateFont === "michroma" ? "font-michroma" : "font-ivymode"
+                            post.dateFont && post.dateFont !== "default" ? BLOCK_FONT_CLASSES[post.dateFont] || "font-ivymode" : "font-ivymode"
                           } ${BLOCK_COLOR_CLASSES[post.dateColor] || "text-[#007190]"} ${cardSizeClass(
                             post.dateSize,
                             DATE_SIZE_CLASSES,
