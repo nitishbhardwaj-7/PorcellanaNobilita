@@ -81,7 +81,12 @@ export default function MediaLibrary() {
 
     setError(null);
     setUploading(true);
+    const failures: string[] = [];
 
+    // Uploaded one at a time (not in parallel) so the progress line stays
+    // accurate and a slow/large video doesn't starve smaller images queued
+    // behind it — each file still lands in the grid as soon as it finishes,
+    // rather than waiting for the whole batch.
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       setUploadProgress(`Uploading ${i + 1} / ${files.length}: ${file.name}`);
@@ -100,8 +105,16 @@ export default function MediaLibrary() {
         if (!res.ok) throw new Error(data.error || "Upload failed");
         setMedia((prev) => [data.data, ...prev]);
       } catch (err: any) {
-        setError(err.message);
+        failures.push(`${file.name}: ${err.message}`);
       }
+    }
+
+    if (failures.length > 0) {
+      setError(
+        failures.length === 1
+          ? failures[0]
+          : `${failures.length} of ${files.length} files failed to upload — ${failures.join("; ")}`
+      );
     }
 
     setUploading(false);
@@ -190,7 +203,7 @@ export default function MediaLibrary() {
                 ref={fileInputRef}
                 type="file"
                 className="hidden"
-                accept="image/*,application/pdf"
+                accept="image/*,video/*,application/pdf"
                 multiple
                 disabled={uploading}
                 onChange={handleFileUpload}
