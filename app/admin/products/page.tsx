@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { MediaPickerButton } from "../_components/MediaPicker";
 import { StyleRow } from "../_components/StyleControls";
-import { HEADING_SIZE_OPTIONS } from "@/lib/textStyle";
+import { HEADING_SIZE_OPTIONS, PARAGRAPH_SIZE_OPTIONS } from "@/lib/textStyle";
 
 const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 const fontIvymode = { fontFamily: "var(--font-ivymode), serif" };
@@ -85,6 +85,10 @@ interface PageHeaderSettings {
   exploreHeroTitleFont: string;
   exploreHeroTitleSize: string;
   exploreHeroLogo: string;
+  exploreBrowseAppsText: string;
+  exploreBrowseAppsColor: string;
+  exploreBrowseAppsFont: string;
+  exploreBrowseAppsSize: string;
 }
 
 function PageHeaderTab() {
@@ -94,6 +98,10 @@ function PageHeaderTab() {
     exploreHeroTitleFont: "default",
     exploreHeroTitleSize: "default",
     exploreHeroLogo: "",
+    exploreBrowseAppsText: "",
+    exploreBrowseAppsColor: "default",
+    exploreBrowseAppsFont: "default",
+    exploreBrowseAppsSize: "default",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -112,6 +120,10 @@ function PageHeaderTab() {
             exploreHeroTitleFont: s.exploreHeroTitleFont || "default",
             exploreHeroTitleSize: s.exploreHeroTitleSize || "default",
             exploreHeroLogo: s.exploreHeroLogo || "",
+            exploreBrowseAppsText: s.exploreBrowseAppsText || "",
+            exploreBrowseAppsColor: s.exploreBrowseAppsColor || "default",
+            exploreBrowseAppsFont: s.exploreBrowseAppsFont || "default",
+            exploreBrowseAppsSize: s.exploreBrowseAppsSize || "default",
           });
         }
       })
@@ -212,6 +224,30 @@ function PageHeaderTab() {
             />
             <MediaPickerButton folder="products" onSelect={(url) => setSettings((p) => ({ ...p, exploreHeroLogo: url }))} />
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-[9px] tracking-[0.25em] uppercase text-[#1a1a1a]/40" style={fontMichroma}>
+            "Browse All Applications" Label (product popup)
+          </label>
+          <input
+            type="text"
+            value={settings.exploreBrowseAppsText}
+            onChange={(e) => setSettings((p) => ({ ...p, exploreBrowseAppsText: e.target.value }))}
+            placeholder="BROWSE ALL APPLICATIONS"
+            className="block w-full border border-[#1a1a1a]/15 bg-[#f8f5f0] px-4 py-2.5 text-sm text-[#1a1a1a] focus:border-[#1a1a1a]/40 focus:outline-none"
+          />
+          <StyleRow
+            color={settings.exploreBrowseAppsColor}
+            onColorChange={(v) => setSettings((p) => ({ ...p, exploreBrowseAppsColor: v }))}
+            font={settings.exploreBrowseAppsFont}
+            onFontChange={(v) => setSettings((p) => ({ ...p, exploreBrowseAppsFont: v }))}
+            size={settings.exploreBrowseAppsSize}
+            onSizeChange={(v) => setSettings((p) => ({ ...p, exploreBrowseAppsSize: v }))}
+            sizeOptions={PARAGRAPH_SIZE_OPTIONS}
+            colorDefaultLabel="White"
+            fontDefaultLabel="Michroma"
+          />
         </div>
 
         <button
