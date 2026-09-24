@@ -101,6 +101,11 @@ function TagInput({
   mediaFolder?: string;
 }) {
   const [input, setInput] = useState("");
+  // Drag-to-reorder for the chips, mirroring the Carousel Slides editor's
+  // pattern below — most relevant here since this is how multi-image fields
+  // like Face Images get reordered (there's no separate numbered list UI).
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -116,6 +121,14 @@ function TagInput({
     }
   };
 
+  function moveTag(from: number, to: number) {
+    if (from === to) return;
+    const next = [...values];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
+  }
+
   return (
     <div className="space-y-1.5">
       <label className="block text-[9px] tracking-[0.3em] uppercase text-[#1a1a1a]/50" style={fontMichroma}>
@@ -123,10 +136,30 @@ function TagInput({
       </label>
       <div className="flex gap-1.5 items-stretch">
         <div className="flex-1 min-h-[44px] flex flex-wrap gap-1.5 items-center border border-[#1a1a1a]/15 bg-white px-3 py-2 focus-within:border-[#1a1a1a]/40 transition-colors">
-          {values.map((v) => (
+          {values.map((v, idx) => (
             <span
               key={v}
-              className="flex items-center gap-1.5 bg-[#f8f5f0] border border-[#1a1a1a]/10 pl-1 pr-2 py-0.5 text-[10px] text-[#1a1a1a]/70"
+              draggable
+              onDragStart={() => setDraggedIdx(idx)}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) setDragOverIdx(idx);
+              }}
+              onDragLeave={() => setDragOverIdx((cur) => (cur === idx ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (draggedIdx !== null) moveTag(draggedIdx, idx);
+                setDraggedIdx(null);
+                setDragOverIdx(null);
+              }}
+              onDragEnd={() => {
+                setDraggedIdx(null);
+                setDragOverIdx(null);
+              }}
+              className={`flex items-center gap-1.5 bg-[#f8f5f0] border pl-1 pr-2 py-0.5 text-[10px] text-[#1a1a1a]/70 cursor-grab active:cursor-grabbing transition-colors ${
+                draggedIdx === idx ? "opacity-40 border-[#1a1a1a]/10" : dragOverIdx === idx ? "border-[#007190]" : "border-[#1a1a1a]/10"
+              }`}
+              title={showMediaPicker ? "Drag to reorder" : undefined}
             >
               {showMediaPicker && (
                 <img src={v} alt="" className="w-5 h-5 object-cover border border-[#1a1a1a]/10 flex-shrink-0" />
@@ -153,15 +186,23 @@ function TagInput({
         {showMediaPicker && (
           <MediaPickerButton
             folder={mediaFolder}
+            multiSelect
             onSelect={(url) => {
               if (!values.includes(url)) {
                 onChange([...values, url]);
               }
             }}
+            onSelectMultiple={(urls) => {
+              const newOnes = urls.filter((u) => !values.includes(u));
+              if (newOnes.length > 0) onChange([...values, ...newOnes]);
+            }}
           />
         )}
       </div>
-      <p className="text-[10px] text-[#8b8b8b]">Press Enter or comma to add{showMediaPicker && ", or pick from media library"}</p>
+      <p className="text-[10px] text-[#8b8b8b]">
+        Press Enter or comma to add{showMediaPicker && ", or pick/upload several from the media library at once"}
+        {showMediaPicker && values.length > 1 && " — drag a thumbnail to reorder"}
+      </p>
     </div>
   );
 }

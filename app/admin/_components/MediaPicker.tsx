@@ -30,13 +30,19 @@ const PAGES = [
 function MediaPickerModal({
   initialFolder,
   onSelect,
+  onSelectMultiple,
   onClose,
   accept = "image/*",
+  multiSelect = false,
 }: {
   initialFolder: string;
   onSelect: (url: string) => void;
+  // Only used when multiSelect is true — receives every picked/uploaded URL
+  // at once when the admin confirms, instead of one at a time via onSelect.
+  onSelectMultiple?: (urls: string[]) => void;
   onClose: () => void;
   accept?: string;
+  multiSelect?: boolean;
 }) {
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +54,14 @@ function MediaPickerModal({
   const [search, setSearch] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<string | null>(null);
+  // Selection state only meaningful in multiSelect mode — an admin can tick
+  // several existing library images and add them all to the field at once,
+  // instead of reopening this modal per image.
+  const [selected, setSelected] = useState<string[]>([]);
+
+  function toggleSelected(url: string) {
+    setSelected((prev) => (prev.includes(url) ? prev.filter((u) => u !== url) : [...prev, url]));
+  }
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
@@ -116,12 +130,17 @@ function MediaPickerModal({
       );
     }
 
-    // A single file keeps the original behavior exactly: select it and close
-    // the modal immediately. With a batch, the caller can only hold one URL
-    // anyway, so select the first upload but leave the modal open — the rest
-    // are now in the grid above, ready to assign to other fields, and the
-    // admin closes the modal themselves once done.
-    if (uploaded.length === 1 && files.length === 1) {
+    if (multiSelect) {
+      // Multi-select mode never auto-closes on upload — newly uploaded files
+      // join the selection so the admin can keep adding (more uploads, more
+      // picks from the grid) before confirming everything at once.
+      setSelected((prev) => [...prev, ...uploaded.filter((u) => !prev.includes(u))]);
+    } else if (uploaded.length === 1 && files.length === 1) {
+      // A single file keeps the original behavior exactly: select it and
+      // close the modal immediately. With a batch, the caller can only hold
+      // one URL anyway, so select the first upload but leave the modal open —
+      // the rest are now in the grid above, ready to assign to other fields,
+      // and the admin closes the modal themselves once done.
       onSelect(uploaded[0]);
     }
 
@@ -196,6 +215,22 @@ function MediaPickerModal({
               </div>
             </form>
 
+            {multiSelect && (
+              <button
+                type="button"
+                disabled={selected.length === 0}
+                onClick={() => {
+                  onSelectMultiple?.(selected);
+                  onClose();
+                }}
+                className="flex items-center gap-1.5 whitespace-nowrap bg-[#1a1a1a] px-4 py-2 text-[9px] tracking-[0.15em] uppercase text-white hover:bg-[#1a1a1a]/85 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                style={fontMichroma}
+              >
+                <Check size={12} />
+                Add {selected.length > 0 ? selected.length : ""} Selected
+              </button>
+            )}
+
             <label
               className={`flex items-center gap-1.5 whitespace-nowrap bg-[#007190] px-4 py-2 text-[9px] tracking-[0.15em] uppercase text-white hover:bg-[#005d76] transition-colors cursor-pointer ${
                 uploading ? "opacity-50 cursor-not-allowed" : ""
@@ -216,6 +251,12 @@ function MediaPickerModal({
             </label>
           </div>
         </div>
+
+        {multiSelect && (
+          <p className="px-6 pt-3 text-[10px] text-[#8b8b8b]">
+            Click images below to select several, then use "Add Selected" — or upload new ones, which are added to your selection automatically.
+          </p>
+        )}
 
         {uploadProgress && (
           <div className="mx-6 mt-4 border border-[#007190]/20 bg-[#007190]/5 px-4 py-2.5 text-[11px] text-[#007190]" style={fontMichroma}>
@@ -264,40 +305,53 @@ function MediaPickerModal({
             </div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-              {media.map((file) => (
-                <button
-                  key={file.id}
-                  type="button"
-                  onClick={() => onSelect(file.fileUrl)}
-                  className="group relative aspect-square overflow-hidden border border-[#1a1a1a]/8 bg-[#f8f5f0] hover:border-[#1a1a1a]/40 transition-colors"
-                  title={file.fileName}
-                >
-                  {file.fileType.startsWith("image/") ? (
-                    <img
-                      src={file.fileUrl}
-                      alt={file.fileName}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  ) : file.fileType.startsWith("video/") ? (
-                    <video
-                      src={file.fileUrl}
-                      muted
-                      playsInline
-                      preload="metadata"
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-[9px] uppercase text-[#1a1a1a]/30" style={fontMichroma}>
-                      Document
+              {media.map((file) => {
+                const isSelected = multiSelect && selected.includes(file.fileUrl);
+                return (
+                  <button
+                    key={file.id}
+                    type="button"
+                    onClick={() => (multiSelect ? toggleSelected(file.fileUrl) : onSelect(file.fileUrl))}
+                    className={`group relative aspect-square overflow-hidden border bg-[#f8f5f0] transition-colors ${
+                      isSelected ? "border-[#007190] ring-2 ring-[#007190]" : "border-[#1a1a1a]/8 hover:border-[#1a1a1a]/40"
+                    }`}
+                    title={file.fileName}
+                  >
+                    {file.fileType.startsWith("image/") ? (
+                      <img
+                        src={file.fileUrl}
+                        alt={file.fileName}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : file.fileType.startsWith("video/") ? (
+                      <video
+                        src={file.fileUrl}
+                        muted
+                        playsInline
+                        preload="metadata"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-[9px] uppercase text-[#1a1a1a]/30" style={fontMichroma}>
+                        Document
+                      </div>
+                    )}
+                    {/* Persistent checkmark once picked, in multi-select mode — the
+                        hover-only overlay below isn't enough since the admin needs
+                        to see at a glance which images are already in their selection. */}
+                    {isSelected && (
+                      <div className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center bg-[#007190] text-white">
+                        <Check size={12} />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#1a1a1a]/0 opacity-0 group-hover:bg-[#1a1a1a]/40 group-hover:opacity-100 transition-all">
+                      <span className="flex items-center gap-1 bg-white px-2 py-1 text-[9px] tracking-[0.1em] uppercase text-[#1a1a1a]" style={fontMichroma}>
+                        <Check size={11} /> {multiSelect ? (isSelected ? "Selected" : "Select") : "Select"}
+                      </span>
                     </div>
-                  )}
-                  <div className="absolute inset-0 flex items-center justify-center bg-[#1a1a1a]/0 opacity-0 group-hover:bg-[#1a1a1a]/40 group-hover:opacity-100 transition-all">
-                    <span className="flex items-center gap-1 bg-white px-2 py-1 text-[9px] tracking-[0.1em] uppercase text-[#1a1a1a]" style={fontMichroma}>
-                      <Check size={11} /> Select
-                    </span>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -392,14 +446,19 @@ export function MediaPickerField({
  */
 export function MediaPickerButton({
   onSelect,
+  onSelectMultiple,
   folder = "products",
   className = "w-12",
   accept = "image/*",
+  multiSelect = false,
 }: {
   onSelect: (url: string) => void;
+  // Only used when multiSelect is true.
+  onSelectMultiple?: (urls: string[]) => void;
   folder?: string;
   className?: string;
   accept?: string;
+  multiSelect?: boolean;
 }) {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -418,10 +477,12 @@ export function MediaPickerButton({
           initialFolder={folder}
           onClose={() => setModalOpen(false)}
           accept={accept}
+          multiSelect={multiSelect}
           onSelect={(url) => {
             onSelect(url);
             setModalOpen(false);
           }}
+          onSelectMultiple={onSelectMultiple}
         />
       )}
     </div>
