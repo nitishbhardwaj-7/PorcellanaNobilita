@@ -47,6 +47,7 @@ function MediaPickerModal({
   const [pageKey, setPageKey] = useState(PAGES[0].key);
   const [search, setSearch] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
@@ -75,33 +76,58 @@ function MediaPickerModal({
   }
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setError(null);
     setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      // A "Pages" browse view isn't itself a storage bucket — new uploads
-      // still land in the general products bucket, just tagged so they show
-      // up under this page going forward.
-      formData.append("folder", view === "pages" ? "products" : view);
-      if (view === "pages") formData.append("tags", `page:${pageKey}`);
+    const failures: string[] = [];
+    const uploaded: string[] = [];
 
-      const res = await fetch("/api/media", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Upload failed");
+    // One at a time, same as the full Media Library page — keeps progress
+    // accurate and a large video doesn't starve smaller images queued behind it.
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (files.length > 1) setUploadProgress(`Uploading ${i + 1} / ${files.length}: ${file.name}`);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        // A "Pages" browse view isn't itself a storage bucket — new uploads
+        // still land in the general products bucket, just tagged so they show
+        // up under this page going forward.
+        formData.append("folder", view === "pages" ? "products" : view);
+        if (view === "pages") formData.append("tags", `page:${pageKey}`);
 
-      // Newly uploaded file is what the user almost certainly wants — select
-      // it immediately rather than making them find it in the grid.
-      onSelect(data.data.fileUrl);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+        const res = await fetch("/api/media", { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Upload failed");
+        uploaded.push(data.data.fileUrl);
+        setMedia((prev) => [data.data, ...prev]);
+      } catch (err: any) {
+        failures.push(`${file.name}: ${err.message}`);
+      }
     }
+
+    if (failures.length > 0) {
+      setError(
+        failures.length === 1
+          ? failures[0]
+          : `${failures.length} of ${files.length} files failed to upload — ${failures.join("; ")}`
+      );
+    }
+
+    // A single file keeps the original behavior exactly: select it and close
+    // the modal immediately. With a batch, the caller can only hold one URL
+    // anyway, so select the first upload but leave the modal open — the rest
+    // are now in the grid above, ready to assign to other fields, and the
+    // admin closes the modal themselves once done.
+    if (uploaded.length === 1 && files.length === 1) {
+      onSelect(uploaded[0]);
+    }
+
+    setUploading(false);
+    setUploadProgress(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   return (
@@ -183,12 +209,19 @@ function MediaPickerModal({
                 type="file"
                 className="hidden"
                 accept={accept}
+                multiple
                 disabled={uploading}
                 onChange={handleUpload}
               />
             </label>
           </div>
         </div>
+
+        {uploadProgress && (
+          <div className="mx-6 mt-4 border border-[#007190]/20 bg-[#007190]/5 px-4 py-2.5 text-[11px] text-[#007190]" style={fontMichroma}>
+            {uploadProgress}
+          </div>
+        )}
 
         {/* Page sub-tabs — only shown while browsing the Pages bucket */}
         {view === "pages" && (
