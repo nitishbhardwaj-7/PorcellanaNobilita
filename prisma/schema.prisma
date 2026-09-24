@@ -93,7 +93,7 @@ model Blog {
   titleAlign     String   @default("left") // "left" | "center" | "right" — article masthead only; the listing-card title stays centered by design
   subtitle       String?  @db.Text // rendered directly under the blog title in the article masthead
   subtitleColor  String   @default("grey") // "black" | "white" | "grey" (#545759, original look) | "teal" (#007190)
-  subtitleFont   String   @default("default") // "default" (Montserrat, original look) | "ivymode" | "michroma"
+  subtitleFont   String   @default("default") // "default" (Ivymode) | "ivymode" | "michroma" | "didot" | "metropolis" | "gruppo"
   subtitleSize   String   @default("standard") // key into SUBTITLE_SIZE_CLASSES in BlogDetailView.tsx
   subtitleAlign  String   @default("left") // "left" | "center" | "right"
   showDateOnCard   Boolean @default(true) // whether the published date shows on the blogs listing tile

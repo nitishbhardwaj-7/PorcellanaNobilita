@@ -235,8 +235,8 @@ const PARAGRAPH_SIZE_OPTIONS = [
   { value: "32", label: "32px" },
   { value: "36", label: "36px" },
 ];
-// "Default" here means the original, never-customized font each field always had
-// before this option existed (Montserrat for subtitle, Ivymode for author/date).
+// "Default" here means Ivymode for all three fields — subtitle used to default to
+// Montserrat before this change, but now matches author/date's original Ivymode look.
 // Color has no such "Default" — see COLOR_OPTIONS above.
 const FONT_OPTIONS_WITH_DEFAULT = [
   { value: "default", label: "Default" },

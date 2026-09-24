@@ -269,7 +269,7 @@ export default function BlogDetailView({
           {post.subtitle && (
             <h2
               className={`${
-                post.subtitleFont && post.subtitleFont !== "default" ? BLOCK_FONT_CLASSES[post.subtitleFont] || "font-montserrat" : "font-montserrat"
+                post.subtitleFont && post.subtitleFont !== "default" ? BLOCK_FONT_CLASSES[post.subtitleFont] || "font-ivymode" : "font-ivymode"
               } font-light ${BLOCK_COLOR_CLASSES[post.subtitleColor || "grey"] || "text-[#545759]"} ${
                 SUBTITLE_SIZE_CLASSES[post.subtitleSize || "standard"] || SUBTITLE_SIZE_CLASSES.standard
               } tracking-[0.05em] uppercase leading-[1.3] ${ALIGN_CLASSES[post.subtitleAlign || "left"]} mt-6 sm:mt-7`}
@@ -305,7 +305,7 @@ export default function BlogDetailView({
                 post.dateFont && post.dateFont !== "default" ? BLOCK_FONT_CLASSES[post.dateFont] || "font-ivymode" : "font-ivymode"
               } font-light ${DATE_SIZE_CLASSES[post.dateSize || "standard"] || DATE_SIZE_CLASSES.standard} ${
                 BLOCK_COLOR_CLASSES[post.dateColor || "teal"] || "text-[#007190]"
-              } tracking-[0.2em] uppercase ${ALIGN_CLASSES[post.dateAlign || "left"]} mt-6 sm:mt-7`}
+              } tracking-[0.2em] uppercase ${ALIGN_CLASSES[post.dateAlign || "left"]} mt-1 sm:mt-1.5`}
             >
               {formatHeaderDate(post.date)}
             </p>
