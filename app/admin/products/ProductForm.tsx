@@ -611,17 +611,26 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 pt-2">
-                <input
-                  type="checkbox"
-                  id="isHorizontalFace"
-                  checked={form.isHorizontalFace}
-                  onChange={(e) => setForm((p) => ({ ...p, isHorizontalFace: e.target.checked }))}
-                  className="w-4 h-4 border-[#1a1a1a]/15 text-[#1a1a1a] focus:ring-0 focus:outline-none"
-                />
-                <label htmlFor="isHorizontalFace" className="text-xs text-[#1a1a1a]/70 select-none">
-                  Wide/Horizontal Face Preview
-                </label>
+              <div className="space-y-1.5 pt-2">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="isHorizontalFace"
+                    checked={form.isHorizontalFace}
+                    onChange={(e) => setForm((p) => ({ ...p, isHorizontalFace: e.target.checked }))}
+                    className="w-4 h-4 border-[#1a1a1a]/15 text-[#1a1a1a] focus:ring-0 focus:outline-none"
+                  />
+                  <label htmlFor="isHorizontalFace" className="text-xs text-[#1a1a1a]/70 select-none">
+                    My Face photos are already upright (portrait), not landscape
+                  </label>
+                </div>
+                <p className="text-[10px] text-[#8b8b8b] pl-7">
+                  Leave unchecked (default) if your Face photos are wide/landscape — the site automatically
+                  rotates them to fill the tall Face panel, like Calacatta Oyster. Check this box only if
+                  your Face photos are already tall/portrait-oriented — checking it displays them as-is
+                  without rotating. Using the wrong setting for your photos' orientation is what makes the
+                  Face preview look distorted or sideways.
+                </p>
               </div>
 
               <div className="flex items-center space-x-3">
