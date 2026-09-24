@@ -241,6 +241,15 @@ model Settings {
   exploreHeroTitleSize  String?
   exploreHeroLogo       String? // default "/images/NOBILITA_white.png"
 
+  // "BROWSE ALL APPLICATIONS" label under a product popup's application slides
+  // carousel (components/FeaturedProduct.tsx) — editable from Admin > Explore
+  // The Collection > Page Header. Global, not per-product: every product's
+  // popup shares this one label/style.
+  exploreBrowseAppsText  String? // default "BROWSE ALL APPLICATIONS"
+  exploreBrowseAppsColor String?
+  exploreBrowseAppsFont  String?
+  exploreBrowseAppsSize  String?
+
   // Homepage Craftsmanship section — editable from Admin > Homepage.
   craftHeading        String?
   craftHeadingColor   String?

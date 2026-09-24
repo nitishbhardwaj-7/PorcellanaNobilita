@@ -392,6 +392,38 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
     };
   }, [activeProduct]);
 
+  // "BROWSE ALL APPLICATIONS" label — global (shared across every product's
+  // popup, not per-product), so it's fetched once from Settings rather than
+  // threaded as a prop through the 3 separate pages that render this
+  // component (Explore The Collection, Our Story, Homepage).
+  const [browseAppsSettings, setBrowseAppsSettings] = useState<{
+    text?: string;
+    color?: string;
+    font?: string;
+    size?: string;
+  }>({});
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((json) => {
+        if (isMounted && json.success && json.data) {
+          setBrowseAppsSettings({
+            text: json.data.exploreBrowseAppsText,
+            color: json.data.exploreBrowseAppsColor,
+            font: json.data.exploreBrowseAppsFont,
+            size: json.data.exploreBrowseAppsSize,
+          });
+        }
+      })
+      .catch((err) => console.error("Error fetching settings in modal:", err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const config = useMemo<SlabConfig | null>(() => {
     if (!activeProduct) return null;
 
@@ -1063,8 +1095,10 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
                 </svg>
               </button>
 
-              <span className="font-michroma text-white tracking-[0.1em] md:tracking-[0.2em] text-[10px] md:text-sm uppercase whitespace-nowrap px-3 py-1.5 md:px-4 md:py-2 rounded backdrop-blur-sm pointer-events-none">
-                BROWSE ALL APPLICATIONS
+              <span
+                className={`${fontClass(browseAppsSettings.font, "font-michroma")} ${colorClass(browseAppsSettings.color, "text-white")} ${paragraphSizeClass(browseAppsSettings.size, "text-[10px] md:text-sm")} tracking-[0.1em] md:tracking-[0.2em] uppercase whitespace-nowrap px-3 py-1.5 md:px-4 md:py-2 rounded backdrop-blur-sm pointer-events-none`}
+              >
+                {browseAppsSettings.text || "BROWSE ALL APPLICATIONS"}
               </span>
 
               {/* Right Arrow Button */}
@@ -1114,7 +1148,7 @@ function FeaturedProductContent({ activeProduct = null, onClose }: FeaturedProdu
       </section>
 
       {/* Face / Bookmatch Section */}
-      <section className="w-full bg-white flex flex-col justify-center items-center pt-0 pb-10 md:pb-20 px-4 md:px-16">
+      <section className="w-full bg-white overflow-hidden flex flex-col justify-center items-center pt-0 pb-10 md:pb-20 px-4 md:px-16">
         {(config.availableFaces || []).length > 1 ? (
           // Side-by-side layout for products with multiple faces
           showBookmatch && config.bookmatchImg ? (
