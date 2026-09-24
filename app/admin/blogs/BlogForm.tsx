@@ -94,7 +94,10 @@ function TagInput({
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if ((e.key === "Enter" || e.key === ",") && input.trim()) {
+    // Only Enter commits a tag — comma used to as well, but that made it
+    // impossible to type a literal comma inside a value, so it's now just
+    // an ordinary character.
+    if (e.key === "Enter" && input.trim()) {
       e.preventDefault();
       if (!values.includes(input.trim())) {
         onChange([...values, input.trim()]);
@@ -136,7 +139,7 @@ function TagInput({
           className="flex-1 min-w-[120px] bg-transparent text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 outline-none"
         />
       </div>
-      <p className="text-[10px] text-[#8b8b8b]">Press Enter or comma to add</p>
+      <p className="text-[10px] text-[#8b8b8b]">Press Enter to add</p>
     </div>
   );
 }

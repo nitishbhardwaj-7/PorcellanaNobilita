@@ -109,7 +109,10 @@ function TagInput({
   const fontMichroma = { fontFamily: "var(--font-michroma), sans-serif" };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if ((e.key === "Enter" || e.key === ",") && input.trim()) {
+    // Only Enter commits a tag — comma used to as well, but that made it
+    // impossible to type a literal comma inside a value (e.g. "POLISHED,
+    // HONED & MATTE" as one entry), so it's now just an ordinary character.
+    if (e.key === "Enter" && input.trim()) {
       e.preventDefault();
       if (!values.includes(input.trim())) {
         onChange([...values, input.trim()]);
@@ -200,7 +203,7 @@ function TagInput({
         )}
       </div>
       <p className="text-[10px] text-[#8b8b8b]">
-        Press Enter or comma to add{showMediaPicker && ", or pick/upload several from the media library at once"}
+        Press Enter to add{showMediaPicker && ", or pick/upload several from the media library at once"}
         {showMediaPicker && values.length > 1 && " — drag a thumbnail to reorder"}
       </p>
     </div>
